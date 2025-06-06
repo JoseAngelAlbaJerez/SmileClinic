@@ -1,0 +1,156 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\Patient;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+
+class PatientController extends Controller
+{
+
+    public function index(Request $request)
+    {
+
+        $search = $request->input('search');
+        $sortField = $request->input('sortField');
+        $sortDirection = $request->input('sortDirection', 'asc');
+        $activeStates = $request->input('activeStates', []);
+        $lastDays = $request->input('lastDays', '30');
+        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
+
+
+        $query = Patient::query()->select('patients.*');
+        if ($showDeleted == true) {
+            $query->where('active', 1);
+        } else {
+            $query->where('active', 0);
+        }
+
+        if ($search) {
+            $query->where(function (Builder $q) use ($search) {
+                $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%']);
+            });
+        }
+
+        if ($sortField) {
+            $query->orderBy($sortField, $sortDirection);
+        } else {
+            $query->latest('patients.updated_at')
+                ->latest('patients.created_at');
+        }
+        if ($lastDays) {
+            if (is_numeric($lastDays)) {
+                // Filtro en días numéricos: last 1, 7, 30, etc.
+                $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
+                $query->where('created_at', '>=', $dateFrom);
+            } else {
+                // Filtros especiales tipo 'month' o 'year'
+                if ($lastDays === 'month') {
+                    $dateFrom = Carbon::now()->startOfMonth();
+                    $query->where('created_at', '>=', $dateFrom);
+                } elseif ($lastDays === 'year') {
+                    $dateFrom = Carbon::now()->startOfYear();
+                    $query->where('created_at', '>=', $dateFrom);
+                }
+            }
+        }
+
+        $patients = $query->orderByDesc('created_at')->paginate(10);
+        Log::info($patients);
+        return Inertia::render('Patients/Index', [
+            'patients' => $patients,
+            'filters' => [
+                'search' => $search,
+                'sortField' => $sortField,
+                'sortDirection' => $sortDirection,
+                'activeStates' => $activeStates,
+                'lastDays' => $lastDays,
+                'showdeleted' => $showDeleted,
+
+            ],
+        ]);
+    }
+
+    public function create()
+    {
+
+        return Inertia::render("Patients/Create");
+    }
+
+    public function show(Patient $patient)
+    {
+        return Inertia::render('Patients/Show', [
+            'patient' => $patient,
+        ]);
+    }
+    public function edit(Patient $patient)
+    {
+        return Inertia::render('Patients/Edit', [
+            'patient' => $patient
+        ]);
+    }
+
+    public function update(Request $request, Patient $patient)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'DNI' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'ars' => 'nullable|string|max:255',
+            'date_of_birth' => 'required|date',
+            'address' => 'nullable|string|max:255',
+            'motive' => 'nullable|string|max:255',
+            'complications' => 'boolean',
+            'complications_detail' => 'nullable|string',
+            'drugs' => 'boolean',
+            'drugs_detail' => 'nullable|string',
+            'alergies' => 'boolean',
+            'alergies_detail' => 'nullable|string',
+        ]);
+
+        $patient->update($data);
+
+        return redirect()->route('patients.show', $patient->id);
+    }
+
+
+    public function store(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'first_name'           => 'required|string|max:100',
+                'last_name'            => 'required|string|max:100',
+                'ars'            => 'required|string|max:100',
+                'DNI'                  => 'required|string|max:20|unique:patients,DNI',
+                'phone_number'         => 'nullable|string|max:20',
+                'date_of_birth'        => 'required|date|before:today',
+                'complications'        => 'required|boolean',
+                'complications_detail' => 'nullable|string',
+                'drugs'                => 'required|boolean',
+                'drugs_detail'         => 'nullable|string',
+                'alergies'             => 'required|boolean',
+                'alergies_detail'      => 'nullable|string',
+                'address'              => 'nullable|string|max:255',
+                'motive'               => 'nullable|string|max:255',
+            ]);
+            Log::info($request);
+            $validated['active'] = true;
+            Patient::create($validated,);
+
+            return redirect()->back()->with('toast.flash', [
+                'type' => 'success',
+                'message' => 'Paciente Registrado Correctamente'
+            ]);
+        } catch (ValidationException $e) {
+            return back()->with('flash.toast', $e)->with('flash.toastStyle', 'danger');
+        }
+    }
+}
