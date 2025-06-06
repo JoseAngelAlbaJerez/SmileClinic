@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Odontograph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Patient;
@@ -86,8 +87,13 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
+
+
+      $odontograph = Odontograph::where('patient_id', $patient->id)->first();
+
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
+            'odontograph' => $odontograph,
         ]);
     }
     public function edit(Patient $patient)
@@ -141,7 +147,7 @@ class PatientController extends Controller
                 'address'              => 'nullable|string|max:255',
                 'motive'               => 'nullable|string|max:255',
             ]);
-            Log::info($request);
+
             $validated['active'] = true;
             Patient::create($validated,);
 
