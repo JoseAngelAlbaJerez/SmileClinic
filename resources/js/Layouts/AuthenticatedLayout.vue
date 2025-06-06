@@ -7,12 +7,13 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 import { switchTheme, setThemeOnLoad } from '../theme.js';
+
 const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen  bg-gray-100 dark:bg-gray-900">
             <nav
                 class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800"
             >
@@ -38,6 +39,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                 <NavLink
+                                    :href="route('patients.index')"
+                                    :active="route().current('patients.index')"
+                                >
+                                    Pacientes
                                 </NavLink>
                             </div>
                         </div>
