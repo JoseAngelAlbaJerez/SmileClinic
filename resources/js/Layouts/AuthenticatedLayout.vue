@@ -25,7 +25,7 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                        class="block h-9 w-auto fill-current text-blue-500 dark:text-blue-200"
                                     />
                                 </Link>
                             </div>
@@ -45,6 +45,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('patients.index')"
                                 >
                                     Pacientes
+                                </NavLink>
+                                 <NavLink
+                                    :href="route('events.index')"
+                                    :active="route().current('events.index')"
+                                >
+                                    Citas
                                 </NavLink>
                             </div>
                         </div>
