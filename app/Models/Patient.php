@@ -24,7 +24,10 @@ class Patient extends Model
         "active",
     ];
     public function odontographs(){
-        // return $this->hasMany(Odontograph::class,'id');
+        return $this->hasMany(Odontograph::class,'patient_id');
+    }
+     public function Event(){
+         return $this->hasMany(Event::class,"patient_id","id");
     }
      public function CXC(){
         // return $this->belongsTo(CXC::class,"","id");
