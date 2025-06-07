@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\OdontographController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
@@ -27,7 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('patients', PatientController::class);
     Route::resource('odontographs', OdontographController::class);
-     Route::resource('events', EventController::class);
+    Route::resource('events', EventController::class);
+    Route::resource('expenses', ExpensesController::class);
 });
 
 require __DIR__.'/auth.php';

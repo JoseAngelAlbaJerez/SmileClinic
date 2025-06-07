@@ -52,6 +52,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Citas
                                 </NavLink>
+                                  <NavLink
+                                    :href="route('expenses.index')"
+                                    :active="route().current('expenses.index')"
+                                >
+                                    Egresos
+                                </NavLink>
                             </div>
                         </div>
 
