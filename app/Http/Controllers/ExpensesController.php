@@ -36,9 +36,9 @@ class ExpensesController extends Controller
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('description LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('amount LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(users.first_name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
+                     ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
 
-                ;
+                    ;
             });
         }
 
