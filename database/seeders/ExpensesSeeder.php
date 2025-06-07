@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 class ExpensesSeeder extends Seeder
 {
     /**
@@ -17,6 +18,7 @@ class ExpensesSeeder extends Seeder
             DB::table('expenses')->insert([
                 'description' => fake()->sentence(),
                 'amount' => fake()->numberBetween(1000,25000),
+                'user_id' => User::inRandomOrder()->first()->id,
                 'active' => fake()->boolean(),
                 'created_at' => now(),
                 'updated_at' => now(),
