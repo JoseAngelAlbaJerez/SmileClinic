@@ -212,6 +212,7 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import LocationIcon from '@/Components/Icons/LocationIcon.vue';
 import { useToast } from 'vue-toastification';
 import { markRaw } from 'vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
 const toast = useToast();
 export default {
     props: {
@@ -229,7 +230,8 @@ export default {
         VueDatePicker,
         ArrowDownTrayIcon,
         InsuranceIcon,
-        LocationIcon
+        LocationIcon,
+        AddIcon
     },
     data() {
         return {
@@ -253,7 +255,7 @@ export default {
             error: '',
              crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-                { label: 'Crear' }
+                { icon: markRaw(AddIcon), label: 'Crear' }
             ]
         };
     },
