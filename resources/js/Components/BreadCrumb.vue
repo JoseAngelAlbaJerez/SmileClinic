@@ -3,8 +3,8 @@
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li>
                 <div class="flex items-center">
-                    <HomeIcon class="w-4 h-4 mr-1" />
-                    <Link href="/dashboard" class="ml-1 font-medium text-blue-600 hover:underline dark:text-blue-400">
+                    <HomeIcon class="w-5 h-5 mr-1" />
+                    <Link href="/dashboard" class=" font-medium text-blue-600 hover:underline dark:text-blue-400">
                     Inicio
                     </Link>
 
@@ -12,7 +12,12 @@
             </li>
             <li v-for="(crumb, index) in crumbs" :key="index">
                 <div class="flex items-center">
-                    <ChevronRightIcon class="w-4 h-4 mx-2 text-gray-400" />
+                    <ChevronRightIcon class="w-5 h-4 mx-2 text-gray-400" />
+
+                    <!-- Icono dinámico, si existe -->
+                    <component v-if="crumb.icon" :is="crumb.icon" class="w-5 h-5 mr-1 text-gray-500" />
+
+                    <!-- Texto -->
                     <span v-if="!crumb.to" class="ml-1 font-medium text-gray-700 dark:text-gray-300">
                         {{ crumb.label }}
                     </span>
@@ -22,6 +27,7 @@
                     </Link>
                 </div>
             </li>
+
         </ol>
     </nav>
 </template>
