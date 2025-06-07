@@ -24,7 +24,7 @@
 
     <div
       v-if="dropdownOpen"
-      class="absolute z-10 mt-1 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700"
+      class="absolute z-10 mt-1 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-800"
     >
       <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200">
         <li v-for="option in options" :key="option.value">
