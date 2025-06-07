@@ -10,15 +10,11 @@
         </template>
         <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
             <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
-                <!-- Título -->
-                <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">
-
-                </h2>
 
 
 
                 <form @submit.prevent="submit" class="gap-x-8 gap-y-6 space-y-6">
-                    <!-- First Name -->
+                    <!-- Title -->
                     <div>
                         <label for="title"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
@@ -31,7 +27,7 @@
                         </div>
                         <p v-if="errors.title" class="mt-1 text-xs text-red-600">{{ errors.title }}</p>
                     </div>
-                    <!-- ARS -->
+                    <!-- Doctor -->
                     <div>
                         <label for="doctor_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Doctor</label>
@@ -46,7 +42,7 @@
 
                         <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.doctor_id }}</p>
                     </div>
-                    <!-- ARS -->
+                    <!-- Paciente -->
                     <div>
                         <label for="patient_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente</label>
