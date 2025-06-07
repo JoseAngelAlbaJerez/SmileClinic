@@ -85,15 +85,30 @@ class PatientController extends Controller
         return Inertia::render("Patients/Create");
     }
 
-    public function show(Patient $patient)
+    public function show(Patient $patient, Request $request)
     {
 
 
-      $odontograph = Odontograph::where('patient_id', $patient->id)->first();
+        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
+
+        $query = Odontograph::with('doctor')->where('patient_id', $patient->id);
+
+        if ($showDeleted) {
+            $query->where('active', true);
+        } else {
+            $query->where('active', false);
+        }
+
+        $odontograph = $query->get();
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'odontograph' => $odontograph,
+            'filters' => [
+
+                'showDeleted' => $showDeleted,
+
+            ],
         ]);
     }
     public function edit(Patient $patient)
@@ -124,7 +139,10 @@ class PatientController extends Controller
 
         $patient->update($data);
 
-        return redirect()->route('patients.show', $patient->id);
+        return redirect()->route('patients.show', $patient)->with('toast.flash', [
+            'type' => 'success',
+            'message' => 'Paciente Registrado Correctamente'
+        ]);
     }
 
 
@@ -149,14 +167,22 @@ class PatientController extends Controller
             ]);
 
             $validated['active'] = true;
-            Patient::create($validated,);
+            $patient = Patient::create($validated);
 
-            return redirect()->back()->with('toast.flash', [
+            return redirect()->route('patients.show', $patient)->with('toast.flash', [
                 'type' => 'success',
                 'message' => 'Paciente Registrado Correctamente'
             ]);
         } catch (ValidationException $e) {
             return back()->with('flash.toast', $e)->with('flash.toastStyle', 'danger');
         }
+    }
+    public function destroy($id)
+    {
+        $patient = Patient::findOrFail($id);
+        $patient->active = false;
+        $patient->save();
+
+        return redirect()->back()->with('message', 'Paciente desactivado correctamente.');
     }
 }
