@@ -6,6 +6,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { setThemeOnLoad } from './theme';
+import Toast, { POSITION } from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,6 +21,10 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(Toast, {
+                position: POSITION.TOP_RIGHT,
+                timeout: 3000,
+            })
             .use(ZiggyVue)
             .mount(el);
     },
@@ -27,4 +33,4 @@ createInertiaApp({
     },
 });
 
-setThemeOnLoad()
+setThemeOnLoad();
