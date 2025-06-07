@@ -109,13 +109,13 @@ const paginationLinks = computed(() => {
             <!-- Botón Anterior -->
             <template v-if="pagination.prev_page_url">
                 <Link :href="buildUrl(pagination.prev_page_url)" preserve-scroll preserve-state
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Anterior
                 </Link>
             </template>
             <template v-else>
                 <button disabled
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-700 cursor-not-allowed opacity-50">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-800 cursor-not-allowed opacity-50">
                     Anterior
                 </button>
             </template>
@@ -125,7 +125,7 @@ const paginationLinks = computed(() => {
                 <template v-if="link.url">
                     <Link :href="link.url" preserve-scroll :class="{
                         'bg-primary-500 dark:bg-primary-600 dark:text-white': link.active,
-                        'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600': !link.active
+                        'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600': !link.active
                     }" class="px-3 py-1 rounded-md text-sm font-medium" v-html="link.label" />
                 </template>
                 <template v-else>
@@ -136,13 +136,13 @@ const paginationLinks = computed(() => {
             <!-- Botón Siguiente -->
             <template v-if="pagination.next_page_url">
                 <Link :href="buildUrl(pagination.next_page_url)" preserve-scroll preserve-state
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Siguiente
                 </Link>
             </template>
             <template v-else>
                 <button disabled
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-700 cursor-not-allowed opacity-50">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-200 dark:bg-gray-800 cursor-not-allowed opacity-50">
                     Siguiente
                 </button>
             </template>
