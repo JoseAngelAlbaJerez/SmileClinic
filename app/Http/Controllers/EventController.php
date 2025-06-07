@@ -110,8 +110,8 @@ class EventController extends Controller
             'title'       => 'required|string|max:100',
             'doctor_id'   => 'required|integer',
             'patient_id'  => 'required|integer',
-            'start_time'  => ['required', 'date_format:H:i', 'before:end_time'],
-            'end_time'    => ['required', 'date_format:H:i', 'after:start_time'],
+            'starttime'  => ['required', 'date_format:H:i', 'before:endtime'],
+            'endtime'    => ['required', 'date_format:H:i', 'after:starttime'],
             'date'        => 'required|date',
         ]);
 
@@ -120,8 +120,9 @@ class EventController extends Controller
 
         Event::create($validated);
 
-        return response()->json([
-            'message' => 'Cita registrada correctamente.'
+         return redirect()->route('events.index')->with('toast.flash', [
+            'type' => 'success',
+            'message' => 'Cita Registrada Correctamente'
         ]);
     }
 

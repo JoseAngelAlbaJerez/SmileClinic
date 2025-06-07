@@ -78,7 +78,7 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Inicio:</label>
 
-                            <VueDatePicker v-model="form.starttime" type="time" :time-picker="true" :is-24="true"
+                            <VueDatePicker v-model="form.starttime" model-type="format" type="time" :time-picker="true" :is-24="true"
                                 :minutes-increment="5" format="HH:mm" placeholder="Selecciona hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
@@ -91,7 +91,7 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Finalización:</label>
 
-                            <VueDatePicker v-model="form.endtime" type="time" :time-picker="true" :is-24="true"
+                            <VueDatePicker v-model="form.endtime" model-type="format"  type="time" :time-picker="true" :is-24="true"
                                 :minutes-increment="5" format="HH:mm" placeholder="Selecciona hora de finalización"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
@@ -165,6 +165,7 @@ export default {
                 endtime: '',
                 date: '',
                 active: true,
+
             }),
             error: '',
 
@@ -192,12 +193,15 @@ export default {
                 this.error = 'Por favor, seleccione una hora de finalización.';
                 return;
             }
+            if(this.form.starttime > this.form.endtime){
+                this.error = 'La hora finalización debe ser despues de la hora de inicio';
+                return;
+            };
 
 
             this.error = null;
 
             this.form.date = this.formatDate(this.form.date);
-
 
             this.form.post(route('events.store'), {
                 onSuccess: () => {
