@@ -75,11 +75,13 @@ import { useToast } from 'vue-toastification';
 const toast = useToast();
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import { markRaw } from 'vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
 export default {
   components: {
     AuthenticatedLayout,
     Breadcrumb,
-    UserIcon
+    UserIcon,
+    AddIcon
   },
   props: {
     patient: Object,
@@ -105,7 +107,8 @@ export default {
       }),
         crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-                { label: this.patient.first_name + this.patient.last_name, to: route('patients.show',this.patient) }
+                { label: this.patient.first_name + this.patient.last_name, to: route('patients.show',this.patient) },
+                 { icon: markRaw(AddIcon), label: 'Crear' }
             ]
     }
   },
