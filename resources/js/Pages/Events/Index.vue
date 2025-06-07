@@ -287,7 +287,7 @@ export default {
             },
             showModal: ref(false),
             selectedEvent: ref(null),
-            timeout: 2000,
+            timeout: 3000,
             crumbs: [
                 { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }

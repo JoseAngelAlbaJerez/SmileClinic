@@ -208,7 +208,7 @@ export default {
                 lastDays: this.filters?.lastDays || '',
                 showDeleted: this.filters?.showDeleted || true,
             },
-            timeout: 2000,
+            timeout: 3000,
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { icon:markRaw(TableIcon), label: 'Listado' }

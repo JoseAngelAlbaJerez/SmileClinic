@@ -203,7 +203,7 @@ export default {
                 lastDays: this.filters?.lastDays || '',
                 showDeleted: this.filters?.showDeleted || true,
             },
-            timeout: 2000,
+            timeout: 3000,
 
 
         }

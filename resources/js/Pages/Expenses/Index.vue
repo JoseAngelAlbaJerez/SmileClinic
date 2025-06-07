@@ -258,7 +258,7 @@ export default {
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,
             },
-            timeout: 2000,
+            timeout: 3000,
             crumbs: [
                 { icon: markRaw(CartIcon), label: 'Egresos', to: route('expenses.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }

@@ -276,7 +276,7 @@ export default {
                 "55", "54", "53", "52", "51",
             ],
             toothDownOrder: ["21", "22", "23", "24", "25", "26", "27", "28", "61", "66", "63", "64", "65"],
-            timeout: 2000,
+            timeout: 3000,
              crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { label: this.patient.first_name + this.patient.last_name }
