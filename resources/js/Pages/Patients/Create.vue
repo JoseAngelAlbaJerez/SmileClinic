@@ -2,23 +2,16 @@
     <AuthenticatedLayout>
         <template #header>
 
-            <Breadcrumb :crumbs="[
-                { label: 'Pacientes', to: route('patients.index') },
-                { label: 'Crear Paciente' }
-            ]" />
+            <Breadcrumb :crumbs="crumbs" />
 
         </template>
-        <template #default class="h-full bg-gray-50 dark:bg-slate-900 dark:text-white py-12">
-            <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg p-10">
+        <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
+            <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
                 <!-- Título -->
                 <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">
 
                 </h2>
 
-                <!-- Error general -->
-                <div v-if="error" class="mb-6 text-red-600 font-medium">
-                    {{ error }}
-                </div>
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <!-- First Name -->
@@ -29,7 +22,7 @@
                             <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
                             <input v-model="form.first_name" id="first_name" type="text"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                                 placeholder="Nombre" />
                         </div>
                         <p v-if="errors.first_name" class="mt-1 text-xs text-red-600">{{ errors.first_name }}</p>
@@ -40,7 +33,7 @@
                         <label for="last_name"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido</label>
                         <input v-model="form.last_name" id="last_name" type="text"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Apellido" />
                         <p v-if="errors.last_name" class="mt-1 text-xs text-red-600">{{ errors.last_name }}</p>
                     </div>
@@ -49,10 +42,14 @@
                     <div>
                         <label for="DNI"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DNI</label>
-                        <input v-model="form.DNI" id="DNI" type="text"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
-                            placeholder="Documento de Identidad" />
-                        <p v-if="errors.DNI" class="mt-1 text-xs text-red-600">{{ errors.DNI }}</p>
+                        <div class="relative">
+                            <CardIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
+                                style="pointer-events: none;" />
+                            <input v-model="form.DNI" id="DNI" type="text"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                placeholder="Documento de Identidad" />
+                            <p v-if="errors.DNI" class="mt-1 text-xs text-red-600">{{ errors.DNI }}</p>
+                        </div>
                     </div>
 
                     <!-- Phone Number -->
@@ -63,7 +60,7 @@
                             <PhoneIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
                             <input v-model="form.phone_number" id="phone_number" type="tel"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                                 placeholder="Ej. 809-555-1234" />
                         </div>
                         <p v-if="errors.phone_number" class="mt-1 text-xs text-red-600">{{ errors.phone_number }}</p>
@@ -73,8 +70,8 @@
                     <div>
                         <label for="ars"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ARS</label>
-                        <select v-model="form.ars"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white">
+                        <select v-model="form.ars" :value="form.ars"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
                             <option value=""> Seleccione una opción</option>
                             <option value="ARS Humano">ARS Humano</option>
                             <option value="ARS Universal">ARS Universal</option>
@@ -89,20 +86,28 @@
                     <!-- Date of Birth -->
                     <div>
 
-                       <div class="mb-4 px-2 w-full-mt-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="select-item">Fecha de Nacimiento:</label>
+                        <div class="mb-4 px-2 w-full-mt-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                                for="select-item">Fecha de Nacimiento:</label>
 
-                        <VueDatePicker class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white" v-model="form.date_of_birth" />
-                    </div> </div>
+                            <VueDatePicker
+                                class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                v-model="form.date_of_birth" />
+                        </div>
+                    </div>
 
                     <!-- Address (full width) -->
                     <div class="md:col-span-2">
                         <label for="address"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dirección</label>
-                        <input v-model="form.address" id="address" type="text"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
-                            placeholder="Dirección completa" />
-                        <p v-if="errors.address" class="mt-1 text-xs text-red-600">{{ errors.address }}</p>
+                        <div class="relative">
+                            <LocationIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
+                                style="pointer-events: none;" />
+                            <input v-model="form.address" id="address" type="text"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                placeholder="Dirección completa" />
+                            <p v-if="errors.address" class="mt-1 text-xs text-red-600">{{ errors.address }}</p>
+                        </div>
                     </div>
 
                     <!-- Complications Checkbox -->
@@ -120,7 +125,7 @@
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Detalle de
                             complicaciones</label>
                         <textarea id="complications_detail" v-model="form.complications_detail" rows="3"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Describe las complicaciones médicas"></textarea>
                     </div>
 
@@ -139,7 +144,7 @@
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Detalle de
                             medicamentos</label>
                         <textarea id="drugs_detail" v-model="form.drugs_detail" rows="3"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Enumere los medicamentos"></textarea>
                     </div>
 
@@ -158,7 +163,7 @@
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Detalle de
                             alergias</label>
                         <textarea id="alergies_detail" v-model="form.alergies_detail" rows="3"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Describa las alergias"></textarea>
                     </div>
 
@@ -168,10 +173,14 @@
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de
                             consulta</label>
                         <textarea id="motive" v-model="form.motive" rows="3"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Describa el motivo de la consulta"></textarea>
                     </div>
 
+                    <!-- Error general -->
+                    <div v-if="error" class="mb-6 text-red-600 font-medium">
+                        {{ error }}
+                    </div>
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
                         <SecondaryButton type="button" @click="form.reset()">
@@ -201,6 +210,9 @@ import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import LocationIcon from '@/Components/Icons/LocationIcon.vue';
+import { useToast } from 'vue-toastification';
+import { markRaw } from 'vue';
+const toast = useToast();
 export default {
     props: {
         errors: [Array, Object],
@@ -239,7 +251,10 @@ export default {
                 motive: '',
             }),
             error: '',
-
+             crumbs: [
+                { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
+                { label: 'Crear' }
+            ]
         };
     },
     methods: {
@@ -265,11 +280,12 @@ export default {
 
             this.error = null;
             this.form.post(route('patients.store'), {
-
                 onSuccess: () => {
-
+                    toast.success('Paciente registrado correctamente.');
                     this.form.reset();
-
+                },
+                  onError: () => {
+                    toast.error('Hubo un error al registrar el paciente.');
                 }
             });
 

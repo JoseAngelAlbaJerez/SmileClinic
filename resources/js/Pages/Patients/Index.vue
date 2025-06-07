@@ -3,16 +3,13 @@
     <Head title="Patients" />
     <AuthenticatedLayout>
         <template #header>
-            <Breadcrumb :crumbs="[
-                { label: 'Pacientes', to: route('patients.index') },
-                { label: 'Listado' }
-            ]" />
+            <Breadcrumb :crumbs="crumbs" />
 
         </template>
 
         <template #default>
             <div
-                class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-slate-900 dark:text-white">
+                class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
                     <div class="my-2 flex mx-10 gap-2 items-center">
@@ -22,7 +19,7 @@
                         <div class="flex ml-auto items-center gap-2">
 
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-slate-800 dark:ring-slate-600" />
+                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('patients.create')" as="button"
                                 class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
                             <AddIcon class="size-6" />
@@ -38,10 +35,10 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-700 dark:text-gray-400">
+                                    class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
-                                            class="px-6 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
+                                            class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
                                             @click="sort('id')">
                                             # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
                                                 'asc' ?
@@ -52,8 +49,8 @@
                                             Nombre<span v-if="form.sortField === 'first_name'">{{ form.sortDirection ===
                                                 'asc' ? '↑' :
                                                 '↓'
-                                                }}</span></th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('date_of_birth')">
+                                            }}</span></th>
+                                        <th scope="col" class=" cursor-pointer" @click="sort('date_of_birth')">
                                             Fecha de Nacimiento <span v-if="form.sortField === 'date_of_birth'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
@@ -62,46 +59,47 @@
                                             }}</span>
                                         </th>
 
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('ars')">ARS
+                                        <th scope="col" class="  cursor-pointer" @click="sort('ars')">ARS
                                             <span v-if="form.sortField === 'ars'">{{ form.sortDirection === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span>
+                                            }}</span>
                                         </th>
 
 
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('created_at')">
+                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
                                             Fecha de
                                             Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span></th>
+                                            }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex ">
+                                            <div class="flex items-center justify-between" @click="toggleShowDeleted()">
+                                                <div class="flex items-center ">
+
                                                     <h2>Estado</h2>
+                                                    <FunnelIcon />
                                                 </div>
-                                                <div class="relative  focus:outline-none">
-                                                    <FunnelIcon @click="toggleShowDeleted()" class="size-5" />
-                                                </div>
+
                                             </div>
                                         </th>
 
 
-                                        <th scope="col" class="px-6 py-3 ">Acciones</th>
+                                        <th scope="col" class=" ">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     <tr v-for="patient in patients.data" :key="patient.id">
-                                        <td class="p-4">{{ patient.id }}</td>
-                                        <td class="p-4">{{ patient.first_name }} {{ patient.last_name }}</td>
-                                        <td class="p-4">{{ patient.date_of_birth }}</td>
-                                        <td class="p-4">{{ patient.ars }}</td>
-                                        <td class="p-4">{{ formatDate(patient.created_at) }}</td>
-                                        <td class="p-4">
+                                        <td class="p-4  items-center">{{ patient.id }}</td>
+                                        <td class="p-4  items-center">{{ patient.first_name }} {{ patient.last_name }}
+                                        </td>
+                                        <td class="p-4  items-center">{{ patient.date_of_birth }}</td>
+                                        <td class="p-4  items-center">{{ patient.ars }}</td>
+                                        <td class="p-4  items-center">{{ formatDate(patient.created_at) }}</td>
+                                        <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(patient.active)" />
                                                 <p :class="statusBadgeClasses(patient.active)">
@@ -111,7 +109,8 @@
                                             </div>
                                         </td>
                                         <td class="p-4 items-center">
-                                            <Link :href="route('patients.show', patient.id)">Abrir</Link>
+                                            <Link :href="route('patients.show', patient.id)" class="text-blue-500">Abrir
+                                            </Link>
                                         </td>
 
                                     </tr>
@@ -159,7 +158,11 @@ import LastDaysFilter from '@/Components/LastDaysFilter.vue';
 import Pagination from '@/Components/Pagination.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
+import UserIcon from '@/Components/Icons/UserIcon.vue';
+import { markRaw } from 'vue';
+import TableIcon from '@/Components/Icons/TableIcon.vue';
 export default {
+
 
     props: {
         patients: Object,
@@ -184,7 +187,9 @@ export default {
         FunnelIcon,
         SearchIcon,
         Link,
-        AddIcon
+        AddIcon,
+        UserIcon,
+        TableIcon
 
     },
     watch: {
@@ -204,7 +209,10 @@ export default {
                 showDeleted: this.filters?.showDeleted || true,
             },
             timeout: 2000,
-
+            crumbs: [
+                { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
+                { icon:markRaw(TableIcon), label: 'Listado' }
+            ]
 
         }
     },
