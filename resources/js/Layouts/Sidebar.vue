@@ -76,7 +76,7 @@
               </span>
             </div>
 
-            <div class="absolute min-w-[88px] -right-[100px] opacity-0 pointer-events-none group-hover/logout:opacity-100 group-hover/logout:pointer-events-auto transition duration-300 text-xs text-center text-white bg-slate-700 shadow-[0_4px_6px_0_rgba(0,0,0,0.25)] rounded p-2">
+            <div class="absolute min-w-[88px] -right-[100px] opacity-0 pointer-events-none group-hover/logout:opacity-100 group-hover/logout:pointer-events-auto transition duration-300 text-xs text-center text-white bg-gray-800 shadow-[0_4px_6px_0_rgba(0,0,0,0.25)] rounded p-2">
               <span>Open/Collapse</span>
               <span class="absolute -left-3 w-0 h-0 border-t-[7px] border-t-transparent border-r-[12px] border-r-slate-700 border-b-[7px] border-b-transparent"></span>
             </div>
