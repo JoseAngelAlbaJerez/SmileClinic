@@ -17,7 +17,7 @@
                     <!-- First Name -->
                     <div>
                         <label for="first_name"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
@@ -31,7 +31,7 @@
                     <!-- Last Name -->
                     <div>
                         <label for="last_name"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido <span class="text-red-500">*</span></label>
                         <input v-model="form.last_name" id="last_name" type="text"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Apellido" />
@@ -41,13 +41,11 @@
                     <!-- DNI -->
                     <div>
                         <label for="DNI"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DNI</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DNI <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <CardIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
-                            <input v-model="form.DNI" id="DNI" type="text"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Documento de Identidad" />
+                                <DNIInput class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" v-model="form.DNI"></DNIInput>
                             <p v-if="errors.DNI" class="mt-1 text-xs text-red-600">{{ errors.DNI }}</p>
                         </div>
                     </div>
@@ -55,13 +53,11 @@
                     <!-- Phone Number -->
                     <div>
                         <label for="phone_number"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Teléfono</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Teléfono <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <PhoneIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
-                            <input v-model="form.phone_number" id="phone_number" type="tel"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Ej. 809-555-1234" />
+                                <PhoneInput v-model="form.phone_number" class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"> </PhoneInput>
                         </div>
                         <p v-if="errors.phone_number" class="mt-1 text-xs text-red-600">{{ errors.phone_number }}</p>
                     </div>
@@ -69,7 +65,7 @@
                     <!-- ARS -->
                     <div>
                         <label for="ars"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ARS</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ARS <span class="text-red-500">*</span></label>
                         <select v-model="form.ars" :value="form.ars"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
                             <option value=""> Seleccione una opción</option>
@@ -88,7 +84,7 @@
 
                         <div class="mb-4 px-2 w-full-mt-4">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Fecha de Nacimiento:</label>
+                                for="select-item">Fecha de Nacimiento: <span class="text-red-500">*</span></label>
 
                             <VueDatePicker
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
@@ -99,7 +95,7 @@
                     <!-- Address (full width) -->
                     <div class="md:col-span-2">
                         <label for="address"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dirección</label>
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dirección <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <LocationIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
@@ -171,7 +167,7 @@
                     <div class="md:col-span-2">
                         <label for="motive"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de
-                            consulta</label>
+                            consulta <span class="text-red-500">*</span></label>
                         <textarea id="motive" v-model="form.motive" rows="3"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Describa el motivo de la consulta"></textarea>
@@ -213,6 +209,8 @@ import LocationIcon from '@/Components/Icons/LocationIcon.vue';
 import { useToast } from 'vue-toastification';
 import { markRaw } from 'vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
+import PhoneInput from '@/Components/PhoneInput.vue';
+import DNIInput from '@/Components/DNIInput.vue';
 const toast = useToast();
 export default {
     props: {
@@ -231,7 +229,9 @@ export default {
         ArrowDownTrayIcon,
         InsuranceIcon,
         LocationIcon,
-        AddIcon
+        AddIcon,
+        PhoneInput,
+        DNIInput
     },
     data() {
         return {
@@ -253,7 +253,7 @@ export default {
                 motive: '',
             }),
             error: '',
-             crumbs: [
+            crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { icon: markRaw(AddIcon), label: 'Crear' }
             ]
@@ -261,35 +261,51 @@ export default {
     },
     methods: {
         submit() {
-
+            if(!this.form.first_name){
+                this.error = 'Por favor, ingrese el nombre.';
+                return;
+            }
+              if(!this.form.last_name){
+                this.error = 'Por favor, ingrese el apellido.';
+                return;
+            }
+              if(!this.form.DNI){
+                this.error = 'Por favor, ingrese el DNI.';
+                return;
+            }
+              if(!this.form.phone_number){
+                this.error = 'Por favor, ingrese el número de télefono.';
+                return;
+            }
+              if(!this.form.ars){
+                this.error = 'Por favor, seleccione un seguro médico.';
+                return;
+            }
+             if (!this.form.form.date_of_birth) {
+                this.error = 'Por favor, seleccione la fecha de nacimiento.';
+                return;
+            }
+              if(!this.form.address){
+                this.error = 'Por favor, ingrese la dirección.';
+                return;
+            }
             if (this.form.drugs == true && this.form.drugs_detail == '') {
                 this.error = 'Por favor, asigne un detalle al medicamento.';
                 return;
             }
             if (this.form.alergies == true && this.form.alergies_detail == '') {
-                this.error = 'Por favor, asigne un detalle al medicamento.';
+                this.error = 'Por favor, asigne un detalle las alergias.';
                 return;
             }
             if (this.form.complications == true && this.form.complications_detail == '') {
-                this.error = 'Por favor, asigne un detalle al medicamento.';
+                this.error = 'Por favor, asigne un detalle a las complicaciones.';
                 return;
             }
-            if (!this.form.date_of_birth) {
-                this.error = 'Por favor, seleccione la fecha de nacimiento.';
-                return;
-            }
+
             this.form.date_of_birth = this.formatDate(this.form.date_of_birth);
 
             this.error = null;
-            this.form.post(route('patients.store'), {
-                onSuccess: () => {
-                    toast.success('Paciente registrado correctamente.');
-                    this.form.reset();
-                },
-                  onError: () => {
-                    toast.error('Hubo un error al registrar el paciente.');
-                }
-            });
+            this.form.post(route('patients.store'),);
 
         },
         formatDate(date) {
