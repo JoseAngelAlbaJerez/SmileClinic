@@ -13,15 +13,11 @@ class OdontographSeeder extends Seeder
     {
         $patients = Patient::pluck('id');
 
-        if ($patients->isEmpty()) {
-            $this->command->warn('No hay pacientes registrados. Por favor, corre el seeder de pacientes primero.');
-            return;
-        }
 
         foreach ($patients as $patientId) {
             Odontograph::create([
                 'patient_id'     => $patientId,
-                 'doctor_id' => User::role('doctor')->inRandomOrder()->first()->id,
+                'doctor_id' => User::role('doctor')->inRandomOrder()->first()->id,
                 'cavities'       => json_encode([
                     'center' => rand(0, 1),
                     'top'    => rand(0, 1),
@@ -33,7 +29,7 @@ class OdontographSeeder extends Seeder
                 'filter'         => (bool)rand(0, 1),
                 'root_canal'     => (bool)rand(0, 1),
                 'cleaning'       => (bool)rand(0, 1),
-                'active'         => true,
+                'active'         => (bool)rand(0, 1),
                 'veener'         => now()->subDays(rand(0, 100)),
                 'graft'          => now()->subDays(rand(0, 100)),
                 'sealant'        => now()->subDays(rand(0, 100)),

@@ -20,7 +20,7 @@ class Odontograph extends Model
     'missing' => 'boolean',
     'root_canal' => 'boolean',
     'cleaning' => 'boolean',
-    'active' => 'boolean',
+     'active' => 'boolean',
 ];
 protected $fillable = [
      'cavities',

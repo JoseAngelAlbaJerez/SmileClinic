@@ -9,46 +9,47 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+
 class OdontographController extends Controller
 {
 
-  public function create(Request $request)
-{
-    $patient = Patient::where('id',$request->id)->first();
+    public function create(Request $request)
+    {
+        $patient = Patient::where('id', $request->id)->first();
 
-    return Inertia::render('Odontograph/Create', compact('patient'));
-}
+        return Inertia::render('Odontograph/Create', compact('patient'));
+    }
 
-public function store(Request $request)
-{
+    public function store(Request $request)
+    {
 
-    $data = $request->validate([
-        'patient_id' => 'required|exists:patients,id',
-        'cavities' => 'required|array',
-        'cavities.center' => 'required|integer',
-        'cavities.top' => 'required|integer',
-        'cavities.bottom' => 'required|integer',
-        'cavities.left' => 'required|integer',
-        'cavities.right' => 'required|integer',
-        'missing' => 'boolean',
-        'filter' => 'boolean',
-        'root_canal' => 'boolean',
-        'cleaning' => 'boolean',
-        'active' => 'boolean',
-        'veener' => 'nullable|date',
-        'graft' => 'nullable|date',
-        'sealant' => 'nullable|date',
-        'bonding' => 'nullable|date',
-        'examinations' => 'nullable|date',
-        'fissure_seal' => 'nullable|date',
-    ]);
+        $data = $request->validate([
+            'cavities' => 'required|array',
+            'cavities.center' => 'required|integer',
+            'cavities.top' => 'required|integer',
+            'cavities.bottom' => 'required|integer',
+            'cavities.left' => 'required|integer',
+            'cavities.right' => 'required|integer',
+            'missing' => 'boolean',
+            'filter' => 'boolean',
+            'root_canal' => 'boolean',
+            'cleaning' => 'boolean',
+            'active' => 'boolean',
+            'veener' => 'nullable|date',
+            'graft' => 'nullable|date',
+            'sealant' => 'nullable|date',
+            'bonding' => 'nullable|date',
+            'examinations' => 'nullable|date',
+            'fissure_seal' => 'nullable|date',
+        ]);
+        $data['patient_id'] = $request->patient_id;
+        $data['doctor_id'] = Auth::id();
 
-    $data['doctor_id'] = Auth::id();
 
-    Odontograph::create($data);
+        Odontograph::create($data);
 
-    return redirect()->route('patients.show', $data['patient_id'])->with('success', 'Odontograma guardado correctamente.');
-}
+        return redirect()->route('patients.show', $data['patient_id'])->with('success', 'Odontograma guardado correctamente.');
+    }
 
 
     public function show(Odontograph $odontograph)
@@ -63,14 +64,51 @@ public function store(Request $request)
             'odontograph' => $odontograph
         ]);
     }
-     public function destroy($id)
+    public function update(Request $request, Odontograph $odontograph)
     {
-        $odontograph = Odontograph::findOrFail($id);
-        $odontograph->active = false;
-        $odontograph->save();
+        if ($request->has('active')) {
+           $this->restore($odontograph);
+        }
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'DNI' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'ars' => 'nullable|string|max:255',
+            'date_of_birth' => 'required|date',
+            'address' => 'nullable|string|max:255',
+            'motive' => 'nullable|string|max:255',
+            'complications' => 'boolean',
+            'complications_detail' => 'nullable|string',
+            'drugs' => 'boolean',
+            'drugs_detail' => 'nullable|string',
+            'alergies' => 'boolean',
+            'alergies_detail' => 'nullable|string',
+        ]);
 
-        return redirect()->back()->with('message', 'Odontograma desactivado correctamente.');
+        $odontograph->update($data);
+
+        return redirect()->route('patients.show', $odontograph->patient_id)->with('toast.flash', [
+            'type' => 'success',
+            'message' => 'Paciente Registrado Correctamente'
+        ]);
     }
+    private function restore(Odontograph $odontograph)
+{
+    $odontograph->active = 1;
+    $odontograph->save();
+
+    return redirect()->route('patients.show', $odontograph->patient_id)->with('message', 'Odontograma restaurado correctamente.');
+}
+
+public function destroy(Odontograph $odontograph)
+{
+
+    $odontograph->active = 0;
+    $odontograph->save();
+
+    return redirect()->route('patients.show',$odontograph->patient_id)->with('message', 'Odontograma desactivado correctamente.');
+}
 
 
 

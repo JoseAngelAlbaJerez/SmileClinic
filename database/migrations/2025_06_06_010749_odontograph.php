@@ -33,7 +33,7 @@ return new class extends Migration
             $table->date('bonding')->nullable();
             $table->date('examinations')->nullable();
             $table->date('fissure_seal')->nullable();
-            $table->boolean('active')->default(true);
+            $table->boolean('active');
             $table->unsignedBigInteger('doctor_id')->nullable();
             $table->foreign('doctor_id')->references('id')->on('users');
             $table->timestamps();
