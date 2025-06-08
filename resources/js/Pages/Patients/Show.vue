@@ -98,7 +98,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
                                 event.title
-                            }}</h3>
+                                }}</h3>
                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                 :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                 {{ event.attended ? 'Atendido' : 'No Atendido' }}
@@ -141,7 +141,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
                                 event.title
-                            }}</h3>
+                                }}</h3>
                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                 :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                 {{ event.attended ? 'Atendido' : 'No Atendido' }}
@@ -181,7 +181,7 @@
 
                 </div>
                 <div class=" flex ml-auto gap-2 ">
-                    <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
+                    <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
                         class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
                     <button @click="toggleshowDeleted()"
                         class="flex justify-center gap-2 rounded-lg bg-red-600 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 sm:px-4">
@@ -201,14 +201,15 @@
                     <div class="flex items-center justify-center text-gray-500 dark:text-gray-200">
                         <DoctorIcon class="size-12 mb-2" />
                     </div>
-                    <span class="self-center text-gray-500 dark:text-gray-200">{{ item.doctor.first_name }} {{
+                    <span class="self-center text-gray-500 dark:text-gray-200">{{ item.doctor.name }} {{
                         item.doctor.last_name }}</span>
                 </div>
-
+                    18
+                <Molar/>
 
                 <div class=" flex  gap-2 ">
                     <h2 class="text-sm text-gray-400 my-2">Fecha de Creación - {{ formatDate(item.created_at)
-                        }} </h2>
+                    }} </h2>
                     <Link v-if="item.active" :href="route('odontographs.edit', item)"
                         class="flex  ml-auto gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
                     <EditIcon />
@@ -250,7 +251,7 @@ import { markRaw } from 'vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import MedicalHistoryIcon from '@/Components/Icons/MedicalHistoryIcon.vue';
-
+import Molar from '@/Components/Icons/Teeths/Molar.vue';
 const toast = useToast();
 export default {
     props: {
@@ -275,7 +276,8 @@ export default {
         DocumentMoney,
         RestoreIcon,
         CalendarIcon,
-        MedicalHistoryIcon
+        MedicalHistoryIcon,
+        Molar
     },
     data() {
         return {
@@ -308,70 +310,34 @@ export default {
             });
         },
         deletePatient(id) {
-            this.$inertia.delete(route('patients.destroy', id), {
-                onSuccess: () => {
-                    toast.success('Paciente desactivado correctamente.');
-                },
-                onError: () => {
-                    toast.error('Hubo un error al desactivar el paciente.');
-                }
-            });
+            this.$inertia.delete(route('patients.destroy', id),);
         },
         restorePatient() {
             this.$inertia.put(route('patients.update', this.patient.id), {
-                active: true,
-                onSuccess: () => {
-                    toast.success('Paciente restaurado correctamente.');
-                },
-                onError: () => {
-                    toast.error('Hubo un error al restaurado el paciente.');
-                }
-            });
+                active: true
+            },
+            );
         },
         deleteOdontograph(id) {
-            this.$inertia.delete(route('odontographs.destroy', id), {
-                onSuccess: () => {
-                    toast.success('Odontograma desactivado correctamente.');
-                    this.$inertia.reload();
-                },
-                onError: () => {
-                    toast.error('Hubo un error al desactivar el Odontograma.');
-                }
-            });
+            this.$inertia.delete(route('odontographs.destroy', id),);
         },
         restoreOdontograph(id) {
             this.$inertia.put(route('odontographs.update', id), {
-                active: true,
-                onSuccess: () => {
-                    toast.success('Odontograma restaurado correctamente.');
-                },
-                onError: () => {
-                    toast.error('Hubo un error al restaurado el odontograma.');
-                }
-            });
+                active: true
+            },
+            );
         },
         deleteEvent(id) {
-            this.$inertia.delete(route('events.destroy', id), {
-                onSuccess: () => {
-                    toast.success('Cita desactivada correctamente.');
-                    this.$inertia.reload();
-                },
-                onError: () => {
-                    toast.error('Hubo un error al desactivar la Cita.');
-                }
-            });
+            this.$inertia.delete(route('events.destroy', id));
         },
         restoreEvent(id) {
-            this.$inertia.put(route('events.update', id), {
-                active: true,
-                onSuccess: () => {
-                    toast.success('Cita restaurado correctamente.');
-                },
-                onError: () => {
-                    toast.error('Hubo un error al restaurado la Cita.');
-                }
-            });
+            this.$inertia.put(route('events.update', id),
+                { active: true },
+
+
+            );
         },
+
 
         toggleshowDeleted() {
 
@@ -384,6 +350,8 @@ export default {
             if (this.timeout) {
                 clearTimeout(this.timeout);
             }
+
+            this.form.search = this.filters.search
 
             this.timeout = setTimeout(() => {
                 this.$inertia.get(route('patients.show', this.patient), this.form, {

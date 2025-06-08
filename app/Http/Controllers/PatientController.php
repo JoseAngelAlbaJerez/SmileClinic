@@ -37,6 +37,8 @@ class PatientController extends Controller
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%']);
             });
         }
