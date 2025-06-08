@@ -186,10 +186,6 @@
                     </div>
 
                     <div class="mt-6 text-center pb-4 flex justify-center gap-2">
-                        <SecondaryButton @click="showModal = false"
-                            class="bg-blue-500 hover:bg-blue-700  font-semibold py-2 px-4 rounded">
-                            Cerrar
-                        </SecondaryButton>
                         <DangerButton @click="deletePatient(patient.id)"
                             class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
                             <DeleteIcon /> Eliminar
