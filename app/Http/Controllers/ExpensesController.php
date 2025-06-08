@@ -98,7 +98,7 @@ class ExpensesController extends Controller
         'active' => true
     ]);
 
-    return redirect()->back()->with('success', 'Gasto guardado correctamente.');
+       return redirect()->back()->with('message', 'Egreso registrado correctamente.');
 }
 
 }

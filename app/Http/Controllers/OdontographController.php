@@ -48,7 +48,7 @@ class OdontographController extends Controller
 
         Odontograph::create($data);
 
-        return redirect()->route('patients.show', $data['patient_id'])->with('success', 'Odontograma guardado correctamente.');
+        return redirect()->route('patients.show', $data['patient_id'])->with('toast', 'Odontograma guardado correctamente.');
     }
 
 
@@ -67,7 +67,8 @@ class OdontographController extends Controller
     public function update(Request $request, Odontograph $odontograph)
     {
         if ($request->has('active')) {
-           $this->restore($odontograph);
+            $this->restore($odontograph);
+            return redirect()->back()->with('toast', 'Odontograma restaurado correctamente');
         }
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -88,28 +89,22 @@ class OdontographController extends Controller
 
         $odontograph->update($data);
 
-        return redirect()->route('patients.show', $odontograph->patient_id)->with('toast.flash', [
-            'type' => 'success',
-            'message' => 'Paciente Registrado Correctamente'
-        ]);
+           return redirect()->back()->with('message', 'Odontograma actualizado correctamente.');
     }
     private function restore(Odontograph $odontograph)
-{
-    $odontograph->active = 1;
-    $odontograph->save();
+    {
+        $odontograph->active = 1;
+        $odontograph->save();
 
-    return redirect()->route('patients.show', $odontograph->patient_id)->with('message', 'Odontograma restaurado correctamente.');
-}
+        return redirect()->back()->with('toast', 'Odontograma restaurado correctamente');
+        }
 
-public function destroy(Odontograph $odontograph)
-{
+    public function destroy(Odontograph $odontograph)
+    {
 
-    $odontograph->active = 0;
-    $odontograph->save();
+        $odontograph->active = 0;
+        $odontograph->save();
 
-    return redirect()->route('patients.show',$odontograph->patient_id)->with('message', 'Odontograma desactivado correctamente.');
-}
-
-
-
+         return redirect()->back()->with('toast', 'Odontograma desactivado correctamente');
+       }
 }
