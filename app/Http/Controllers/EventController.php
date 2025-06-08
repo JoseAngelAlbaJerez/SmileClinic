@@ -125,7 +125,42 @@ class EventController extends Controller
             'message' => 'Cita Registrada Correctamente'
         ]);
     }
+      public function update(Request $request, Event $event)
+    {
+        if ($request->has('active')) {
+           $this->restore($event);
+        }
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'DNI' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'ars' => 'nullable|string|max:255',
+            'date_of_birth' => 'required|date',
+            'address' => 'nullable|string|max:255',
+            'motive' => 'nullable|string|max:255',
+            'complications' => 'boolean',
+            'complications_detail' => 'nullable|string',
+            'drugs' => 'boolean',
+            'drugs_detail' => 'nullable|string',
+            'alergies' => 'boolean',
+            'alergies_detail' => 'nullable|string',
+        ]);
 
+        $event->update($data);
+
+        return redirect()->route('patients.show', $event->patient_id)->with('toast.flash', [
+            'type' => 'success',
+            'message' => 'Cita Registrado Correctamente'
+        ]);
+    }
+    private function restore(Event $event)
+{
+    $event->active = 1;
+    $event->save();
+
+    return redirect()->route('patients.show', $event->patient_id)->with('message', 'Cita restaurado correctamente.');
+}
     /**
      * Display the specified resource.
      */
@@ -145,16 +180,17 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy(Event $event)
+{
+
+    $event->active = 0;
+    $event->save();
+
+    return redirect()->route('patients.show',$event->patient_id)->with('message', 'Cita desactivada correctamente.');
+}
 }
