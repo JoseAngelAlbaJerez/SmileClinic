@@ -6,6 +6,7 @@ use App\Models\Odontograph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Patient;
+use App\Models\Event;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,7 +65,6 @@ class PatientController extends Controller
         }
 
         $patients = $query->orderByDesc('created_at')->paginate(10);
-        Log::info($patients);
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
             'filters' => [
@@ -107,12 +107,13 @@ class PatientController extends Controller
                     ->orWhereRaw('CONCAT(name, " ", COALESCE(last_name, "")) LIKE ?', ["%{$search}%"]);
             });
         }
-
+        $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $odontograph = $query->get();
 
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
+            'events' => $events,
             'odontograph' => $odontograph,
             'filters' => [
                 'search' => $search,
