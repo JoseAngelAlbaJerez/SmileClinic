@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -9,19 +9,43 @@ import { Link } from '@inertiajs/vue3';
 import { switchTheme, setThemeOnLoad } from '../theme.js';
 import LightIcon from '@/Components/Icons/LightIcon.vue';
 import DarkIcon from '@/Components/Icons/DarkIcon.vue';
+import { useToast } from 'vue-toastification';
+import { usePage } from '@inertiajs/vue3';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
+const toast = useToast();
+const page = usePage();
+const shownFlash = ref(null);
 
 onMounted(() => {
-  if (
-    localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    isDark.value = true
-  }
-})
 
+    if (
+        localStorage.theme === 'dark' ||
+        (!('theme' in localStorage) &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+        isDark.value = true
+    }
+})
+watchEffect(() => {
+    const flash = page.props.flash;
+
+    if (flash.toast && flash.toast !== shownFlash.value) {
+        const style = flash.toastStyle || 'success';
+
+        if (style === 'danger' || style === 'error') {
+            toast.error(flash.toast);
+        } else if (style === 'info') {
+            toast.info(flash.toast);
+        } else if (style === 'warning') {
+            toast.warning(flash.toast);
+        } else {
+            toast.success(flash.toast);
+        }
+
+        shownFlash.value = flash.toast;
+    }
+});
 </script>
 
 <template>
