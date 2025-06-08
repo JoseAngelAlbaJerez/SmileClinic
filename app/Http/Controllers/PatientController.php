@@ -90,8 +90,9 @@ class PatientController extends Controller
 
 
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
-
-        $query = Odontograph::with('doctor')->where('patient_id', $patient->id);
+        $search = $request->input('search');
+        $query = Odontograph::with('doctor')
+            ->where('patient_id', $patient->id);
 
         if ($showDeleted) {
             $query->where('active', true);
@@ -99,13 +100,22 @@ class PatientController extends Controller
             $query->where('active', false);
         }
 
+        if ($search) {
+            $query->whereHas('doctor', function (Builder $q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhereRaw('CONCAT(name, " ", COALESCE(last_name, "")) LIKE ?', ["%{$search}%"]);
+            });
+        }
+
         $odontograph = $query->get();
+
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'odontograph' => $odontograph,
             'filters' => [
-
+                'search' => $search,
                 'showDeleted' => $showDeleted,
 
             ],
@@ -120,6 +130,9 @@ class PatientController extends Controller
 
     public function update(Request $request, Patient $patient)
     {
+        if ($request->has('active')) {
+            $this->restore($patient);
+        }
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -144,7 +157,13 @@ class PatientController extends Controller
             'message' => 'Paciente Registrado Correctamente'
         ]);
     }
+   private function restore(Patient $patient)
+{
+    $patient->active = 1;
+    $patient->save();
 
+    return redirect()->route('patients.show', $patient->id)->with('message', 'Odontograma restaurado correctamente.');
+}
 
     public function store(Request $request)
     {
