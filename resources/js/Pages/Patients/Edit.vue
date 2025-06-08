@@ -232,7 +232,7 @@ export default {
             }),
              crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-                { label: this.patient.first_name + this.patient.last_name, to: route('patients.show',this.patient) }
+                { label: this.patient.first_name +' '+ this.patient.last_name, to: route('patients.show',this.patient) }
             ]
         };
     },
