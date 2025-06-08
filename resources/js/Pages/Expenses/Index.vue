@@ -22,8 +22,8 @@
                                 class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
                             <button @click="openModal()"
                                 class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                            <AddIcon class="size-6" />
-                            Nuevo Egreso
+                                <AddIcon class="size-6" />
+                                Nuevo Egreso
                             </button>
                         </div>
                     </div>
@@ -46,10 +46,18 @@
                                                 '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('description')">
-                                            Descripción<span v-if="form.sortField === 'description'">{{ form.sortDirection ===
-                                                'asc' ? '↑' :
-                                                '↓'
+                                            Descripción<span v-if="form.sortField === 'description'">{{
+                                                form.sortDirection ===
+                                                    'asc' ? '↑' :
+                                                    '↓'
                                                 }}</span></th>
+                                                <th scope="col" class="  cursor-pointer" @click="sort('users.id')">Creado Por:
+                                            <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc'
+                                                ?
+                                                '↑' :
+                                                '↓'
+                                                }}</span>
+                                        </th>
                                         <th scope="col " class=" cursor-pointer" @click="sort('amount')">
                                             Monto <span v-if="form.sortField === 'amount'">{{
                                                 form.sortDirection ===
@@ -58,23 +66,13 @@
                                                     '↓'
                                             }}</span>
                                         </th>
-
-                                        <th scope="col" class="  cursor-pointer" @click="sort('users.id')">Creado Por:
-                                            <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span>
-                                        </th>
-
-
                                         <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
                                             Fecha de
                                             Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span></th>
+                                            }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -96,8 +94,9 @@
                                     <tr v-for="expense in expenses.data" :key="expense.id">
                                         <td class="p-4  items-center">{{ expense.id }}</td>
                                         <td class="p-4  items-center">{{ expense.description }} </td>
-                                        <td class="p-4  items-center">{{ expense.amount }} </td>
-                                        <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name }} </td>
+                                         <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
+                                            }} </td>
+                                        <td class="p-4  items-center">$ {{ formatNumber(expense.amount) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
@@ -135,7 +134,7 @@
                     <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
                         Crear Egreso
                     </h2>
-  <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                         <!-- Descripción -->
                         <div>
                             <label for="description"
@@ -260,12 +259,12 @@ export default {
                 { icon: markRaw(CartIcon), label: 'Egresos', to: route('expenses.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
-             showModal: ref(false),
-             form_modal: useForm({
+            showModal: ref(false),
+            form_modal: useForm({
                 description: '',
                 amount: '',
             }),
-              error: '',
+            error: '',
 
         }
     },
@@ -279,7 +278,11 @@ export default {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },
-         submit() {
+        formatNumber(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
+
+        submit() {
             if (!this.form_modal.description) {
                 this.error = 'Por favor, ingrese la descripción del egreso.';
                 return;
@@ -306,7 +309,7 @@ export default {
             });
 
         },
-         openModal() {
+        openModal() {
 
 
             this.showModal = true;
