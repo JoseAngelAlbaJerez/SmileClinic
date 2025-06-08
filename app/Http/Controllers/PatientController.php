@@ -94,21 +94,25 @@ class PatientController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $search = $request->input('search');
         $query = Odontograph::with('doctor')
-            ->where('patient_id', $patient->id);
+            ->join('users', 'odontographs.doctor_id', '=', 'users.id')
+            ->where('odontographs.patient_id', $patient->id)
+            ->select('odontographs.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
+
+
 
         if ($showDeleted) {
-            $query->where('active', true);
+            $query->where('odontographs.active', true);
         } else {
-            $query->where('active', false);
+            $query->where('odontographs.active', false);
         }
 
         if ($search) {
-            $query->whereHas('doctor', function (Builder $q) use ($search) {
-                $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhereRaw('CONCAT(name, " ", COALESCE(last_name, "")) LIKE ?', ["%{$search}%"]);
+            $query->where(function (Builder $q) use ($search) {
+                $q->WhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
+                ->orWhere('odontographs.id', $search);
             });
         }
+
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $odontograph = $query->get();
 
@@ -135,6 +139,7 @@ class PatientController extends Controller
     {
         if ($request->has('active')) {
             $this->restore($patient);
+            return redirect()->back()->with('message', 'Paciente restaurado correctamente.');
         }
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -155,18 +160,15 @@ class PatientController extends Controller
 
         $patient->update($data);
 
-        return redirect()->route('patients.show', $patient)->with('toast.flash', [
-            'type' => 'success',
-            'message' => 'Paciente Registrado Correctamente'
-        ]);
+        return redirect()->back()->with('message', 'Paciente actualizado correctamente.');
     }
-   private function restore(Patient $patient)
-{
-    $patient->active = 1;
-    $patient->save();
+    private function restore(Patient $patient)
+    {
+        $patient->active = 1;
+        $patient->save();
 
-    return redirect()->route('patients.show', $patient->id)->with('message', 'Odontograma restaurado correctamente.');
-}
+        return redirect()->back()->with('message', 'Paciente restaurado correctamente.');
+    }
 
     public function store(Request $request)
     {
@@ -191,12 +193,11 @@ class PatientController extends Controller
             $validated['active'] = true;
             $patient = Patient::create($validated);
 
-            return redirect()->route('patients.show', $patient)->with('toast.flash', [
-                'type' => 'success',
-                'message' => 'Paciente Registrado Correctamente'
-            ]);
+            return redirect()->back()->with('message', 'Paciente registrado correctamente.');
         } catch (ValidationException $e) {
-            return back()->with('flash.toast', $e)->with('flash.toastStyle', 'danger');
+            return back()
+                ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
+                ->with('toastStyle', 'danger');
         }
     }
     public function destroy($id)
