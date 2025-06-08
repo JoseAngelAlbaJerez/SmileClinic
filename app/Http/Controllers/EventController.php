@@ -115,7 +115,7 @@ class EventController extends Controller
             'date'        => 'required|date',
         ]);
 
-        $validated['attended'] = true;
+        $validated['attended'] = false;
         $validated['active'] = true;
 
         Event::create($validated);
