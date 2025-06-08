@@ -171,12 +171,9 @@
 
                         <!-- Botones -->
                         <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                             <SecondaryButton type="button" @click="showModal = false">
-                                Cerrar
-                            </SecondaryButton>
-                            <PrimaryButton type="button" @click="form_modal.reset()">
+                            <SecondaryButton type="button" @click="form_modal.reset()">
                                 Limpiar
-                            </PrimaryButton>
+                            </SecondaryButton>
                             <PrimaryButton type="submit">Guardar</PrimaryButton>
                         </div>
                     </form>
