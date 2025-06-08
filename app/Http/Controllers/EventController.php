@@ -42,6 +42,7 @@ class EventController extends Controller
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('events.title LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
@@ -120,15 +121,13 @@ class EventController extends Controller
 
         Event::create($validated);
 
-         return redirect()->route('events.index')->with('toast.flash', [
-            'type' => 'success',
-            'message' => 'Cita Registrada Correctamente'
-        ]);
+         return redirect()->back()->with('toast', 'Cita registrada correctamente');
     }
-      public function update(Request $request, Event $event)
+    public function update(Request $request, Event $event)
     {
         if ($request->has('active')) {
-           $this->restore($event);
+            $this->restore($event);
+            return redirect()->back()->with('success', 'cita restaurada correctamente');
         }
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -149,18 +148,15 @@ class EventController extends Controller
 
         $event->update($data);
 
-        return redirect()->route('patients.show', $event->patient_id)->with('toast.flash', [
-            'type' => 'success',
-            'message' => 'Cita Registrado Correctamente'
-        ]);
+        return redirect()->back()->with('toast', 'Cita actualizada correctamente');
     }
     private function restore(Event $event)
-{
-    $event->active = 1;
-    $event->save();
+    {
+        $event->active = 1;
+        $event->save();
 
-    return redirect()->route('patients.show', $event->patient_id)->with('message', 'Cita restaurado correctamente.');
-}
+        return redirect()->back()->with('toast', 'Cita restaurada correctamente');
+    }
     /**
      * Display the specified resource.
      */
@@ -186,11 +182,11 @@ class EventController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event)
-{
+    {
 
-    $event->active = 0;
-    $event->save();
-
-    return redirect()->route('patients.show',$event->patient_id)->with('message', 'Cita desactivada correctamente.');
-}
+        $event->active = 0;
+        $event->save();
+        return redirect()->back()
+            ->with('toast', 'Cita desactivada correctamente');
+    }
 }

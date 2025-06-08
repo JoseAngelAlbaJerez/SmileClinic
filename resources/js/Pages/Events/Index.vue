@@ -50,8 +50,8 @@
                                                 'asc' ? '↑' :
                                                 '↓'
                                                 }}</span></th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('doctor.first_name')">
-                                            Doctor <span v-if="form.sortField === 'doctor.first_name'">{{
+                                        <th scope="col" class=" cursor-pointer" @click="sort('doctor.name')">
+                                            Doctor <span v-if="form.sortField === 'doctor.name'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
                                                     '↑' :
@@ -96,7 +96,7 @@
                                     <tr v-for="event in events.data" :key="event.id">
                                         <td class="p-4  items-center">{{ event.id }}</td>
                                         <td class="p-4  items-center">{{ event.title }} </td>
-                                        <td class="p-4  items-center">{{ event.doctor.first_name }} {{
+                                        <td class="p-4  items-center">{{ event.doctor.name }} {{
                                             event.doctor.last_name }}</td>
                                         <td class="p-4  items-center">{{ event.patient.first_name }} {{
                                             event.patient.last_name }}</td>
@@ -142,7 +142,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Paciente:</span>
                             <Link :href="route('patients.show', selectedEvent.patient.id)" class="text-blue-500">{{
-                            selectedEvent.patient.first_name }} {{
+                                selectedEvent.patient.first_name }} {{
                                 selectedEvent.patient.last_name }}
                             </Link>
                         </div>
@@ -154,7 +154,7 @@
 
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.doctor.first_name }} {{
+                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.doctor.name }} {{
                                 selectedEvent.doctor.last_name }}</span>
                         </div>
 
@@ -185,11 +185,20 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 text-center pb-4 flex justify-center gap-2">
-                        <DangerButton @click="deletePatient(patient.id)"
-                            class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
-                            <DeleteIcon /> Eliminar
+                    <div class=" flex  gap-2 ">
+                        <Link v-if="selectedEvent.active" :href="route('odontographs.edit', selectedEvent)"
+                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                        <EditIcon />
+                        </Link>
+                        <DangerButton v-if="selectedEvent.active" @click="deleteEvent(selectedEvent)"
+                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <DeleteIcon />
                         </DangerButton>
+                        <button v-else @click="restoreEvent(selectedEvent)"
+                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <RestoreIcon />
+                        </button>
+
                     </div>
                 </div>
             </Modal>
@@ -232,6 +241,10 @@ import { ref } from 'vue';
 import { markRaw } from 'vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
+import EditIcon from '@/Components/Icons/EditIcon.vue';
+import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 export default {
 
     props: {
@@ -256,13 +269,15 @@ export default {
         ChevronDoubleRightIcon,
         ChevronLeftIcon,
         ChevronRightIcon,
+        EditIcon,
         DocumentIcon,
         FunnelIcon,
         SearchIcon,
         Link,
         Modal,
         TableIcon,
-        AddIcon
+        AddIcon,
+        RestoreIcon
 
     },
     watch: {
@@ -307,6 +322,14 @@ export default {
         },
         AttendEvent() {
             this.selectedEvent.attended = !this.selectedEvent.attended;
+        },
+        deleteEvent(id) {
+            this.$inertia.delete(route('events.destroy', id),);
+        },
+        restoreEvent(id) {
+            this.$inertia.put(route('events.update', id),
+                { active: true },
+            );
         },
 
 
