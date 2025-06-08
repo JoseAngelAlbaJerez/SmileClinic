@@ -78,8 +78,9 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Inicio:</label>
 
-                            <VueDatePicker v-model="form.starttime" model-type="format" type="time" :time-picker="true" :is-24="true"
-                                :minutes-increment="5" format="HH:mm" placeholder="Selecciona hora de inicio"
+                            <VueDatePicker v-model="form.starttime" model-type="format" type="time" :time-picker="true"
+                                :is-24="true" :minutes-increment="5" format="HH:mm"
+                                placeholder="Selecciona hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -91,8 +92,9 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Finalización:</label>
 
-                            <VueDatePicker v-model="form.endtime" model-type="format"  type="time" :time-picker="true" :is-24="true"
-                                :minutes-increment="5" format="HH:mm" placeholder="Selecciona hora de finalización"
+                            <VueDatePicker v-model="form.endtime" model-type="format" type="time" :time-picker="true"
+                                :is-24="true" :minutes-increment="5" format="HH:mm"
+                                placeholder="Selecciona hora de finalización"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -193,7 +195,7 @@ export default {
                 this.error = 'Por favor, seleccione una hora de finalización.';
                 return;
             }
-            if(this.form.starttime > this.form.endtime){
+            if (this.form.starttime > this.form.endtime) {
                 this.error = 'La hora finalización debe ser despues de la hora de inicio';
                 return;
             };
@@ -203,23 +205,7 @@ export default {
 
             this.form.date = this.formatDate(this.form.date);
 
-            this.form.post(route('events.store'), {
-                onSuccess: () => {
-                    toast.success('Cita registrada correctamente.');
-                    this.form.reset();
-                },
-                onError: (errors) => {
-
-                    if (errors && errors.response && errors.response.data && errors.response.data.errors) {
-
-                        const firstErrorField = Object.keys(errors.response.data.errors)[0];
-                        this.error = errors.response.data.errors[firstErrorField][0];
-                        toast.error(this.error);
-                    } else {
-                        toast.error('Hubo un error al registrar la Cita.');
-                    }
-                }
-            });
+            this.form.post(route('events.store'),);
 
         },
         formatDate(date) {
