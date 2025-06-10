@@ -11,6 +11,7 @@ import LightIcon from '@/Components/Icons/LightIcon.vue';
 import DarkIcon from '@/Components/Icons/DarkIcon.vue';
 import { useToast } from 'vue-toastification';
 import { usePage } from '@inertiajs/vue3';
+import '@vuepic/vue-datepicker/dist/main.css';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
 const toast = useToast();
@@ -74,6 +75,9 @@ watchEffect(() => {
                                 </NavLink>
                                 <NavLink :href="route('events.index')" :active="route().current('events.index')">
                                     Citas
+                                </NavLink>
+                                <NavLink :href="route('budgets.index')" :active="route().current('budgets.index')">
+                                    Presupuestos
                                 </NavLink>
                                 <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
                                     Egresos
