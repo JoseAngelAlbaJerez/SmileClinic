@@ -127,23 +127,15 @@ class EventController extends Controller
     {
         if ($request->has('active')) {
             $this->restore($event);
-            return redirect()->back()->with('success', 'cita restaurada correctamente');
+            return redirect()->back()->with('toast', 'Cita restaurada correctamente');
         }
         $data = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'DNI' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:255',
-            'ars' => 'nullable|string|max:255',
-            'date_of_birth' => 'required|date',
-            'address' => 'nullable|string|max:255',
-            'motive' => 'nullable|string|max:255',
-            'complications' => 'boolean',
-            'complications_detail' => 'nullable|string',
-            'drugs' => 'boolean',
-            'drugs_detail' => 'nullable|string',
-            'alergies' => 'boolean',
-            'alergies_detail' => 'nullable|string',
+            'title'       => 'required|string|max:100',
+            'doctor_id'   => 'required|integer',
+            'patient_id'  => 'required|integer',
+            'starttime'  => ['required', 'date_format:H:i', 'before:endtime'],
+            'endtime'    => ['required', 'date_format:H:i', 'after:starttime'],
+            'date'        => 'required|date',
         ]);
 
         $event->update($data);
