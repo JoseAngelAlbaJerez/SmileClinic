@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\BudgetDetailController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\OdontographController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
+use App\Models\BudgetDetail;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('odontographs', OdontographController::class);
     Route::resource('events', EventController::class);
     Route::resource('expenses', ExpensesController::class);
+    Route::resource('budgets', BudgetController::class);
+        Route::resource('budgetDetails', BudgetDetailController::class);
 });
 
 require __DIR__.'/auth.php';
