@@ -128,6 +128,9 @@ class EventController extends Controller
         if ($request->has('active')) {
             $this->restore($event);
             return redirect()->back()->with('toast', 'Cita restaurada correctamente');
+        } else if ($request->has('attended')) {
+            $this->attend($event, $request->attended);
+            return redirect()->back()->with('toast', 'Cita atendida correctamente');
         }
         $data = $request->validate([
             'title'       => 'required|string|max:100',
@@ -148,6 +151,17 @@ class EventController extends Controller
         $event->save();
 
         return redirect()->back()->with('toast', 'Cita restaurada correctamente');
+    }
+      private function attend(Event $event, $attended)
+    {
+        $event->attended = $attended;
+        $event->save();
+        if ($event->attended = true) {
+            return redirect()->back()->with('toast', 'Cita atendida correctamente');
+        } else{
+             return redirect()->back()->with('toast', 'Cita desatendida correctamente');
+        }
+
     }
     /**
      * Display the specified resource.

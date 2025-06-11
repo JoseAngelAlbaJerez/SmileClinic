@@ -243,8 +243,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
-import { useToast } from 'vue-toastification';
-const toast = useToast();
+
 export default {
 
     props: {
@@ -322,6 +321,9 @@ export default {
         },
         AttendEvent() {
             this.selectedEvent.attended = !this.selectedEvent.attended;
+              this.$inertia.put(route('events.update', this.selectedEvent.id),
+                { attended: this.selectedEvent.attended },
+            );
         },
         deleteEvent(id) {
             this.$inertia.delete(route('events.destroy', id),);
