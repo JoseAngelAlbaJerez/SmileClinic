@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
 use App\Models\Odontograph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -114,11 +115,13 @@ class PatientController extends Controller
         }
 
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
+        $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
         $odontograph = $query->get();
 
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
+            'budgets' => $budgets,
             'events' => $events,
             'odontograph' => $odontograph,
             'filters' => [
@@ -193,7 +196,7 @@ class PatientController extends Controller
             $validated['active'] = true;
             $patient = Patient::create($validated);
 
-            return redirect()->back()->with('message', 'Paciente registrado correctamente.');
+            return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');
         } catch (ValidationException $e) {
             return back()
                 ->with('toast', 'Ocurrió un error. ' . $e->getMessage())

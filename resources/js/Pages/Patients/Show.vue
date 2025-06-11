@@ -10,7 +10,7 @@
                 <h2 class="text-lg font-semibold ml-1"> Historial Médico de {{ patient.first_name }} {{
                     patient.last_name }}
                 </h2>
-                <div v-if="patient.active" class=" flex ml-auto gap-2 ">
+                <div v-if="patient.active" class=" flex ml-auto gap-2 mb-2 ">
                     <Link :href="route('patients.edit', patient.id)"
                         class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
                     <PrintIcon /> Imprimir
@@ -88,46 +88,83 @@
                 </div>
                 <!-- Presupuestos -->
                 <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md">
-                    <div class="my-2  flex items-center gap-2">
+                    <div class=" flex items-center gap-2">
                         <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-1" />
-                        <h2 class="text-lg font-semibold ">Presupuestos</h2>
+                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Presupuestos</h2>
+                    </div>
+
+                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md ">
+
+                        <div v-for="(budget, index) in budgets" :key="index"
+                            class="text-sm p-4 cursor-pointer rounded-2xl dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
+
+                            <div @click="openAccordion(index)" class="flex items-center gap-4">
+                                 <p>
+                                    <strong># - </strong> {{ budget.id }}
+                                </p>
+                                <p>
+                                    <strong>Tipo:</strong> {{ budget.type }}
+                                </p>
+                                <p v-if="budget.type === 'Contado'"> <strong>Fecha de Emisión:</strong> {{
+                                    budget.emission_date }}</p>
+                                <template v-if="budget.type === 'Crédito'">
+                                    <p> <strong>Fecha de Expiración:</strong> {{ budget.expiration_date }}</p>
+                                </template>
+                                <p> <strong>Total:</strong> {{ formatNumber(budget.total) }}</p>
+                                <ChevronDownIcon class="flex  ml-auto " v-if="activeIndex === index" />
+                                <ChevronUpIcon class="flex  ml-auto " v-else />
+                            </div>
+
+                            <transition name="accordion" @enter="enter" @leave="leave">
+                                <div v-if="activeIndex === index">
+                                    <div v-for="details in budget.budgetdetail" :key="details.id"
+                                        class="bg-white my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
+                                                details.id
+                                            }} {{ details.procedure.name }}</h3>
+                                            <span class="text-sm font-medium px-2 py-1 rounded-full"
+                                                :class="details.procedure.coberture ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
+                                                {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                            </span>
+                                        </div>
+
+                                        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                                            <div>
+                                                <label class="block text-sm font-medium">Monto: {{ details.amount
+                                                }}</label>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium">Descuento: {{ details.discount
+                                                }}</label>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium">Cantidad: {{ details.quantity
+                                                }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 mt-4">
+                                            <h3 class="text-md font-semibold">Subtotal: {{ formatNumber(details.total) }}
+                                            </h3>
+                                            <DangerButton v-if="budget.active && details.active"
+                                                @click="deleteBudgetDetail(details.id)"
+                                                class="ml-auto mt-2 gap-2 bg-red-500 px-2 py-2 text-sm text-white hover:bg-red-600 rounded-lg">
+                                                <DeleteIcon />
+                                            </DangerButton>
+                                            <button v-else @click="restoreBudgetDetail(details.id)"
+                                                class="ml-auto gap-2 bg-green-500 px-2 py-2 text-sm text-white hover:bg-green-600 rounded-lg">
+                                                <RestoreIcon />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </transition>
+
+                        </div>
 
                     </div>
-                    <div v-for="event in events" :key="event.id"
-                        class="bg-white  my-2 border shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
-                                event.title
-                                }}</h3>
-                            <span class="text-sm font-medium px-2 py-1 rounded-full"
-                                :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
-                                {{ event.attended ? 'Atendido' : 'No Atendido' }}
-                            </span>
-                        </div>
 
-
-
-                        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                            <p><strong>Fecha:</strong> {{ event.date }}</p>
-                            <p><strong>Hora:</strong> {{ event.starttime }} - {{ event.endtime }}</p>
-                            <p><strong>Doctor:</strong> {{ event.doctor.name }} {{ event.last_name }}</p>
-                        </div>
-                        <div class=" flex  gap-2 ">
-                            <Link v-if="event.active" :href="route('odontographs.edit', event)"
-                                class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <EditIcon />
-                            </Link>
-                            <DangerButton v-if="event.active" @click="deleteEvent(event)"
-                                class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                <DeleteIcon />
-                            </DangerButton>
-                            <button v-else @click="restoreEvent(event)"
-                                class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                <RestoreIcon />
-                            </button>
-
-                        </div>
-                    </div>
                 </div>
                 <!-- Citas Pendientes -->
                 <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md">
@@ -141,7 +178,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
                                 event.title
-                                }}</h3>
+                            }}</h3>
                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                 :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                 {{ event.attended ? 'Atendido' : 'No Atendido' }}
@@ -197,15 +234,53 @@
             <div class="overflow-x-auto bg-gray-100 mt-5 dark:bg-gray-800 dark:text-gray-200  rounded-2xl p-5"
                 v-for="item in odontograph" :key="item.id">
                 <div class="flex items-center gap-2 font-bold h-12">
-                    <h2 class="self-center"># - {{ item.id }}</h2>
+                    <h2 class="self-center mt-1"># - {{ item.id }}</h2>
                     <div class="flex items-center justify-center text-gray-500 dark:text-gray-200">
-                        <DoctorIcon class="size-12 mb-2" />
+                        <DoctorIcon class="size-12 mb-3 text-blue-500" />
                     </div>
-                    <span class="self-center text-gray-500 dark:text-gray-200">{{ item.doctor.name }} {{
+                    <span class="self-center text-gray-500 dark:text-gray-200 mt-1">{{ item.doctor.name }} {{
                         item.doctor.last_name }}</span>
                 </div>
-                    18
-                <Molar/>
+                <div class="flex items-center gap-2 font-bold ">
+
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                </div>
+                <hr class="text-gray-900 dark:text-gray-100 ">
+                <div class="flex items-center gap-2 font-bold ">
+
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                    <Molar />
+                </div>
+
 
                 <div class=" flex  gap-2 ">
                     <h2 class="text-sm text-gray-400 my-2">Fecha de Creación - {{ formatDate(item.created_at)
@@ -252,13 +327,17 @@ import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import MedicalHistoryIcon from '@/Components/Icons/MedicalHistoryIcon.vue';
 import Molar from '@/Components/Icons/Teeths/Molar.vue';
-const toast = useToast();
+import ChevronDownIcon from '@/Components/Icons/ChevronDownIcon.vue';
+import ChevronUpIcon from '@/Components/Icons/ChevronUpIcon.vue';
+import { ref } from 'vue';
+
 export default {
     props: {
         patient: Object,
         odontograph: Object,
         filters: Object,
-        events: Object
+        events: Object,
+        budgets: Object
     },
     components: {
         AuthenticatedLayout,
@@ -277,7 +356,9 @@ export default {
         RestoreIcon,
         CalendarIcon,
         MedicalHistoryIcon,
-        Molar
+        Molar,
+        ChevronDownIcon,
+        ChevronUpIcon
     },
     data() {
         return {
@@ -294,7 +375,8 @@ export default {
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { label: this.patient.first_name + ' ' + this.patient.last_name }
-            ]
+            ],
+            activeIndex: null,
         };
 
     },
@@ -309,6 +391,9 @@ export default {
                 day: 'numeric',
             });
         },
+        formatNumber(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
         deletePatient(id) {
             this.$inertia.delete(route('patients.destroy', id),);
         },
@@ -318,6 +403,10 @@ export default {
             },
             );
         },
+        openAccordion(index) {
+            this.activeIndex = this.activeIndex === index ? null : index;
+        },
+
         deleteOdontograph(id) {
             this.$inertia.delete(route('odontographs.destroy', id),);
         },
@@ -337,8 +426,6 @@ export default {
 
             );
         },
-
-
         toggleshowDeleted() {
 
             this.form.showDeleted = !this.form.showDeleted;
@@ -361,6 +448,25 @@ export default {
                 });
             }, 300);
         },
+        enter(el) {
+            el.style.height = '0';
+            el.style.opacity = '0';
+            const height = el.scrollHeight;
+            setTimeout(() => {
+                el.style.transition = 'all 0.3s ease';
+                el.style.height = height + 'px';
+                el.style.opacity = '1';
+            });
+        },
+        leave(el) {
+            el.style.height = el.scrollHeight + 'px';
+            el.style.opacity = '1';
+            setTimeout(() => {
+                el.style.height = el.scrollHeight + 'px';
+                el.style.height = '0';
+                el.style.opacity = '0';
+            })
+        }
 
     },
 };
@@ -372,5 +478,27 @@ export default {
 <style scoped>
 p span:first-child {
     color: #6b7280;
+}
+
+.fade-accordion-enter-active,
+.fade-accordion-leave-active {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.fade-accordion-enter-from,
+.fade-accordion-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.fade-accordion-enter-to,
+.fade-accordion-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+.accordion-enter-active,
+.accordion-leave-active {
+  overflow: hidden;
 }
 </style>
