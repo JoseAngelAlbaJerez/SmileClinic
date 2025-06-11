@@ -93,10 +93,10 @@
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Presupuestos</h2>
                     </div>
 
-                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md ">
+                    <div class=" rounded-2xl ">
 
                         <div v-for="(budget, index) in budgets" :key="index"
-                            class="text-sm p-4 cursor-pointer rounded-2xl dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
+                            class="text-sm p-4 cursor-pointer  bg-gray-300  rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
 
                             <div @click="openAccordion(index)" class="flex items-center gap-4">
                                  <p>
@@ -118,7 +118,7 @@
                             <transition name="accordion" @enter="enter" @leave="leave">
                                 <div v-if="activeIndex === index">
                                     <div v-for="details in budget.budgetdetail" :key="details.id"
-                                        class="bg-white my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
+                                        class="bg-white  hover:bg-blue-500 my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
                                         <div class="flex justify-between items-center mb-2">
                                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
                                                 details.id
@@ -174,7 +174,7 @@
                     </div>
 
                     <div v-for="event in events" :key="event.id"
-                        class="bg-white  my-2 border shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200">
+                        class="bg-white hover:bg-blue-500  my-2 border shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
                                 event.title
@@ -184,9 +184,6 @@
                                 {{ event.attended ? 'Atendido' : 'No Atendido' }}
                             </span>
                         </div>
-
-
-
                         <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                             <p><strong>Fecha:</strong> {{ event.date }}</p>
                             <p><strong>Hora:</strong> {{ event.starttime }} - {{ event.endtime }}</p>
@@ -421,6 +418,16 @@ export default {
         },
         restoreEvent(id) {
             this.$inertia.put(route('events.update', id),
+                { active: true },
+
+
+            );
+        },
+         deleteBudgetDetail(id) {
+            this.$inertia.delete(route('budgetDetails.destroy', id));
+        },
+        restoreBudgetDetail(id) {
+            this.$inertia.put(route('budgetDetails.update', id),
                 { active: true },
 
 
