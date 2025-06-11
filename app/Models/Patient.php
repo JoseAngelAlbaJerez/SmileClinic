@@ -33,6 +33,6 @@ class Patient extends Model
         // return $this->belongsTo(CXC::class,"","id");
     }
     public function Budget(){
-        // return $this->hasMany(Budget::class,"","id");
+        return $this->hasMany(Budget::class,"patient_id","id");
     }
 }
