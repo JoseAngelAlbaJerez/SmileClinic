@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+
 class ExpensesController extends Controller
 {
 
@@ -36,9 +37,9 @@ class ExpensesController extends Controller
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('description LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('amount LIKE ?', ['%' . $search . '%'])
-                     ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
 
-                    ;
+                ;
             });
         }
 
@@ -52,15 +53,15 @@ class ExpensesController extends Controller
             if (is_numeric($lastDays)) {
                 // Filtro en días numéricos: last 1, 7, 30, etc.
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
-               $query->where('expenses.created_at', '>=', $dateFrom);
+                $query->where('expenses.created_at', '>=', $dateFrom);
             } else {
                 // Filtros especiales tipo 'month' o 'year'
                 if ($lastDays === 'month') {
                     $dateFrom = Carbon::now()->startOfMonth();
-                   $query->where('expenses.created_at', '>=', $dateFrom);
+                    $query->where('expenses.created_at', '>=', $dateFrom);
                 } elseif ($lastDays === 'year') {
                     $dateFrom = Carbon::now()->startOfYear();
-                   $query->where('expenses.created_at', '>=', $dateFrom);
+                    $query->where('expenses.created_at', '>=', $dateFrom);
                 }
             }
         }
@@ -86,19 +87,39 @@ class ExpensesController extends Controller
         return Inertia::render("Expenses/Create");
     }
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'description' => 'required|string|max:255',
-        'amount' => 'required|numeric|min:0',
+    {
+        $validated = $request->validate([
+            'description' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
 
-    ]);
-    Expenses::create([
-        ...$validated,
-        'user_id' => Auth::id(),
-        'active' => true
-    ]);
+        ]);
+        Expenses::create([
+            ...$validated,
+            'user_id' => Auth::id(),
+            'active' => true
+        ]);
 
-       return redirect()->back()->with('message', 'Egreso registrado correctamente.');
-}
+        return redirect()->back()->with('toast', 'Egreso registrado correctamente.');
+    }
+    public function update(Request $request, Expenses $expense)
+    {
+        if ($request->has('active')) {
+            $this->restore($expense);
+            return redirect()->back()->with('toast', 'Egreso restaurado correctamente.');
+        }
+    }
+    public function destroy(Expenses $expense)
+    {
+        $expense->active = 0;
+        $expense->save();
 
+        return redirect()->back()->with('toast', 'Egreso eliminado correctamente.');
+    }
+    private function restore(Expenses $expense)
+    {
+        $expense->active = 1;
+        $expense->save();
+
+        return redirect()->back()->with('toast', 'Egreso restaurado correctamente.');
+    }
 }
