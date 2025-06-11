@@ -15,7 +15,7 @@ class ProcedureSeeder extends Seeder
          foreach (range(1, 10) as $i) {
 
             DB::table('procedures')->insert([
-                'name' => fake()->sentence(),
+                'name' => fake()->randomElement(['Bicuspid root canal (premolar)', 'Composite resin dental fillings (per filling)','Deep cleaning - Scaling and root planing (per quadrant)','Dental fillings - Porcelain inlay/onlay (per filling)','Dental sedation','Metallic dental crown','Molar root canal', 'Mouth guard', 'Porcelain and metal dental crown', 'Resin-base or temporary crown', 'Tooth extraction','Wisdom teeth removal' ] ),
                 'coberture' => fake()->boolean(),
                 'cost' => fake()->numberBetween(1000,50000),
                 'active' => true,
