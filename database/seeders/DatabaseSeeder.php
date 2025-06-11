@@ -29,5 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(OdontographSeeder::class);
         $this->call(EventSeeder::class);
         $this->call(ExpensesSeeder::class);
+        $this->call(BudgetSeeder::class);
+        $this->call(ProcedureSeeder::class);
     }
 }

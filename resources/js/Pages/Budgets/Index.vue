@@ -107,8 +107,8 @@
                                             </div>
                                         </td>
                                         <td class="p-4 items-center">
-                                            <p @click="openModal(budget)" class="text-blue-500 cursor-pointer">Abrir
-                                            </p>
+                                            <Link :href="route('budgets.show',budget)" class="text-blue-500 cursor-pointer">Abrir
+                                            </Link>
                                         </td>
 
                                     </tr>
