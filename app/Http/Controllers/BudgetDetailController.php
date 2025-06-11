@@ -27,26 +27,26 @@ class BudgetDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- public function store(Request $request)
-{
-    $validated = $request->validate([
-        'details' => 'required|array',
-        'details.*.budget_id' => 'required|exists:budgets,id',
-        'details.*.treatment' => 'required|string|max:100',
-        'details.*.amount' => 'required|numeric',
-        'details.*.total' => 'required|numeric',
-        'details.*.discount' => 'required|integer',
-        'details.*.quantity' => 'required|integer',
-        'details.*.procedure_id' => 'required|integer',
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'details' => 'required|array',
+            'details.*.budget_id' => 'required|exists:budgets,id',
+            'details.*.treatment' => 'required|string|max:100',
+            'details.*.amount' => 'required|numeric',
+            'details.*.total' => 'required|numeric',
+            'details.*.discount' => 'required|integer',
+            'details.*.quantity' => 'required|integer',
+            'details.*.procedure_id' => 'required|integer',
+        ]);
 
-    foreach ($validated['details'] as $detail) {
-        $detail['active'] = 1;
-        BudgetDetail::create($detail);
+        foreach ($validated['details'] as $detail) {
+            $detail['active'] = 1;
+            BudgetDetail::create($detail);
+        }
+
+        return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardados correctamente');
     }
-
-    return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardados correctamente');
-}
 
 
     /**
@@ -70,7 +70,7 @@ class BudgetDetailController extends Controller
      */
     public function update(Request $request, BudgetDetail $budgetDetail)
     {
-          if ($request->has('active')) {
+        if ($request->has('active')) {
             $this->restore($budgetDetail);
             return redirect()->back()->with('toast', 'Detalle de Presupuesto restaurado correctamente');
         }
@@ -82,14 +82,21 @@ class BudgetDetailController extends Controller
     public function destroy(Budgetdetail $budgetDetail)
     {
         $budgetDetail->active = 0;
+        $budget = $budgetDetail->budget()->first();
+        $budget->total -= $budgetDetail->total;
         $budgetDetail->save();
+        $budget->save();
+
 
         return redirect()->back()->with('toast', 'Detalle de Presupuesto eliminado correctamente');
     }
     private function restore(Budgetdetail $budgetDetail)
     {
         $budgetDetail->active = 1;
+        $budget = $budgetDetail->budget()->first();
+        $budget->total += $budgetDetail->total;
         $budgetDetail->save();
+        $budget->save();
 
         return redirect()->back()->with('toast', 'Detalle de Presupuesto restaurado correctamente');
     }
