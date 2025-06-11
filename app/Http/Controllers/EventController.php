@@ -121,7 +121,7 @@ class EventController extends Controller
 
         Event::create($validated);
 
-         return redirect()->back()->with('toast', 'Cita registrada correctamente');
+         return redirect()->route('events.index')->with('toast', 'Cita registrada correctamente');
     }
     public function update(Request $request, Event $event)
     {
