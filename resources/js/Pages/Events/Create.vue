@@ -67,7 +67,7 @@
 
                             <VueDatePicker
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                v-model="form.date" />
+                                placeholder="Seleccione la fecha" v-model="form.date" />
                         </div>
                     </div>
 
@@ -78,9 +78,9 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Inicio:</label>
 
-                            <VueDatePicker v-model="form.starttime" model-type="format" type="time" :time-picker="true"
+                            <VueDatePicker v-model="form.starttime" model-type="format"  :time-picker="true"
                                 :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Selecciona hora de inicio"
+                                placeholder="Seleccione hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -92,9 +92,9 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Finalización:</label>
 
-                            <VueDatePicker v-model="form.endtime" model-type="format" type="time" :time-picker="true"
+                            <VueDatePicker v-model="form.endtime" model-type="format"  :time-picker="true"
                                 :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Selecciona hora de finalización"
+                                placeholder="Seleccione hora de finalización"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -127,7 +127,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
 import ArrowDownTrayIcon from '@/Components/Icons/ArrowDownTrayIcon.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 import InsuranceIcon from '@/Components/Icons/InsuranceIcon.vue';
 import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
