@@ -109,7 +109,7 @@ const paginationLinks = computed(() => {
             <!-- Botón Anterior -->
             <template v-if="pagination.prev_page_url">
                 <Link :href="buildUrl(pagination.prev_page_url)" preserve-scroll preserve-state
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900">
                 Anterior
                 </Link>
             </template>
@@ -136,7 +136,7 @@ const paginationLinks = computed(() => {
             <!-- Botón Siguiente -->
             <template v-if="pagination.next_page_url">
                 <Link :href="buildUrl(pagination.next_page_url)" preserve-scroll preserve-state
-                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800">
+                    class="px-3 py-1 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900">
                 Siguiente
                 </Link>
             </template>
