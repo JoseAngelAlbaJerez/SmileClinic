@@ -139,7 +139,7 @@
 
                         </div>
                         <div class=" flex  gap-2 ">
-                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">Subtotal: {{
+                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">Subtotal: ${{
                                 formatNumber(form_details[index].total) }}</h3>
                             <DangerButton @click="removeProcedure(index)"
                                 class="flex  ml-auto mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
@@ -159,7 +159,7 @@
                     {{ errors }}
                 </div>
                 <div v-if="form.total" class="mt-2 ml-2 text-red-600 font-medium">
-                    Total: {{ formatNumber(form.total) }}
+                    Total: ${{ formatNumber(form.total) }}
                 </div>
 
 

@@ -32,25 +32,25 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-x-8 gap-y-6 ">
-                    <div class="text-sm text-gray-700 dark:text-gray-300 ml-1 space-y-1">
+                    <div class="text-sm text-gray-700 dark:text-gray-300 ml-1 flex items-center gap-4">
                         <p><strong>Tipo:</strong> {{ budgets.type }}</p>
                         <p><strong>Fecha de Emisión:</strong> {{ budgets.emission_date }}</p>
                         <p v-if="budgets.type == 'Crédito'"><strong>Fecha de Expiración:</strong> {{ budgets.expiration_date
                         }}</p>
-                         <p><strong>Total:</strong> {{formatNumber(budgets.total) }}</p>
+                         <p><strong>Total:</strong> ${{formatNumber(budgets.total) }}</p>
 
                     </div>
-                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md mt-5">
+                    <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md ">
                         <div class="my-2  flex items-center gap-2">
                             <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-1" />
                             <h2 class="text-lg font-semibold dark:text-white ">Procedimientos</h2>
 
                         </div>
 
-                        <div class="bg-white  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
+                        <div class="bg-white hover:bg-blue-500  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
                             v-for="details in budgets.budgetdetail" :key="details.id">
                             <div class="flex justify-between items-center mb-2 ">
-                                <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># - {{ details.id }}
+                                <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">
                                     {{
                                         details.procedure.name }}</h3>
                                 <span class="text-sm font-medium px-2 py-1 rounded-full"
@@ -85,7 +85,7 @@
 
                             </div>
                             <div class=" flex items-center gap-2 mt-4">
-                                <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">Subtotal: {{
+                                <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">Subtotal: ${{
                                     formatNumber(details.total) }}</h3>
                                 <DangerButton v-if="budgets.active, details.active" @click="deleteBudgetDetail(details.id)"
                                     class="flex  ml-auto mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
