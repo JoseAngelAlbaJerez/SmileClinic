@@ -50,13 +50,13 @@
                                                 form.sortDirection ===
                                                     'asc' ? '↑' :
                                                     '↓'
-                                                }}</span></th>
-                                                <th scope="col" class="  cursor-pointer" @click="sort('users.id')">Creado Por:
+                                            }}</span></th>
+                                        <th scope="col" class="  cursor-pointer" @click="sort('users.id')">Creado Por:
                                             <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc'
                                                 ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span>
+                                            }}</span>
                                         </th>
                                         <th scope="col " class=" cursor-pointer" @click="sort('amount')">
                                             Monto <span v-if="form.sortField === 'amount'">{{
@@ -72,7 +72,7 @@
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                            }}</span></th>
+                                                }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -94,8 +94,8 @@
                                     <tr v-for="expense in expenses.data" :key="expense.id">
                                         <td class="p-4  items-center">{{ expense.id }}</td>
                                         <td class="p-4  items-center">{{ expense.description }} </td>
-                                         <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
-                                            }} </td>
+                                        <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
+                                        }} </td>
                                         <td class="p-4  items-center">$ {{ formatNumber(expense.amount) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
                                         <td class="p-4  items-center">
@@ -298,15 +298,7 @@ export default {
 
             this.error = null;
             this.showModal = false;
-            this.form_modal.post(route('expenses.store'), {
-                onSuccess: () => {
-                    toast.success('Egreso registrado correctamente.');
-                    this.form_modal.reset();
-                },
-                onError: () => {
-                    toast.error('Hubo un error al registrar el egreso.');
-                }
-            });
+            this.form_modal.post(route('expenses.store'),);
 
         },
         openModal() {
