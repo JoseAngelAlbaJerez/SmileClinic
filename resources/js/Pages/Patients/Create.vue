@@ -7,10 +7,7 @@
         </template>
         <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
             <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
-                <!-- Título -->
-                <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">
 
-                </h2>
 
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -281,7 +278,7 @@ export default {
                 this.error = 'Por favor, seleccione un seguro médico.';
                 return;
             }
-             if (!this.form.form.date_of_birth) {
+             if (!this.form.date_of_birth) {
                 this.error = 'Por favor, seleccione la fecha de nacimiento.';
                 return;
             }
