@@ -142,7 +142,7 @@ class PatientController extends Controller
     {
         if ($request->has('active')) {
             $this->restore($patient);
-            return redirect()->back()->with('message', 'Paciente restaurado correctamente.');
+            return redirect()->back()->with('toast', 'Paciente restaurado correctamente.');
         }
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -163,14 +163,14 @@ class PatientController extends Controller
 
         $patient->update($data);
 
-        return redirect()->back()->with('message', 'Paciente actualizado correctamente.');
+        return redirect()->back()->with('toast', 'Paciente actualizado correctamente.');
     }
     private function restore(Patient $patient)
     {
         $patient->active = 1;
         $patient->save();
 
-        return redirect()->back()->with('message', 'Paciente restaurado correctamente.');
+        return redirect()->back()->with('toast', 'Paciente restaurado correctamente.');
     }
 
     public function store(Request $request)
@@ -209,6 +209,6 @@ class PatientController extends Controller
         $patient->active = false;
         $patient->save();
 
-        return redirect()->back()->with('message', 'Paciente desactivado correctamente.');
+        return redirect()->back()->with('toast', 'Paciente desactivado correctamente.');
     }
 }
