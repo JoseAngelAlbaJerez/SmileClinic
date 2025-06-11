@@ -35,18 +35,19 @@
                     </div>
 
 
-                     <!-- DNI -->
+                    <!-- DNI -->
                     <div>
                         <label for="DNI"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DNI</label>
-                             <div class="relative">
-                                <CardIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
+                        <div class="relative">
+                            <CardIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
-                        <input v-model="form.DNI" id="DNI" type="text"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                            placeholder="Documento de Identidad" />
-                        <p v-if="errors.DNI" class="mt-1 text-xs text-red-600">{{ errors.DNI }}</p>
-                    </div></div>
+                            <DNIInput
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                v-model="form.DNI" ></DNIInput>
+                            <p v-if="errors.DNI" class="mt-1 text-xs text-red-600">{{ errors.DNI }}</p>
+                        </div>
+                    </div>
 
                     <!-- Phone Number -->
                     <div>
@@ -55,9 +56,9 @@
                         <div class="relative">
                             <PhoneIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
-                            <input v-model="form.phone_number" id="phone_number" type="tel"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Ej. 809-555-1234" />
+                            <PhoneInput v-model="form.phone_number"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                            </PhoneInput>
                         </div>
                         <p v-if="errors.phone_number" class="mt-1 text-xs text-red-600">{{ errors.phone_number }}</p>
                     </div>
@@ -89,14 +90,15 @@
                     <div class="md:col-span-2">
                         <label for="address"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dirección</label>
-                         <div class="relative">
+                        <div class="relative">
                             <LocationIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                 style="pointer-events: none;" />
                             <input v-model="form.address" id="address" type="text"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                            placeholder="Dirección completa" />
-                        <p v-if="errors.address" class="mt-1 text-xs text-red-600">{{ errors.address }}</p>
-                    </div></div>
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                placeholder="Dirección completa" />
+                            <p v-if="errors.address" class="mt-1 text-xs text-red-600">{{ errors.address }}</p>
+                        </div>
+                    </div>
 
                     <!-- Complications Checkbox -->
                     <div class="flex items-center space-x-3">
@@ -193,6 +195,8 @@ import LocationIcon from '@/Components/Icons/LocationIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
 import { useToast } from 'vue-toastification'
 import { markRaw } from 'vue';
+import PhoneInput from '@/Components/PhoneInput.vue';
+import DNIInput from '@/Components/DNIInput.vue';
 const toast = useToast();
 export default {
     props: {
@@ -209,7 +213,9 @@ export default {
         UserIcon,
         PhoneIcon,
         LocationIcon,
-        CardIcon
+        CardIcon,
+        PhoneInput,
+        DNIInput
     },
     data() {
         return {
@@ -230,9 +236,9 @@ export default {
                 address: this.patient.address || '',
                 motive: this.patient.motive || '',
             }),
-             crumbs: [
+            crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-                { label: this.patient.first_name +' '+ this.patient.last_name, to: route('patients.show',this.patient) }
+                { label: this.patient.first_name + ' ' + this.patient.last_name, to: route('patients.show', this.patient) }
             ]
         };
     },
@@ -256,15 +262,7 @@ export default {
             }
 
             this.error = '';
-            this.form.put(route('patients.update', this.patient.id), {
-                onSuccess: () => {
-                        toast.success('Paciente actualizado correctamente.');
-
-                },
-                onError: () =>{
-                     toast.error('Hubo un error al actualizar el paciente.');
-                }
-            });
+            this.form.put(route('patients.update', this.patient.id),);
         },
     },
 };
