@@ -15,7 +15,7 @@
                     <ChevronRightIcon class="w-5 h-4 mx-2 text-gray-400" />
 
                     <!-- Icono dinámico, si existe -->
-                    <component v-if="crumb.icon" :is="crumb.icon" class="w-5 h-5 mr-1 text-gray-500" />
+                    <component v-if="crumb.icon" :is="crumb.icon" class="w-5 h-5 mr-1 " />
 
                     <!-- Texto -->
                     <span v-if="!crumb.to" class="ml-1 font-medium text-gray-700 dark:text-gray-300">
