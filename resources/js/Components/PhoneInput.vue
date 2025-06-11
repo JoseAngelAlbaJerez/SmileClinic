@@ -1,6 +1,6 @@
 <template>
   <input
-    v-model="formattedPhone"
+    :value="formattedPhone"
     @input="onInput"
     type="text"
     maxlength="12"
@@ -10,12 +10,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+  modelValue: String,
+});
+
+const emit = defineEmits(['update:modelValue']);
 
 const formattedPhone = ref('');
 
+watch(() => props.modelValue, (newVal) => {
+  formattedPhone.value = newVal || '';
+}, { immediate: true });
+
 function onInput(e) {
-  let digits = e.target.value.replace(/\D/g, '').substring(0, 10); // max 10 digits
+  let digits = e.target.value.replace(/\D/g, '').substring(0, 10);
   let formatted = '';
 
   if (digits.length > 6) {
@@ -27,5 +37,6 @@ function onInput(e) {
   }
 
   formattedPhone.value = formatted;
+  emit('update:modelValue', formatted);
 }
 </script>

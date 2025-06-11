@@ -1,6 +1,6 @@
 <template>
   <input
-    v-model="formattedDni"
+    :value="formattedDni"
     @input="onInput"
     type="text"
     maxlength="13"
@@ -10,12 +10,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+  modelValue: String
+});
+const emit = defineEmits(['update:modelValue']);
 
 const formattedDni = ref('');
 
+watch(() => props.modelValue, (newVal) => {
+  formattedDni.value = newVal || '';
+}, { immediate: true });
+
 function onInput(e) {
-  let digits = e.target.value.replace(/\D/g, '').substring(0, 11); // 11 digits
+  let digits = e.target.value.replace(/\D/g, '').substring(0, 11); // max 11 digits
   let formatted = '';
 
   if (digits.length > 10) {
@@ -27,5 +36,6 @@ function onInput(e) {
   }
 
   formattedDni.value = formatted;
+  emit('update:modelValue', formatted);
 }
 </script>
