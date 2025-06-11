@@ -89,7 +89,7 @@ class OdontographController extends Controller
 
         $odontograph->update($data);
 
-           return redirect()->back()->with('message', 'Odontograma actualizado correctamente.');
+           return redirect()->back()->with('toast', 'Odontograma actualizado correctamente.');
     }
     private function restore(Odontograph $odontograph)
     {
