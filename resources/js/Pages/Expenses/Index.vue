@@ -20,7 +20,7 @@
 
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
                                 class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
-                            <button @click="openModal()"
+                            <button @click="showModal = true;"
                                 class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
                                 <AddIcon class="size-6" />
                                 Nuevo Egreso
@@ -176,9 +176,47 @@
                             <PrimaryButton type="submit">Guardar</PrimaryButton>
                         </div>
                     </form>
+                </div>
+            </Modal>
+            <!-- Modal -->
+            <Modal :show="showDetailModal" @close="showDetailModal = false">
+                <div class="text-gray-800 p-5  ">
+                    <h2 class="text-2xl font-semibold p-4 text-blue-500  pb-2">
+                        Detalles del Egreso
+                    </h2>
 
+                    <div v-if="selectedExpense" class="space-y-3 p-4">
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
+                            <span class="text-gray-900 dark:text-gray-300">{{ selectedExpense.user.name }} {{
+                                selectedExpense.user.last_name }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Descripción: </span>
+                            <span class="text-gray-900 dark:text-gray-300">{{ selectedExpense.description }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
+                            <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
+                                }}</span>
+                        </div>
+                    </div>
 
+                    <div class=" flex  gap-2 ">
+                        <Link v-if="selectedExpense.active" :href="route('odontographs.edit', selectedExpense)"
+                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                        <EditIcon />
+                        </Link>
+                        <DangerButton v-if="selectedExpense.active" @click="deleteExpense(selectedExpense)"
+                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <DeleteIcon />
+                        </DangerButton>
+                        <button v-else @click="restoreExpense(selectedExpense)"
+                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <RestoreIcon />
+                        </button>
 
+                    </div>
                 </div>
             </Modal>
 
@@ -214,6 +252,10 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useToast } from 'vue-toastification';
+import EditIcon from '@/Components/Icons/EditIcon.vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 const toast = useToast();
 export default {
 
@@ -239,9 +281,12 @@ export default {
         DocumentMoney,
         AuthenticatedLayout,
         PrimaryButton,
-        SecondaryButton
-
-
+        SecondaryButton,
+        Link,
+        EditIcon,
+        DeleteIcon,
+        DangerButton,
+        RestoreIcon,
     },
 
     data() {
@@ -260,6 +305,8 @@ export default {
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showModal: ref(false),
+            showDetailModal: ref(false),
+            selectedExpense: ref(null),
             form_modal: useForm({
                 description: '',
                 amount: '',
@@ -301,11 +348,11 @@ export default {
             this.form_modal.post(route('expenses.store'),);
 
         },
-        openModal() {
-
-
-            this.showModal = true;
+        openModal(expense) {
+            this.selectedExpense = expense;
+            this.showDetailModal = true;
         },
+
         statusBadgeClasses(status) {
             return {
                 1: "bg-green-200 text-green-700 px-2 py-1 rounded",
@@ -341,12 +388,19 @@ export default {
             this.submitFilters();
         },
         toggleShowDeleted() {
-
             this.form.showDeleted = !this.form.showDeleted;
-
             this.submitFilters();
-
-        }
+        },
+        deleteExpense(id) {
+            this.showDetailModal = false;
+            this.$inertia.delete(route('expenses.destroy', id),);
+        },
+        restoreExpense(id) {
+            this.showDetailModal = false;
+            this.$inertia.put(route('expenses.update', id),
+                { active: true },
+            );
+        },
 
 
     }
