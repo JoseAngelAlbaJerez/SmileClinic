@@ -168,6 +168,10 @@ class BudgetController extends Controller
     public function destroy(Budget $budget)
     {
         $budget->active = 0;
+        $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget) {
+            $budgetDetail->active = 0;
+            $budgetDetail->save();
+        });
         $budget->save();
 
         return redirect()->back()->with('toast', 'Presupuesto eliminado correctamente');
