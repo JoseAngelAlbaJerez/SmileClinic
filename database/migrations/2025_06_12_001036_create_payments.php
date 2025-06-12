@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('budget_details', function (Blueprint $table) {
+        Schema::create('Payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('procedure_id');
-            $table->decimal('amount');
+            $table->foreignId('cxc_id');
+            $table->foreignId('amount_paid');
+            $table->foreignId('remaining_amount');
+            $table->foreignId('budget_detail_id');
             $table->decimal('total');
-            $table->string('treatment');
-            $table->integer('discount');
-            $table->integer('quantity');
-            $table->foreignId( 'budget_id');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('budget_details');
+        Schema::dropIfExists('Payments');
     }
 };
