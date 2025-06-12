@@ -30,7 +30,7 @@ class Patient extends Model
          return $this->hasMany(Event::class,"patient_id","id");
     }
      public function CXC(){
-        // return $this->belongsTo(CXC::class,"","id");
+       return $this->hasOne(CXC::class,"patient_id","id");
     }
     public function Budget(){
         return $this->hasMany(Budget::class,"patient_id","id");
