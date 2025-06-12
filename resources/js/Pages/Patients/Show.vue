@@ -118,7 +118,7 @@
                             <transition name="accordion" @enter="enter" @leave="leave">
                                 <div v-if="activeIndex === index">
                                     <div v-for="details in budget.budgetdetail" :key="details.id"
-                                        class="bg-white  hover:bg-blue-500 my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
+                                        class="bg-white  cursor-default hover:bg-blue-500 my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
                                         <div class="flex justify-between items-center mb-2">
                                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
                                                 details.id
@@ -131,12 +131,12 @@
 
                                         <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
                                             <div>
-                                                <label class="block text-sm font-medium">Monto: {{ details.amount
+                                                <label class="block text-sm font-medium">Monto: ${{ formatNumber(details.amount)
                                                 }}</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Descuento: {{ details.discount
-                                                }}</label>
+                                                }} %</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Cantidad: {{ details.quantity
@@ -145,7 +145,7 @@
                                         </div>
 
                                         <div class="flex items-center gap-2 mt-4">
-                                            <h3 class="text-md font-semibold">Subtotal: {{ formatNumber(details.total) }}
+                                            <h3 class="text-md font-semibold">Subtotal: ${{ formatNumber(details.total) }}
                                             </h3>
                                             <DangerButton v-if="budget.active && details.active"
                                                 @click="deleteBudgetDetail(details.id)"

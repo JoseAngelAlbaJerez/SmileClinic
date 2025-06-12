@@ -64,14 +64,14 @@
                                 class="text-sm text-gray-700 dark:text-gray-300 space-y-2 ">
                                 <div>
                                     <label for="amount"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Monto: {{ details.amount }}
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Monto: ${{ formatNumber(details.amount) }}
                                         </label>
 
                                 </div>
 
                                 <div>
                                     <label for="discount"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Descuento: {{ details.discount }}
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Descuento: {{ details.discount }} %
                                     </label>
 
                                 </div>
