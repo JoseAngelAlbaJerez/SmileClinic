@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('initial')->nullable();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
+            $table->foreignId('c_x_c_id')->nullable();
             $table->decimal('total');
             $table->timestamps();
         });

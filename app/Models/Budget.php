@@ -12,17 +12,24 @@ class Budget extends Model
         "emission_date",
         "expiration_date",
         "doctor_id",
-        "patient_id"
-        ,"total"
+        "patient_id",
+        "total",
+        "c_x_c_id",
     ];
-    public function budgetdetail(){
+    public function budgetdetail()
+    {
         return $this->hasMany(Budgetdetail::class);
     }
-      public function doctor(){
+    public function doctor()
+    {
         return $this->belongsTo(User::class);
     }
-     public function patient(){
+    public function CXC()
+    {
+        return $this->hasOne(CXC::class, );
+    }
+    public function patient()
+    {
         return $this->belongsTo(Patient::class);
     }
-
 }

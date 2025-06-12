@@ -125,9 +125,24 @@ class BudgetController extends Controller
         $budgetData['doctor_id'] = Auth::id();
         $budget = Budget::create($budgetData);
         $budget->budgetdetail()->createMany($validated['details']);
-        if ($budget->type = "Crédito") {
-         CXC::create(['balance'=> $budget->total,'budget_id' => $budget->id, 'patient_id' => $budget->patient_id, 'doctor_id' => $budget->doctor_id,]);
+        if ($budget->type == "Crédito") {
+            $patient = $budget->patient;
+
+            if (!$patient->cxc) {
+                $CXC = CXC::create([
+                    'balance' => $budget->total,
+                    'patient_id' => $budget->patient_id,
+                    'doctor_id' => $budget->doctor_id,
+                ]);
+            } else {
+
+                $CXC = $patient->cxc;
+            }
+
+            $budget->c_x_c_id = $CXC->id;
+            $budget->save();
         }
+
 
 
         return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardado correctamente');
