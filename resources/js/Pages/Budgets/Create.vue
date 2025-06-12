@@ -58,7 +58,7 @@
                         <VueDatePicker
                             class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Seleccione la fecha de expiración" v-model="form.expiration_date" />
-
+                        <p v-if="errors.expiration_date" class="mt-1 text-xs text-red-600">{{ errors.expiration_date }}</p>
 
                     </div>
 
@@ -314,7 +314,7 @@ export default {
             const quantity = parseInt(detail.quantity) || 1;
 
             detail.total = (amount * quantity);
-            const discounted =  (detail.total * discount)/100;
+            const discounted = (detail.total * discount) / 100;
             detail.total -= discounted;
 
             this.form.total = this.form_details.reduce((sum, detail) => {
@@ -380,7 +380,7 @@ export default {
             }
 
             if (this.form.type === 'Crédito' && !this.form.expiration_date) {
-                this.error = 'Por favor, ingrese la fecha de expiración.';
+                this.errors.expiration_date = 'Por favor, ingrese la fecha de expiración.';
                 return;
             }
 
