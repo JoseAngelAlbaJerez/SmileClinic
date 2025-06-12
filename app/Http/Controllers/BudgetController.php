@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
+use App\Models\CXC;
 use App\Models\Procedure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -56,11 +57,9 @@ class BudgetController extends Controller
         }
         if ($lastDays) {
             if (is_numeric($lastDays)) {
-                // Filtro en días numéricos: last 1, 7, 30, etc.
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
                 $query->where('created_at', '>=', $dateFrom);
             } else {
-                // Filtros especiales tipo 'month' o 'year'
                 if ($lastDays === 'month') {
                     $dateFrom = Carbon::now()->startOfMonth();
                     $query->where('created_at', '>=', $dateFrom);
@@ -126,6 +125,9 @@ class BudgetController extends Controller
         $budgetData['doctor_id'] = Auth::id();
         $budget = Budget::create($budgetData);
         $budget->budgetdetail()->createMany($validated['details']);
+        if ($budget->type = "Crédito") {
+         CXC::create(['balance'=> $budget->total,'budget_id' => $budget->id, 'patient_id' => $budget->patient_id, 'doctor_id' => $budget->doctor_id,]);
+        }
 
 
         return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardado correctamente');
