@@ -14,4 +14,7 @@ class BudgetDetail extends Model
     public function budget(){
         return $this->belongsTo(Budget::class,'budget_id','id');
     }
+    public function Payment(){
+        return $this->hasMany(Payment::class,'budget_detail_id','id');
+    }
 }
