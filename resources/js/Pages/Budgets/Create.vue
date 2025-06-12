@@ -313,7 +313,10 @@ export default {
             const discount = parseFloat(detail.discount) || 0;
             const quantity = parseInt(detail.quantity) || 1;
 
-            detail.total = (amount * quantity) - discount;
+            detail.total = (amount * quantity);
+            const discounted =  (detail.total * discount)/100;
+            detail.total -= discounted;
+
             this.form.total = this.form_details.reduce((sum, detail) => {
                 const total = parseFloat(detail.total) || 0;
                 return sum + total;
