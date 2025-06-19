@@ -79,15 +79,13 @@ watchEffect(() => {
                                 <NavLink :href="route('budgets.index')" :active="route().current('budgets.index')">
                                     Presupuestos
                                 </NavLink>
+                                  <NavLink :href="route('CXC.index')" :active="route().current('CXC.index')">
+                                    Cuentas por Cobrar
+                                </NavLink>
                                 <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
                                     Egresos
                                 </NavLink>
-                                 <NavLink :href="route('CXC.index')" :active="route().current('CXC.index')">
-                                    Cuentas por Cobrar
-                                </NavLink>
-                                <NavLink :href="route('payments.index')" :active="route().current('payments.index')">
-                                    Pagos
-                                </NavLink>
+
                             </div>
                         </div>
 
