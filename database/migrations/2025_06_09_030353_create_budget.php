@@ -17,8 +17,6 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->date('emission_date');
             $table->date('expiration_date')->nullable();
-            $table->decimal('amount_of_payments')->nullable();
-            $table->decimal('initial')->nullable();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
             $table->foreignId('c_x_c_id')->nullable();
