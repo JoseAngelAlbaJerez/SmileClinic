@@ -26,7 +26,7 @@ class Budget extends Model
     }
     public function CXC()
     {
-        return $this->hasOne(CXC::class, );
+        return $this->hasOne(CXC::class,'id','c_x_c_id' );
     }
     public function patient()
     {
