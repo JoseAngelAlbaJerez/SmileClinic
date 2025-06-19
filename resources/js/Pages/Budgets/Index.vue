@@ -256,7 +256,7 @@ export default {
             },
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(CartIcon), label: 'Presupuestos', to: route('budgets.index') },
+                { icon: markRaw(DocumentMoney), label: 'Presupuestos', to: route('budgets.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showModal: ref(false),
