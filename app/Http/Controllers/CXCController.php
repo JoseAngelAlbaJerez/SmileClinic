@@ -50,11 +50,11 @@ class CXCController extends Controller
         }
         if ($lastDays) {
             if (is_numeric($lastDays)) {
-                // Filtro en días numéricos: last 1, 7, 30, etc.
+
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
                 $query->where('c_x_c_s.created_at', '>=', $dateFrom);
             } else {
-                // Filtros especiales tipo 'month' o 'year'
+
                 if ($lastDays === 'month') {
                     $dateFrom = Carbon::now()->startOfMonth();
                     $query->where('c_x_c_s.created_at', '>=', $dateFrom);
@@ -121,7 +121,7 @@ class CXCController extends Controller
         }
 
 
-        $CXC = CXC::with( 'patient', 'budget.budgetdetail.procedure')->find($CXC->id);
+        $CXC = CXC::with( 'patient', 'budget.budgetdetail.procedure','CXCDetail','budget.budgetdetail.Payment')->find($CXC->id);
 
         return Inertia::render('CXC/Show', [
             'CXC'=> $CXC,
