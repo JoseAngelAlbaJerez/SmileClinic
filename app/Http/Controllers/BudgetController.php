@@ -120,7 +120,12 @@ class BudgetController extends Controller
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
             'details.*.procedure_id' => 'required|integer',
-            'details.*.amount_of_payments' => 'nullable|integer',
+            'details.*.amount_of_payments' => [
+                'nullable',
+                'integer',
+                'required_if:budgets.type,Crédito',
+                'gt:1'
+            ],
             'details.*.initial' => 'nullable|integer',
         ]);
 
@@ -143,12 +148,14 @@ class BudgetController extends Controller
                 $CXC = $patient->cxc;
             }
             foreach ($budgetDetails as $detail) {
+
                 $remaining_amount = $detail->total / $detail->amount_of_payments;
                 for ($i = 0; $i < $detail->amount_of_payments; $i++) {
                     Payment::create([
                         'budget_detail_id' => $detail->id,
-                        'cxc_id' => $CXC->id,
+                        'c_x_c_id' => $CXC->id,
                         'amount_paid' => 0,
+                        'expiration_date' => $budgetData['expiration_date']->addMonth(),
                         'remaining_amount' => $remaining_amount,
                         'total' => $detail->total,
                     ]);
@@ -169,7 +176,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,
         ]);

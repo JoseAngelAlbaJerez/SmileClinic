@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('Payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cxc_id');
+            $table->foreignId('c_x_c_id');
             $table->foreignId('amount_paid');
             $table->foreignId('remaining_amount');
             $table->foreignId('budget_detail_id');
+            $table->date('expiration_date');
             $table->decimal('total');
             $table->boolean('active')->default(true);
             $table->timestamps();
