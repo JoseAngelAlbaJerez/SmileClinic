@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Egresos" />
+    <Head title="Cuentas Por Cobrar" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -47,15 +47,15 @@
                                                     'asc' ? '↑' :
                                                     '↓'
                                             }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('budgets.type')">Tipo
-                                            <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
+                                        <th scope="col" class="  cursor-pointer" @click="sort('doctor_id')">Creador Por:
+                                            <span v-if="form.sortField === 'doctor_id'">{{ form.sortDirection === 'asc'
                                                 ?
                                                 '↑' :
                                                 '↓'
                                                 }}</span>
                                         </th>
-                                        <th scope="col " class=" cursor-pointer" @click="sort('budgets.total')">
-                                            Total <span v-if="form.sortField === 'total'">{{
+                                        <th scope="col " class=" cursor-pointer" @click="sort('balance')">
+                                            Balance <span v-if="form.sortField === 'balance'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
                                                     '↑' :
@@ -91,8 +91,8 @@
                                         <td class="p-4  items-center">{{ CXCS.id }}</td>
                                         <td class="p-4  items-center">{{ CXCS.patient.first_name }} {{ CXCS.patient.last_name }} </td>
                                         <td class="p-4  items-center">{{ CXCS.budget.type }} </td>
-                                           <td class="p-4  items-center">$ {{ formatNumber(CXCS.budget.total) }} </td>
-                                        <td class="p-4  items-center">{{ formatDate(CXCS.budget.created_at) }}</td>
+                                           <td class="p-4  items-center">$ {{ formatNumber(CXCS.balance) }} </td>
+                                        <td class="p-4  items-center">{{ formatDate(CXCS.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(CXCS.active)" />
@@ -174,46 +174,7 @@
                 </div>
             </Modal>
             <!-- Modal -->
-            <Modal :show="showDetailModal" @close="showDetailModal = false">
-                <div class="text-gray-800 p-5  ">
-                    <h2 class="text-2xl font-semibold p-4 text-blue-500  pb-2">
-                        Detalles del Egreso
-                    </h2>
 
-                    <div v-if="selectedExpense" class="space-y-3 p-4">
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedExpense.user.name }} {{
-                                selectedExpense.user.last_name }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Descripción: </span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedExpense.description }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
-                            <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                                }}</span>
-                        </div>
-                    </div>
-
-                    <div class=" flex  gap-2 ">
-                        <Link v-if="selectedExpense.active" :href="route('odontographs.edit', selectedExpense)"
-                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                        <EditIcon />
-                        </Link>
-                        <DangerButton v-if="selectedExpense.active" @click="deleteExpense(selectedExpense)"
-                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <DeleteIcon />
-                        </DangerButton>
-                        <button v-else @click="restoreExpense(selectedExpense)"
-                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <RestoreIcon />
-                        </button>
-
-                    </div>
-                </div>
-            </Modal>
 
 
         </template>
@@ -246,7 +207,6 @@ import CartIcon from '@/Components/Icons/CartIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { useToast } from 'vue-toastification';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
@@ -324,29 +284,7 @@ export default {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
 
-        submit() {
-            if (!this.form_modal.description) {
-                this.error = 'Por favor, ingrese la descripción del egreso.';
-                return;
-            }
-            if (!this.form_modal.amount) {
-                this.error = 'Por favor, ingrese el monto del egreso.';
-                return;
-            }
-            if (!this.form_modal.amount < 0) {
-                this.error = 'El monto debe ser mayor a 0.';
-                return;
-            }
 
-            this.error = null;
-            this.showModal = false;
-            this.form_modal.post(route('CXC.store'),);
-
-        },
-        openModal(expense) {
-            this.selectedExpense = expense;
-            this.showDetailModal = true;
-        },
 
         statusBadgeClasses(status) {
             return {
