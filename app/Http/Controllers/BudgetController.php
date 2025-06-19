@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\CXC;
+use App\Models\CXCDetail;
 use App\Models\Procedure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Models\Event;
 use App\Models\Patient;
+use App\Models\Payment;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
@@ -109,6 +111,7 @@ class BudgetController extends Controller
             'form.emission_date' => 'required|date',
             'form.expiration_date' => 'nullable|date',
             'form.total' => 'required|numeric',
+            'form.amount_of_payments' => 'nullable|numeric',
 
             'details' => 'required|array|min:1',
             'details.*.treatment' => 'required|string|max:100',
@@ -117,6 +120,8 @@ class BudgetController extends Controller
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
             'details.*.procedure_id' => 'required|integer',
+            'details.*.amount_of_payments' => 'nullable|integer',
+            'details.*.initial' => 'nullable|integer',
         ]);
 
         $budgetData = $validated['form'];
@@ -124,7 +129,7 @@ class BudgetController extends Controller
         $budgetData['expiration_date'] = $budgetData['expiration_date'] ? Carbon::parse($budgetData['expiration_date']) : null;
         $budgetData['doctor_id'] = Auth::id();
         $budget = Budget::create($budgetData);
-        $budget->budgetdetail()->createMany($validated['details']);
+        $budgetDetails  = $budget->budgetdetail()->createMany($validated['details']);
         if ($budget->type == "Crédito") {
             $patient = $budget->patient;
 
@@ -135,10 +140,20 @@ class BudgetController extends Controller
                     'doctor_id' => $budget->doctor_id,
                 ]);
             } else {
-
                 $CXC = $patient->cxc;
             }
-
+            foreach ($budgetDetails as $detail) {
+                $remaining_amount = $detail->total / $detail->amount_of_payments;
+                for ($i = 0; $i < $detail->amount_of_payments; $i++) {
+                    Payment::create([
+                        'budget_detail_id' => $detail->id,
+                        'cxc_id' => $CXC->id,
+                        'amount_paid' => 0,
+                        'remaining_amount' => $remaining_amount,
+                        'total' => $detail->total,
+                    ]);
+                }
+            }
             $budget->c_x_c_id = $CXC->id;
             $budget->save();
         }
