@@ -22,7 +22,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(Toast, {
-                position: POSITION.TOP_RIGHT,
+                position: POSITION.BOTTOM_RIGHT,
                 timeout: 3000,
             })
             .use(ZiggyVue)
