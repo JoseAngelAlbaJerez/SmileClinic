@@ -18,8 +18,10 @@ return new class extends Migration
             $table->decimal('total');
             $table->string('treatment');
             $table->integer('discount');
+            $table->integer('amount_of_payments')->nullable();
+            $table->decimal('initial')->nullable();
             $table->integer('quantity');
-            $table->foreignId( 'budget_id');
+            $table->foreignId('budget_id');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
