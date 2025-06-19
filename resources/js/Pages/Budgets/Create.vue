@@ -40,8 +40,6 @@
                         <p v-if="errors.type" class="mt-1 text-xs text-red-600">{{ errors.type }}</p>
                     </div>
 
-
-
                     <!-- emission_date -->
                     <div class="mb-1">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -58,11 +56,10 @@
                         <VueDatePicker
                             class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                             placeholder="Seleccione la fecha de expiración" v-model="form.expiration_date" />
-                        <p v-if="errors.expiration_date" class="mt-1 text-xs text-red-600">{{ errors.expiration_date }}</p>
+                        <p v-if="errors.expiration_date" class="mt-1 text-xs text-red-600">{{ errors.expiration_date }}
+                        </p>
 
                     </div>
-
-
 
                 </div>
                 <!-- Presupuestos -->
@@ -136,6 +133,30 @@
                                 </p>
 
                             </div>
+                            <!-- Initial -->
+                            <div class="mb-1" v-if="form.type == 'Crédito'">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                                    for="select-item">Inicial: <span class="text-red-500">*</span></label>
+                                <input v-model="form_details[index].initial" id="initial" @input="calcTotal(index)"
+                                    type="number"
+                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    placeholder="0" />
+                                <p v-if="form.errors[`details.${index}.initial`]" class="text-red-600 text-xs">
+                                    {{ form.errors[`details.${index}.initial`] }}
+                                </p>
+                            </div>
+                            <!-- amount_of_payments -->
+                            <div class="mb-1" v-if="form.type == 'Crédito'">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                                    for="select-item">Cantidad de Pagos: <span class="text-red-500">*</span></label>
+                                <input v-model="form_details[index].amount_of_payments" @input="calcTotal(index)"
+                                    value="1" id="amount_of_payments" type="number"
+                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    placeholder="1" />
+                                <p v-if="form.errors[`details.${index}.amount_of_payments`]" class="text-red-600 text-xs">
+                                    {{ form.errors[`details.${index}.amount_of_payments`] }}
+                                </p>
+                            </div>
 
                         </div>
                         <div class=" flex  gap-2 ">
@@ -165,7 +186,8 @@
 
                 <!-- Botones -->
                 <div class="md:col-span-4 flex justify-end space-x-4 mt-6">
-                    <SecondaryButton type="button" @click="form.reset() && form_detail.reset()">
+                    <SecondaryButton type="button"
+                        @click="form.reset() && form_detail.reset(), selectedProcedures = []">
                         Limpiar
                     </SecondaryButton>
                     <PrimaryButton @click="submit()">Guardar</PrimaryButton>
@@ -300,6 +322,8 @@ export default {
                     treatment: found.name,
                     discount: 0,
                     quantity: 1,
+                    initial: 0,
+                    amount_of_payments: 0,
                 });
                 this.selectedProcedures.push({ ...found });
             }
@@ -312,8 +336,9 @@ export default {
             const amount = parseFloat(detail.amount) || 0;
             const discount = parseFloat(detail.discount) || 0;
             const quantity = parseInt(detail.quantity) || 1;
-
+            const initial = parseFloat(detail.initial) || 0;
             detail.total = (amount * quantity);
+            detail.total -= initial;
             const discounted = (detail.total * discount) / 100;
             detail.total -= discounted;
 
@@ -328,6 +353,8 @@ export default {
             const amount = parseFloat(detail.amount) || 0;
             const discount = parseFloat(detail.discount) || 0;
             const quantity = parseInt(detail.quantity) || 1;
+            const initial = parseFloat(detail.initial) || 0;
+            detail.total -= initial;
             detail.total = (amount * quantity) - discount;
             this.form.total = this.form.total - detail.total;
             this.selectedProcedures.splice(index, 1);
@@ -366,12 +393,13 @@ export default {
 
             );
         },
+
         formatNumber(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         getDefaultDatetime() {
             const now = new Date();
-            return now.toISOString().slice(0, 16); // "2025-06-10T20:05"
+            return now.toISOString().slice(0, 16);
         },
         submit() {
             if (!this.form.patient_id) {
@@ -388,11 +416,11 @@ export default {
                 this.error = 'Por favor, seleccione un procedimiento.';
                 return;
             }
+
+
             this.error = null;
 
-
-
-            const payload = {
+            const data = {
                 form: {
                     patient_id: this.form.patient_id,
                     type: this.form.type,
@@ -402,10 +430,13 @@ export default {
                 },
                 details: this.form_details,
             };
+            console.log(data);
 
-            this.$inertia.post(route('budgets.store'), payload, {
+
+            this.$inertia.post(route('budgets.store'), data, {
                 onError: (errors) => {
                     this.form.errors = errors;
+                    this.form_detail.errors = errors;
                 }
             });
 
