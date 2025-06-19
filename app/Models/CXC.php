@@ -17,6 +17,9 @@ class CXC extends Model
     {
         return $this->hasMany(Budget::class,'c_x_c_id','id');
     }
+    public function CXCDetail(){
+        return $this->hasMany(CXCDetail::class,'c_x_c_id','id');
+    }
     public function Patient()
     {
         return $this->belongsTo(Patient::class);
