@@ -51,11 +51,11 @@ class ExpensesController extends Controller
         }
         if ($lastDays) {
             if (is_numeric($lastDays)) {
-                // Filtro en días numéricos: last 1, 7, 30, etc.
+
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
                 $query->where('expenses.created_at', '>=', $dateFrom);
             } else {
-                // Filtros especiales tipo 'month' o 'year'
+
                 if ($lastDays === 'month') {
                     $dateFrom = Carbon::now()->startOfMonth();
                     $query->where('expenses.created_at', '>=', $dateFrom);
