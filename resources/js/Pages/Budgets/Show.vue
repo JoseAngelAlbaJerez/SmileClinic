@@ -142,9 +142,18 @@
                             <div v-if="details.payment.length" class="mt-4 space-y-2">
                                 <h4 class="text-sm font-bold text-gray-800 dark:text-gray-100">Pagos realizados:</h4>
                                 <div v-for="(payment, pIndex) in details.payment" :key="payment.id"
-                                    class="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-md border dark:border-gray-700"
-                                    :class="{ 'bg-green-300 dark:bg-green-700': payment.remaining_amount === 0 }">
-                                    <p><strong>Pago #{{ pIndex + 1 }}</strong></p>
+                                    class="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded-md border dark:border-gray-700">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <p><strong>Pago #{{ pIndex + 1 }}</strong></p>
+
+                                        <span class="text-sm font-medium px-2 py-1 rounded-full" :class="!payment.remaining_amount
+                                            ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300'
+                                            : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
+                                            {{ !payment.remaining_amount ? 'Pagado' : 'No Pagado' }}
+                                        </span>
+
+                                    </div>
+
                                     <p>Monto pagado: ${{ formatNumber(payment.amount_paid) }}</p>
                                     <p>Restante: ${{ formatNumber(payment.remaining_amount) }}</p>
                                     <p>Total: ${{ formatNumber(payment.total) }}</p>
