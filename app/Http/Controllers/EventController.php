@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Event;
+use App\Models\Patient;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+use Inertia\Inertia;
+use Illuminate\Validation\ValidationException;
+
+class EventController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+
+        $search = $request->input('search');
+        $sortField = $request->input('sortField');
+        $sortDirection = $request->input('sortDirection', 'asc');
+        $activeStates = $request->input('activeStates', []);
+        $lastDays = $request->input('lastDays', '1');
+        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
+
+
+        $query = Event::query()
+            ->select('events.*')
+            ->join('patients', 'events.patient_id', '=', 'patients.id')
+            ->join('users', 'events.doctor_id', '=', 'users.id');
+
+        if ($showDeleted == true) {
+            $query->where('events.active', 1);
+        } else {
+            $query->where('events.active', 0);
+        }
+
+        if ($search) {
+            $query->where(function (Builder $q) use ($search) {
+                $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('events.title LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
+            });
+        }
+
+        if ($sortField) {
+            $query->orderBy($sortField, $sortDirection);
+        } else {
+            $query->latest('events.updated_at')
+                ->latest('events.created_at');
+        }
+        if ($lastDays) {
+            if (is_numeric($lastDays)) {
+
+                $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
+                $query->where('events.created_at', '>=', $dateFrom);
+            } else {
+
+                if ($lastDays === 'month') {
+                    $dateFrom = Carbon::now()->startOfMonth();
+                    $query->where('events.created_at', '>=', $dateFrom);
+                } elseif ($lastDays === 'year') {
+                    $dateFrom = Carbon::now()->startOfYear();
+                    $query->where('events.created_at', '>=', $dateFrom);
+                }
+            }
+        }
+
+        $events = $query->orderByDesc('events.created_at')->with('doctor', 'patient')->paginate(10);
+
+        return Inertia::render('Events/Index', [
+            'events' => $events,
+            'filters' => [
+                'search' => $search,
+                'sortField' => $sortField,
+                'sortDirection' => $sortDirection,
+                'activeStates' => $activeStates,
+                'lastDays' => $lastDays,
+                'showdeleted' => $showDeleted,
+
+            ],
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $doctors = User::role('doctor')->get();
+        $patients = Patient::all();
+        return Inertia::render("Events/Create", [
+            'doctors' => $doctors,
+            'patients' => $patients,
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title'       => 'required|string|max:100',
+            'doctor_id'   => 'required|integer',
+            'patient_id'  => 'required|integer',
+            'starttime'  => ['required', 'date_format:H:i', 'before:endtime'],
+            'endtime'    => ['required', 'date_format:H:i', 'after:starttime'],
+            'date'        => 'required|date',
+        ]);
+
+        $validated['attended'] = false;
+        $validated['active'] = true;
+
+        Event::create($validated);
+
+         return redirect()->route('events.index')->with('toast', 'Cita registrada correctamente');
+    }
+    public function update(Request $request, Event $event)
+    {
+        if ($request->has('active')) {
+            $this->restore($event);
+            return redirect()->back()->with('toast', 'Cita restaurada correctamente');
+        } else if ($request->has('attended')) {
+            $this->attend($event, $request->attended);
+            return redirect()->back()->with('toast', 'Cita atendida correctamente');
+        }
+        $data = $request->validate([
+            'title'       => 'required|string|max:100',
+            'doctor_id'   => 'required|integer',
+            'patient_id'  => 'required|integer',
+            'starttime'  => ['required', 'date_format:H:i', 'before:endtime'],
+            'endtime'    => ['required', 'date_format:H:i', 'after:starttime'],
+            'date'        => 'required|date',
+        ]);
+
+        $event->update($data);
+
+        return redirect()->back()->with('toast', 'Cita actualizada correctamente');
+    }
+    private function restore(Event $event)
+    {
+        $event->active = 1;
+        $event->save();
+
+        return redirect()->back()->with('toast', 'Cita restaurada correctamente');
+    }
+      private function attend(Event $event, $attended)
+    {
+        $event->attended = $attended;
+        $event->save();
+        if ($event->attended = true) {
+            return redirect()->back()->with('toast', 'Cita atendida correctamente');
+        } else{
+             return redirect()->back()->with('toast', 'Cita desatendida correctamente');
+        }
+
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Event $event)
+    {
+
+        $event->active = 0;
+        $event->save();
+        return redirect()->back()
+            ->with('toast', 'Cita desactivada correctamente');
+    }
+}
