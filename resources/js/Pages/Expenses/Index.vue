@@ -11,10 +11,14 @@
             <div
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
+
                     <!-- Search & Exports -->
                     <div class="my-2 flex mx-10 gap-2 items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-
+                        <button @click="print()"
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                            <PrintIcon />
+                        </button>
                         <!-- Espacio flexible para separar TableDropDown de la derecha -->
                         <div class="flex ml-auto items-center gap-2">
 
@@ -56,7 +60,7 @@
                                                 ?
                                                 '↑' :
                                                 '↓'
-                                            }}</span>
+                                                }}</span>
                                         </th>
                                         <th scope="col " class=" cursor-pointer" @click="sort('amount')">
                                             Monto <span v-if="form.sortField === 'amount'">{{
@@ -72,7 +76,7 @@
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span></th>
+                                            }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -95,7 +99,7 @@
                                         <td class="p-4  items-center">{{ expense.id }}</td>
                                         <td class="p-4  items-center">{{ expense.description }} </td>
                                         <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
-                                        }} </td>
+                                            }} </td>
                                         <td class="p-4  items-center">$ {{ formatNumber(expense.amount) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
                                         <td class="p-4  items-center">
@@ -198,7 +202,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
 
@@ -256,6 +260,7 @@ import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 const toast = useToast();
 export default {
 
@@ -287,6 +292,7 @@ export default {
         DeleteIcon,
         DangerButton,
         RestoreIcon,
+        PrintIcon
     },
 
     data() {
@@ -401,7 +407,11 @@ export default {
                 { active: true },
             );
         },
-
+        async print() {
+            window.open(route('report.expenses', {
+                Days: this.filters.lastDays
+            }), '_blank');
+        }
 
     }
 };
