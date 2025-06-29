@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ExpensesSeeder::class);
         $this->call(BudgetSeeder::class);
         $this->call(ProcedureSeeder::class);
+        $this->call(PrescriptionSeeder::class);
+        $this->call(PrescriptionDetailSeeder::class);
+        $this->call(DrugSeeder::class);
     }
 }
