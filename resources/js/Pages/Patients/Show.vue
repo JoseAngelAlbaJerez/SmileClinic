@@ -272,7 +272,13 @@
                                 <!-- Muestra zonas con procedimiento abreviados -->
                                 <template v-if="item.data[tooth]">
                                     <span v-for="(proc, zone) in item.data[tooth]" :key="zone"
-                                        class="mr-1 px-1 rounded text-white bg-blue-600 dark:bg-blue-400 text-[10px] font-semibold">
+                                        class="mr-1 px-1 rounded text-white text-[10px] font-semibold" :class="{
+                                            'bg-gray-900': zone.charAt(0) === 'O',
+                                            'bg-red-500': zone.charAt(0) === 'D',
+                                            'bg-green-500': zone.charAt(0) === 'M',
+                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                        }">
                                         {{ zone.charAt(0) }}
                                     </span>
                                 </template>
@@ -294,7 +300,14 @@
                             <div class="text-xs text-gray-600 dark:text-gray-300 truncate">
                                 <template v-if="item.data[tooth]">
                                     <span v-for="(proc, zone) in item.data[tooth]" :key="zone"
-                                        class="mr-1 px-4 rounded text-white bg-blue-600 dark:bg-blue-400 text-[10px] font-semibold">
+                                        class="mr-1 px-4 rounded text-white bg-blue-600 dark:bg-blue-400 text-[10px] font-semibold"
+                                        :class="{
+                                            'bg-gray-900': zone.charAt(0) === 'O',
+                                            'bg-red-500': zone.charAt(0) === 'D',
+                                            'bg-green-500': zone.charAt(0) === 'M',
+                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                        }">
                                         {{ zone.charAt(0) }}
                                     </span>
                                 </template>
@@ -311,14 +324,20 @@
                 <div v-if="selectedToothInfo && selectedOdontograph && selectedOdontograph.id === item.id"
                     class="fixed inset-0  bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md max-w-lg  w-full">
-                        <h3 class="text-lg font-semibold mb-4">
-                            Procedimientos {{ toothNames[selectedToothInfo.tooth] || selectedToothInfo.tooth }}
-                        </h3>
+                        <h2 class="text-2xl font-semibold mb-4">
+                            {{ toothNames[selectedToothInfo.tooth] || selectedToothInfo.tooth }}
+                        </h2>
 
                         <div class="space-y-2 text-gray-700 dark:text-gray-300 text-sm">
                             <div v-for="(proc, zone) in selectedToothInfo.zones" :key="zone"
                                 class="flex justify-between">
-                                <span class="font-bold">{{ zone }}:</span>
+                                <span class="font-bold flex gap-2 text-white p-2 rounded"  :class="{
+                                            'bg-gray-900': zone.charAt(0) === 'O',
+                                            'bg-red-500': zone.charAt(0) === 'D',
+                                            'bg-green-500': zone.charAt(0) === 'M',
+                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                        }"><TeethIcon/> {{ zone }} </span>
                                 <span>{{ proc }}</span>
 
                             </div>
