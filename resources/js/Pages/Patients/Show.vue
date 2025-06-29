@@ -122,7 +122,7 @@
                                         <div class="flex justify-between items-center mb-2">
                                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
                                                 details.id
-                                                }} {{ details.procedure.name }}</h3>
+                                            }} {{ details.procedure.name }}</h3>
                                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                                 :class="details.procedure.coberture ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                                 {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
@@ -133,22 +133,22 @@
                                             <div>
                                                 <label class="block text-sm font-medium">Monto: ${{
                                                     formatNumber(details.amount)
-                                                    }}</label>
+                                                }}</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Descuento: {{ details.discount
-                                                    }} %</label>
+                                                }} %</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Cantidad: {{ details.quantity
-                                                    }}</label>
+                                                }}</label>
                                             </div>
                                         </div>
 
 
                                         <div class="flex items-center gap-2 mt-4">
                                             <h3 class="text-md font-semibold">Subtotal: ${{ formatNumber(details.total)
-                                                }}
+                                            }}
                                             </h3>
                                             <DangerButton v-if="budget.active && details.active"
                                                 @click="deleteBudgetDetail(details.id)"
@@ -181,7 +181,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
                                 event.title
-                                }}</h3>
+                            }}</h3>
                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                 :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                 {{ event.attended ? 'Atendido' : 'No Atendido' }}
@@ -192,7 +192,7 @@
                             <p><strong>Hora:</strong> {{ event.starttime }} - {{ event.endtime }}</p>
                             <p><strong>Doctor:</strong> {{ event.doctor.name }} {{ event.last_name }}</p>
                         </div>
-                        <div class="flex items-start gap-2">
+                        <div v-if="event.active" class="flex items-start gap-2">
                             <label class="inline-flex items-center cursor-pointer">
                                 <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
                                     class="sr-only peer">
@@ -200,8 +200,8 @@
                                     class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
                                 </div>
                                 <span v-if="event.attended"
-                                    class="ms-3 text-sm font-medium text-green-300  ">Recibido</span>
-                                <span v-else class="ms-3 text-sm font-medium text-red-300  ">No Recibido</span>
+                                    class="ms-3 text-sm font-medium text-green-300  ">Atendido</span>
+                                <span v-else class="ms-3 text-sm font-medium text-red-300  ">No Atendido</span>
                             </label>
                         </div>
                         <div class=" flex  gap-2 ">
@@ -223,7 +223,7 @@
                 </div>
 
             </div>
-            <div class="my-2 mt-5 flex  gap-2 items-center">
+            <div class="my-2 mt-5 flex   gap-2 items-center">
                 <div class="my-2 mt-5 flex items-center gap-2 ml-1">
                     <TeethIcon />
                     <h1 class="font-bold text-2xl">Odontogramas</h1>
@@ -331,21 +331,26 @@
                         <div class="space-y-2 text-gray-700 dark:text-gray-300 text-sm">
                             <div v-for="(proc, zone) in selectedToothInfo.zones" :key="zone"
                                 class="flex justify-between">
-                                <span class="font-bold flex gap-2 text-white p-2 rounded"  :class="{
-                                            'bg-gray-900': zone.charAt(0) === 'O',
-                                            'bg-red-500': zone.charAt(0) === 'D',
-                                            'bg-green-500': zone.charAt(0) === 'M',
-                                            'bg-yellow-500': zone.charAt(0) === 'L',
-                                            'bg-purple-500': zone.charAt(0) === 'V',
-                                        }"><TeethIcon/> {{ zone }} </span>
+                                <span class="font-bold flex gap-2 text-white p-2 px-4 rounded" :class="{
+                                    'bg-gray-900': zone.charAt(0) === 'O',
+                                    'bg-red-500': zone.charAt(0) === 'D',
+                                    'bg-green-500': zone.charAt(0) === 'M',
+                                    'bg-yellow-500': zone.charAt(0) === 'L',
+                                    'bg-purple-500': zone.charAt(0) === 'V',
+                                }">
+                                    <TeethIcon /> {{ zone }}
+                                </span>
                                 <span>{{ proc }}</span>
 
                             </div>
                         </div>
-                        <button class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-                            @click="closeToothDetail">
-                            Cerrar
-                        </button>
+                        <div class="flex justify-end">
+                            <SecondaryButton class="mt-6  dark:text-white font-semibold py-2 px-4 rounded"
+                                @click="closeToothDetail">
+                                Cerrar
+                            </SecondaryButton>
+                        </div>
+
                     </div>
                 </div>
 
@@ -355,7 +360,7 @@
 
                 <div class=" flex  gap-2 mt-4 ">
                     <h2 class="text-sm text-gray-400 my-2">Fecha de Creación - {{ formatDate(item.created_at)
-                        }} </h2>
+                    }} </h2>
                     <Link v-if="item.active" :href="route('odontographs.edit', item)"
                         class="flex  ml-auto gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
                     <EditIcon />
@@ -388,7 +393,6 @@ import AddIcon from '@/Components/Icons/AddIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import TeethIcon from '@/Components/Icons/TeethIcon.vue';
-import { useToast } from 'vue-toastification';
 import DangerButton from '@/Components/DangerButton.vue';
 import DoctorIcon from '@/Components/Icons/DoctorIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
@@ -400,7 +404,7 @@ import MedicalHistoryIcon from '@/Components/Icons/MedicalHistoryIcon.vue';
 import Molar from '@/Components/Icons/Teeths/Molar.vue';
 import ChevronDownIcon from '@/Components/Icons/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/Components/Icons/ChevronUpIcon.vue';
-import { ref } from 'vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 export default {
     props: {
@@ -429,7 +433,8 @@ export default {
         MedicalHistoryIcon,
         Molar,
         ChevronDownIcon,
-        ChevronUpIcon
+        ChevronUpIcon,
+        SecondaryButton
     },
     data() {
         return {
