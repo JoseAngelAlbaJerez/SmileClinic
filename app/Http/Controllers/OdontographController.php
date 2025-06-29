@@ -22,34 +22,20 @@ class OdontographController extends Controller
 
     public function store(Request $request)
     {
-
-        $data = $request->validate([
-            'cavities' => 'required|array',
-            'cavities.center' => 'required|integer',
-            'cavities.top' => 'required|integer',
-            'cavities.bottom' => 'required|integer',
-            'cavities.left' => 'required|integer',
-            'cavities.right' => 'required|integer',
-            'missing' => 'boolean',
-            'filter' => 'boolean',
-            'root_canal' => 'boolean',
-            'cleaning' => 'boolean',
-            'active' => 'boolean',
-            'veener' => 'nullable|date',
-            'graft' => 'nullable|date',
-            'sealant' => 'nullable|date',
-            'bonding' => 'nullable|date',
-            'examinations' => 'nullable|date',
-            'fissure_seal' => 'nullable|date',
+        $validated = $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'data' => 'nullable|array',
         ]);
-        $data['patient_id'] = $request->patient_id;
-        $data['doctor_id'] = Auth::id();
 
+        $validated['doctor_id'] = Auth::id();
+        $validated['active'] = true;
+        $odontogram = Odontograph::create($validated);
 
-        Odontograph::create($data);
-
-        return redirect()->route('patients.show', $data['patient_id'])->with('toast', 'Odontograma guardado correctamente.');
+        return redirect()
+            ->route('patients.show', $validated['patient_id'])
+            ->with('toast', 'Odontograma guardado correctamente.');
     }
+
 
 
     public function show(Odontograph $odontograph)
@@ -89,7 +75,7 @@ class OdontographController extends Controller
 
         $odontograph->update($data);
 
-           return redirect()->back()->with('toast', 'Odontograma actualizado correctamente.');
+        return redirect()->back()->with('toast', 'Odontograma actualizado correctamente.');
     }
     private function restore(Odontograph $odontograph)
     {
@@ -97,7 +83,7 @@ class OdontographController extends Controller
         $odontograph->save();
 
         return redirect()->back()->with('toast', 'Odontograma restaurado correctamente');
-        }
+    }
 
     public function destroy(Odontograph $odontograph)
     {
@@ -105,6 +91,6 @@ class OdontographController extends Controller
         $odontograph->active = 0;
         $odontograph->save();
 
-         return redirect()->back()->with('toast', 'Odontograma desactivado correctamente');
-       }
+        return redirect()->back()->with('toast', 'Odontograma desactivado correctamente');
+    }
 }
