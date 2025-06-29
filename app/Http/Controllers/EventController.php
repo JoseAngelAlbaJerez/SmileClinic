@@ -95,8 +95,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        $doctors = User::role('doctor')->paginate(10);;
-        $patients = Patient::paginate(10);;
+        $doctors = User::role('doctor')->paginate(10);
+        $patients = Patient::paginate(10);
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
@@ -156,7 +156,6 @@ class EventController extends Controller
         } else if ($request->has('attended')) {
             $this->attend($event, $request->attended);
             return redirect()->back()->with('toast', 'Cita atendida correctamente');
-
         }
         $data = $request->validate([
             'title'       => 'required|string|max:100',
@@ -169,7 +168,7 @@ class EventController extends Controller
 
         $event->update($data);
 
-        return redirect()->back()->with('toast', 'Cita actualizada correctamente');
+        return redirect()->route('events.index')->with('toast', 'Cita actualizada correctamente');
     }
     private function restore(Event $event)
     {
@@ -199,9 +198,18 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Event $event)
     {
-        //
+        $event->load(['patient', 'doctor']);
+        $event->starttime = Carbon::parse($event->starttime)->format('H:i');
+         $event->endtime = Carbon::parse($event->endtime)->format('H:i');
+        $doctors = User::role('doctor')->paginate(10);
+        $patients = Patient::paginate(10);
+        return Inertia::render('Events/Edit', [
+            'event' => $event,
+            'doctors' => $doctors,
+            'patients' => $patients,
+        ]);
     }
 
     /**

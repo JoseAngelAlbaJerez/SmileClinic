@@ -186,7 +186,7 @@
                     </div>
 
                     <div class=" flex  gap-2 ">
-                        <Link v-if="selectedEvent.active" :href="route('odontographs.edit', selectedEvent)"
+                        <Link v-if="selectedEvent.active" :href="route('events.edit', selectedEvent)"
                             class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                         <EditIcon />
                         </Link>
