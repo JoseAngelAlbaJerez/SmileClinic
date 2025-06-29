@@ -34,72 +34,128 @@
 
 
                 <!-- Presupuestos -->
-                <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md my-4"
+                    v-for="(budgets, index) in CXC.budget" :key="budgets.id">
                     <div class=" flex items-center gap-2">
                         <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-1" />
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Presupuestos</h2>
+
                     </div>
 
                     <div class=" rounded-2xl ">
 
-                        <div v-for="(budget, index) in CXC.budget" :key="index"
-                            class="text-sm p-4 cursor-pointer  bg-gray-300  rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
+                        <div class="text-sm p-4 cursor-pointer  bg-gray-300  rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1"
+                            :class="{
+                                'brightness-70': isExpired(budgets.emission_date) || !budgets.active
+                            }">
 
                             <div @click="openAccordion(index)" class="flex items-center gap-4">
                                 <p>
-                                    <strong># - </strong> {{ budget.id }}
+                                    <strong># - </strong> {{ CXC.id }}
                                 </p>
-                                <p>
-                                    <strong>Tipo:</strong> {{ budget.type }}
-                                </p>
-                                <p v-if="budget.type === 'Contado'"> <strong>Fecha de Emisión:</strong> {{
-                                    budget.emission_date }}</p>
-                                <template v-if="budget.type === 'Crédito'">
-                                    <p> <strong>Fecha de Expiración:</strong> {{ budget.expiration_date }}</p>
-                                </template>
-                                <p> <strong>Total:</strong> {{ formatNumber(budget.total) }}</p>
-                                <ChevronDownIcon class="flex  ml-auto " v-if="activeIndex === index" />
+                                <p><strong>Tipo:</strong> {{ budgets.type }}</p>
+                                <p><strong>Fecha de Emisión:</strong> {{ budgets.emission_date }}</p>
+                                <p v-if="budgets.type == 'Crédito'"><strong>Fecha de Expiración:</strong> {{
+                                    budgets.expiration_date
+                                    }}</p>
+                                <p> <strong>Balance:</strong> ${{ formatNumber(CXC.balance) }}</p>
+                                <ChevronDownIcon class="flex  ml-auto " v-if="activeIndex === 0" />
                                 <ChevronUpIcon class="flex  ml-auto " v-else />
                             </div>
 
                             <transition name="accordion" @enter="enter" @leave="leave">
                                 <div v-if="activeIndex === index">
-                                    <div v-for="details in budget.budgetdetail" :key="details.id"
-                                        class="bg-white  hover:bg-blue-500 my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear">
-                                        <div class="flex justify-between items-center mb-2">
-                                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
-                                                details.id
-                                            }} {{ details.procedure.name }}</h3>
+                                    <div v-for="details in budgets.budgetdetail" :key="details.id"
+                                        class="bg-white  hover:bg-blue-300 dark:hover:bg-blue-500 my-4 border shadow-md dark:bg-gray-800 p-4 rounded-xl transition-all duration-200 ease-linear"
+                                        :class="{
+                                            'bg-red-100 dark:bg-red-500': !details.active || !CXC.active
+                                        }">
+                                        <div class="flex justify-between items-center mb-2 ">
+                                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">
+                                                {{ details.procedure.name }}</h3>
                                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                                 :class="details.procedure.coberture ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                                 {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
+
+                                        </div>
+                                        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2 ">
+                                            <div>
+                                                <label for="amount"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Monto:
+                                                    ${{ formatNumber(details.amount) }}
+                                                </label>
+
+                                            </div>
+
+                                            <div>
+                                                <label for="discount"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Descuento:
+                                                    {{ details.discount }} %
+                                                </label>
+
+                                            </div>
+                                            <div>
+                                                <label for="quantity"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Cantidad:
+                                                    {{ details.quantity }}
+                                                </label>
+
+
+                                            </div>
+                                            <div>
+                                                <label for="initial"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Inicial:
+                                                    ${{ formatNumber(details.initial) }}
+                                                </label>
+
+
+                                            </div>
+                                            <div>
+                                                <label for="amount_of_payments"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 ">Cantidad
+                                                    de Pagos:
+                                                    {{ details.amount_of_payments }} pagos de ${{
+                                                        formatNumber(details.total / details.amount_of_payments) }}
+                                                </label>
+
+
+                                            </div>
+                                            <div>
+                                                <label for="amount_of_payments"
+                                                    class="block text-sm font-medium text-red-700 dark:text-red-300"
+                                                    v-if="getRemainingPayments(details)">
+                                                    Restantes: {{ getRemainingPayments(details) }} pagos de ${{
+                                                        formatNumber(details.total / details.amount_of_payments) }}
+                                                </label>
+                                                <label for="amount_of_payments"
+                                                    class="block text-sm font-medium text-green-700 dark:text-green-300"
+                                                   v-else>
+                                                No tiene pagos Pendientes
+                                                </label>
+
+                                            </div>
+
+
                                         </div>
 
-                                        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                                            <div>
-                                                <label class="block text-sm font-medium">Monto: $ {{ formatNumber(details.amount)
-                                                }}</label>
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium">Descuento: {{ details.discount
-                                                }} %</label>
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium">Cantidad: {{ details.quantity
-                                                }}</label>
-                                            </div>
-                                        </div>
 
                                         <div class="flex items-center gap-2 mt-4">
-                                            <h3 class="text-md font-semibold">Subtotal: ${{ formatNumber(details.total)
+                                            <h3 class="text-md font-semibold">Total: ${{ formatNumber(details.total)
                                             }}
                                             </h3>
-                                            <DangerButton v-if="budget.active && details.active"
+                                            <Button v-if="CXC.active && details.active && getRemainingPayments(details)"
+                                                @click="showModal = true, selectedBudget = details, resetModal()"
+                                                class="ml-auto p-2 px-4 mt-2 gap-2 bg-green-500 text-sm text-white hover:bg-green-600 rounded-lg">
+                                                <AddIcon />
+                                            </Button>
+                                            <DangerButton v-if="CXC.active && details.active"
                                                 @click="deleteBudgetDetail(details.id)"
-                                                class="ml-auto mt-2 gap-2 bg-red-500 px-2 py-2 text-sm text-white hover:bg-red-600 rounded-lg">
+                                                class=" mt-2 gap-2 bg-red-500 px-2 py-2 text-sm text-white hover:bg-red-600 rounded-lg"
+                                                :class="!getRemainingPayments(details) ? 'ml-auto' : ''">
                                                 <DeleteIcon />
                                             </DangerButton>
+
                                             <button v-else @click="restoreBudgetDetail(details.id)"
                                                 class="ml-auto gap-2 bg-green-500 px-2 py-2 text-sm text-white hover:bg-green-600 rounded-lg">
                                                 <RestoreIcon />
@@ -119,8 +175,74 @@
 
 
             </div>
+            <!-- Modal -->
+            <Modal :show="showModal" @close="showModal = false" class="max-w-6xl">
+                <div class="text-gray-800 p-5 h-full max-h-[700px] overflow-y-auto">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-500">Pagos Disponibles</h2>
+
+                    <div v-if="selectedBudget" class="space-y-3">
+                        <div v-for="(payment, index) in selectedBudget.payment" :key="payment.id">
+                            <div class="p-4 border rounded-md dark:border-gray-700">
+                                <div class="flex justify-between">
+
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                                        Cuota #{{ index + 1 }} - {{ selectedBudget.procedure.name }}
+                                    </h3>
+                                    <span class="text-sm font-medium px-3 py-2 rounded-full"
+                                        :class="payment.remaining_amount === 0 ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
+                                        {{ payment.remaining_amount === 0 ? 'Pagado' : 'Pendiente' }}
+                                    </span>
+
+                                </div>
+
+                                <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                    <div>
+                                        <label class="block mb-1">Monto a Pagar <span
+                                                class="text-red-500">*</span></label>
+                                        <input @input="calcTotal(index)" v-model="form_details[index].amount_paid"
+                                            :disabled="payment.remaining_amount === 0" type="number" min="0"
+                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-800 dark:text-white"
+                                            placeholder="Monto" />
+                                        <p v-if="form_details.errors && form_details.errors[index]"
+                                            class="text-red-600 text-xs">
+                                            {{ form_details.errors[index] }}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <label>
+                                            Restante:
+                                            <span :class="{ 'text-green-600': payment.remaining_amount === 0 }">
+                                                ${{ formatNumber(payment.remaining_amount) }}
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="flex justify-end">
+                                        <button @click.prevent="payAll(index)"
+                                            :disabled="payment.remaining_amount === 0"
+                                            class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm">
+                                            Pagar Todo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flex gap-2 mt-4 ">
+                        <SecondaryButton class="ml-auto" @click="showModal = false">Cancelar</SecondaryButton>
+                        <PrimaryButton  @click="submit()">Guardar</PrimaryButton>
+                    </div>
+                </div>
+            </Modal>
+
+
+
 
         </template>
+
 
     </AuthenticatedLayout>
 </template>
@@ -129,7 +251,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
@@ -138,11 +260,14 @@ import DoctorIcon from '@/Components/Icons/DoctorIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
-import { markRaw } from 'vue';
+import { markRaw, ref } from 'vue';
 import BreadCrumb from '@/Components/BreadCrumb.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import ChevronDownIcon from '@/Components/Icons/ChevronDownIcon.vue';
 import ChevronUpIcon from '@/Components/Icons/ChevronUpIcon.vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 
 export default {
@@ -166,8 +291,13 @@ export default {
         DocumentIcon,
         RestoreIcon,
         ChevronDownIcon,
-        ChevronUpIcon
+        ChevronUpIcon,
+        AddIcon,
+        Modal,
+        SecondaryButton,
     },
+
+
     data() {
         return {
             crumbs: [
@@ -176,9 +306,62 @@ export default {
 
             ],
             activeIndex: null,
+            showModal: ref(false),
+            selectedBudget: [],
+
+            form_payments: [],
+
         }
     },
     methods: {
+        getRemainingPayments(detail) {
+            if (!detail.payment || !Array.isArray(detail.payment)) return 0;
+
+            return detail.payment.filter(p => Number(p.remaining_amount) > 0).length;
+        },
+
+        calcTotal(index) {
+            const payment = this.selectedBudget.payment[index];
+            if (!payment) return;
+
+            if (payment.remaining_amount_original === undefined) {
+                payment.remaining_amount_original = payment.remaining_amount;
+            }
+
+            let amount_paid = Number(this.form_details[index].amount_paid);
+
+            if (isNaN(amount_paid) || amount_paid < 0) {
+                this.form_details[index].amount_paid = 0;
+                payment.remaining_amount = payment.remaining_amount_original;
+                this.form_details.errors[index] = 'El monto no puede ser negativo ni nulo.';
+                return;
+            }
+
+            const remaining_original = payment.remaining_amount_original;
+
+            if (amount_paid > remaining_original) {
+                this.form_details[index].amount_paid = 0;
+                payment.remaining_amount = remaining_original;
+                this.form_details.errors[index] = 'El monto a pagar debe ser menor o igual al restante.';
+                return;
+            }
+
+            payment.remaining_amount = remaining_original - amount_paid;
+            this.form_details.errors[index] = null;
+        },
+        isExpired(dateString) {
+            if (!dateString) return true;
+            const today = new Date();
+            const emissionDate = new Date(dateString);
+            today.setHours(0, 0, 0, 0);
+            emissionDate.setHours(0, 0, 0, 0);
+            return emissionDate < today;
+        },
+        payAll(index) {
+            let payment = this.selectedBudget.payment[index];
+            this.form_details[index].amount_paid = payment.remaining_amount_original ?? payment.remaining_amount;
+            this.calcTotal(index);
+        },
         formatDate(date) {
             if (!date) return '';
             const d = new Date(date);
@@ -188,6 +371,62 @@ export default {
                 day: 'numeric',
             });
         },
+        submit() {
+            this.form_details.errors = [];
+            let hasAtLeastOnePayment = false;
+            let valid = true;
+
+            this.form_details.forEach((payment, i) => {
+                const amount = Number(payment.amount_paid);
+
+                if (amount > 0) {
+                    hasAtLeastOnePayment = true;
+                } else if (amount < 0 || isNaN(amount)) {
+                    this.form_details.errors[i] = "El monto debe ser mayor o igual a 0";
+                    valid = false;
+                }
+            });
+
+            if (!hasAtLeastOnePayment) {
+                this.$toast.error("Debe ingresar al menos un monto de pago válido.");
+                return;
+            }
+
+            if (!valid) return;
+
+            const payload = this.selectedBudget.payment
+                .map((payment, i) => {
+                    const amount_paid = Number(this.form_details[i].amount_paid);
+                    if (amount_paid <= 0) return null;
+                    console.log(payment)
+                    return {
+                        amount_paid,
+                        id: payment.id,
+                        remaining_amount: payment.remaining_amount,
+                        total: payment.total
+                    };
+                })
+                .filter(p => p !== null);
+
+
+            this.$inertia.put(route('payments.update', payload), { pagos: payload }, {
+                onSuccess: () => {
+                    this.showModal = false;
+                    this.resetModal();
+                },
+                onError: (errors) => {
+                    console.error(errors);
+                }
+            });
+        },
+        resetModal() {
+            if (!this.selectedBudget || !this.selectedBudget.payment) return;
+            this.form_details = this.selectedBudget.payment.map(p => ({
+                amount_paid: 0,
+            }));
+            this.form_details.errors = [];
+        },
+
         formatNumber(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
