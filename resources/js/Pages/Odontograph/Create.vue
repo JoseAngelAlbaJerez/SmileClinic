@@ -9,9 +9,9 @@
 
 
 
-               <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
+                <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
                     <div>
-                        <Odontograph v-model="odontogramData" />
+                        <Odontograph v-model="odontogramData"  />
                     </div>
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
@@ -19,7 +19,7 @@
                     </div>
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                        <SecondaryButton type="button" @click="form.reset()">
+                        <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
                         <PrimaryButton type="submit">Guardar</PrimaryButton>
@@ -58,17 +58,18 @@ export default {
     setup(props) {
         const error = ref(null);
         const odontogramData = ref({});
+        const odontographKey = ref(Date.now());
 
+        const resetForm = () => {
+            odontogramData.value = {};
+            odontographKey.value = Date.now();
+            error.value = null;
+        };
         const crumbs = [
             { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
             { label: `${props.patient.first_name} ${props.patient.last_name}`, to: route('patients.show', props.patient) },
             { icon: markRaw(AddIcon), label: 'Crear Odontograma' }
         ];
-
-        const resetForm = () => {
-            odontogramData.value = {};
-            error.value = null;
-        };
 
         const submit = () => {
             router.post(route('odontographs.store'), {
@@ -84,6 +85,7 @@ export default {
         return {
             error,
             odontogramData,
+            odontographKey,
             crumbs,
             resetForm,
             submit
