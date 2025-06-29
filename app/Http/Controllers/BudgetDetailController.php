@@ -84,6 +84,16 @@ class BudgetDetailController extends Controller
         $budgetDetail->active = 0;
         $budget = $budgetDetail->budget()->first();
         $budget->total -= $budgetDetail->total;
+        if ($budget->type == "Crédito") {
+            $CXC = $budget->CXC()->first();
+            $CXC->balance -= $budgetDetail->total;
+            $CXC->save();
+            $payments = $budgetDetail->Payment()->get();
+            foreach ($payments as $payment) {
+                $payment->active = 0;
+                $payment->save();
+            }
+        }
         $budgetDetail->save();
         $budget->save();
 
@@ -95,6 +105,16 @@ class BudgetDetailController extends Controller
         $budgetDetail->active = 1;
         $budget = $budgetDetail->budget()->first();
         $budget->total += $budgetDetail->total;
+        if ($budget->type == "Contado") {
+            $CXC = $budget->CXC()->first();
+            $CXC->balance += $budgetDetail->total;
+            $CXC->save();
+            $payments = $budgetDetail->Payment()->get();
+            foreach ($payments as $payment) {
+                $payment->active = 1;
+                $payment->save();
+            }
+        }
         $budgetDetail->save();
         $budget->save();
 
