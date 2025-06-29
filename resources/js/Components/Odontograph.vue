@@ -52,7 +52,7 @@
 
                     <button type="button" @click="selectZone('Mesial')" :class="zoneClass('Mesial')">Mesial</button>
 
-                    <button type="button" @click="applyToAllZones":class="zoneClass('Mesial')" >
+                    <button type="button" @click="applyToAllZones" :class="zoneClass('Mesial')">
                         Todas
                     </button>
 
@@ -109,23 +109,23 @@ const lowerTeeth = [
     31, 32, 33, 34, 35, 36, 37, 38
 ]
 function applyToAllZones() {
-  if (!selectedTooth.value || !procedure.value) return;
+    if (!selectedTooth.value || !procedure.value) return;
 
-  const updated = JSON.parse(JSON.stringify(odontogram.value));
+    const updated = JSON.parse(JSON.stringify(odontogram.value));
 
-  updated[selectedTooth.value] = {
-    Oclusal: procedure.value,
-    Mesial: procedure.value,
-    Distal: procedure.value,
-    Vestibular: procedure.value,
-    Lingual: procedure.value,
-  };
+    updated[selectedTooth.value] = {
+        Oclusal: procedure.value,
+        Mesial: procedure.value,
+        Distal: procedure.value,
+        Vestibular: procedure.value,
+        Lingual: procedure.value,
+    };
 
-  odontogram.value = updated;
+    odontogram.value = updated;
 
-  selectedZone.value = '';
-  selectedTooth.value = null;
-  procedure.value = '';
+    selectedZone.value = '';
+    selectedTooth.value = null;
+    procedure.value = '';
 }
 
 
@@ -138,8 +138,9 @@ const procedure = ref('')
 
 
 watch(() => props.modelValue, (val) => {
-    odontogram.value = structuredClone(val)
+    odontogram.value = JSON.parse(JSON.stringify(val || {}))
 })
+
 
 const selectedZone = ref('')
 const selectZone = (zone) => {
