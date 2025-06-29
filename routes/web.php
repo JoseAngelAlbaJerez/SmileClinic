@@ -8,9 +8,15 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\OdontographController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Models\Budget;
 use App\Models\BudgetDetail;
-
+use App\Models\Expenses;
+use App\Models\Patient;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,7 +31,50 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $patients = Patient::all();
+    $users = User::all();
+
+
+    $now = Carbon::now();
+    $startOfThisWeek = $now->copy()->startOfWeek();
+    $endOfThisWeek = $now->copy()->endOfWeek();
+
+    $startOfLastWeek = $now->copy()->subWeek()->startOfWeek();
+    $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
+
+
+    $incomeThisWeek = Budget::where('type', 'Contado')
+        ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
+        ->sum('total');
+
+    $incomeLastWeek = Budget::where('type', 'Contado')
+        ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
+        ->sum('total');
+
+
+    $percentageChange = $incomeLastWeek > 0
+        ? (($incomeThisWeek - $incomeLastWeek) / $incomeLastWeek) * 100
+        : 0;
+
+
+    $income = Budget::where('type', '=', 'Contado')->orderByDesc('created_at')->with('budgetdetail.procedure', 'patient')->get();
+    $income_sum = $income->sum('total');
+
+
+    $expense = Expenses::orderByDesc('created_at')->get();
+    $expense_sum = $expense->sum('amount');
+
+    return Inertia::render('Dashboard', [
+        'patients' => $patients,
+        'users' => $users,
+        'income_sum' => $income_sum,
+        'expense_sum' => $expense_sum,
+        'income' => $income,
+        'expense' => $expense,
+        'incomeThisWeek' => $incomeThisWeek,
+        'incomeLastWeek' => $incomeLastWeek,
+        'percentageChange' => round($percentageChange, 2),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -40,7 +89,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('budgetDetails', BudgetDetailController::class);
     Route::resource('CXC', CXCController::class);
     Route::resource('payments', PaymentController::class);
+    Route::resource('prescriptions', PrescriptionController::class);
 
+
+    //Reports
+    Route::get('reports/patient/{patient}', [ReportController::class, 'patient'])->name('report.patient');
+    Route::get('reports/budget/{budget}', [ReportController::class, 'budget'])->name('report.budget');
+    Route::get('reports/prescription/{prescription}', [ReportController::class, 'prescription'])->name('report.prescription');
+     Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
