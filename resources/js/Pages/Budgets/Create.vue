@@ -153,7 +153,8 @@
                                     value="1" id="amount_of_payments" type="number"
                                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
                                     placeholder="1" />
-                                <p v-if="form.errors[`details.${index}.amount_of_payments`]" class="text-red-600 text-xs">
+                                <p v-if="form.errors[`details.${index}.amount_of_payments`]"
+                                    class="text-red-600 text-xs">
                                     {{ form.errors[`details.${index}.amount_of_payments`] }}
                                 </p>
                             </div>
@@ -310,6 +311,7 @@ export default {
                 day: 'numeric',
             });
         },
+
         addProcedure() {
 
             const id = parseInt(this.selectedProcedureId);
@@ -401,6 +403,7 @@ export default {
             const now = new Date();
             return now.toISOString().slice(0, 16);
         },
+
         submit() {
             if (!this.form.patient_id) {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';
@@ -430,19 +433,25 @@ export default {
                 },
                 details: this.form_details,
             };
-            console.log(data);
 
+            axios.post(route('budgets.store'), data)
+                .then(response => {
+                    const budgetId = response.data.budget_id;
 
-            this.$inertia.post(route('budgets.store'), data, {
-                onError: (errors) => {
-                    this.form.errors = errors;
-                    this.form_detail.errors = errors;
-                }
-            });
-
-
-        }
-        ,
+                    if (budgetId) {
+                        window.open(route('report.budget', { budget: budgetId }), '_blank');
+                    }
+                    window.location.href = route('budgets.show', { budget: budgetId });
+                })
+                .catch(error => {
+                    if (error.response?.status === 422) {
+                        this.form.errors = error.response.data.errors;
+                        this.form_detail.errors = error.response.data.errors;
+                    } else {
+                        console.error('Error al guardar el presupuesto:', error);
+                    }
+                });
+        },
 
         toggleshowDeleted() {
 
