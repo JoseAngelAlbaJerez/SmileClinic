@@ -11,7 +11,7 @@
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
                     <div>
-                        <Odontograph v-model="odontogramData"  />
+                        <Odontograph v-model="odontogramData" />
                     </div>
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
@@ -67,17 +67,18 @@ export default {
         };
         const crumbs = [
             { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-            { label: `${props.patient.first_name} ${props.patient.last_name}`, to: route('patients.show', props.patient) },
+            { icon: markRaw(UserIcon), label: `${props.patient.first_name} ${props.patient.last_name}`, to: route('patients.show', props.patient) },
             { icon: markRaw(AddIcon), label: 'Crear Odontograma' }
         ];
 
         const submit = () => {
+
             router.post(route('odontographs.store'), {
                 patient_id: props.patient.id,
                 data: odontogramData.value,
             }, {
                 onError: (e) => {
-                    error.value = e.message || 'Error al guardar el odontograma.';
+                    error.value = e || 'Error al guardar el odontograma.';
                 }
             });
         };
