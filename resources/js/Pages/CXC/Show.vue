@@ -57,7 +57,7 @@
                                 <p><strong>Fecha de Emisión:</strong> {{ budgets.emission_date }}</p>
                                 <p v-if="budgets.type == 'Crédito'"><strong>Fecha de Expiración:</strong> {{
                                     budgets.expiration_date
-                                    }}</p>
+                                }}</p>
                                 <p> <strong>Balance:</strong> ${{ formatNumber(CXC.balance) }}</p>
                                 <ChevronDownIcon class="flex  ml-auto " v-if="activeIndex === 0" />
                                 <ChevronUpIcon class="flex  ml-auto " v-else />
@@ -130,8 +130,8 @@
                                                 </label>
                                                 <label for="amount_of_payments"
                                                     class="block text-sm font-medium text-green-700 dark:text-green-300"
-                                                   v-else>
-                                                No tiene pagos Pendientes
+                                                    v-else>
+                                                    No tiene pagos Pendientes
                                                 </label>
 
                                             </div>
@@ -142,13 +142,13 @@
 
                                         <div class="flex items-center gap-2 mt-4">
                                             <h3 class="text-md font-semibold">Total: ${{ formatNumber(details.total)
-                                            }}
+                                                }}
                                             </h3>
-                                            <Button v-if="CXC.active && details.active && getRemainingPayments(details)"
+                                            <button v-if="CXC.active && details.active && getRemainingPayments(details)"
                                                 @click="showModal = true, selectedBudget = details, resetModal()"
                                                 class="ml-auto p-2 px-4 mt-2 gap-2 bg-green-500 text-sm text-white hover:bg-green-600 rounded-lg">
                                                 <AddIcon />
-                                            </Button>
+                                            </button>
                                             <DangerButton v-if="CXC.active && details.active"
                                                 @click="deleteBudgetDetail(details.id)"
                                                 class=" mt-2 gap-2 bg-red-500 px-2 py-2 text-sm text-white hover:bg-red-600 rounded-lg"
@@ -232,8 +232,9 @@
 
 
                     <div class="flex gap-2 mt-4 ">
-                        <SecondaryButton class="ml-auto" @click="showModal = false">Cancelar</SecondaryButton>
-                        <PrimaryButton  @click="submit()">Guardar</PrimaryButton>
+                        <SecondaryButton class="ml-auto" @click="showModal = false, resetModal()">Cancelar
+                        </SecondaryButton>
+                        <PrimaryButton @click="submit()">Guardar</PrimaryButton>
                     </div>
                 </div>
             </Modal>
@@ -268,6 +269,7 @@ import ChevronUpIcon from '@/Components/Icons/ChevronUpIcon.vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import CashIcon from '@/Components/Icons/CashIcon.vue';
 
 
 export default {
@@ -295,13 +297,15 @@ export default {
         AddIcon,
         Modal,
         SecondaryButton,
+        CashIcon
     },
 
 
     data() {
         return {
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
+                { icon: markRaw(CashIcon), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
+                { icon: markRaw(UserIcon), label: this.CXC.patient.first_name + ' ' + this.CXC.patient.last_name, to: route('patients.show',this.CXC.patient)},
                 { icon: markRaw(DocumentIcon), label: this.CXC.id },
 
             ],
