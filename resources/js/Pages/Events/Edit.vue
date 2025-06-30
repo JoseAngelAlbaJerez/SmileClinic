@@ -208,7 +208,8 @@ export default {
             selected_doctor: '',
               crumbs: [
                 {icon: markRaw(CalendarIcon),  label: 'Citas', to: route('events.index') },
-                {icon: markRaw(UserIcon), label: this.event.patient.first_name + ' ' + this.event.patient.last_name, to: route('patients.show',this.event.patient) }
+                {icon: markRaw(UserIcon), label: this.event.patient.first_name + ' ' + this.event.patient.last_name, to: route('patients.show',this.event.patient) },
+                {  label: 'Editar' },
             ]
         };
     },
