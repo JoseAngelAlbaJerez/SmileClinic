@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class BudgetController extends Controller
 {
     /**
@@ -171,15 +172,13 @@ class BudgetController extends Controller
         }
 
 
-        $pdf = Pdf::loadView('Reports.patient', [
-            'budget' => $budget->with('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment')
+        $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
+
+
+
+        return response()->json([
+            'budget_id' => $budget->id,
         ]);
-       $pdf->download('budget.pdf');
-
-
-
-
-        return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardado correctamente');
     }
 
 
