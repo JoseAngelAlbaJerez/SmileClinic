@@ -44,7 +44,7 @@
 
                         </div>
 
-                        <div class="bg-white hover:bg-blue-500  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
+                        <div class="bg-white hover:bg-blue-300 dark:hover:bg-blue-500  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
                             v-for="details in budgets.budgetdetail" :key="details.id">
                             <div class="flex justify-between items-center mb-2 ">
                                 <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">
@@ -213,6 +213,7 @@ import BreadCrumb from '@/Components/BreadCrumb.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 
 
+
 export default {
     props: {
         budgets: Object,
@@ -238,6 +239,7 @@ export default {
         return {
             crumbs: [
                 { icon: markRaw(DocumentMoney), label: 'Presupuestos', to: route('budgets.index') },
+                { icon: markRaw(UserIcon), label: this.budgets.patient.first_name+ ' ' + this.budgets.patient.last_name, to: route('patients.show',this.budgets.patient) },
                 { icon: markRaw(DocumentIcon), label: this.budgets.id },
 
             ],
