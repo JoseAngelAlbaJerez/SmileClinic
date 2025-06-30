@@ -158,7 +158,7 @@
         <tr>
             <td rowspan="2" class="client-name">
                 <div class="logo-container">
-
+ <img height="50" width="200" src="{{ public_path('img/Logo-COLOR.jpg') }}" >
                 </div>
             </td>
             <td>
@@ -174,7 +174,7 @@
             <td>
                 <p><strong>Paciente:</strong> {{ $budget->patient->first_name ?? '' }}</p>
                 <p><strong>Doctor:</strong> {{ $budget->doctor->name ?? '' }}</p>
-                <p><strong>Cuenta por cobrar:</strong> {{ $budget->CXC->balance ?? 'No asignada' }}</p>
+                <p><strong>Balance:</strong> ${{ $budget->CXC->balance ?? 'No asignada' }}</p>
 
             </td>
             <td>
@@ -210,9 +210,9 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $detail->procedure->name }}</td>
                     <td>{{ $detail->quantity }}</td>
-                    <td>{{ number_format($detail->amount, 2) }}</td>
+                    <td>$ {{ number_format($detail->amount, 2) }}</td>
                     <td>{{ $detail->discount }}%</td>
-                    <td>{{ number_format($detail->total, 2) }}</td>
+                    <td>$ {{ number_format($detail->total, 2) }}</td>
                 </tr>
             @endforeach
 

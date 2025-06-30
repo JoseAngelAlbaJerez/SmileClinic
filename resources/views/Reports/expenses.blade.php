@@ -158,7 +158,7 @@
         <tr>
             <td rowspan="2" class="client-name">
                 <div class="logo-container">
-
+                    <img height="50" width="200" src="{{ public_path('img/Logo-COLOR.jpg') }}" >
                 </div>
             </td>
             <td>
@@ -189,26 +189,26 @@
         </tr>
     </table>
 
-   <table class="line-items-container">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($expenses as $index => $expense)
+    <table class="line-items-container">
+        <thead>
             <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $expense->description }}</td>
-                <td>{{ number_format($expense->amount, 2) }} RD$</td>
-                <td>{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
+                <th>#</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Fecha</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach ($expenses as $index => $expense)
+                <tr>
+                    <td>{{ $expense->id }}</td>
+                    <td>{{ $expense->description }}</td>
+                    <td>{{ number_format($expense->amount, 2) }} RD$</td>
+                    <td>{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
 
     <hr style="color: #ddd;">
