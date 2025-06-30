@@ -2,10 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
 
-            <Breadcrumb :crumbs="[
-                { label: 'Citas', to: route('events.index') },
-                { label: 'Crear Cita' }
-            ]" />
+            <Breadcrumb :crumbs="crumbs" />
 
         </template>
         <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
@@ -31,7 +28,7 @@
                     <div>
                         <label for="doctor_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Doctor</label>
-                         <div @click="openUserModal()"
+                        <div @click="openUserModal()"
                             class="block cursor-pointer w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
                             <p v-if="form.doctor_id">{{ selected_doctor.name }} {{ selected_doctor.last_name }}
                             </p>
@@ -47,7 +44,7 @@
                         <label for="patient_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente</label>
 
-                          <div @click="openPatientModal()"
+                        <div @click="openPatientModal()"
                             class="block cursor-pointer  w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
                             <p v-if="form.patient_id">{{ selected_patient.first_name }} {{ selected_patient.last_name }}
                             </p>
@@ -79,7 +76,7 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Inicio:</label>
 
-                            <VueDatePicker v-model="form.starttime" model-type="format"  :time-picker="true"
+                            <VueDatePicker v-model="form.starttime" model-type="format" :time-picker="true"
                                 :is-24="true" :minutes-increment="5" format="HH:mm"
                                 placeholder="Seleccione hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
@@ -93,9 +90,8 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Finalización:</label>
 
-                            <VueDatePicker v-model="form.endtime" model-type="format"  :time-picker="true"
-                                :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Seleccione hora de finalización"
+                            <VueDatePicker v-model="form.endtime" model-type="format" :time-picker="true" :is-24="true"
+                                :minutes-increment="5" format="HH:mm" placeholder="Seleccione hora de finalización"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -122,7 +118,9 @@
                     <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
                         Seleccionar Doctor
                     </h2>
-                    <UserSelector :users="doctors" @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false"></UserSelector>
+                    <UserSelector :users="doctors"
+                        @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false">
+                    </UserSelector>
 
                 </div>
             </Modal>
@@ -160,6 +158,9 @@ import { ref } from 'vue';
 import UserSelector from '@/Components/UserSelector.vue';
 import Modal from '@/Components/Modal.vue';
 import PatientSelector from '@/Components/PatientSelector.vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
+import { markRaw } from 'vue';
+import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 export default {
     props: {
         errors: [Array, Object],
@@ -182,7 +183,8 @@ export default {
         UserSelector,
         Modal,
         PatientSelector,
-
+        AddIcon,
+        CalendarIcon
     },
     data() {
         return {
@@ -203,7 +205,11 @@ export default {
             showPatientModal: ref(false),
             selected_patient: '',
             selected_doctor: '',
+            crumbs: [
+                { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
+                { icon: markRaw(AddIcon), label: 'Crear' },
 
+            ]
         };
     },
     methods: {
