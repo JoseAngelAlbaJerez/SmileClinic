@@ -45,13 +45,13 @@
                                                 '↑' :
                                                 '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('title')">
-                                            Diagnosis<span v-if="form.sortField === 'title'">{{ form.sortDirection ===
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patients.motive')">
+                                            Diagnosis<span v-if="form.sortField === 'patient.motive'">{{ form.sortDirection ===
                                                 'asc' ? '↑' :
                                                 '↓'
                                                 }}</span></th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('doctor.name')">
-                                            Doctor <span v-if="form.sortField === 'doctor.name'">{{
+                                        <th scope="col" class=" cursor-pointer" @click="sort('users.name')">
+                                            Doctor <span v-if="form.sortField === 'users.name'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
                                                     '↑' :

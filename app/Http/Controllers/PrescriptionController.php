@@ -43,7 +43,7 @@ class PrescriptionController extends Controller
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('prescriptions.title LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.motive LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
