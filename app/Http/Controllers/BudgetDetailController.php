@@ -105,7 +105,7 @@ class BudgetDetailController extends Controller
         $budgetDetail->active = 1;
         $budget = $budgetDetail->budget()->first();
         $budget->total += $budgetDetail->total;
-        if ($budget->type == "Contado") {
+        if ($budget->type == "Crédito") {
             $CXC = $budget->CXC()->first();
             $CXC->balance += $budgetDetail->total;
             $CXC->save();
