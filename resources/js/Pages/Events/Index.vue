@@ -50,8 +50,8 @@
                                                 'asc' ? '↑' :
                                                 '↓'
                                                 }}</span></th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('doctor.name')">
-                                            Doctor <span v-if="form.sortField === 'doctor.name'">{{
+                                        <th scope="col" class=" cursor-pointer" @click="sort('users.name')">
+                                            Doctor <span v-if="form.sortField === 'users.name'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
                                                     '↑' :
