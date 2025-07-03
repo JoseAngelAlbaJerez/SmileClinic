@@ -91,12 +91,17 @@
                     <div class=" flex items-center gap-2">
                         <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-1" />
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Presupuestos</h2>
+                        <Link :href="route('budgets.create')" as="button"
+                            class="ml-auto flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
+                        <AddIcon class="size-6" />
+                        Nuevo Presupuesto
+                        </Link>
                     </div>
 
-                    <div class=" rounded-2xl ">
+                    <div class=" rounded-2xl max-h-96  overflow-y-auto">
 
                         <div v-for="(budget, index) in budgets" :key="index"
-                            class="text-sm p-4 cursor-pointer  bg-gray-300  rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
+                            class="text-sm p-4 cursor-pointer  bg-gray-300   rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1">
 
                             <div @click="openAccordion(index)" class="flex items-center gap-4">
                                 <p>
@@ -122,7 +127,7 @@
                                         <div class="flex justify-between items-center mb-2">
                                             <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100"># -{{
                                                 details.id
-                                            }} {{ details.procedure.name }}</h3>
+                                                }} {{ details.procedure.name }}</h3>
                                             <span class="text-sm font-medium px-2 py-1 rounded-full"
                                                 :class="details.procedure.coberture ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
                                                 {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
@@ -133,22 +138,22 @@
                                             <div>
                                                 <label class="block text-sm font-medium">Monto: ${{
                                                     formatNumber(details.amount)
-                                                }}</label>
+                                                    }}</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Descuento: {{ details.discount
-                                                }} %</label>
+                                                    }} %</label>
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium">Cantidad: {{ details.quantity
-                                                }}</label>
+                                                    }}</label>
                                             </div>
                                         </div>
 
 
                                         <div class="flex items-center gap-2 mt-4">
                                             <h3 class="text-md font-semibold">Subtotal: ${{ formatNumber(details.total)
-                                            }}
+                                                }}
                                             </h3>
                                             <DangerButton v-if="budget.active && details.active"
                                                 @click="deleteBudgetDetail(details.id)"
@@ -165,7 +170,10 @@
                             </transition>
 
                         </div>
-
+                        <div v-if="!budgets.length"
+                            class="text-center text-gray-500 mt-10 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
                     </div>
 
                 </div>
@@ -174,51 +182,60 @@
                     <div class="mb-4 flex items-center gap-2">
                         <CalendarIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Citas Pendientes</h2>
+                        <Link :href="route('events.create')" as="button"
+                            class=" ml-auto flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
+                        <AddIcon class="size-6" />
+                        Nueva Cita
+                        </Link>
                     </div>
+                    <div class="max-h-96 overflow-y-auto">
+                        <div v-for="event in events" :key="event.id"
+                            class="bg-white hover:bg-blue-300 dark:hover:bg-blue-500   my-2 border shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
+                                    event.title
+                                    }}</h3>
+                                <span class="text-sm font-medium px-2 py-1 rounded-full"
+                                    :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
+                                    {{ event.attended ? 'Atendido' : 'No Atendido' }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                <p><strong>Fecha:</strong> {{ event.date }}</p>
+                                <p><strong>Hora:</strong> {{ event.starttime }} - {{ event.endtime }}</p>
+                                <p><strong>Doctor:</strong> {{ event.doctor.name }} {{ event.last_name }}</p>
+                            </div>
+                            <div v-if="event.active" class="flex items-start gap-2">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
+                                        class="sr-only peer">
+                                    <div
+                                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
+                                    </div>
+                                    <span v-if="event.attended"
+                                        class="ms-3 text-sm font-medium text-green-300  ">Atendido</span>
+                                    <span v-else class="ms-3 text-sm font-medium text-red-300  ">No Atendido</span>
+                                </label>
+                            </div>
+                            <div class=" flex  gap-2 ">
+                                <Link v-if="event.active" :href="route('odontographs.edit', event)"
+                                    class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                <EditIcon />
+                                </Link>
+                                <DangerButton v-if="event.active" @click="deleteEvent(event)"
+                                    class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                    <DeleteIcon />
+                                </DangerButton>
+                                <button v-else @click="restoreEvent(event)"
+                                    class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                    <RestoreIcon />
+                                </button>
 
-                    <div v-for="event in events" :key="event.id"
-                        class="bg-white hover:bg-blue-300 dark:hover:bg-blue-500  my-2 border shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">#{{ event.id }} - {{
-                                event.title
-                            }}</h3>
-                            <span class="text-sm font-medium px-2 py-1 rounded-full"
-                                :class="event.attended ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
-                                {{ event.attended ? 'Atendido' : 'No Atendido' }}
-                            </span>
+                            </div>
                         </div>
-                        <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                            <p><strong>Fecha:</strong> {{ event.date }}</p>
-                            <p><strong>Hora:</strong> {{ event.starttime }} - {{ event.endtime }}</p>
-                            <p><strong>Doctor:</strong> {{ event.doctor.name }} {{ event.last_name }}</p>
-                        </div>
-                        <div v-if="event.active" class="flex items-start gap-2">
-                            <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
-                                    class="sr-only peer">
-                                <div
-                                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
-                                </div>
-                                <span v-if="event.attended"
-                                    class="ms-3 text-sm font-medium text-green-300  ">Atendido</span>
-                                <span v-else class="ms-3 text-sm font-medium text-red-300  ">No Atendido</span>
-                            </label>
-                        </div>
-                        <div class=" flex  gap-2 ">
-                            <Link v-if="event.active" :href="route('odontographs.edit', event)"
-                                class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <EditIcon />
-                            </Link>
-                            <DangerButton v-if="event.active" @click="deleteEvent(event)"
-                                class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                <DeleteIcon />
-                            </DangerButton>
-                            <button v-else @click="restoreEvent(event)"
-                                class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                <RestoreIcon />
-                            </button>
-
-                        </div>
+                    </div>
+                    <div v-if="!events.length" class="text-center text-gray-500  mt-5 dark:text-gray-400 py-4 w-full">
+                        No hay registros disponibles.
                     </div>
                 </div>
 
@@ -261,18 +278,18 @@
                     <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Procedimientos guardados:</h3>
 
                     <!-- Fila superior -->
-                    <div class="grid grid-cols-16 gap-2 mb-4">
+                    <div class="grid grid-cols-16  gap-2 mb-4">
                         <div v-for="tooth in upperTeeth" :key="tooth"
                             class="border rounded p-2 text-center cursor-default" :class="{
                                 'bg-blue-200 dark:bg-blue-700': item.data[tooth],
                                 'hover:bg-blue-100 dark:hover:bg-blue-800': item.data[tooth]
                             }" @click="selectToothInView(item, tooth)" title="Click para ver detalles">
                             <div class="font-bold">{{ tooth }}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-300 truncate">
-                                <!-- Muestra zonas con procedimiento abreviados -->
+                            <div class="text-xs text-gray-600 dark:text-gray-300 truncate mb-1">
                                 <template v-if="item.data[tooth]">
-                                    <span v-for="(proc, zone) in item.data[tooth]" :key="zone"
-                                        class="mr-1 px-1 rounded text-white text-[10px] font-semibold" :class="{
+                                    <span v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                        :key="zone" class="mr-1 px-1 py-1 rounded text-white text-[10px] font-semibold"
+                                        :class="{
                                             'bg-gray-900': zone.charAt(0) === 'O',
                                             'bg-red-500': zone.charAt(0) === 'D',
                                             'bg-green-500': zone.charAt(0) === 'M',
@@ -297,10 +314,10 @@
                                 'hover:bg-blue-100 dark:hover:bg-blue-800': item.data[tooth]
                             }" @click="selectToothInView(item, tooth)" title="Click para ver detalles">
                             <div class="font-bold">{{ tooth }}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-300 truncate">
+                            <div class="text-xs text-gray-600 dark:text-gray-300 truncate mb-1">
                                 <template v-if="item.data[tooth]">
-                                    <span v-for="(proc, zone) in item.data[tooth]" :key="zone"
-                                        class="mr-1 px-4 rounded text-white bg-blue-600 dark:bg-blue-400 text-[10px] font-semibold"
+                                    <span v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                        :key="zone" class="mr-1 px-1 py-1 rounded text-white text-[10px] font-semibold"
                                         :class="{
                                             'bg-gray-900': zone.charAt(0) === 'O',
                                             'bg-red-500': zone.charAt(0) === 'D',
@@ -360,7 +377,7 @@
 
                 <div class=" flex  gap-2 mt-4 ">
                     <h2 class="text-sm text-gray-400 my-2">Fecha de Creación - {{ formatDate(item.created_at)
-                    }} </h2>
+                        }} </h2>
                     <Link v-if="item.active" :href="route('odontographs.edit', item)"
                         class="flex  ml-auto gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
                     <EditIcon />
@@ -657,5 +674,20 @@ p span:first-child {
 .accordion-enter-active,
 .accordion-leave-active {
     overflow: hidden;
+}
+
+.scroll-beauty::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scroll-beauty::-webkit-scrollbar-thumb {
+    background-color: #3b82f6;
+    /* azul */
+    border-radius: 6px;
+}
+
+.scroll-beauty::-webkit-scrollbar-track {
+    background-color: #e5e7eb;
+    /* gris claro */
 }
 </style>
