@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
+use Spatie\GoogleCalendar\Event as GoogleCalendarEvent;
 
 class EventController extends Controller
 {
@@ -94,8 +95,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        $doctors = User::role('doctor')->get();
-        $patients = Patient::all();
+        $doctors = User::role('doctor')->paginate(10);
+        $patients = Patient::paginate(10);
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
@@ -105,8 +106,11 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
+        $timezone = 'America/Santo_Domingo';
+
         $validated = $request->validate([
             'title'       => 'required|string|max:100',
             'doctor_id'   => 'required|integer',
@@ -115,13 +119,34 @@ class EventController extends Controller
             'endtime'    => ['required', 'date_format:H:i', 'after:starttime'],
             'date'        => 'required|date',
         ]);
+        $startDateTime = Carbon::parse($request->input('date') . ' ' . $request->input('starttime'))->setTimezone($timezone);
+
+        $endDateTime = Carbon::parse($request->input('date') . ' ' . $request->input('endtime'))->setTimezone($timezone);
 
         $validated['attended'] = false;
         $validated['active'] = true;
 
-        Event::create($validated);
+        $event =  Event::create($validated);
+        try {
+            $googleEvent = GoogleCalendarEvent::create([
+                'name' => $request->input('title'),
+                'startDateTime' => $startDateTime,
+                'endDateTime' => $endDateTime,
+            ]);
 
-         return redirect()->route('events.index')->with('toast', 'Cita registrada correctamente');
+            $event->google_event_id = $googleEvent->id;
+            $event->save();
+        } catch (\Exception $e) {
+
+            $event->delete();
+
+            return back()
+                ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
+                ->with('toastStyle', 'danger');
+        }
+
+
+        return redirect()->route('events.index')->with('toast', 'Cita registrada correctamente');
     }
     public function update(Request $request, Event $event)
     {
@@ -143,7 +168,7 @@ class EventController extends Controller
 
         $event->update($data);
 
-        return redirect()->back()->with('toast', 'Cita actualizada correctamente');
+        return redirect()->route('events.index')->with('toast', 'Cita actualizada correctamente');
     }
     private function restore(Event $event)
     {
@@ -152,16 +177,15 @@ class EventController extends Controller
 
         return redirect()->back()->with('toast', 'Cita restaurada correctamente');
     }
-      private function attend(Event $event, $attended)
+    private function attend(Event $event, $attended)
     {
         $event->attended = $attended;
         $event->save();
-        if ($event->attended = true) {
+        if ($event->attended == 1) {
             return redirect()->back()->with('toast', 'Cita atendida correctamente');
-        } else{
-             return redirect()->back()->with('toast', 'Cita desatendida correctamente');
+        } else {
+            return redirect()->back()->with('toast', 'Cita desatendida correctamente');
         }
-
     }
     /**
      * Display the specified resource.
@@ -174,9 +198,18 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Event $event)
     {
-        //
+        $event->load(['patient', 'doctor']);
+        $event->starttime = Carbon::parse($event->starttime)->format('H:i');
+         $event->endtime = Carbon::parse($event->endtime)->format('H:i');
+        $doctors = User::role('doctor')->paginate(10);
+        $patients = Patient::paginate(10);
+        return Inertia::render('Events/Edit', [
+            'event' => $event,
+            'doctors' => $doctors,
+            'patients' => $patients,
+        ]);
     }
 
     /**

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id');
-            $table->foreignId('budget_id');
             $table->foreignId('doctor_id');
               $table->boolean('active')->default(true);
             $table->timestamps();

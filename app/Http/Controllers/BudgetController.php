@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BudgetController extends Controller
 {
@@ -123,8 +124,11 @@ class BudgetController extends Controller
             'details.*.amount_of_payments' => [
                 'nullable',
                 'integer',
-                'required_if:budgets.type,Crédito',
-                'gt:1'
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->input('form.type') === 'Crédito' && (!is_numeric($value) || $value <= 1)) {
+                        $fail("La cantidad de pagos debe ser mayor que 1 cuando el tipo es Crédito.");
+                    }
+                }
             ],
             'details.*.initial' => 'nullable|integer',
         ]);
@@ -146,6 +150,8 @@ class BudgetController extends Controller
                 ]);
             } else {
                 $CXC = $patient->cxc;
+                $CXC->balance += $budget->total;
+                $CXC->save();
             }
             foreach ($budgetDetails as $detail) {
 
@@ -166,8 +172,13 @@ class BudgetController extends Controller
         }
 
 
+        $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-        return redirect()->route('budgets.index')->with('toast', 'Presupuesto guardado correctamente');
+
+
+        return response()->json([
+            'budget_id' => $budget->id,
+        ]);
     }
 
 

@@ -11,10 +11,10 @@
                         budgets.patient.last_name }}
                     </h2>
                     <div v-if="budgets.active" class=" flex ml-auto gap-2 mb-2 ">
-                        <Link :href="route('budgets.edit', budgets.id)"
+                        <button @click="print()"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
                         <PrintIcon /> Imprimir
-                        </Link>
+                        </button>
                         <Link :href="route('budgets.edit', budgets.id)"
                             class="flex justify-center gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
                         <EditIcon /> Editar
@@ -44,7 +44,7 @@
 
                         </div>
 
-                        <div class="bg-white hover:bg-blue-500  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
+                        <div class="bg-white hover:bg-blue-300 dark:hover:bg-blue-500  my-2 border border-blue-500 dark:border-blue-400 shadow-md dark:bg-gray-700 p-4 rounded-xl shadow-sm hover:shadow-md transition duration-200"
                             v-for="details in budgets.budgetdetail" :key="details.id">
                             <div class="flex justify-between items-center mb-2 ">
                                 <h3 class="text-md font-semibold text-gray-800 dark:text-gray-100">
@@ -213,6 +213,7 @@ import BreadCrumb from '@/Components/BreadCrumb.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 
 
+
 export default {
     props: {
         budgets: Object,
@@ -238,6 +239,7 @@ export default {
         return {
             crumbs: [
                 { icon: markRaw(DocumentMoney), label: 'Presupuestos', to: route('budgets.index') },
+                { icon: markRaw(UserIcon), label: this.budgets.patient.first_name+ ' ' + this.budgets.patient.last_name, to: route('patients.show',this.budgets.patient) },
                 { icon: markRaw(DocumentIcon), label: this.budgets.id },
 
             ],
@@ -274,6 +276,11 @@ export default {
             },
             );
         },
+        async print() {
+            window.open(route('report.budget', {
+                budget: this.budgets
+            }), '_blank');
+        }
     }
 }
 </script>

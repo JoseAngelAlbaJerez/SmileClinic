@@ -116,7 +116,7 @@ class PatientController extends Controller
 
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
-        $odontograph = $query->get();
+        $odontograph = $query->orderByDesc('created_at')->get();
 
 
         return Inertia::render('Patients/Show', [

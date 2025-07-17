@@ -16,6 +16,7 @@ class Event extends Model
         'endtime',
         'date',
         'active',
+        'google_event_id'
 
     ];
     public function doctor(){

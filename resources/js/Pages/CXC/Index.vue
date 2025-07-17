@@ -203,7 +203,7 @@ import { ref } from 'vue';
 import { markRaw } from 'vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
-import CartIcon from '@/Components/Icons/CartIcon.vue';
+import CashIcon from '@/Components/Icons/CashIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -230,7 +230,7 @@ export default {
         LastDaysFilter,
         Breadcrumb,
         TableIcon,
-        CartIcon,
+        CashIcon,
         AddIcon,
         UserIcon,
         DocumentMoney,
@@ -256,7 +256,7 @@ export default {
             },
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(CartIcon), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
+                { icon: markRaw(CashIcon), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showModal: ref(false),

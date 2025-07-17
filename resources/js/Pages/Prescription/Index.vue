@@ -20,10 +20,10 @@
 
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
                                 class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
-                            <Link :href="route('events.create')" as="button"
+                            <Link :href="route('prescriptions.create')" as="button"
                                 class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
                             <AddIcon class="size-6" />
-                            Nueva Cita
+                            Nueva Receta
                             </Link>
                         </div>
                     </div>
@@ -45,8 +45,8 @@
                                                 '↑' :
                                                 '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('title')">
-                                            Titulo<span v-if="form.sortField === 'title'">{{ form.sortDirection ===
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patients.motive')">
+                                            Diagnosis<span v-if="form.sortField === 'patient.motive'">{{ form.sortDirection ===
                                                 'asc' ? '↑' :
                                                 '↓'
                                                 }}</span></th>
@@ -91,27 +91,29 @@
                                         <th scope="col" class=" ">Acciones</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
 
-                                    <tr v-for="event in events.data" :key="event.id">
-                                        <td class="p-4  items-center">{{ event.id }}</td>
-                                        <td class="p-4  items-center">{{ event.title }} </td>
-                                        <td class="p-4  items-center">{{ event.doctor.name }} {{
-                                            event.doctor.last_name }}</td>
-                                        <td class="p-4  items-center">{{ event.patient.first_name }} {{
-                                            event.patient.last_name }}</td>
-                                        <td class="p-4  items-center">{{ formatDate(event.created_at) }}</td>
+                                    <tr v-for="prescription in prescriptions.data" :key="prescription.id">
+                                        <td class="p-4  items-center">{{ prescription.id }}</td>
+                                        <td class="p-4  items-center">{{ prescription.patient.motive }} </td>
+                                        <td class="p-4  items-center">{{ prescription.doctor.name }} {{
+                                            prescription.doctor.last_name }}</td>
+                                        <td class="p-4  items-center">{{ prescription.patient.first_name }} {{
+                                            prescription.patient.last_name }}</td>
+                                        <td class="p-4  items-center">{{ formatDate(prescription.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
-                                                <span :class="statusIndicatorClasses(event.active)" />
-                                                <p :class="statusBadgeClasses(event.active)">
-                                                    <HandThumbDown v-if="event.active == 0" />
+                                                <span :class="statusIndicatorClasses(prescription.active)" />
+                                                <p :class="statusBadgeClasses(prescription.active)">
+                                                    <HandThumbDown v-if="prescription.active == 0" />
                                                     <HandThumbUp v-else />
                                                 </p>
                                             </div>
                                         </td>
                                         <td class="p-4 items-center">
-                                            <p @click="openModal(event)" class="text-blue-500 cursor-pointer">Abrir
+                                            <p @click="openModal(prescription)" class="text-blue-500 cursor-pointer">
+                                                Abrir
                                             </p>
                                         </td>
 
@@ -121,81 +123,137 @@
 
                                 </tbody>
                             </table>
-                            <div v-if="!events.data.length"
+                            <div v-if="!prescriptions.data.length"
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
                         </div>
-                        <Pagination :pagination="events" :filters="form" />
+                        <Pagination :pagination="prescriptions" :filters="form" />
                     </div>
                 </div>
             </div>
 
             <!-- Modal -->
-            <Modal :show="showModal" @close="showModal = false">
-                <div class="text-gray-800 p-5  ">
-                    <h2 class="text-2xl font-semibold mb-4 p-4 text-blue-500  pb-2">
-                        Detalles del Evento
+            <Modal :show="showModal" @close="showModal = false" :max-width="'3xl'">
+                <div class="text-gray-800 p-5 ">
+                    <h2 class="text-2xl font-semibold  p-4 text-blue-500 ">
+                        Detalles de la Receta
                     </h2>
 
-                    <div v-if="selectedEvent" class="space-y-3 p-4 ">
+                    <div v-if="selectedprescription" class="space-y-3 p-4 ">
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Paciente:</span>
-                            <Link :href="route('patients.show', selectedEvent.patient.id)" class="text-blue-500">{{
-                                selectedEvent.patient.first_name }} {{
-                                selectedEvent.patient.last_name }}
+                            <Link :href="route('patients.show', selectedprescription.patient.id)" class="text-blue-500">
+                            {{
+                                selectedprescription.patient.first_name }} {{
+                                selectedprescription.patient.last_name }}
                             </Link>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Motivo de última
                                 Consulta:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.patient.motive }}</span>
+                            <span class="text-gray-900 dark:text-gray-300">{{ selectedprescription.patient.motive
+                            }}</span>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.doctor.name }} {{
-                                selectedEvent.doctor.last_name }}</span>
+                            <span class="text-gray-900 dark:text-gray-300">{{ selectedprescription.doctor.name }} {{
+                                selectedprescription.doctor.last_name }}</span>
+                        </div>
+                        <div class="max-h-[70vh] overflow-y-auto space-y-4 px-2">
+                            <div v-for="(details, index) in selectedprescription.prescriptions_details"
+                                :key="details.id"
+                                class="max-w-lg mx-auto border rounded-xl bg-white dark:bg-gray-900 shadow-lg overflow-hidden ">
+                                <!-- Encabezado clickeable -->
+                                <button @click="toggleDetail(index)"
+                                    class="w-full text-left p-4 flex justify-between items-center border dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                                    <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        {{ details.drugs.name }}
+                                    </h3>
+
+                                </button>
+
+                                <!-- Contenido expandible -->
+                                <transition name="fade">
+                                    <div v-show="expandedIndexes.includes(index)"
+                                        class="p-6 space-y-3 max-h-80 overflow-y-auto">
+                                        <div class="space-y-1">
+                                            <p>
+                                                <span
+                                                    class="font-semibold text-gray-600 dark:text-gray-300">Descripción:
+                                                </span>
+                                                <span class="text-gray-800 dark:text-gray-200">{{ details.description
+                                                }}</span>
+                                            </p>
+
+                                            <template v-if="details.drugs">
+
+                                                <p>
+                                                    <span
+                                                        class="font-semibold text-gray-600 dark:text-gray-300">Detalles
+                                                        del medicamento: </span>
+                                                    <span class="italic text-gray-600 dark:text-gray-400">{{
+                                                        details.drugs.description }}</span>
+                                                </p>
+                                                <p>
+                                                    <span
+                                                        class="font-semibold text-gray-600 dark:text-gray-300">Frecuencia
+                                                        de Uso (fc): </span>
+                                                    <span class="text-gray-800 dark:text-gray-200">{{ details.fc }}
+                                                        veces</span>
+                                                </p>
+                                                <p>
+                                                    <span
+                                                        class="font-semibold text-gray-600 dark:text-gray-300">Intervalo
+                                                        (hrs): </span>
+                                                    <span class="text-gray-800 dark:text-gray-200">cada {{
+                                                        details.time_interval }} horas</span>
+                                                </p>
+                                            </template>
+
+                                            <p v-else class="italic text-gray-400">No hay medicamento asignado</p>
+                                        </div>
+
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold text-gray-600 dark:text-gray-300">Activo:</span>
+                                            <span>
+                                                <span v-if="details.active"
+                                                    class="text-green-600 font-semibold">Sí</span>
+                                                <span v-else class="text-red-600 font-semibold">No</span>
+                                            </span>
+                                        </div>
+
+                                        <div class="text-sm text-gray-400 dark:text-gray-500 italic">
+                                            Creado: {{ new Date(details.created_at).toLocaleString() }}
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
                         </div>
 
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Fecha:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.date }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Hora de Inicio:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.starttime }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Hora de Finalización:</span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedEvent.endtime }}</span>
-                        </div>
 
-                        <div class="flex items-start gap-2">
-                            <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" @click="AttendEvent()" :checked="selectedEvent.attended"
-                                    class="sr-only peer">
-                                <div
-                                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
-                                </div>
-                                <span v-if="selectedEvent.attended"
-                                    class="ms-3 text-sm font-medium text-green-300  ">Atendido</span>
-                                <span v-else class="ms-3 text-sm font-medium text-red-300  ">No Atendido</span>
-                            </label>
-                        </div>
+
+
                     </div>
 
                     <div class=" flex  gap-2 ">
-                        <Link v-if="selectedEvent.active" :href="route('events.edit', selectedEvent)"
-                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                          <button @click="print"
+                            class=" ml-auto flex justify-center mt-2 py-3 gap-2 rounded-lg bg-green-500 px-2  text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                        <PrintIcon />
+                        </button>
+                        <Link v-if="selectedprescription.active"
+                            :href="route('odontographs.edit', selectedprescription)"
+                            class="flex   mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                         <EditIcon />
                         </Link>
-                        <DangerButton v-if="selectedEvent.active" @click="deleteEvent(selectedEvent)"
-                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                        <DangerButton v-if="selectedprescription.active"
+                            @click="deleteprescription(selectedprescription)"
+                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                             <DeleteIcon />
                         </DangerButton>
-                        <button v-else @click="restoreEvent(selectedEvent)"
-                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                        <button v-else @click="restoreprescription(selectedprescription)"
+                            class="flex mt-2  gap-2 rounded-lg bg-green-500 px-2 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                             <RestoreIcon />
                         </button>
 
@@ -243,11 +301,13 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
+import RXIcon from '@/Components/Icons/RXIcon.vue';
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 
 export default {
 
     props: {
-        events: Object,
+        prescriptions: Object,
         filters: Object
     },
     components: {
@@ -276,12 +336,14 @@ export default {
         Modal,
         TableIcon,
         AddIcon,
-        RestoreIcon
+        RestoreIcon,
+        RXIcon,
+        PrintIcon
 
     },
     watch: {
         selectedOptions() {
-            this.fetchFilteredevents();
+            this.fetchFilteredprescriptions();
         },
 
     },
@@ -289,17 +351,18 @@ export default {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'events.updated_at',
+                sortField: this.filters?.sortField || 'prescriptions.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,
             },
+            expandedIndexes: [],
             showModal: ref(false),
-            selectedEvent: ref(null),
+            selectedprescription: ref(null),
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
+                { icon: markRaw(RXIcon), label: 'Recetas', to: route('prescriptions.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ]
 
@@ -315,23 +378,31 @@ export default {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },
-        openModal(event) {
-            this.selectedEvent = event;
+        openModal(prescription) {
+            this.selectedprescription = prescription;
             this.showModal = true;
         },
-        AttendEvent() {
-            this.selectedEvent.attended = !this.selectedEvent.attended;
-              this.$inertia.put(route('events.update', this.selectedEvent.id),
-                { attended: this.selectedEvent.attended },
+        Attendprescription() {
+            this.selectedprescription.attended = !this.selectedprescription.attended;
+            this.$inertia.put(route('prescriptions.update', this.selectedprescription.id),
+                { attended: this.selectedprescription.attended },
             );
         },
-        deleteEvent(id) {
-            this.$inertia.delete(route('events.destroy', id),);
+        deleteprescription(id) {
+            this.$inertia.delete(route('prescriptions.destroy', id),);
         },
-        restoreEvent(id) {
-            this.$inertia.put(route('events.update', id),
+        restoreprescription(id) {
+            this.$inertia.put(route('prescriptions.update', id),
                 { active: true },
             );
+        },
+        toggleDetail(index) {
+            const i = this.expandedIndexes.indexOf(index);
+            if (i > -1) {
+                this.expandedIndexes.splice(i, 1);
+            } else {
+                this.expandedIndexes.push(index);
+            }
         },
 
 
@@ -360,7 +431,7 @@ export default {
 
 
 
-                    this.$inertia.get(route('events.index'), this.form, {
+                    this.$inertia.get(route('prescriptions.index'), this.form, {
                         preserveState: true,
                         preserveScroll: true,
                         replace: true
@@ -378,6 +449,11 @@ export default {
 
             this.submitFilters();
 
+        },
+        async print() {
+            window.open(route('report.prescription', {
+                prescription: this.selectedprescription
+            }), '_blank');
         }
 
 
@@ -386,20 +462,21 @@ export default {
 
 </script>
 <style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-    transition: all 0.2s ease;
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
 }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
     opacity: 0;
-    transform: translateY(-5px);
+    max-height: 0;
 }
 
-.slide-fade-enter-to,
-.slide-fade-leave-from {
+.fade-enter-to,
+.fade-leave-from {
     opacity: 1;
-    transform: translateY(0);
+    max-height: 20rem;
+
 }
 </style>

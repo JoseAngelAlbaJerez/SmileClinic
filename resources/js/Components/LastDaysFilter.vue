@@ -78,7 +78,7 @@ export default {
     },
     onChange(value) {
       this.$emit("update:modelValue", value);
-      this.$emit("change", value); // por si quieres escuchar también el evento change en el padre
+      this.$emit("change", value);
       this.dropdownOpen = false;
     },
   },

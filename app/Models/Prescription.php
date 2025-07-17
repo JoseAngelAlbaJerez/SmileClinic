@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Prescription extends Model
 {
     protected $fillable = [
-        "patient_id","budget_id","doctor_id", "active"
+        "patient_id","doctor_id", "active"
     ];
     public function patient(){
         return $this->belongsTo(Patient::class);
@@ -18,7 +18,7 @@ class Prescription extends Model
      public function budget(){
         return $this->belongsTo(Budget::class);
     }
-    public function prescriptionDetail(){
+    public function prescriptionsDetails(){
         return $this->hasMany( PrescriptionDetail::class);
 }
 }

@@ -85,6 +85,9 @@ watchEffect(() => {
                                 <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
                                     Egresos
                                 </NavLink>
+                                 <NavLink :href="route('prescriptions.index')" :active="route().current('prescriptions.index')">
+                                    Recetas
+                                </NavLink>
 
                             </div>
                         </div>

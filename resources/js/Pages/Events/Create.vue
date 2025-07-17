@@ -2,10 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
 
-            <Breadcrumb :crumbs="[
-                { label: 'Citas', to: route('events.index') },
-                { label: 'Crear Cita' }
-            ]" />
+            <Breadcrumb :crumbs="crumbs" />
 
         </template>
         <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
@@ -31,13 +28,13 @@
                     <div>
                         <label for="doctor_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Doctor</label>
-                        <select v-model="form.doctor_id"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <option value="">Seleccione una opción</option>
-                            <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
-                                {{ doctor.name }} {{ doctor.last_name }}
-                            </option>
-                        </select>
+                        <div @click="openUserModal()"
+                            class="block cursor-pointer w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                            <p v-if="form.doctor_id">{{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                            </p>
+                            <p v-else>Seleccionar Doctor</p>
+                        </div>
+
 
 
                         <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.doctor_id }}</p>
@@ -46,13 +43,14 @@
                     <div>
                         <label for="patient_id"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente</label>
-                        <select v-model="form.patient_id"
-                            class="block w-full text px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <option value="">Seleccione una opción</option>
-                            <option class="" v-for="patient in patients" :key="patient.id" :value="patient.id">
-                                {{ patient.first_name }} {{ patient.last_name }}
-                            </option>
-                        </select>
+
+                        <div @click="openPatientModal()"
+                            class="block cursor-pointer  w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                            <p v-if="form.patient_id">{{ selected_patient.first_name }} {{ selected_patient.last_name }}
+                            </p>
+                            <p v-else>Seleccionar Paciente</p>
+                        </div>
+
 
 
                         <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.patient_id }}</p>
@@ -61,7 +59,7 @@
                     <!-- Date -->
                     <div>
 
-                        <div class="mb-4 px-2 w-full-mt-4">
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Fecha:</label>
 
@@ -74,11 +72,11 @@
                     <!-- starttime -->
                     <div>
 
-                        <div class="mb-4 px-2 w-full-mt-4">
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Inicio:</label>
 
-                            <VueDatePicker v-model="form.starttime" model-type="format"  :time-picker="true"
+                            <VueDatePicker v-model="form.starttime" model-type="format" :time-picker="true"
                                 :is-24="true" :minutes-increment="5" format="HH:mm"
                                 placeholder="Seleccione hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
@@ -88,13 +86,12 @@
                     <!-- endtime-->
                     <div>
 
-                        <div class="mb-4 px-2 w-full-mt-4">
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Hora de Finalización:</label>
 
-                            <VueDatePicker v-model="form.endtime" model-type="format"  :time-picker="true"
-                                :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Seleccione hora de finalización"
+                            <VueDatePicker v-model="form.endtime" model-type="format" :time-picker="true" :is-24="true"
+                                :minutes-increment="5" format="HH:mm" placeholder="Seleccione hora de finalización"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
@@ -113,6 +110,31 @@
                     </div>
                 </form>
             </div>
+
+
+            <!-- Modal -->
+            <Modal :show="showUserModal" @close="showUserModal = false" class="lg:max-w-2xl">
+                <div class="text-gray-800 p-12 p-8  ">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
+                        Seleccionar Doctor
+                    </h2>
+                    <UserSelector :users="doctors"
+                        @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false">
+                    </UserSelector>
+
+                </div>
+            </Modal>
+            <!-- Modal -->
+            <Modal :show="showPatientModal" @close="showPatientModal = false" class="lg:max-w-2xl">
+                <div class="text-gray-800 p-8  ">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
+                        Seleccionar Paciente
+                    </h2>
+
+                    <PatientSelector :patients="patients"
+                        @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
+                </div>
+            </Modal>
         </template>
     </AuthenticatedLayout>
 </template>
@@ -132,13 +154,18 @@ import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import LocationIcon from '@/Components/Icons/LocationIcon.vue';
-import { useToast } from 'vue-toastification';
-const toast = useToast();
+import { ref } from 'vue';
+import UserSelector from '@/Components/UserSelector.vue';
+import Modal from '@/Components/Modal.vue';
+import PatientSelector from '@/Components/PatientSelector.vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
+import { markRaw } from 'vue';
+import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 export default {
     props: {
         errors: [Array, Object],
-        doctors: Array,
-        patients: Array
+        doctors: Object,
+        patients: Object
     },
     components: {
         Link,
@@ -152,7 +179,12 @@ export default {
         VueDatePicker,
         ArrowDownTrayIcon,
         InsuranceIcon,
-        LocationIcon
+        LocationIcon,
+        UserSelector,
+        Modal,
+        PatientSelector,
+        AddIcon,
+        CalendarIcon
     },
     data() {
         return {
@@ -169,10 +201,24 @@ export default {
 
             }),
             error: '',
+            showUserModal: ref(false),
+            showPatientModal: ref(false),
+            selected_patient: '',
+            selected_doctor: '',
+            crumbs: [
+                { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
+                { icon: markRaw(AddIcon), label: 'Crear' },
 
+            ]
         };
     },
     methods: {
+        openUserModal() {
+            this.showUserModal = true;
+        },
+        openPatientModal() {
+            this.showPatientModal = true;
+        },
         submit() {
             if (!this.form.title) {
                 this.error = 'Por favor, Ingrese un título.';
