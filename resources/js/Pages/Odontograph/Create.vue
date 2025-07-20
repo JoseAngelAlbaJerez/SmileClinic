@@ -22,7 +22,7 @@
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit">Guardar</PrimaryButton>
+                        <PrimaryButton type="submit" >Guardar</PrimaryButton>
                     </div>
                 </form>
             </div>

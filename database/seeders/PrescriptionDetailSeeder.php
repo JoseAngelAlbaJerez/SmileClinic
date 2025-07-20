@@ -20,6 +20,7 @@ class PrescriptionDetailSeeder extends Seeder
                 'drug_id' => fake()->numberBetween(1, 10),
                 'fc'=> fake()->numberBetween(1,10),
                 'time_interval'=> fake()->numberBetween(1,10),
+                'ending_date' => now()->addHours(5),
                 'active' => fake()->boolean(),
                 'created_at' => now(),
                 'updated_at' => now(),

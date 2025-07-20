@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\CXC;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -66,8 +67,16 @@ class CXCController extends Controller
         }
 
         $CXC = $query->orderByDesc('created_at')->with('Patient', 'Budget')->paginate(10);
+        $pending_payments = Payment::whereIn('c_x_c_id', $CXC->pluck('id'))
+            ->where('remaining_amount', '>', 0)
+            ->where('active', true)
+            ->get()
+            ->groupBy('c_x_c_id');
+
+
         return Inertia::render('CXC/Index', [
             'CXC' => $CXC,
+            'pending_payments' => $pending_payments,
             'filters' => [
                 'search' => $search,
                 'sortField' => $sortField,
@@ -101,7 +110,7 @@ class CXCController extends Controller
     {
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $search = $request->input('search');
-        $query = Budget::with('doctor','patient')
+        $query = Budget::with('doctor', 'patient')
             ->join('users', 'odontographs.doctor_id', '=', 'users.id')
             ->select('budgets.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
 
@@ -121,10 +130,10 @@ class CXCController extends Controller
         }
 
 
-        $CXC = CXC::with( 'patient', 'budget.budgetdetail.procedure','CXCDetail','budget.budgetdetail.Payment')->find($CXC->id);
+        $CXC = CXC::with('patient', 'budget.budgetdetail.procedure', 'CXCDetail', 'budget.budgetdetail.Payment')->find($CXC->id);
 
         return Inertia::render('CXC/Show', [
-            'CXC'=> $CXC,
+            'CXC' => $CXC,
 
             'filters' => [
                 'search' => $search,
@@ -132,7 +141,6 @@ class CXCController extends Controller
 
             ],
         ]);
-
     }
 
     /**

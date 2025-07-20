@@ -26,7 +26,7 @@
 
 
                     <!-- Table -->
-                     <div
+                    <div
                         class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -47,12 +47,13 @@
                                                     'asc' ? '↑' :
                                                     '↓'
                                             }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('doctor_id')">Creador Por:
+                                        <th scope="col" class="  cursor-pointer" @click="sort('doctor_id')">Pagos
+                                            Pendientes
                                             <span v-if="form.sortField === 'doctor_id'">{{ form.sortDirection === 'asc'
                                                 ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span>
+                                            }}</span>
                                         </th>
                                         <th scope="col " class=" cursor-pointer" @click="sort('balance')">
                                             Balance <span v-if="form.sortField === 'balance'">{{
@@ -68,7 +69,7 @@
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                            }}</span></th>
+                                                }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -89,9 +90,12 @@
 
                                     <tr v-for="CXCS in CXC.data" :key="CXCS.id">
                                         <td class="p-4  items-center">{{ CXCS.id }}</td>
-                                        <td class="p-4  items-center">{{ CXCS.patient.first_name }} {{ CXCS.patient.last_name }} </td>
-                                        <td class="p-4  items-center">{{ CXCS.budget.type }} </td>
-                                           <td class="p-4  items-center">$ {{ formatNumber(CXCS.balance) }} </td>
+                                        <td class="p-4  items-center">{{ CXCS.patient.first_name }} {{
+                                            CXCS.patient.last_name }} </td>
+                                        <td class="p-4  items-center">
+                                            {{ pending_payments[CXCS.id].length }}
+                                        </td>
+                                        <td class="p-4  items-center">$ {{ formatNumber(CXCS.balance) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(CXCS.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
@@ -103,7 +107,8 @@
                                             </div>
                                         </td>
                                         <td class="p-4 items-center">
-                                            <Link :href="route('CXC.show',CXCS)" class="text-blue-500 cursor-pointer">Abrir
+                                            <Link :href="route('CXC.show', CXCS)" class="text-blue-500 cursor-pointer">
+                                            Abrir
                                             </Link>
                                         </td>
 
@@ -168,7 +173,7 @@
                             <SecondaryButton type="button" @click="form_modal.reset()">
                                 Limpiar
                             </SecondaryButton>
-                            <PrimaryButton type="submit">Guardar</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
                         </div>
                     </form>
                 </div>
@@ -218,6 +223,7 @@ export default {
         CXC: Object,
         filters: Object,
         errors: [Array, Object],
+        pending_payments: Object
     },
     components: {
         Head,

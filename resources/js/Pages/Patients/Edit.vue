@@ -174,7 +174,7 @@
                     <Link :href="route('patients.show', patient)">
                     <SecondaryButton>Cancelar</SecondaryButton>
                     </Link>
-                    <PrimaryButton type="submit">Guardar Cambios</PrimaryButton>
+                    <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar Cambios</PrimaryButton>
                 </div>
             </form>
         </div>

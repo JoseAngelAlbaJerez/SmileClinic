@@ -61,7 +61,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Fecha:</label>
+                                for="select-item">Fecha</label>
 
                             <VueDatePicker
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
@@ -74,28 +74,17 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Hora de Inicio:</label>
+                                for="select-item">Hora </label>
 
-                            <VueDatePicker v-model="form.starttime" model-type="format" :time-picker="true"
-                                :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Seleccione hora de inicio"
+                            <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
+                                :time-picker="true" :format="timeFormat" :is-24="true" :minutes-increment="5"
+                                format="HH:mm" :enable-time-picker="true" placeholder="Seleccione hora de inicio"
                                 class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
 
                         </div>
                     </div>
                     <!-- endtime-->
-                    <div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Hora de Finalización:</label>
-
-                            <VueDatePicker v-model="form.endtime" model-type="format" :time-picker="true" :is-24="true"
-                                :minutes-increment="5" format="HH:mm" placeholder="Seleccione hora de finalización"
-                                class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
-
-                        </div>
-                    </div>
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
                         {{ error }}
@@ -106,7 +95,9 @@
                         <SecondaryButton type="button" @click="form.reset()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit">Guardar</PrimaryButton>
+                        <PrimaryButton type="submit" :disabled="form.processing"
+                            :class="{ 'opacity-25': form.processing }" :is-loading="form.processing">Guardar
+                        </PrimaryButton>
                     </div>
                 </form>
             </div>
@@ -161,6 +152,7 @@ import PatientSelector from '@/Components/PatientSelector.vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import { markRaw } from 'vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
+import dayjs from 'dayjs';
 export default {
     props: {
         errors: [Array, Object],
@@ -200,6 +192,8 @@ export default {
                 active: true,
 
             }),
+            timeRange: [],
+            timeFormat: 'HH:mm',
             error: '',
             showUserModal: ref(false),
             showPatientModal: ref(false),
@@ -213,6 +207,15 @@ export default {
         };
     },
     methods: {
+        onTimeRangeChange(range) {
+            if (Array.isArray(range) && range.length === 2) {
+                this.form.starttime = range[0];
+                this.form.endtime = range[1];
+            } else {
+                this.form.starttime = null;
+                this.form.endtime = null;
+            }
+        },
         openUserModal() {
             this.showUserModal = true;
         },
@@ -220,6 +223,8 @@ export default {
             this.showPatientModal = true;
         },
         submit() {
+
+
             if (!this.form.title) {
                 this.error = 'Por favor, Ingrese un título.';
                 return;
@@ -244,7 +249,18 @@ export default {
                 this.error = 'La hora finalización debe ser despues de la hora de inicio';
                 return;
             };
+            const formatTime = (time) => {
+                const h = time.hours.toString().padStart(2, '0');
+                const m = time.minutes.toString().padStart(2, '0');
+                return `${h}:${m}`;
+            };
+            this.form.starttime = formatTime(this.form.starttime);
+            this.form.endtime = formatTime(this.form.endtime);
 
+            if (this.form.starttime > this.form.endtime) {
+                this.error = 'La hora de finalización debe ser después de la hora de inicio';
+                return;
+            }
 
             this.error = null;
 

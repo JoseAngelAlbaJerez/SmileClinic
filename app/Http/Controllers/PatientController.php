@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Patient;
 use App\Models\Event;
+use App\Models\Prescription;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
@@ -117,12 +118,13 @@ class PatientController extends Controller
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
-
+        $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->get();
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'budgets' => $budgets,
             'events' => $events,
+            'prescription' => $prescription,
             'odontograph' => $odontograph,
             'filters' => [
                 'search' => $search,

@@ -11,6 +11,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 use App\Models\Budget;
 use App\Models\BudgetDetail;
 use App\Models\Expenses;
@@ -90,11 +91,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('CXC', CXCController::class);
     Route::resource('payments', PaymentController::class);
     Route::resource('prescriptions', PrescriptionController::class);
+    Route::resource('users', UserController::class);
 
 
     //Reports
     Route::get('reports/patient/{patient}', [ReportController::class, 'patient'])->name('report.patient');
+    Route::get('reports/CXC/{CXC}', [ReportController::class, 'CXC'])->name('report.CXC');
     Route::get('reports/budget/{budget}', [ReportController::class, 'budget'])->name('report.budget');
+    Route::get('reports/budgets/{Days}', [ReportController::class, 'budgets'])->name('report.budgets');
     Route::get('reports/prescription/{prescription}', [ReportController::class, 'prescription'])->name('report.prescription');
      Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
 });

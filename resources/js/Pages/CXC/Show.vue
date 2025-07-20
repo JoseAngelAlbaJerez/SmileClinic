@@ -11,10 +11,10 @@
                         CXC.patient.last_name }}
                     </h2>
                     <div v-if="CXC.active" class=" flex ml-auto gap-2 mb-2 ">
-                        <Link :href="route('CXC.edit', CXC.id)"
+                        <button @click="print()"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                        <PrintIcon /> Imprimir
-                        </Link>
+                            <PrintIcon /> Imprimir
+                        </button>
                         <Link :href="route('CXC.edit', CXC.id)"
                             class="flex justify-center gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
                         <EditIcon /> Editar
@@ -34,15 +34,14 @@
 
 
                 <!-- Presupuestos -->
-                <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md my-4"
-                    v-for="(budgets, index) in CXC.budget" :key="budgets.id">
+                <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-md my-4">
                     <div class=" flex items-center gap-2">
                         <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-1" />
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Presupuestos</h2>
 
                     </div>
 
-                    <div class=" rounded-2xl ">
+                    <div class=" rounded-2xl" v-for="(budgets, index) in CXC.budget" :key="budgets.id">
 
                         <div class="text-sm p-4 cursor-pointer  bg-gray-300  rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-300 ml-1 my-2 space-y-1"
                             :class="{
@@ -51,14 +50,14 @@
 
                             <div @click="openAccordion(index)" class="flex items-center gap-4">
                                 <p>
-                                    <strong># - </strong> {{ CXC.id }}
+                                    <strong># - </strong> {{ budgets.id }}
                                 </p>
-                                <p><strong>Tipo:</strong> {{ budgets.type }}</p>
+
                                 <p><strong>Fecha de Emisión:</strong> {{ budgets.emission_date }}</p>
                                 <p v-if="budgets.type == 'Crédito'"><strong>Fecha de Expiración:</strong> {{
                                     budgets.expiration_date
-                                }}</p>
-                                <p> <strong>Balance:</strong> ${{ formatNumber(CXC.balance) }}</p>
+                                    }}</p>
+                                <p> <strong>Total:</strong> ${{ formatNumber(budgets.total) }}</p>
                                 <ChevronDownIcon class="flex  ml-auto " v-if="activeIndex === 0" />
                                 <ChevronUpIcon class="flex  ml-auto " v-else />
                             </div>
@@ -125,7 +124,7 @@
                                                 <label for="amount_of_payments"
                                                     class="block text-sm font-medium text-red-700 dark:text-red-300"
                                                     v-if="getRemainingPayments(details)">
-                                                    Restantes: {{ getRemainingPayments(details) }} pagos de ${{
+                                                    Pendientes: {{ getRemainingPayments(details) }} pagos de ${{
                                                         formatNumber(details.total / details.amount_of_payments) }}
                                                 </label>
                                                 <label for="amount_of_payments"
@@ -142,11 +141,16 @@
 
                                         <div class="flex items-center gap-2 mt-4">
                                             <h3 class="text-md font-semibold">Total: ${{ formatNumber(details.total)
-                                                }}
+                                            }}
                                             </h3>
+
+                                            <Link v-if="CXC.active" :href="route('budgets.show', budgets)"
+                                                class="flex  ml-auto mt-2  gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                            <EyeIcon />
+                                            </Link>
                                             <button v-if="CXC.active && details.active && getRemainingPayments(details)"
                                                 @click="showModal = true, selectedBudget = details, resetModal()"
-                                                class="ml-auto p-2 px-4 mt-2 gap-2 bg-green-500 text-sm text-white hover:bg-green-600 rounded-lg">
+                                                class=" p-2 px-4 mt-2 gap-2 bg-green-500 text-sm text-white hover:bg-green-600 rounded-lg">
                                                 <AddIcon />
                                             </button>
                                             <DangerButton v-if="CXC.active && details.active"
@@ -186,7 +190,7 @@
                                 <div class="flex justify-between">
 
                                     <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                                        Cuota #{{ index + 1 }} - {{ selectedBudget.procedure.name }}
+                                        Cuota # {{ index + 1 }} - {{ selectedBudget.procedure.name }}
                                     </h3>
                                     <span class="text-sm font-medium px-3 py-2 rounded-full"
                                         :class="payment.remaining_amount === 0 ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
@@ -219,11 +223,19 @@
                                     </div>
 
                                     <div class="flex justify-end">
-                                        <button @click.prevent="payAll(index)"
-                                            :disabled="payment.remaining_amount === 0"
+
+                                        <button @click.prevent="payAll(index)" v-if="payment.remaining_amount !== 0"
                                             class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm">
                                             Pagar Todo
                                         </button>
+
+
+                                        <button @click.prevent="revert(index)" v-else
+                                            class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm">
+                                            Revertir
+                                        </button>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -270,11 +282,11 @@ import AddIcon from '@/Components/Icons/AddIcon.vue';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import CashIcon from '@/Components/Icons/CashIcon.vue';
+import EyeIcon from '@/Components/Icons/EyeIcon.vue';
 
 
 export default {
     props: {
-
         CXC: Object
     },
     components: {
@@ -297,7 +309,8 @@ export default {
         AddIcon,
         Modal,
         SecondaryButton,
-        CashIcon
+        CashIcon,
+        EyeIcon
     },
 
 
@@ -305,7 +318,7 @@ export default {
         return {
             crumbs: [
                 { icon: markRaw(CashIcon), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
-                { icon: markRaw(UserIcon), label: this.CXC.patient.first_name + ' ' + this.CXC.patient.last_name, to: route('patients.show',this.CXC.patient)},
+                { icon: markRaw(UserIcon), label: this.CXC.patient.first_name + ' ' + this.CXC.patient.last_name, to: route('patients.show', this.CXC.patient) },
                 { icon: markRaw(DocumentIcon), label: this.CXC.id },
 
             ],
@@ -314,6 +327,7 @@ export default {
             selectedBudget: [],
 
             form_payments: [],
+            previous_amount_paid: {}
 
         }
     },
@@ -362,10 +376,22 @@ export default {
             return emissionDate < today;
         },
         payAll(index) {
+            if (!this.previous_amount_paid.hasOwnProperty(index)) {
+                this.previous_amount_paid[index] = this.form_details[index].amount_paid;
+            }
+
             let payment = this.selectedBudget.payment[index];
             this.form_details[index].amount_paid = payment.remaining_amount_original ?? payment.remaining_amount;
             this.calcTotal(index);
         },
+        revert(index) {
+            if (this.previous_amount_paid.hasOwnProperty(index)) {
+                this.form_details[index].amount_paid = this.previous_amount_paid[index];
+                delete this.previous_amount_paid[index];
+                this.calcTotal(index);
+            }
+        }
+        ,
         formatDate(date) {
             if (!date) return '';
             const d = new Date(date);
@@ -473,7 +499,13 @@ export default {
                 el.style.height = '0';
                 el.style.opacity = '0';
             })
+        },
+        async print() {
+            window.open(route('report.CXC', {
+                CXC: this.CXC
+            }), '_blank');
         }
+
     }
 }
 </script>

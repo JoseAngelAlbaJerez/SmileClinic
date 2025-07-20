@@ -60,7 +60,7 @@
                                                 ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span>
+                                            }}</span>
                                         </th>
                                         <th scope="col " class=" cursor-pointer" @click="sort('amount')">
                                             Monto <span v-if="form.sortField === 'amount'">{{
@@ -76,7 +76,7 @@
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                            }}</span></th>
+                                                }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -99,7 +99,7 @@
                                         <td class="p-4  items-center">{{ expense.id }}</td>
                                         <td class="p-4  items-center">{{ expense.description }} </td>
                                         <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
-                                            }} </td>
+                                        }} </td>
                                         <td class="p-4  items-center">$ {{ formatNumber(expense.amount) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
                                         <td class="p-4  items-center">
@@ -177,7 +177,7 @@
                             <SecondaryButton type="button" @click="form_modal.reset()">
                                 Limpiar
                             </SecondaryButton>
-                            <PrimaryButton type="submit">Guardar</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
                         </div>
                     </form>
                 </div>
@@ -202,7 +202,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
 
@@ -297,14 +297,14 @@ export default {
 
     data() {
         return {
-            form: {
+            form: useForm({
                 search: this.filters?.search || '',
                 sortField: this.filters?.sortField || 'expenses.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,
-            },
+            }),
             timeout: 3000,
             crumbs: [
                 { icon: markRaw(CartIcon), label: 'Egresos', to: route('expenses.index') },
@@ -352,6 +352,7 @@ export default {
             this.error = null;
             this.showModal = false;
             this.form_modal.post(route('expenses.store'),);
+            this.form_modal.reset();
 
         },
         openModal(expense) {

@@ -64,7 +64,7 @@
                         <label for="ars"
                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ARS <span class="text-red-500">*</span></label>
                         <select v-model="form.ars" :value="form.ars"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                            class="block w-full  py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
                             <option value=""> Seleccione una opción</option>
                             <option value="ARS Humano">ARS Humano</option>
                             <option value="ARS Universal">ARS Universal</option>
@@ -79,7 +79,7 @@
                     <!-- Date of Birth -->
                     <div>
 
-                        <div class="mb-4 px-2 w-full-mt-4">
+                        <div class="mb-4 w-full-mt-4">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                                 for="select-item">Fecha de Nacimiento: <span class="text-red-500">*</span></label>
 
@@ -179,7 +179,7 @@
                         <SecondaryButton type="button" @click="form.reset()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit">Guardar</PrimaryButton>
+                        <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
                     </div>
                 </form>
             </div>

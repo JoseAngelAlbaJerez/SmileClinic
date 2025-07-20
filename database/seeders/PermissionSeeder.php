@@ -25,6 +25,12 @@ class PermissionSeeder extends Seeder
             'odontograph.create',
             'odontograph.update',
             'odontograph.delete',
+            //Budgets
+            'budget.view',
+            'budget.create',
+            'budget.update',
+            'budget.delete',
+
             //event
             'event.view',
             'event.create',
@@ -32,20 +38,22 @@ class PermissionSeeder extends Seeder
             'event.delete',
 
             //Expenses
-            'expenses.view',
-            'expenses.create',
-            'expenses.update',
-            'expenses.delete',
+            'expense.view',
+            'expense.create',
+            'expense.update',
+            'expense.delete',
             //CXC
             'cxc.view',
             'cxc.create',
             'cxc.update',
             'cxc.delete',
-            //Drugs
-            'drugs.view',
-            'drugs.create',
-            'drugs.update',
-            'drugs.delete',
+
+            //Prescriptions
+            'prescription.view',
+            'prescription.create',
+            'prescription.update',
+            'prescription.delete',
+
             //user
             'user.*',
             'user.create',

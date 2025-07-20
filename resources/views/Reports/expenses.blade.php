@@ -1,223 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
-    <title>Reporte Egresos</title>
-
-<body>
-
+    <meta charset="UTF-8">
+    <title>Presupuesto Smile Clinic</title>
     <style>
-        /*
-  Common invoice styles. These styles will work in a browser or using the HTML
-  to PDF anvil endpoint.
-*/
-
-        body {
-            font-size: 16px;
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{{ public_path('fonts/Montserrat-Regular.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
 
-        table {
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            color: #322d28;
+            background-color: #ffffff;
+            margin: 40px;
+            font-size: 15px;
+        }
+
+        .invoice {
+            width: 100%;
+        }
+
+        .invoice .header td img {
+            max-width: 200px;
+        }
+
+        .invoice .header h2 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: right;
+            font-size: 2rem;
+            color: pink;
+            margin: 0;
+        }
+
+        .invoice .intro td {
+            padding-top: 15px;
+            vertical-align: top;
+        }
+
+        .invoice .intro td:nth-child(2) {
+            text-align: right;
+        }
+
+        .invoice .num {
+            font-weight: 200;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.8em;
+        }
+
+        .invoice .details td {
+            padding-top: 30px;
+        }
+
+        .invoice table.inner-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        table tr td {
-            padding: 0;
-        }
-
-        table tr td:last-child {
-            text-align: right;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        .right {
-            text-align: right;
-        }
-
-        .large {
-            font-size: 2em;
-        }
-
-        .total {
-            font-weight: bold;
-            color: #fb7578;
-        }
-
-
-        .invoice-info-container {
-            font-size: 0.875em;
-            margin-left: 15px;
-        }
-
-        .invoice-info-container td {
-            padding: 4px 0;
-        }
-
-        .client-name {
-            font-size: 2em;
-            vertical-align: top;
-        }
-
-        .line-items-container {
-            margin: 20px 0;
-            font-size: 0.875em;
-        }
-
-        .line-items-container th {
+        .invoice table.inner-table th,
+        .invoice table.inner-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #c8c3be;
             text-align: left;
-            color: var(--background);
-            border-bottom: 2px solid #ddd;
-            padding: 10px 0 15px 0;
+        }
+
+        .invoice table.inner-table thead {
+            background-color: pink;
+            color: white;
+        }
+
+        .invoice .totals {
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .invoice .totals td {
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+
+        .invoice .totals td:nth-child(2) {
+            text-align: right;
+        }
+
+        .invoice .totals .total td {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding-top: 10px;
+        }
+
+        h5 {
             font-size: 1em;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Montserrat', sans-serif;
+            color: pink;
+            margin-bottom: 5px;
         }
 
-        .line-items-container th:last-child {
-            text-align: right;
+        .additional-info {
+            margin-top: 40px;
+            font-size: 0.9em;
         }
 
-        .line-items-container td {
-            padding: 15px 0;
-        }
-
-        .line-items-container tbody tr:first-child td {
-            padding-top: 25px;
-        }
-
-        .line-items-container.has-bottom-border tbody tr:last-child td {
-            padding-bottom: 25px;
-            border-bottom: 2px solid #ddd;
-        }
-
-        .line-items-container.has-bottom-border {
-            margin-bottom: 0;
-        }
-
-        .line-items-container th.heading-quantity {
-            width: 50px;
-        }
-
-        .line-items-container th.heading-price {
-            text-align: right;
-            width: 100px;
-        }
-
-        .line-items-container th.heading-subtotal {
-            width: 100px;
-        }
-
-        .payment-info {
-            width: 38%;
-            font-size: 1em;
-            line-height: 1.5;
+        .additional-info p {
+            line-height: 1.5em;
+            margin: 2px 0;
         }
 
         .footer {
-            margin-top: 100px;
+            margin-top: 60px;
+            font-size: 0.85em;
+            text-align: center;
+            color: #999;
         }
 
-        .footer-thanks {
-            font-size: 1.125em;
-        }
-
-        .footer-thanks img {
-            display: inline-block;
-            position: relative;
-            top: 1px;
-            width: 16px;
-            margin-right: 4px;
-        }
-
-        .footer-info {
-            float: right;
-            margin-top: 5px;
-            font-size: 0.75em;
-            color: #ccc;
-        }
-
-        .footer-info span {
-            padding: 0 5px;
-            color: black;
-        }
-
-        .footer-info span:last-child {
-            padding-right: 0;
-        }
-
-        td {
-            font-size: 1em;
+        .page-break {
+            page-break-after: always;
         }
     </style>
+</head>
 
-
-
-    <table class="invoice-info-container">
-        <tr>
-            <td rowspan="2" class="client-name">
-                <div class="logo-container">
-                    <img height="50" width="200" src="{{ public_path('img/Logo-COLOR.jpg') }}" >
-                </div>
+<body>
+    <table class="invoice">
+        <tr class="header">
+            <td>
+                <img height="50" width="200" src="{{ public_path('img/Logo-COLOR.jpg') }}">
             </td>
             <td>
-                Smile Clinic
+                <h2>Egresos</h2>
+            </td>
+        </tr>
+        <tr class="intro">
+            <td>
+                Paciente: <strong></strong><br>
+                Doctor: <strong></strong><br>
+                Fecha: <strong>{{ \Carbon\Carbon::parse(now())->format('d/m/Y') }}</strong><br>
+            </td>
+            <td>
+                <span class="num">Presupuesto ID: #</span><br>
+                <span class="num">Balance:
+
+                </span><br>
+            </td>
+
+        </tr>
+        <tr class="details">
+            <td colspan="2">
+                <table class="inner-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $total = 0; @endphp
+                        @foreach ($expenses as $index => $expense)
+                            <tr>
+                                <td>{{ $expense->id }}</td>
+                                <td>{{ $expense->description }}</td>
+                                <td>{{ number_format($expense->amount, 2) }} RD$</td>
+                                <td>{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
+                            </tr>
+                            @php $total += $expense->amount; @endphp
+
+                            @if (($index + 1) % 10 === 0 && $index + 1 !== count($expenses))
+                    </tbody>
+                </table>
             </td>
         </tr>
         <tr>
-            <td>
-                (809) 970-4382
+            <td colspan="2">
+                <div class="page-break"></div>
             </td>
         </tr>
-        <tr>
-            <td>
+        <tr class="details">
+            <td colspan="2">
+                <table class="inner-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @endif
+                        @endforeach
 
+                    </tbody>
 
-            </td>
-            <td>
-                Duarte 5, Cayetano Germosén 56000
+                </table>
             </td>
         </tr>
-        <tr>
+        <tr class="totals">
+            <td></td>
             <td>
-
-            </td>
-            <td>
-                SmileClinic@gmail.com
+                <table class="totals">
+                    <tr>
+                        <td>Subtotal</td>
+                        <td>$ {{ number_format($total, 2) }}</td>
+                    </tr>
+                    <tr class="total">
+                        <td>Total</td>
+                        <td>$ {{ number_format($total, 2) }}</td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
 
-    <table class="line-items-container">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($expenses as $index => $expense)
-                <tr>
-                    <td>{{ $expense->id }}</td>
-                    <td>{{ $expense->description }}</td>
-                    <td>{{ number_format($expense->amount, 2) }} RD$</td>
-                    <td>{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <section class="additional-info">
+        <h5>Información de contacto</h5>
+        <p>Smile Clinic</p>
+        <p>Duarte 5, Cayetano Germosén 56000</p>
+        <p>Tel: (809) 970-4382</p>
+        <p>Email: SmileClinic@gmail.com</p>
+    </section>
 
-
-    <hr style="color: #ddd;">
-
-
-
-
+    <div class="footer">
+        Este reporte fue generado automáticamente por el sistema Smile Clinic.
+    </div>
 </body>
-
-<script></script>
 
 </html>

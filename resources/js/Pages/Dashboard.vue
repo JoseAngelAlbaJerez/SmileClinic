@@ -6,6 +6,9 @@ import AddIcon from '@/Components/Icons/AddIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import CartIcon from '@/Components/Icons/CartIcon.vue';
+import CardStats from '@/Components/CardStats.vue';
+import PieChartIcon from '@/Components/Icons/PieChartIcon.vue';
+
 export default {
     props: {
         patients: Object,
@@ -26,7 +29,9 @@ export default {
         AuthenticatedLayout,
         UserIcon,
         DocumentMoney,
-        CartIcon
+        CartIcon,
+        CardStats,
+        PieChartIcon
     },
     methods: {
         formatNumber(n) {
@@ -51,56 +56,14 @@ export default {
                     <!-- Content -->
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                            <div
-                                class="bg-gray-100 rounded-md  p-6 shadow-md dark:bg-gray-700 dark:text-white  shadow-black/5">
-                                <div class="flex justify-between ">
-                                    <div>
-                                        <div class="flex items-center mb-2">
-                                            <div class="text-3xl font-semibold">{{ patients.length }}</div>
-                                        </div>
-                                        <div class="text-sm font-medium text-gray-400 ">Total de Pacientes</div>
 
-                                        <Link :href="route('patients.index')"
-                                            class="text-blue-500 font-medium text-sm hover:text-blue-800">Ver</Link>
-                                    </div>
-                                    <UserIcon class="h-16 w-16 mt-2 text-blue-500" />
-                                </div>
-
-                            </div>
-                            <div
-                                class="bg-gray-100 rounded-md  p-6 shadow-md dark:bg-gray-700 dark:text-white shadow-black/5">
-                                <div class="flex justify-between mb-4">
-                                    <div>
-                                        <div class="flex items-center mb-1">
-                                            <div class="text-2xl font-semibold">$ {{ formatNumber(incomeThisWeek) }}</div>
-                                            <div class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2"
-                                                :class="percentageChange < 0 ? 'bg-red-500/10 text-red-500' : 'bg-emerald-500/10 text-emerald-500'">
-                                                {{ percentageChange > 0 ? '+' : '' }}{{ percentageChange }}%
-                                            </div>
-
-                                        </div>
-                                        <div class="text-sm font-medium text-gray-400">Ingresos</div>
-                                    </div>
-                                </div>
-                                <a href="/dierenartsen"
-                                    class="text-blue-500 font-medium text-sm hover:text-blue-800">Ver</a>
-                            </div>
-                            <div
-                                class="bg-gray-100 rounded-md  p-6 shadow-md dark:bg-gray-700 dark:text-white shadow-black/5">
-                                <div class="flex justify-between mb-4">
-                                    <div>
-                                        <div class="flex items-center mb-1">
-                                            <div class="text-2xl font-semibold">$ {{ formatNumber(expense_sum) }}</div>
-                                            <div
-                                                class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">
-                                                +30%</div>
-                                        </div>
-                                        <div class="text-sm font-medium text-gray-400">Egresos</div>
-                                    </div>
-                                </div>
-                                <a href="/dierenartsen"
-                                    class="text-blue-500 font-medium text-sm hover:text-blue-800">View</a>
-                            </div>
+                            <CardStats statSubtitle="Nuevos Usuarios" :statTitle="patients.lenght" statArrow="down" statPercent="3.48"
+                                statPercentColor="text-red-500" statDescripition="desde la semana pasada"
+                                 statIconColor="bg-orange-500" :stat-icon-color="'bg-green-500'"> </CardStats>
+                            <CardStats statSubtitle="Ingresos Mensuales" :statDescripition="'del mes pasado'">
+                            </CardStats>
+                            <CardStats statSubtitle="Egresos Mensuales" :stat-percent="percentageChange"
+                                :statDescripition="'del mes pasado'" :stat-icon-color="'bg-yellow-400'"> </CardStats>
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                             <div

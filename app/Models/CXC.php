@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class CXC extends Model
 {
     protected $fillable = [
-
         "patient_id",
         "doctor_id",
         "balance",

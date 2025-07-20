@@ -191,7 +191,7 @@
                         @click="form.reset() && form_detail.reset(), selectedProcedures = []">
                         Limpiar
                     </SecondaryButton>
-                    <PrimaryButton @click="submit()">Guardar</PrimaryButton>
+                    <PrimaryButton @click="submit()":disabled="form.processing || form_detail.processing" :class="{ 'opacity-25': form.processing || form_detail.processing}  " :is-loading="form.processing || form_detail.processing">Guardar</PrimaryButton>
                 </div>
             </div>
 

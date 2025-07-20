@@ -33,13 +33,20 @@ class RoleSeeder extends Seeder
             'odontograph.delete',
             'patient.view',
             'patient.create',
+            'event.view',
+            'event.create',
+            'event.update',
+            'event.delete',
+            'prescription.create',
+            'prescription.update',
+            'prescription.delete',
         ]);
 
         $role = Role::findByName("patient");
         $role->syncPermissions([
             'odontograph.view',
             'patient.view',
-            'drugs.view',
+            'prescription.view',
         ]);
         $role = Role::findByName("staff");
         $role->syncPermissions([
@@ -48,6 +55,18 @@ class RoleSeeder extends Seeder
             'patient.update',
             'patient.delete',
             'odontograph.view',
+            'budget.view',
+            'budget.create',
+            'budget.update',
+            'budget.delete',
+            'event.view',
+            'event.create',
+            'event.update',
+            'event.delete',
+            'expense.view',
+            'expense.create',
+            'expense.update',
+            'expense.delete',
         ]);
 
         $user = User::where('name', 'Test User')->first();
