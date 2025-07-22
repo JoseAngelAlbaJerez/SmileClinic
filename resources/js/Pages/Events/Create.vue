@@ -92,7 +92,7 @@
 
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                        <SecondaryButton type="button" @click="form.reset()">
+                        <SecondaryButton type="button" @click="form.reset(); timeRange = [] ">
                             Limpiar
                         </SecondaryButton>
                         <PrimaryButton type="submit" :disabled="form.processing"
