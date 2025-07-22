@@ -210,7 +210,7 @@
 
                 <div v-if="eventForm" class="space-y-3 p-4 ">
                     <div class="flex items-center gap-2">
-                        <h1 class="font-semibold text-2xl text-gray-700"> {{ eventForm.title }}</h1>
+                        <h1 class=" dark:text-white font-semibold text-2xl text-gray-700"> {{ eventForm.title }}</h1>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Paciente:</span>
@@ -236,11 +236,11 @@
 
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Hora de Inicio:</span>
-                        <span class="text-gray-900 dark:text-gray-300">{{ formatDate(eventForm.start) }}</span>
+                        <span class="text-gray-900 dark:text-gray-300">{{ formatTime(eventForm.start) }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Hora de Finalización:</span>
-                        <span class="text-gray-900 dark:text-gray-300">{{ formatDate(eventForm.end) }}</span>
+                        <span class="text-gray-900 dark:text-gray-300">{{ formatTime(eventForm.end) }}</span>
                     </div>
 
                     <div class="flex items-start gap-2">
