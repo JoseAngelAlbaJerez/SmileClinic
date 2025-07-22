@@ -112,7 +112,7 @@
 
                             <div class="space-y-3 text-sm">
                                 <!-- Complicaciones -->
-                                <div class="bg-gray-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Complicaciones
                                             médicas:</span>
@@ -129,7 +129,7 @@
                                 </div>
 
                                 <!-- Medicamentos -->
-                                <div class="bg-gray-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Uso de
                                             medicamentos:</span>
@@ -146,7 +146,7 @@
                                 </div>
 
                                 <!-- Alergias -->
-                                <div class="bg-gray-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Alergias
                                             conocidas:</span>
@@ -204,7 +204,7 @@
                                         <div class="flex justify-between">
                                             <h3
                                                 class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
-                                                Receta #{{ prescription.id }}
+                                                Receta # - {{ prescription.id }}
 
                                             </h3>
                                             <span class="  text-sm font-medium px-2 py-1 rounded-full"
@@ -313,7 +313,7 @@
                     </div>
 
                     <!-- Mensaje cuando no hay recetas -->
-                    <div v-if="!prescription.length" class="text-center py-6">
+                    <div v-if="!prescription.length" class="text-center py-6 ">
                         <div class="inline-flex flex-col items-center">
                             <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
                             <p class="text-gray-500 dark:text-gray-400 font-medium">No hay recetas médicas registradas
@@ -361,9 +361,9 @@
                                                 class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                                                 Presupuesto #{{ budget.id }}
                                             </h3>
-                                            <span class="  text-sm font-medium px-2 py-1 rounded-full" :class="{
-                                                'bg-green-500': budget.type === 'Contado' || budget.total === 0,
-                                                'bg-red-500': budget.type === 'Crédito' && budget.total > 0
+                                            <span class="  text-sm font-medium px-2 text-white py-1 rounded-full" :class="{
+                                                'bg-green-500  ': budget.type === 'Contado' || budget.total === 0,
+                                                'bg-red-500': budget.type === 'Credito' && budget.total > 0
                                             }">
                                                 {{ budget.type === 'Contado' ? 'PAGADO' : (budget.total === 0 ? 'PAGADO'
                                                     :
@@ -497,7 +497,7 @@
                                                 class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                                                 #{{ event.id }} - {{ event.title }}
                                             </h3>
-                                            <span class="  text-sm font-medium px-2 py-1 rounded-full" :class="{
+                                            <span class="  text-sm text-white font-medium px-2 py-1 rounded-full" :class="{
                                                 'bg-green-500': event.attended ,
                                                 'bg-red-500': !event.attended
                                             }">
@@ -538,7 +538,7 @@
                                     </label>
 
                                     <div class="flex gap-2">
-                                        <Link v-if="event.active" :href="route('odontographs.edit', event)"
+                                        <Link v-if="event.active" :href="route('events.edit', event)"
                                             class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
                                         <EditIcon class="size-4" />
                                         </Link>
