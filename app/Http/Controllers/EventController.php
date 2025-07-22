@@ -28,7 +28,7 @@ class EventController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-        Log::info('a'.$showDeleted);
+
         $query = Event::query()
             ->select('events.*')
             ->join('patients', 'events.patient_id', '=', 'patients.id')
@@ -36,12 +36,12 @@ class EventController extends Controller
 
         if ($showDeleted == true) {
             $query->where('events.active', 1);
-            Log::info('abc'.$showDeleted);
+
         } else {
             $query->where('events.active', 0);
-            Log::info('abcd'.$showDeleted);
+
         }
-        Log::info('ab'.$showDeleted);
+
         if ($patient_id) {
             $patient = Patient::find($patient_id);
 
@@ -123,7 +123,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        $doctors = User::role('doctor')->paginate(10);
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
