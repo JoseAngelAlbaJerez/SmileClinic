@@ -11,6 +11,7 @@ import LightIcon from '@/Components/Icons/LightIcon.vue';
 import DarkIcon from '@/Components/Icons/DarkIcon.vue';
 import { useToast } from 'vue-toastification';
 import { usePage } from '@inertiajs/vue3';
+import { can } from '@/useAccess.js';
 import '@vuepic/vue-datepicker/dist/main.css';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
@@ -70,25 +71,25 @@ watchEffect(() => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('patients.index')" :active="route().current('patients.index')">
+                                <NavLink  v-if="can('patient.view')" :href="route('patients.index')" :active="route().current('patients.index')">
                                     Pacientes
                                 </NavLink>
-                                <NavLink :href="route('events.index')" :active="route().current('events.index')">
+                                <NavLink  v-if="can('event.view')" :href="route('events.index')" :active="route().current('events.index')">
                                     Citas
                                 </NavLink>
-                                <NavLink :href="route('budgets.index')" :active="route().current('budgets.index')">
+                                <NavLink  v-if="can('budget.view')" :href="route('budgets.index')" :active="route().current('budgets.index')">
                                     Presupuestos
                                 </NavLink>
-                                  <NavLink :href="route('CXC.index')" :active="route().current('CXC.index')">
+                                  <NavLink  v-if="can('CXC.view')" :href="route('CXC.index')" :active="route().current('CXC.index')">
                                     Cuentas por Cobrar
                                 </NavLink>
-                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
+                                <NavLink   v-if="can('expense.view')" :href="route('expenses.index')" :active="route().current('expenses.index')">
                                     Egresos
                                 </NavLink>
-                                 <NavLink :href="route('prescriptions.index')" :active="route().current('prescriptions.index')">
+                                 <NavLink  v-if="can('prescription.view')" :href="route('prescriptions.index')" :active="route().current('prescriptions.index')">
                                     Recetas
                                 </NavLink>
-                                <NavLink :href="route('users.index')" :active="route().current('users.index')">
+                                <NavLink  v-if="can('user.view')" :href="route('users.index')" :active="route().current('users.index')">
                                     Usuarios
                                 </NavLink>
 

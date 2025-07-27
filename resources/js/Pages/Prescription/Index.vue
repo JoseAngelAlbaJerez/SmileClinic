@@ -10,7 +10,7 @@
         <div class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
             <div class="container mx-auto w-full px-2">
                 <!-- Search & Exports -->
-                <div class="my-2 flex mx-10 gap-2 items-center">
+                <div class="my-2 flex lg:mx-10 gap-2 items-center">
                     <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
                     <!-- Espacio flexible para separar TableDropDown de la derecha -->
@@ -28,7 +28,7 @@
                 <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                     <div class="min-w-full overflow-x-auto">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                            <thead class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                 <tr>
                                     <th scope="col" class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell" @click="sort('id')">
                                         # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
@@ -145,8 +145,9 @@
 
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
-                        <span class="text-gray-900 dark:text-gray-300">{{ selectedprescription.doctor.name }} {{
-                                selectedprescription.doctor.last_name }}</span>
+                        <Link :href="route('users.show', selectedprescription.patient.id)" class="text-blue-500">
+                       {{ selectedprescription.doctor.name }} {{
+                                selectedprescription.doctor.last_name }}</Link>
                     </div>
                     <div class="max-h-[70vh] overflow-y-auto space-y-4 px-2">
                         <div v-for="(details, index) in selectedprescription.prescriptions_details" :key="details.id" class="max-w-lg mx-auto border rounded-xl bg-white dark:bg-gray-900 shadow-lg overflow-hidden ">

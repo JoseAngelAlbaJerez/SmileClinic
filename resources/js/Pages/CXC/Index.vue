@@ -12,7 +12,7 @@
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
-                    <div class="my-2 flex mx-10 gap-2 items-center">
+                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
                         <!-- Espacio flexible para separar TableDropDown de la derecha -->

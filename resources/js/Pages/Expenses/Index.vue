@@ -13,7 +13,7 @@
                 <div class="container mx-auto w-full px-2">
 
                     <!-- Search & Exports -->
-                    <div class="my-2 flex mx-10 gap-2 items-center">
+                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
                         <button @click="print()"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
@@ -39,7 +39,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
