@@ -3,149 +3,198 @@
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
         </template>
-        <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
-            <div class="max-w-7xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
+        <template #default>
+            <div class="min-h-full bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Form Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                        <!-- Form Header -->
+                        <div class="bg-blue-500 px-6 py-4">
+                            <h2 class="text-xl font-bold text-white">Nueva Receta Médica</h2>
+                            <p class="text-blue-100 text-sm">Complete los detalles de la prescripción</p>
+                        </div>
 
+                        <!-- Main Form Content -->
+                        <div class="p-6 space-y-6">
+                            <!-- Patient Selection -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Paciente <span class="text-red-500">*</span>
+                                    </label>
+                                    <button @click="openPatientModal()"
+                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                        <span v-if="form.patient_id" class="truncate">
+                                            {{ selected_patient.first_name }} {{ selected_patient.last_name }}
+                                        </span>
+                                        <span v-else class="text-gray-400 dark:text-gray-400">Seleccionar</span>
+                                    </button>
+                                    <p v-if="errors.patient_id" class="mt-1 text-xs text-red-600 dark:text-red-400">
+                                        {{ errors.patient_id }}
+                                    </p>
+                                </div>
+                            </div>
 
+                            <!-- Prescription Section -->
+                            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm mt-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-2">
+                                        <RXIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <h3 class="text-lg font-semibold dark:text-white">Receta</h3>
+                                    </div>
+                                    <button @click="addPrescriptionDetail()"
+                                        class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                                        <AddIcon class="h-4 w-4" />
+                                        <span>Agregar</span>
+                                    </button>
+                                </div>
 
-                <div @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-6">
+                                <!-- Empty State -->
+                                <div v-if="!form.details.length" class="text-center py-6">
+                                    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-600">
+                                        <SearchIcon class="h-6 w-6 text-gray-400 dark:text-gray-300" />
+                                    </div>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No hay medicamentos</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Agregue medicamentos para continuar</p>
+                                </div>
 
-                    <!-- Paciente -->
-                    <div>
-                        <label for="patient_id"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente <span
-                                class="text-red-500">*</span></label>
-                        <button @click="openPatientModal()"
-                            class="block w-full  pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <p v-if="form.patient_id">{{ selected_patient.first_name }} {{ selected_patient.last_name }}
-                            </p>
-                            <p v-else>Seleccionar Paciente</p>
-                        </button>
+                                <!-- Prescription Items -->
+                                <div v-else class="space-y-4">
+                                    <div v-for="(detail, index) in form.details" :key="index"
+                                        class="bg-white dark:bg-gray-600 border border-blue-200 dark:border-blue-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+                                        <!-- Item Header -->
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-2">
+                                                <h4 class="text-md font-semibold text-gray-800 dark:text-gray-100">Medicamento #{{ index + 1 }}</h4>
+                                            </div>
+                                            <button @click="removePrescriptionDetail(index)" type="button"
+                                                class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
+                                                <DeleteIcon class="h-4 w-4 mr-1" />
+                                                Eliminar
+                                            </button>
+                                        </div>
 
+                                        <!-- Item Details -->
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                            <!-- Description -->
+                                            <div class="space-y-1">
+                                                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Descripción
+                                                </label>
+                                                <input v-model="detail.description" type="text"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    placeholder="Descripción" />
+                                            </div>
 
-                        <p v-if="errors.patient_id" class="mt-1 text-xs text-red-600">{{ errors.patient_id }}</p>
+                                            <!-- Frequency -->
+                                            <div class="space-y-1">
+                                                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Frecuencia (fc)
+                                                </label>
+                                                <input v-model.number="detail.fc" type="number" min="1"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    placeholder="Frecuencia" />
+                                            </div>
+
+                                            <!-- Time Interval -->
+                                            <div class="space-y-1">
+                                                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Intervalo (horas)
+                                                </label>
+                                                <input v-model.number="detail.time_interval" type="number" min="1"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    placeholder="Intervalo" />
+                                            </div>
+
+                                            <!-- Drug Selection -->
+                                            <div class="space-y-1">
+                                                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Medicamento
+                                                </label>
+                                                <button @click="openDrugModal(index)"
+                                                    class="flex items-center w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                                    <span v-if="detail.drug_id" class="truncate">
+                                                        {{ drugs.data.find(d => d.id === detail.drug_id)?.name || 'ID: ' + detail.drug_id }}
+                                                    </span>
+                                                    <span v-else class="text-gray-400 dark:text-gray-400">Seleccionar</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6">
+                                <!-- Error Message -->
+                                <div v-if="error" class="flex-1">
+                                    <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                        <div class="flex items-center text-red-600 dark:text-red-400">
+                                            <span>{{ error }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Buttons -->
+                                <div class="flex space-x-3">
+                                    <SecondaryButton type="button"
+                                        @click="form.reset()"
+                                        class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
+                                        Limpiar
+                                    </SecondaryButton>
+                                    <PrimaryButton @click="submit()"
+                                        :disabled="form.processing"
+                                        :class="{ 'opacity-75': form.processing }"
+                                        class="hover:bg-blue-600 transition duration-200">
+                                        <span v-if="form.processing">Guardando...</span>
+                                        <span v-else>Guardar Receta</span>
+                                    </PrimaryButton>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-
-
                 </div>
-                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-5">
-                    <div class="my-2  flex items-center gap-2">
-                        <RXIcon class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-3" />
-                        <h2 class="text-lg font-semibold dark:text-white mb-3">Receta</h2>
 
-                        <button @click="addPrescriptionDetail()"
-                            class=" ml-auto flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <AddIcon> </AddIcon>
-                        </button>
-                    </div>
-
-
-
-
-                    <div v-for="(detail, index) in form.details" :key="index"
-                        class="mt-6 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-base font-semibold text-gray-700 dark:text-gray-100">
-                                # - {{ index + 1 }}
+                <!-- Drug Selection Modal -->
+                <Modal :show="showDrugModal" @close="showDrugModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <RXIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                Seleccionar Medicamento
                             </h3>
-                            <button @click="removePrescriptionDetail(index)"
-                                class="text-red-600 hover:text-red-800 transition" title="Eliminar detalle">
-                                <DeleteIcon />
+                            <button @click="showDrugModal = false" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                                <XIcon class="h-6 w-6" />
                             </button>
                         </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <!-- Descripción -->
-                            <div>
-                                <label class="block mb-1 text-sm font-medium dark:text-gray-300">
-                                    Descripción
-                                </label>
-                                <input v-model="detail.description" type="text"
-                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Descripción" />
-                            </div>
-
-                            <!-- Frecuencia -->
-                            <div>
-                                <label class="block mb-1 text-sm font-medium dark:text-gray-300">
-                                    Frecuencia (fc)
-                                </label>
-                                <input v-model.number="detail.fc" type="number" min="1"
-                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Frecuencia" />
-                            </div>
-
-                            <!-- Intervalo de tiempo -->
-                            <div>
-                                <label class="block mb-1 text-sm font-medium dark:text-gray-300">
-                                    Intervalo (horas)
-                                </label>
-                                <input v-model.number="detail.time_interval" type="number" min="1"
-                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Intervalo" />
-                            </div>
-
-                            <!-- Medicamento -->
-                            <div>
-                                <label class="block mb-1 text-sm font-medium dark:text-gray-300">
-                                    Medicamento
-                                </label>
-                                <button @click="openDrugModal(index)"
-                                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                                    <p v-if="detail.drug_id">
-                                        {{drugs.data.find(d => d.id === detail.drug_id)?.name || 'ID: ' +
-                                        detail.drug_id }}
-                                    </p>
-
-                                    <p v-else class="text-gray-500 dark:text-gray-400">Seleccionar Medicamento</p>
-                                </button>
-                            </div>
-                        </div>
+                        <DrugSelector
+                            :drugs="drugs"
+                            @selected="selectedDrugId = $event; addDrug()"
+                        />
                     </div>
+                </Modal>
 
-                    <p v-if="error" class="mt-1 text-xs text-red-600">{{ error }}</p>
-
-                </div>
-
-
-
-
-                <!-- Botones -->
-                <div class="md:col-span-4 flex justify-end space-x-4 mt-6">
-                    <SecondaryButton type="button" @click="form.reset()">
-                        Limpiar
-                    </SecondaryButton>
-                    <PrimaryButton @click="submit()">Guardar</PrimaryButton>
-                </div>
-
+                <!-- Patient Selection Modal -->
+                <Modal :show="showPatientModal" @close="showPatientModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                Seleccionar Paciente
+                            </h3>
+                            <button @click="showPatientModal = false" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                                <XIcon class="h-6 w-6" />
+                            </button>
+                        </div>
+                        <PatientSelector
+                            :patients="patient"
+                            @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false"
+                        />
+                    </div>
+                </Modal>
             </div>
-
-
-            <!-- Modal -->
-            <Modal :show="showDrugModal" @close="showDrugModal = false" class="lg:max-w-2xl">
-                <div class="text-gray-800 p-12 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Seleccionar Medicamento
-                    </h2>
-                    <DrugSelector :drugs="drugs" @selected="selectedDrugId = $event; addDrug()"></DrugSelector>
-
-                </div>
-            </Modal>
-            <!-- Modal -->
-            <Modal :show="showPatientModal" @close="showPatientModal = false" class="lg:max-w-2xl">
-                <div class="text-gray-800 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Seleccionar Paciente
-                    </h2>
-
-                    <PatientSelector :patients="patient"
-                        @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
-                </div>
-            </Modal>
         </template>
-
-
     </AuthenticatedLayout>
 </template>
 

@@ -5,119 +5,174 @@
             <Breadcrumb :crumbs="crumbs" />
 
         </template>
-        <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
-            <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
-
-                <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    <!-- First Name -->
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre
-                            <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                style="pointer-events: none;" />
-                            <input v-model="form.name" id="name" type="text"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Nombre" />
+        <template #default>
+            <div class="min-h-full dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Form Card -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg  transition-all duration-300 hover:shadow-xl">
+                        <!-- Form Header with Gradient -->
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                            <h2 class="text-xl font-bold text-white">Registro de Usuario</h2>
+                            <p class="text-blue-100 text-sm">Complete la información requerida</p>
                         </div>
-                        <p v-if="errors.name" class="mt-1 text-xs text-red-600">{{ errors.name }}</p>
+
+                        <!-- Form Content -->
+                        <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                            <!-- First Name -->
+                            <div class="space-y-1">
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Nombre <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.name" id="name" type="text"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Nombre" />
+                                </div>
+                                <p v-if="errors.name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.name
+                                    }}</p>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="space-y-1">
+                                <label for="last_name"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Apellido <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.last_name" id="last_name" type="text"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Apellido" />
+                                </div>
+                                <p v-if="errors.last_name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.last_name }}</p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="space-y-1">
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Correo Electrónico <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <MailIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.email" id="email" type="email"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="correo@ejemplo.com" />
+                                </div>
+                                <p v-if="errors.email" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.email }}</p>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="space-y-1">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Fecha de Nacimiento <span class="text-red-500">*</span>
+                                </label>
+                                <VueDatePicker
+                                    class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    v-model="form.date_of_birth" :enable-time-picker="false"
+                                    placeholder="Seleccione fecha" />
+                                <p v-if="errors.date_of_birth" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.date_of_birth }}</p>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="space-y-1">
+                                <label for="password"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Contraseña <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <LockClosedIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.password" id="password" type="password"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="••••••••" autocomplete="new-password" />
+                                </div>
+                                <p v-if="errors.password" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.password }}</p>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="space-y-1">
+                                <label for="password_confirmation"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Confirmar Contraseña <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <LockClosedIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.password_confirmation" id="password_confirmation"
+                                        type="password"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="••••••••" autocomplete="new-password" />
+                                </div>
+                                <p v-if="errors.password_confirmation"
+                                    class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.password_confirmation
+                                    }}</p>
+                            </div>
+
+                            <!-- Role Selection -->
+                            <div class="md:col-span-2 space-y-1">
+                                <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Rol <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <select v-model="form.role" id="role"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200 appearance-none">
+                                        <option value="">Seleccione un rol</option>
+                                        <option value="admin">Administrador</option>
+                                        <option value="doctor">Doctor</option>
+                                        <option value="staff">Personal</option>
+                                        <option value="patient">Paciente</option>
+                                    </select>
+                                </div>
+                                <p v-if="errors.role" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.role
+                                    }}</p>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div v-if="error"
+                                class="md:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                <div class="flex items-center text-red-600 dark:text-red-400">
+
+                                    <span>{{ error }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div
+                                class="md:col-span-2 flex justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <SecondaryButton type="button" @click="form.reset()"
+                                    class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
+
+                                    Limpiar
+                                </SecondaryButton>
+                                <PrimaryButton type="submit" :disabled="form.processing"
+                                    :class="{ 'opacity-75': form.processing }"
+                                    class="hover:bg-blue-600 transition duration-200">
+
+                                    <span v-if="form.processing">Registrando...</span>
+                                    <span v-else>Registrar Usuario</span>
+                                </PrimaryButton>
+                            </div>
+                        </form>
                     </div>
-
-                    <!-- Last Name -->
-                    <div>
-                        <label for="last_name"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido <span
-                                class="text-red-500">*</span></label>
-                        <input v-model="form.last_name" id="last_name" type="text"
-                            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                            placeholder="Apellido" />
-                        <p v-if="errors.last_name" class="mt-1 text-xs text-red-600">{{ errors.last_name }}</p>
-                    </div>
-
-                    <!-- password -->
-                    <div>
-                        <label for="password"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contraseña
-                            <span class="text-red-500">*</span></label>
-                        <div class="relative">
-
-                            <input id="password" type="password"
-                                class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                v-model="form.password" required autocomplete="new-password"  placeholder="Contraseña"  />
-                            <p v-if="errors.password" class="mt-1 text-xs text-red-600">{{ errors.password }}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="password_confirmation"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confimar contraseña
-                            <span class="text-red-500">*</span></label>
-                        <div class="relative">
-
-                            <input id="password_confirmation" type="password_confirmation"
-                                class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                v-model="form.password_confirmation" required
-                                autocomplete="new-password_confirmation" placeholder="Contraseña" />
-                            <p v-if="errors.password_confirmation" class="mt-1 text-xs text-red-600">{{
-                                errors.password_confirmation }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Phone Number -->
-                    <div>
-                        <label for="email"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Correo Electrónico
-                            <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <MailIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                style="pointer-events: none;" />
-                            <input v-model="form.email" placeholder="Correo Electrónico"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            </input>
-                        </div>
-                        <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
-                    </div>
-
-                    <!-- Date of Birth -->
-                    <div>
-
-                        <div class=" w-full ">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Fecha de Nacimiento: <span class="text-red-500">*</span></label>
-                            <VueDatePicker
-                                class="border-gray-300  dark:bg-gray-500 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                v-model="form.date_of_birth" />
-                        </div>
-                    </div>
-                    <!-- role -->
-                    <div class="col-span-full mb-2">
-                        <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rol
-                            <span class="text-red-500">*</span></label>
-                        <select v-model="form.role" :value="form.role"
-                            class="block w-full  py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <option value=""> Seleccione una opción</option>
-                            <option value="admin">Admin</option>
-                            <option value="doctor">Doctor</option>
-                            <option value="staff">Staff</option>
-                            <option value="patient">Paciente</option>
-                        </select>
-
-
-                        <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.ars }}</p>
-                    </div>
-
-                    <!-- Error general -->
-                    <div v-if="error" class="mb-6 text-red-600 font-medium">
-                        {{ error }}
-                    </div>
-                    <!-- Botones -->
-                    <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                        <SecondaryButton type="button" @click="form.reset()">
-                            Limpiar
-                        </SecondaryButton>
-                        <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
-                    </div>
-                </form>
-            </div>
+                </div>
+                </div>
         </template>
     </AuthenticatedLayout>
 </template>
@@ -143,6 +198,8 @@ import { markRaw } from 'vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import MailIcon from '@/Components/Icons/MailIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
+import LockClosedIcon from '@/Components/Icons/LockClosedIcon.vue';
+
 export default {
     props: {
         errors: [Array, Object],
@@ -162,7 +219,8 @@ export default {
         LocationIcon,
         AddIcon,
         MailIcon,
-        TextInput
+        TextInput,
+        LockClosedIcon
     },
     data() {
         return {
@@ -189,7 +247,7 @@ export default {
                 this.error = 'Por favor, ingrese el nombre.';
                 return;
             }
-              if (!this.form.role) {
+            if (!this.form.role) {
                 this.error = 'Por favor, seleccione el rol.';
                 return;
             }

@@ -193,11 +193,10 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
 import LocationIcon from '@/Components/Icons/LocationIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
-import { useToast } from 'vue-toastification'
 import { markRaw } from 'vue';
 import PhoneInput from '@/Components/PhoneInput.vue';
 import DNIInput from '@/Components/DNIInput.vue';
-const toast = useToast();
+
 export default {
     props: {
         patient: Object,
