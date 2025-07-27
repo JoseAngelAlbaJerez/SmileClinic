@@ -33,13 +33,21 @@ class RoleSeeder extends Seeder
             'odontograph.delete',
             'patient.view',
             'patient.create',
+            'event.view',
+            'event.create',
+            'event.update',
+            'event.delete',
+            'prescription.view',
+            'prescription.create',
+            'prescription.update',
+            'prescription.delete',
         ]);
 
         $role = Role::findByName("patient");
         $role->syncPermissions([
             'odontograph.view',
             'patient.view',
-            'drugs.view',
+            'prescription.view',
         ]);
         $role = Role::findByName("staff");
         $role->syncPermissions([
@@ -48,12 +56,31 @@ class RoleSeeder extends Seeder
             'patient.update',
             'patient.delete',
             'odontograph.view',
+            'budget.view',
+            'budget.create',
+            'budget.update',
+            'budget.delete',
+            'event.view',
+            'event.create',
+            'event.update',
+            'event.delete',
+            'expense.view',
+            'expense.create',
+            'expense.update',
+            'expense.delete',
         ]);
 
         $user = User::where('name', 'Test User')->first();
         $user->syncRoles('admin');
 
+        $user = User::where('name', 'San Pedro')->first();
+        $user->syncRoles('staff');
 
+        $user = User::where('name', 'Mario')->first();
+        $user->syncRoles('patient');
+
+        $user = User::where('name', 'Jose Angel')->first();
+        $user->syncRoles('doctor');
         $users = User::where('name', '!=', 'Test User')->get();
         $roles = Role::all()->pluck('name')->toArray();
         foreach ($users as $user) {

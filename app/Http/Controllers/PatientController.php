@@ -8,13 +8,24 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Patient;
 use App\Models\Event;
+use App\Models\Prescription;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
-
-class PatientController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+class PatientController extends Controller implements HasMiddleware
 {
+ public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:patient.view', only: ['index', 'show']),
+            new Middleware('permission:patient.create', only: ['create', 'store']),
+            new Middleware('permission:patient.update', only: ['edit', 'update']),
+            new Middleware('permission:patient.delete', only: ['destroy']),
+        ];
+    }
 
     public function index(Request $request)
     {
@@ -117,12 +128,13 @@ class PatientController extends Controller
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
-
+        $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->get();
 
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'budgets' => $budgets,
             'events' => $events,
+            'prescription' => $prescription,
             'odontograph' => $odontograph,
             'filters' => [
                 'search' => $search,

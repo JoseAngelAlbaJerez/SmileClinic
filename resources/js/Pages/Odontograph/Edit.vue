@@ -22,7 +22,7 @@
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit">Guardar</PrimaryButton>
+                        <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
                     </div>
                 </form>
             </div>

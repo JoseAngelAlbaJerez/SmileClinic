@@ -23,6 +23,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'password' => Hash::make('12345678'),
         ]);
+          User::factory()->create([
+            'name' => 'Jose Angel',
+            'email' => 'joseangelalba24@gmail.com',
+            'password' => Hash::make('12345678'),
+        ]);
+          User::factory()->create([
+            'name' => 'San Pedro',
+            'email' => 'sanpedro@gmail.com',
+            'password' => Hash::make('12345678'),
+        ]);
+           User::factory()->create([
+            'name' => 'Mario',
+            'email' => 'Mario@gmail.com',
+            'password' => Hash::make('12345678'),
+        ]);
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(PatientSeeder::class);

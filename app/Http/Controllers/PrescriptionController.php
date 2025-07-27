@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PrescriptionController extends Controller
 {
@@ -25,9 +27,9 @@ class PrescriptionController extends Controller
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
         $activeStates = $request->input('activeStates', []);
-        $lastDays = $request->input('lastDays', '1');
+        $lastDays = $request->input('lastDays', '30');
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
-
+        $patient_id = $request->input('patient_id');
 
         $query = Prescription::query()
             ->select('prescriptions.*')
@@ -40,6 +42,7 @@ class PrescriptionController extends Controller
             $query->where('prescriptions.active', 0);
         }
 
+
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
@@ -50,6 +53,19 @@ class PrescriptionController extends Controller
                     ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
             });
         }
+        if ($patient_id) {
+            $patient = Patient::find($patient_id);
+
+            $prescriptionDates = $patient->prescriptions()->pluck('created_at');
+
+            if ($prescriptionDates->isNotEmpty()) {
+                $query->where('patient_id', $patient_id)
+                    ->whereIn('prescriptions.created_at', $prescriptionDates)
+                    ->latest();
+                $lastDays = 'year';
+            }
+        }
+
 
         if ($sortField) {
             $query->orderBy($sortField, $sortDirection);
@@ -80,6 +96,7 @@ class PrescriptionController extends Controller
             'prescriptions' => $prescriptions,
             'filters' => [
                 'search' => $search,
+                'patient_id' => $patient_id,
                 'sortField' => $sortField,
                 'sortDirection' => $sortDirection,
                 'activeStates' => $activeStates,
@@ -126,11 +143,15 @@ class PrescriptionController extends Controller
             ]);
 
             foreach ($validated['details'] as $detail) {
+                $ending_date = Carbon::now()->addHours($detail['time_interval'] * $detail['fc']);
+
+
                 $prescriptionDetail = $prescription->prescriptionsDetails()->create([
                     'description' => $detail['description'],
                     'fc' => $detail['fc'],
-                    'drug_id'=>$detail['drug_id'],
+                    'drug_id' => $detail['drug_id'],
                     'time_interval' => $detail['time_interval'],
+                    'ending_date' => $ending_date,
                     'active' => true,
                 ]);
                 $prescriptionDetail->save();

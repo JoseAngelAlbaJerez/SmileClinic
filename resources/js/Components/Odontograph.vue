@@ -1,81 +1,280 @@
 <template>
-    <div>
-        <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Odontograma</h2>
+    <div class="space-y-6">
+        <!-- Encabezado -->
+        <div class="flex items-center gap-3">
+            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <TeethIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Creador de Odontograma</h2>
+        </div>
 
-        <!-- Fila superior -->
-        <div class="grid grid-cols-16 gap-2 mb-4">
-            <div v-for="tooth in upperTeeth" :key="tooth"
-                class="relative group border rounded p-6 text-center cursor-pointer dark:text-white hover:bg-blue-100 dark:hover:bg-blue-800"
-                :class="{ 'bg-blue-200 dark:bg-blue-700': odontogram[tooth] }" @click="selectTooth(tooth)">
-                <div class="font-bold">{{ tooth }}</div>
+        <!-- Odontograma Superior -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">ARCADA SUPERIOR</h3>
+            <div class="grid grid-cols-16 gap-1.5">
+                <div
+                    v-for="tooth in upperTeeth"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-2 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
 
-                <!-- Tooltip -->
-                <div v-if="odontogram[tooth]"
-                    class="absolute left-1/2 transform -translate-x-1/2 dark:border -top-20 w-40 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded shadow-lg p-2 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
-                    <div v-for="(proc, zone) in odontogram[tooth]" :key="zone" class="flex justify-between">
-                        <span class="font-semibold">{{ zone }}:</span>
-                        <span>{{ proc }}</span>
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Fila inferior -->
-        <div class="grid grid-cols-16 gap-2 mb-4">
-            <div v-for="tooth in lowerTeeth" :key="tooth"
-                class="relative group border rounded p-6 text-center cursor-pointer hover:bg-blue-100 dark:text-white dark:hover:bg-blue-800"
-                :class="{ 'bg-blue-200 dark:bg-blue-700': odontogram[tooth] }" @click="selectTooth(tooth)">
-                <div class="font-bold">{{ tooth }}</div>
+        <!-- Odontograma Inferior -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">ARCADA INFERIOR</h3>
+            <div class="grid grid-cols-16 gap-1.5">
+                <div
+                    v-for="tooth in lowerTeeth"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-2 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
 
-                <!-- Tooltip -->
-                <div v-if="odontogram[tooth]"
-                    class="absolute left-1/2 transform -translate-x-1/2 dark:border -top-20 w-40 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs rounded shadow-lg p-2 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
-                    <div v-for="(proc, zone) in odontogram[tooth]" :key="zone" class="flex justify-between">
-                        <span class="font-semibold">{{ zone }}:</span>
-                        <span>{{ proc }}</span>
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal -->
-        <div v-if="selectedTooth" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 dark:text-white p-6 rounded-xl shadow-md w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">
-                    Procedimiento para {{ toothNames[selectedTooth] || selectedTooth }}
-                </h3>
-
-                <!-- Zonas -->
-                <div class="grid grid-cols-3 gap-2 mb-4 text-center">
-                    <div></div>
-                    <button type="button" @click="selectZone('Oclusal')" :class="zoneClass('Oclusal')">Oclusal</button>
-                    <div></div>
-
-                    <button type="button" @click="selectZone('Mesial')" :class="zoneClass('Mesial')">Mesial</button>
-                    <button type="button" @click="applyToAllZones" :class="zoneClass('Zona')">Todas</button>
-                    <button type="button" @click="selectZone('Distal')" :class="zoneClass('Distal')">Distal</button>
-
-                    <div></div>
-                    <button type="button" @click="selectZone('Vestibular')"
-                        :class="zoneClass('Vestibular')">Vestibular</button>
-                    <button type="button" @click="selectZone('Lingual')" :class="zoneClass('Lingual')">Lingual</button>
+        <!-- Modal de Edición -->
+        <div
+            v-if="selectedTooth"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        >
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                <!-- Encabezado del Modal -->
+                <div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
+                        {{ toothNames[selectedTooth] || `Diente ${selectedTooth}` }}
+                    </h3>
                 </div>
 
-                <!-- Procedimiento -->
-                <select v-model="procedure" class="w-full border p-2 dark:bg-gray-800 rounded mb-4">
-                    <option disabled value="">Seleccione un procedimiento</option>
-                    <option value="Obturación">Obturación</option>
-                    <option value="Endodoncia">Endodoncia</option>
-                    <option value="Extracción">Extracción</option>
-                    <option value="Limpieza">Limpieza</option>
-                    <option value="Corona">Corona</option>
-                </select>
+                <!-- Contenido del Modal -->
+                <div class="p-5">
+                    <!-- Selector de Zonas -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">SELECCIONAR ZONA</h4>
 
-                <div class="flex justify-end space-x-2">
-                    <PrimaryButton type="button" @click="applyProcedure"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</PrimaryButton>
-                    <SecondaryButton type="button" @click="cancel" class="text-gray-600 hover:text-gray-600">Cancelar
-                    </SecondaryButton>
+                        <div class="grid grid-cols-3 gap-3 text-center dark:text-white">
+                            <div></div>
+                            <button
+                                type="button"
+                                @click="selectZone('Oclusal')"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-gray-800 text-white border-gray-800': selectedZone === 'Oclusal',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Oclusal'
+                                }"
+                            >
+                                Oclusal
+                            </button>
+                            <div></div>
+
+                            <button
+                                type="button"
+                                @click="selectZone('Mesial')"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-green-500 text-white border-green-500': selectedZone === 'Mesial',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Mesial'
+                                }"
+                            >
+                                Mesial
+                            </button>
+
+                            <button
+                                type="button"
+                                @click="applyToAllZones"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-blue-500 text-white border-blue-500': selectedZone === 'Todas',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Todas'
+                                }"
+                            >
+                                Todas
+                            </button>
+
+                            <button
+                                type="button"
+                                @click="selectZone('Distal')"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-red-500 text-white border-red-500': selectedZone === 'Distal',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Distal'
+                                }"
+                            >
+                                Distal
+                            </button>
+
+                            <div></div>
+                            <button
+                                type="button"
+                                @click="selectZone('Vestibular')"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-purple-500 text-white border-purple-500': selectedZone === 'Vestibular',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Vestibular'
+                                }"
+                            >
+                                Vestibular
+                            </button>
+
+                            <button
+                                type="button"
+                                @click="selectZone('Lingual')"
+                                class="p-2 rounded-lg border transition-colors"
+                                :class="{
+                                    'bg-yellow-500 text-white border-yellow-500': selectedZone === 'Lingual',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Lingual'
+                                }"
+                            >
+                                Lingual
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Selector de Procedimiento -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            PROCEDIMIENTO
+                        </label>
+                        <select
+                            v-model="procedure"
+                            class="w-full border dark:text-white border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        >
+                            <option disabled value="">Seleccione un procedimiento</option>
+                            <option value="Obturación">Obturación</option>
+                            <option value="Endodoncia">Endodoncia</option>
+                            <option value="Extracción">Extracción</option>
+                            <option value="Limpieza">Limpieza</option>
+                            <option value="Corona">Corona</option>
+                            <option value="Implante">Implante</option>
+                            <option value="Sellante">Sellante</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Pie del Modal -->
+                <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+                    <button
+                        type="button"
+                        @click="cancel"
+                        class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        @click="applyProcedure"
+                        class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+                        :disabled="!selectedZone || !procedure"
+                        :class="{ 'opacity-50 cursor-not-allowed': !selectedZone || !procedure }"
+                    >
+                        Guardar Procedimiento
+                    </button>
                 </div>
             </div>
         </div>
@@ -86,7 +285,7 @@
 import { ref, watch } from 'vue'
 import PrimaryButton from './PrimaryButton.vue'
 import SecondaryButton from './SecondaryButton.vue'
-
+import TeethIcon from './Icons/TeethIcon.vue'
 const props = defineProps({
     modelValue: {
         type: Object,

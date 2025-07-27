@@ -23,7 +23,7 @@ class EventSeeder extends Seeder
                 'patient_id' => fake()->numberBetween(1, 10),
                 'attended' => fake()->boolean(),
                 'starttime' => now()->format('H:i:s'),
-                'endtime' => now()->format('H:i:s'),
+                'endtime' => now()->addHour()->format('H:i:s'),
                 'date' => now(),
                 'active' => fake()->boolean(),
                 'created_at' => now(),

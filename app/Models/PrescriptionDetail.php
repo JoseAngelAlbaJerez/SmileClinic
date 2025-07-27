@@ -12,6 +12,7 @@ class PrescriptionDetail extends Model
         "time_interval",
         "prescription_id",
         "drug_id",
+        "ending_date",
         "active"
     ];
     public function drugs()

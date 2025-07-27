@@ -20,13 +20,13 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
         $activeStates = $request->input('activeStates', []);
         $lastDays = $request->input('lastDays', '1');
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
+        $patient_id = $request->input('patient_id');
 
 
         $query = Event::query()
@@ -36,8 +36,23 @@ class EventController extends Controller
 
         if ($showDeleted == true) {
             $query->where('events.active', 1);
+
         } else {
             $query->where('events.active', 0);
+
+        }
+
+        if ($patient_id) {
+            $patient = Patient::find($patient_id);
+
+            $eventDates = $patient->event()->pluck('created_at');
+
+            if ($eventDates->isNotEmpty()) {
+                $query->where('patient_id', $patient_id)
+                    ->whereIn('events.created_at', $eventDates)
+                    ->latest();
+                $lastDays = 'year';
+            }
         }
 
         if ($search) {
@@ -74,18 +89,31 @@ class EventController extends Controller
             }
         }
 
-        $events = $query->orderByDesc('events.created_at')->with('doctor', 'patient')->paginate(10);
-
+        $events = $query->orderByDesc('events.created_at')
+            ->with('doctor', 'patient')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->title ?? 'Sin título',
+                    'start' => $event->date . 'T' . $event->starttime,
+                    'end' => $event->date . 'T' . $event->endtime,
+                    'patient' => $event->patient,
+                    'doctor' => $event->doctor,
+                    'attended' => $event->attended,
+                    'active' => $event->active,
+                ];
+            });
         return Inertia::render('Events/Index', [
-            'events' => $events,
+            'events' =>  $events->toArray(),
             'filters' => [
                 'search' => $search,
+                'patient_id' => $patient_id,
                 'sortField' => $sortField,
                 'sortDirection' => $sortDirection,
                 'activeStates' => $activeStates,
                 'lastDays' => $lastDays,
-                'showdeleted' => $showDeleted,
-
+                'showDeleted' => $showDeleted,
             ],
         ]);
     }
@@ -95,7 +123,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        $doctors = User::role('doctor')->paginate(10);
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
@@ -202,7 +230,7 @@ class EventController extends Controller
     {
         $event->load(['patient', 'doctor']);
         $event->starttime = Carbon::parse($event->starttime)->format('H:i');
-         $event->endtime = Carbon::parse($event->endtime)->format('H:i');
+        $event->endtime = Carbon::parse($event->endtime)->format('H:i');
         $doctors = User::role('doctor')->paginate(10);
         $patients = Patient::paginate(10);
         return Inertia::render('Events/Edit', [

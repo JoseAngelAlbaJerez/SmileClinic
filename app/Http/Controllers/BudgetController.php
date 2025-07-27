@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class BudgetController extends Controller
 {
@@ -33,7 +34,7 @@ class BudgetController extends Controller
         $activeStates = $request->input('activeStates', []);
         $lastDays = $request->input('lastDays', '30');
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
-
+        $patient_id = $request->input('patient_id');
 
         $query = Budget::query()->select('budgets.*');
         if ($showDeleted == true) {
@@ -41,6 +42,19 @@ class BudgetController extends Controller
         } else {
             $query->where('active', 0);
         }
+
+        if ($patient_id) {
+            $patient = Patient::find($patient_id);
+            $createdAtDates = $patient->budget()->pluck('created_at');
+
+            if ($createdAtDates->isNotEmpty()) {
+                $query->where('patient_id', $patient_id)
+                    ->whereIn('budgets.created_at', $createdAtDates)
+                    ->latest();
+            }
+        }
+
+
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
@@ -78,6 +92,7 @@ class BudgetController extends Controller
             'budgets' => $budgets,
             'filters' => [
                 'search' => $search,
+                'patient_id' => $patient_id,
                 'sortField' => $sortField,
                 'sortDirection' => $sortDirection,
                 'activeStates' => $activeStates,
@@ -217,19 +232,55 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
-        $budget->active = 0;
-        $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget) {
-            $budgetDetail->active = 0;
-            $budgetDetail->save();
+        DB::transaction(function () use ($budget) {
+            $budget->active = 0;
+            $CXC = $budget->CXC;
+
+            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget, $CXC) {
+                $budgetDetail->active = 0;
+                $budgetDetail->save();
+
+                if ($budget->type == "Crédito" && $CXC) {
+                    $CXC->balance -= $budgetDetail->total;
+                    $CXC->save();
+
+                    $budgetDetail->Payment()->get()->each(function ($payment) {
+                        $payment->active = 0;
+                        $payment->save();
+                    });
+                }
+            });
+
+            $budget->save();
         });
-        $budget->save();
+
 
         return redirect()->back()->with('toast', 'Presupuesto eliminado correctamente');
     }
     private function restore(Budget $budget)
     {
-        $budget->active = 1;
-        $budget->save();
+        DB::transaction(function () use ($budget) {
+            $budget->active = 1;
+            $CXC = $budget->CXC;
+
+            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget, $CXC) {
+                $budgetDetail->active = 1;
+                $budgetDetail->save();
+
+                if ($budget->type == "Crédito" && $CXC) {
+                    $CXC->balance += $budgetDetail->total;
+                    $CXC->save();
+
+                    $budgetDetail->Payment()->get()->each(function ($payment) {
+                        $payment->active = 1;
+                        $payment->save();
+                    });
+                }
+            });
+
+            $budget->save();
+        });
+
 
         return redirect()->back()->with('toast', 'Presupuesto restaurado correctamente');
     }

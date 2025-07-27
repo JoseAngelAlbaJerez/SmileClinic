@@ -29,6 +29,9 @@ class Patient extends Model
      public function Event(){
          return $this->hasMany(Event::class,"patient_id","id");
     }
+      public function Prescriptions(){
+         return $this->hasMany(Prescription::class,"patient_id","id");
+    }
      public function CXC(){
        return $this->hasOne(CXC::class,"patient_id","id");
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
+use App\Models\CXC;
 use App\Models\Expenses;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
@@ -20,12 +21,60 @@ class ReportController extends Controller
     {
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-        return Pdf::loadView('Reports.budget', compact('budget'))->setPaper('a4')->stream('budget.pdf');
+        return Pdf::loadView('Reports.budget', compact('budget'))->setPaper('a4','landscape')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ])->stream('budget.pdf');
+    }
+      public function CXC(CXC $CXC)
+    {
+        $CXC->load(['Budget', 'CXCDetail', 'patient', 'Payment']);
+
+        return Pdf::loadView('Reports.CXC', compact('CXC'))->setPaper('a4','landscape')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ])->stream('CXC.pdf');
+    }
+       public function budgets($Days)
+    {
+
+        $now = now();
+
+        switch ($Days) {
+            case '1':
+            case '7':
+            case '30':
+                $date = $now->subDays((int)$Days);
+                break;
+            case 'month':
+                $date = $now->copy()->subMonth()->startOfMonth();
+                break;
+            case 'year':
+                $date = $now->copy()->subYear()->startOfYear();
+                break;
+            default:
+                $date = $now->startOfDay();
+                break;
+        }
+
+        $budgets = Budget::where('created_at', '>=', $date)
+            ->where('active', true)
+            ->get();
+
+        $pdf = Pdf::loadView('Reports.budgets', compact('budgets', 'date', 'Days'))->setPaper('a4','portrait')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ]);
+
+        return $pdf->stream('budgets.pdf');
     }
     public function prescription(Prescription $prescription)
     {
 
-        $pdf = Pdf::loadView('Reports.prescription', compact('prescription'))->setPaper('a4');
+        $pdf = Pdf::loadView('Reports.prescription', compact('prescription'))->setPaper('a4')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ]);
         return  $pdf->stream('prescription.pdf');
     }
     public function expenses($Days)
@@ -54,7 +103,10 @@ class ReportController extends Controller
             ->where('active', true)
             ->get();
 
-        $pdf = Pdf::loadView('Reports.expenses', compact('expenses', 'date', 'Days'))->setPaper('a4');
+        $pdf = Pdf::loadView('Reports.expenses', compact('expenses', 'date', 'Days'))->setPaper('a4','portrait')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ]);
 
         return $pdf->stream('expenses.pdf');
     }
