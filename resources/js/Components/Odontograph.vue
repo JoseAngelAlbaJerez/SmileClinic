@@ -157,7 +157,7 @@
                     <div class="mb-6">
                         <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">SELECCIONAR ZONA</h4>
 
-                        <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="grid grid-cols-3 gap-3 text-center dark:text-white">
                             <div></div>
                             <button
                                 type="button"
@@ -242,7 +242,7 @@
                         </label>
                         <select
                             v-model="procedure"
-                            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            class="w-full border dark:text-white border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                         >
                             <option disabled value="">Seleccione un procedimiento</option>
                             <option value="Obturación">Obturación</option>
