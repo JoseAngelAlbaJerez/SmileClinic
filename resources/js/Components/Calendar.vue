@@ -2,11 +2,7 @@
     <section class="relative bg-stone-50 dark:bg-gray-900">
         <div class="w-full py-8 relative z-10 backdrop-blur-3xl dark:bg-gray-900/80">
             <div class="w-full max-w-8xl mx-auto px-2 lg:px-8">
-                <Link :href="route('events.create')" as="button"
-                    class="flex justify-center ml-auto my-4 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                <AddIcon class="size-6" />
-                Nueva Cita
-                </Link>
+
                 <div class="grid grid-cols-12 gap-8 max-w-4xl mx-auto xl:max-w-full">
 
                     <!-- Upcoming Events List -->
@@ -16,10 +12,13 @@
                         <div class="flex justify-between mb-2">
                             <p class="text-lg font-normal text-gray-600 dark:text-gray-300 ">No faltes al horario
                             </p>
-                            <button @click="toggleShowDeleted()"
-                                class="flex justify-center rounded-lg  bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 sm:px-4">
-                                <DeleteIcon /> Mostrar Eliminados
-                            </button>
+                            <AccessGate permission="event.delete">
+                                <button @click="toggleShowDeleted()"
+                                :class="showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                    class="flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                    <DeleteIcon /> {{ showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados'  }}
+                                </button>
+                            </AccessGate>
                         </div>
 
                         <!-- Search and Filter Controls -->
@@ -66,7 +65,7 @@
                                 <h6 class="text-xl leading-8 font-semibold text-black dark:text-white mb-1">{{
                                     event.title }}</h6>
                                 <p class="text-base font-normal text-gray-600 dark:text-gray-300">
-                                    <span v-if="event.patient">Patient: {{ event.patient.first_name }} {{
+                                    <span v-if="event.patient">Paciente: {{ event.patient.first_name }} {{
                                         event.patient.last_name }}</span>
                                     <span v-if="event.doctor"> | Doctor: {{ event.doctor.name }}</span>
                                 </p>
@@ -86,7 +85,7 @@
                     <!-- Calendar View -->
                     <div
                         class="col-span-12 xl:col-span-7 px-2.5 py-5 sm:p-8 bg-gradient-to-b from-white/25 to-white dark:from-gray-800/25 dark:to-gray-800 xl:bg-white dark:xl:bg-gray-800 rounded-2xl max-xl:row-start-1 shadow-sm dark:shadow-none">
-                        <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-5">
+                        <div class="flex flex-col md:flex-row gap-4 items-center  mb-5">
                             <div class="flex items-center gap-4">
                                 <h5 class="text-xl leading-8 font-semibold text-gray-900 dark:text-white">{{
                                     currentMonth }} {{
@@ -112,7 +111,15 @@
                                     </button>
                                 </div>
                             </div>
+                            <AccessGate permission="event.create" class="ml-auto" >
+                                <Link :href="route('events.create')" as="button"
+                                    class="flex justify-center  rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
+                                <AddIcon class="size-6" />
+                                Nueva Cita
+                                </Link>
+                            </AccessGate>
                             <div class="flex items-center rounded-md p-1 bg-blue-50 dark:bg-gray-700 gap-px">
+
                                 <button @click="viewMode = 'day'"
                                     :class="{ 'bg-blue-600 dark:bg-blue-500 text-white': viewMode === 'day', 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400': viewMode !== 'day' }"
                                     class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white">
@@ -258,19 +265,22 @@
                 </div>
 
                 <div class=" flex  gap-2 ">
-                    <Link v-if="eventForm.active" :href="route('events.edit', eventForm)"
-                        class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                    <EditIcon />
-                    </Link>
-                    <DangerButton v-if="eventForm.active" @click="deleteEvent(eventForm)"
-                        class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                        <DeleteIcon />
-                    </DangerButton>
-                    <button v-else @click="restoreEvent(eventForm)"
-                        class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                        <RestoreIcon />
-                    </button>
-
+                    <AccessGate permission="event.delete" class=" ml-auto ">
+                        <Link v-if="eventForm.active" :href="route('events.edit', eventForm)"
+                            class="flex mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                        <EditIcon />
+                        </Link>
+                    </AccessGate>
+                    <AccessGate permission="event.delete">
+                        <DangerButton v-if="eventForm.active" @click="deleteEvent(eventForm)"
+                            class="flex  mt-2  gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <DeleteIcon />
+                        </DangerButton>
+                        <button v-else @click="restoreEvent(eventForm)"
+                            class="flex  ml-auto mt-2  gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                            <RestoreIcon />
+                        </button>
+                    </AccessGate>
                 </div>
             </div>
         </Modal>
@@ -288,6 +298,7 @@ import DangerButton from './DangerButton.vue';
 import RestoreIcon from './Icons/RestoreIcon.vue';
 import Modal from './Modal.vue';
 import AddIcon from './Icons/AddIcon.vue';
+import AccessGate from './AccessGate.vue';
 export default {
     props: {
         initialEvents: {
@@ -314,12 +325,13 @@ export default {
         DangerButton,
         RestoreIcon,
         Modal,
-        AddIcon
+        AddIcon,
+        AccessGate
 
     },
 
     setup(props) {
-        console.log('Initial props:', props);
+
         // Reactive state
         const events = ref(props.initialEvents);
         const currentDate = ref(new Date());
@@ -566,7 +578,7 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     showEventModal.value = false;
-                    // In a real app, you'd refresh the events or update the local list
+
                 }
             });
         };
@@ -585,7 +597,7 @@ export default {
         const toggleShowDeleted = () => {
             console.log(showDeleted.value);
             showDeleted.value = !showDeleted.value;
-             console.log(showDeleted.value);
+            console.log(showDeleted.value);
             Inertia.get(route('events.index'), {
                 search: searchQuery.value,
                 lastDays: timeRange.value,

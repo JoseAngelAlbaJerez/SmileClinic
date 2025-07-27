@@ -37,6 +37,7 @@ class RoleSeeder extends Seeder
             'event.create',
             'event.update',
             'event.delete',
+            'prescription.view',
             'prescription.create',
             'prescription.update',
             'prescription.delete',
@@ -72,7 +73,14 @@ class RoleSeeder extends Seeder
         $user = User::where('name', 'Test User')->first();
         $user->syncRoles('admin');
 
+        $user = User::where('name', 'San Pedro')->first();
+        $user->syncRoles('staff');
 
+        $user = User::where('name', 'Mario')->first();
+        $user->syncRoles('patient');
+
+        $user = User::where('name', 'Jose Angel')->first();
+        $user->syncRoles('doctor');
         $users = User::where('name', '!=', 'Test User')->get();
         $roles = Role::all()->pluck('name')->toArray();
         foreach ($users as $user) {

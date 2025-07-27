@@ -100,7 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/budget/{budget}', [ReportController::class, 'budget'])->name('report.budget');
     Route::get('reports/budgets/{Days}', [ReportController::class, 'budgets'])->name('report.budgets');
     Route::get('reports/prescription/{prescription}', [ReportController::class, 'prescription'])->name('report.prescription');
-     Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
+    Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
 });
 
 require __DIR__ . '/auth.php';
