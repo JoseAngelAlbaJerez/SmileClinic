@@ -1,4 +1,5 @@
 <template>
+      <Head title="Dashboard" />
       <AuthenticatedLayout>
   <div class="py-8">
     <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 p-5 rounded-xl">
@@ -9,7 +10,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-blue-600 dark:text-blue-300">Total Pacientes</p>
-              <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ patients.length }}</h3>
+              <h3 class="text-2xl font-bold text-blue-800 dark:text-white mt-1">{{ patients.length }}</h3>
               <div class="mt-2">
                 <span class="text-xs text-gray-500 dark:text-gray-400">Registrados en el sistema</span>
               </div>
@@ -27,7 +28,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-purple-600 dark:text-purple-300">Usuarios</p>
-              <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ users.length }}</h3>
+              <h3 class="text-2xl font-bold text-purple-800 dark:text-white mt-1">{{ users.length }}</h3>
               <div class="mt-2">
                 <span class="text-xs text-gray-500 dark:text-gray-400">Registrados en el sistema</span>
               </div>
@@ -45,7 +46,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-green-600 dark:text-green-300">Ingresos Esta Semana</p>
-              <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">${{ formatNumber(incomeThisWeek) }}</h3>
+              <h3 class="text-2xl font-bold text-green-800 dark:text-white mt-1">${{ formatNumber(incomeThisWeek) }}</h3>
               <div class="flex items-center mt-2">
                 <span :class="`text-sm flex items-center ${percentageChange >= 0 ? 'text-green-500' : 'text-red-500'}`">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -70,7 +71,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-amber-600 dark:text-amber-300">Balance Total</p>
-              <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">${{ formatNumber(income_sum - expense_sum) }}</h3>
+              <h3 class="text-2xl font-bold text-amber-800 dark:text-white  mt-1" :class="income_sum > expense_sum ?'text-green-500' :'text-red-500'">${{ formatNumber(income_sum - expense_sum) }} {{  income_sum > expense_sum ?'+' :'' }}</h3>
               <div class="mt-2">
                 <span class="text-xs text-gray-500 dark:text-gray-400">Ingresos: ${{ formatNumber(income_sum) }}</span>
                 <span class="text-xs text-gray-500 dark:text-gray-400 block">Gastos: ${{ formatNumber(expense_sum) }}</span>
@@ -103,7 +104,10 @@
                 </div>
               </Link>
               <div class="text-right">
-                <p class="text-sm font-medium text-emerald-600">+${{ formatNumber(item.total) }}</p>
+                <p class="text-sm font-medium text-emerald-600">+${{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(item.total
+                                                                    || 0) }}</p>
                 <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.type }}</span>
               </div>
             </div>
@@ -126,7 +130,10 @@
                 </div>
               </div>
               <div class="text-right">
-                <p class="text-sm font-medium text-red-600">-${{ formatNumber(item.amount) }}</p>
+                <p class="text-sm font-medium text-red-600">-${{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(item.amount
+                                                                    || 0) }}</p>
                 <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.category || 'General' }}</span>
               </div>
             </div>
@@ -163,7 +170,7 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import CartIcon from '@/Components/Icons/CartIcon.vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
@@ -178,6 +185,7 @@ defineProps({
   incomeThisWeek: Number,
   incomeLastWeek: Number,
   percentageChange: Number,
+  total: Number,
 });
 
 const formatNumber = (value) => {
