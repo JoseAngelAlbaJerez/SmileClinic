@@ -758,7 +758,7 @@
                     </div>
                 </AccessGate>
             </div>
-            <AccessGate permission="odontograph.view">
+            <AccessGate permission="odontograph.view" >
                 <div class="space-y-6">
                     <!-- Encabezado Mejorado -->
                     <div
@@ -802,7 +802,7 @@
                     </div>
 
                     <!-- Lista de Odontogramas -->
-                    <div class="space-y-4">
+                    <div class="space-y-4" v-if="patient.age >=18">
                         <div v-for="item in odontograph" :key="item.id"
                             class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
                             <!-- Encabezado del Odontograma -->
@@ -892,6 +892,145 @@
                                 <div>
                                     <div class="grid grid-cols-16 gap-1.5">
                                         <div v-for="tooth in lowerTeeth" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="{
+                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
+                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                            }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <template v-if="item.data[tooth]">
+                                                    <span
+                                                        v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
+                                                            'bg-gray-800 dark:bg-gray-200': zone.charAt(0) === 'O',
+                                                            'bg-red-500': zone.charAt(0) === 'D',
+                                                            'bg-green-500': zone.charAt(0) === 'M',
+                                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                                        }" :title="`${zone}: ${proc}`"></span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado vacío -->
+                        <div v-if="!odontograph.length"
+                            class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
+                            <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
+                            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron
+                                odontogramas
+                            </h3>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
+                                No hay registros de odontogramas para este paciente. Crea uno nuevo para comenzar.
+                            </p>
+                            <AccessGate permission="odontograph.create">
+                                <Link v-if="patient.active" :href="route('odontographs.create', patient)"
+                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                <AddIcon class="w-5 h-5" />
+                                <span>Crear primer odontograma</span>
+                                </Link>
+                            </AccessGate>
+                        </div>
+                    </div>
+                    <div class="space-y-4" v-else>
+                        <div v-for="item in odontograph" :key="item.id"
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
+                            <!-- Encabezado del Odontograma -->
+                            <div
+                                class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                            <DocumentTextIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <div>
+                                            <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
+                                                item.id
+                                                }}</h2>
+                                            <div
+                                                class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <UserIcon class="w-4 h-4" />
+                                                <span>Dr. {{ item.doctor.name }} {{ item.doctor.last_name }}</span>
+                                                <span class="mx-1">•</span>
+                                                <CalendarIcon class="w-4 h-4" />
+                                                <span>{{ formatDate(item.created_at) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex gap-2">
+                                        <Link v-if="item.active" :href="route('odontographs.edit', item)"
+                                            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                                            title="Editar">
+                                        <EditIcon class="w-5 h-5" />
+                                        </Link>
+
+                                        <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
+                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
+                                            title="Eliminar">
+                                            <DeleteIcon class="w-5 h-5" />
+                                        </DangerButton>
+
+                                        <button v-else @click="restoreOdontograph(item)"
+                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
+                                            title="Restaurar">
+                                            <RestoreIcon class="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Visualización del Odontograma -->
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">PROCEDIMIENTOS
+                                    REGISTRADOS
+                                </h3>
+
+                                <!-- Odontograma Superior -->
+                                <div class="mb-6">
+                                    <div class="grid grid-cols-10 gap-1.5 mb-2">
+                                        <div v-for="tooth in upperTeethChild" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="{
+                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
+                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                            }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <template v-if="item.data[tooth]">
+                                                    <span
+                                                        v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
+                                                            'bg-gray-800 dark:bg-gray-200': zone.charAt(0) === 'O',
+                                                            'bg-red-500': zone.charAt(0) === 'D',
+                                                            'bg-green-500': zone.charAt(0) === 'M',
+                                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                                        }" :title="`${zone}: ${proc}`"></span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Odontograma Inferior -->
+                                <div>
+                                    <div class="grid grid-cols-10 gap-1.5">
+                                        <div v-for="tooth in lowerTeethChild" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="{
@@ -1100,6 +1239,12 @@ export default {
             lowerTeeth: [
                 48, 47, 46, 45, 44, 43, 42, 41,
                 31, 32, 33, 34, 35, 36, 37, 38
+            ],
+               upperTeethChild: [
+              55, 54, 53, 52, 51, 61, 62, 63, 64, 65
+            ],
+             lowerTeethChild: [
+              85, 84, 83, 82, 81, 71, 72, 73, 74, 75
             ],
             selectedOdontograph: null,
             selectedToothInfo: null,
