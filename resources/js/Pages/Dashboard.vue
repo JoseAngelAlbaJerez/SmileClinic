@@ -71,7 +71,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-amber-600 dark:text-amber-300">Balance Total</p>
-              <h3 class="text-2xl font-bold text-amber-800 dark:text-white  mt-1" :class="income_sum > expense_sum ?'text-green-500' :'text-red-500'">${{ formatNumber(income_sum - expense_sum) }} {{  income_sum > expense_sum ?'+' :'' }}</h3>
+              <h3 class="text-2xl font-bold text-amber-800 dark:text-white  mt-1" :class="income_sum > expense_sum ?'text-amber-500' :'text-amber-500'">${{ formatNumber(income_sum - expense_sum) }} {{  income_sum > expense_sum ?'+' :'' }}</h3>
               <div class="mt-2">
                 <span class="text-xs text-gray-500 dark:text-gray-400">Ingresos: ${{ formatNumber(income_sum) }}</span>
                 <span class="text-xs text-gray-500 dark:text-gray-400 block">Gastos: ${{ formatNumber(expense_sum) }}</span>
