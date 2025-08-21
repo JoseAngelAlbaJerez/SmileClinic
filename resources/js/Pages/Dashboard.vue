@@ -95,7 +95,7 @@
             <Link :href="route('budgets.index')" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todos</Link>
           </div>
           <div class="space-y-3">
-            <div v-for="item in income.slice(0, 5)" :key="item.id" class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <div v-for="item in income.slice(0, 5)" :key="item.id" class="flex items-center justify-between p-3 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <Link :href="route('budgets.show', item.id)" class="flex items-center">
                 <DocumentMoney class="w-8 h-8 text-blue-500 mr-3" />
                 <div>
@@ -121,7 +121,7 @@
             <Link :href="route('expenses.index')" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todos</Link>
           </div>
           <div class="space-y-3">
-            <div v-for="item in expense.slice(0, 5)" :key="item.id" class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <div v-for="item in expense.slice(0, 5)" :key="item.id" class="flex items-center justify-between p-3 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <div class="flex items-center">
                 <CartIcon class="w-8 h-8 text-amber-500 mr-3" />
                 <div>
