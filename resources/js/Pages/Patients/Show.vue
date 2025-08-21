@@ -98,7 +98,7 @@
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.address }}</span>
                                 </div>
                                 <div class="flex items-start">
-                                    <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Motivo
+                                    <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Motivo de
                                         visita:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.motive }}</span>
                                 </div>
