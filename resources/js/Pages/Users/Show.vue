@@ -4,13 +4,14 @@
             <Breadcrumb :crumbs="crumbs" />
         </template>
 
-        <div class="container mx-auto px-6 mt-5 py-4 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-             <div class="my-2 mt-5 flex  gap-2 items-center">
+        <div
+            class="container mx-auto px-6 mt-5 py-4 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+            <div class="my-2 mt-5 flex  gap-2 items-center">
 
-            <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-                Perfil
-            </h3>
-            <div v-if="user.active" class=" flex ml-auto gap-2 mb-2 ">
+                <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+                    Perfil
+                </h3>
+                <div v-if="user.active" class=" flex ml-auto gap-2 mb-2 ">
                     <button @click="print()"
                         class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
                         <PrintIcon />
@@ -30,16 +31,18 @@
                         <RestoreIcon /> Restaurar
                     </PrimaryButton>
                 </div>
-                </div>
+            </div>
             <!-- Profile Header Section -->
             <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6 ">
                 <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div class="flex flex-col items-center w-full gap-6 xl:flex-row">
                         <div class="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-                            <img :src="user.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'" alt="user" class="w-full h-full object-cover">
+                            <img :src="user.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                alt="user" class="w-full h-full object-cover">
                         </div>
                         <div class="order-3 xl:order-2">
-                            <h4 class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
+                            <h4
+                                class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
                                 {{ user.name }} {{ user.last_name }}
                             </h4>
                             <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
@@ -54,17 +57,22 @@
                         </div>
                         <div class="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
                             <button v-for="(social, index) in socialLinks" :key="index"
-                                    class="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-                                <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                class="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                                <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path :d="social.icon" fill=""></path>
                                 </svg>
                             </button>
                         </div>
                     </div>
 
-                    <button @click="openEditModal('profile')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
+                    <button @click="openEditModal('profile')"
+                        class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
+                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                                fill=""></path>
                         </svg>
                         Edit
                     </button>
@@ -136,9 +144,13 @@
                         </div>
                     </div>
 
-                    <button @click="openEditModal('personal')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
+                    <button @click="openEditModal('personal')"
+                        class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
+                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                                fill=""></path>
                         </svg>
                         Edit
                     </button>
@@ -168,7 +180,8 @@
                                     Ciudad/Estado
                                 </p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.address?.city || 'No especificado' }}, {{ user.address?.state || 'No especificado' }}
+                                    {{ user.address?.city || 'No especificado' }}, {{ user.address?.state || 'No especificado'
+                                    }}
                                 </p>
                             </div>
 
@@ -192,19 +205,21 @@
                         </div>
                     </div>
 
-                    <button @click="openEditModal('address')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
+                    <button @click="openEditModal('address')"
+                        class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
+                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z"
+                                fill=""></path>
                         </svg>
                         Edit
                     </button>
                 </div>
             </div>
-            <div
-                    class="p-5 border border-gray-200 rounded-2xl  dark:border-gray-800 lg:p-6 mt-5"
-                >
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
+            <div class="p-5 border border-gray-200 rounded-2xl  dark:border-gray-800 lg:p-6 mt-5">
+                <UpdatePasswordForm class="max-w-xl" />
+            </div>
 
         </div>
 
@@ -216,8 +231,11 @@
                         {{ modalTitle }}
                     </h3>
                     <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12">
+                            </path>
                         </svg>
                     </button>
                 </div>
@@ -232,10 +250,13 @@
                                 </label>
                                 <div class="flex items-center space-x-4">
                                     <div class="w-16 h-16 rounded-full overflow-hidden border border-gray-300">
-                                        <img :src="form.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'" alt="Avatar" class="w-full h-full object-cover">
+                                        <img :src="form.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                            alt="Avatar" class="w-full h-full object-cover">
                                     </div>
-                                    <input type="file" @change="handleAvatarChange" class="hidden" ref="avatarInput" accept="image/*">
-                                    <button type="button" @click="$refs.avatarInput.click()" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
+                                    <input type="file" @change="handleAvatarChange" class="hidden" ref="avatarInput"
+                                        accept="image/*">
+                                    <button type="button" @click="$refs.avatarInput.click()"
+                                        class="px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
                                         Cambiar
                                     </button>
                                 </div>
@@ -246,14 +267,16 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Nombre
                                     </label>
-                                    <input v-model="form.name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.name" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Apellido
                                     </label>
-                                    <input v-model="form.last_name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.last_name" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
                             </div>
 
@@ -261,7 +284,8 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Especialidad
                                 </label>
-                                <input v-model="form.specialty" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.specialty" type="text"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
                         </div>
 
@@ -272,14 +296,16 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Nombre
                                     </label>
-                                    <input v-model="form.name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.name" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Apellido
                                     </label>
-                                    <input v-model="form.last_name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.last_name" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
                             </div>
 
@@ -287,21 +313,24 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Correo Electrónico
                                 </label>
-                                <input v-model="form.email" type="email" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.email" type="email"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Teléfono
                                 </label>
-                                <input v-model="form.phone_number" type="tel" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.phone_number" type="tel"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Puesto
                                 </label>
-                                <input v-model="form.position" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.position" type="text"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
                         </div>
 
@@ -311,7 +340,8 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     País
                                 </label>
-                                <input v-model="form.address.country" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.address.country" type="text"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -319,14 +349,16 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Ciudad
                                     </label>
-                                    <input v-model="form.address.city" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.address.city" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                         Estado/Provincia
                                     </label>
-                                    <input v-model="form.address.state" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input v-model="form.address.state" type="text"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 </div>
                             </div>
 
@@ -334,23 +366,27 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Dirección
                                 </label>
-                                <input v-model="form.address.street" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.address.street" type="text"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                                     Código Postal
                                 </label>
-                                <input v-model="form.address.postal_code" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input v-model="form.address.postal_code" type="text"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-6 flex justify-end space-x-3">
-                        <button type="button" @click="closeModal" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="button" @click="closeModal"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancelar
                         </button>
-                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Guardar Cambios
                         </button>
                     </div>
@@ -362,8 +398,9 @@
 
 <script setup>
 import { ref, computed, markRaw } from 'vue';
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage  } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Inertia } from '@inertiajs/inertia';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
 import Modal from '@/Components/Modal.vue';
 import UpdatePasswordForm from '../Profile/Partials/UpdatePasswordForm.vue';
@@ -385,10 +422,10 @@ const props = defineProps({
         required: true
     },
 });
-const  crumbs = [
-                { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
-                { label: props.user.name + ' ' + props.user.last_name }
-            ];
+const crumbs = [
+    { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
+    { label: props.user.name + ' ' + props.user.last_name }
+];
 const showModal = ref(false);
 const activeModal = ref('');
 const isLoading = ref(false);
@@ -431,6 +468,15 @@ const openEditModal = (type) => {
     activeModal.value = type;
     showModal.value = true;
 };
+const deleteUser = (id) => {
+  Inertia.delete(route('users.destroy', id))
+}
+
+const restoreUser = () => {
+  Inertia.put(route('users.update', props.user.id), {
+    active: true,
+  })
+}
 
 const closeModal = () => {
     showModal.value = false;

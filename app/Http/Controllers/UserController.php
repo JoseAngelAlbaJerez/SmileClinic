@@ -109,6 +109,10 @@ class UserController extends Controller
     }
     public function update(User $user, Request $request)
     {
+        if ($request->has('active')) {
+            $this->restore($user);
+            return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+        }
         // Validación de datos
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -141,6 +145,21 @@ class UserController extends Controller
         }
 
         return redirect()->back()->with('success', 'Usuario actualizado correctamente');
+    }
+    private function restore(User $user)
+    {
+        $user->active = 1;
+        $user->save();
+
+        return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+    }
+     public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->active = false;
+        $user->save();
+
+        return redirect()->back()->with('toast', 'Usuario desactivado correctamente.');
     }
     public function show(User $user)
     {
