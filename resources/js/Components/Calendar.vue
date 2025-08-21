@@ -38,7 +38,7 @@
                         <div class="flex gap-5 flex-col ">
                             <!-- Event List -->
                             <div v-for="event in filteredEvents" :key="event.id"
-                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none">
+                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none hover:bg-blue-100">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center gap-2.5">
                                         <span class="w-2.5 h-2.5 rounded-full"
@@ -211,7 +211,7 @@
         <!-- Modal -->
         <Modal :show="showEventModal" @close="showEventModal = false">
             <div class="text-gray-800 p-5  ">
-                <h2 class="text-2xl font-semibold  p-4  dark:text-white  ">
+                <h2 class="text-2xl font-semibold  pt-3 pl-4  dark:text-white  ">
                     Detalles del Evento
                 </h2>
 
@@ -558,7 +558,6 @@ export default {
             Inertia.put(route('events.update', event),
                 { attended: eventForm.attended },
                 { preserveScroll: true, preserveState: true }
-
             );
         };
 
