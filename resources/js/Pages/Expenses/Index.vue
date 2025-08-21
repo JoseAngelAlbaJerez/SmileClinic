@@ -90,7 +90,7 @@
                                         </th>
 
 
-                                        <th scope="col" class=" ">Acciones</th>
+                                        <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -305,7 +305,7 @@ export default {
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,
             }),
-            timeout: 3000,
+            timeout: 5000,
             crumbs: [
                 { icon: markRaw(CartIcon), label: 'Egresos', to: route('expenses.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }

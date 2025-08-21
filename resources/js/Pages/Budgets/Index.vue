@@ -54,7 +54,7 @@
                                                     'asc' ? '↑' :
                                                     '↓'
                                             }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('type')">Tipo:
+                                        <th scope="col" class="  cursor-pointer" @click="sort('type')">Tipo
                                             <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
                                                 ?
                                                 '↑' :
@@ -89,7 +89,7 @@
                                         </th>
 
 
-                                        <th scope="col" class=" ">Acciones</th>
+                                        <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -99,7 +99,10 @@
                                         <td class="p-4  items-center">{{ budget.patient.first_name }} {{
                                             budget.patient.last_name }} </td>
                                         <td class="p-4  items-center">{{ budget.type }} </td>
-                                        <td class="p-4  items-center">$ {{ formatNumber(budget.total) }} </td>
+                                        <td class="p-4  items-center">  {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(budget.total
+                                                                    || 0) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(budget.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
