@@ -304,18 +304,18 @@ const upperTeeth = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 
 const lowerTeeth = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38]
 
 const toothNames = {
-    11: "Incisivo central sup. derecho", 12: "Incisivo lateral sup. derecho", 13: "Canino sup. derecho",
-    14: "1er premolar sup. derecho", 15: "2do premolar sup. derecho", 16: "1er molar sup. derecho",
-    17: "2do molar sup. derecho", 18: "3er molar sup. derecho",
-    21: "Incisivo central sup. izquierdo", 22: "Incisivo lateral sup. izquierdo", 23: "Canino sup. izquierdo",
-    24: "1er premolar sup. izquierdo", 25: "2do premolar sup. izquierdo", 26: "1er molar sup. izquierdo",
-    27: "2do molar sup. izquierdo", 28: "3er molar sup. izquierdo",
-    41: "Incisivo central inf. derecho", 42: "Incisivo lateral inf. derecho", 43: "Canino inf. derecho",
-    44: "1er premolar inf. derecho", 45: "2do premolar inf. derecho", 46: "1er molar inf. derecho",
-    47: "2do molar inf. derecho", 48: "3er molar inf. derecho",
-    31: "Incisivo central inf. izquierdo", 32: "Incisivo lateral inf. izquierdo", 33: "Canino inf. izquierdo",
-    34: "1er premolar inf. izquierdo", 35: "2do premolar inf. izquierdo", 36: "1er molar inf. izquierdo",
-    37: "2do molar inf. izquierdo", 38: "3er molar inf. izquierdo"
+    11: "Incisivo central superior derecho", 12: "Incisivo lateral superior derecho", 13: "Canino superior derecho",
+    14: "1er premolar superior derecho", 15: "2do premolar superior derecho", 16: "1er molar superior derecho",
+    17: "2do molar superior derecho", 18: "3er molar superior derecho",
+    21: "Incisivo central superior izquierdo", 22: "Incisivo lateral superior izquierdo", 23: "Canino superior izquierdo",
+    24: "1er premolar superior izquierdo", 25: "2do premolar superior izquierdo", 26: "1er molar superior izquierdo",
+    27: "2do molar superior izquierdo", 28: "3er molar superior izquierdo",
+    41: "Incisivo central inferior derecho", 42: "Incisivo lateral inferior derecho", 43: "Canino inferior derecho",
+    44: "1er premolar inferior derecho", 45: "2do premolar inferior derecho", 46: "1er molar inferior derecho",
+    47: "2do molar inferior derecho", 48: "3er molar inferior derecho",
+    31: "Incisivo central inferior izquierdo", 32: "Incisivo lateral inferior izquierdo", 33: "Canino inferior izquierdo",
+    34: "1er premolar inferior izquierdo", 35: "2do premolar inferior izquierdo", 36: "1er molar inferior izquierdo",
+    37: "2do molar inferior izquierdo", 38: "3er molar inferior izquierdo"
 }
 
 function selectTooth(tooth) {
