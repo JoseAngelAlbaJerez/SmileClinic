@@ -8,11 +8,8 @@ class PrescriptionDetail extends Model
 {
     protected $fillable = [
         "description",
-        "fc",
-        "time_interval",
         "prescription_id",
         "drug_id",
-        "ending_date",
         "active"
     ];
     public function drugs()

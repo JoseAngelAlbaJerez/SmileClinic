@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::create('prescription_details', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->integer('fc');
-            $table->integer('time_interval');
             $table->foreignId('prescription_id');
             $table->foreignId('drug_id');
-            $table->date('ending_date');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
