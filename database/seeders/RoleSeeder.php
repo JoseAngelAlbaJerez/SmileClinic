@@ -60,6 +60,10 @@ class RoleSeeder extends Seeder
             'budget.create',
             'budget.update',
             'budget.delete',
+            'bill.view',
+            'bill.create',
+            'bill.update',
+            'bill.delete',
             'event.view',
             'event.create',
             'event.update',
@@ -81,6 +85,7 @@ class RoleSeeder extends Seeder
 
         $user = User::where('name', 'Jose Angel')->first();
         $user->syncRoles('doctor');
+
         $users = User::where('name', '!=', 'Test User')->get();
         $roles = Role::all()->pluck('name')->toArray();
         foreach ($users as $user) {
