@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Drug;
 use Illuminate\Http\Request;
 
 class DrugController extends Controller
@@ -27,7 +28,14 @@ class DrugController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'active' => 'boolean'
+        ]);
+        Drug::create($validated);
+        return redirect()->back()->with('toast', 'Medicamento registrado correctamente.');
+
     }
 
     /**
