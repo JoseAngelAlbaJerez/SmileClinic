@@ -18,15 +18,24 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
+      protected $fillable = [
         'name',
-        'email',
-        'password',
         'last_name',
+        'DNI',
+        'specialty',
+        'phone_number',
         'date_of_birth',
-        'active',
+        'position',
+        'email',
+        'avatar',
+        'password',
+        'active'
     ];
 
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,6 +57,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+             'active' => 'boolean',
+               'date_of_birth' => 'date',
         ];
     }
 }
