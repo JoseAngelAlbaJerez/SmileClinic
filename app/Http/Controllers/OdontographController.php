@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Odontograph;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,7 +17,7 @@ class OdontographController extends Controller
     public function create(Request $request)
     {
         $patient = Patient::where('id', $request->id)->first();
-
+        $patient->age = Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Odontograph/Create', compact('patient'));
     }
 
