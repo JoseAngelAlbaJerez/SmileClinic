@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Budget;
 use App\Models\CXC;
 use App\Models\Expenses;
@@ -25,6 +26,15 @@ class ReportController extends Controller
             'isRemoteEnabled' => true,
             'isHtml5ParserEnabled' => true,
         ])->stream('budget.pdf');
+    }
+      public function bill(Bill $bill)
+    {
+        $bill->load(['billdetail', 'doctor', 'patient', 'CXC']);
+
+        return Pdf::loadView('Reports.bill', compact('bill'))->setPaper('a4','landscape')->setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ])->stream('bill.pdf');
     }
       public function CXC(CXC $CXC)
     {
