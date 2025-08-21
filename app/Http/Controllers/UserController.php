@@ -88,7 +88,11 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'last_name'            => 'required|string|max:100',
+                'last_name' => 'required|string|max:100',
+                'specialty' => 'required|string|max:100',
+                'phone_number' => 'required|string|max:100',
+                'position' => 'required|string|max:100',
+                'DNI' => 'required|string|max:255',
                 'date_of_birth'        => 'required|date|before:today',
                 'role' => 'required|string|in:admin,doctor,patient,staff',
             ]);
@@ -103,10 +107,47 @@ class UserController extends Controller
                 ->with('toastStyle', 'danger');
         }
     }
-    public function show(User $user){
+    public function update(User $user, Request $request)
+    {
+        // Validación de datos
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
+            'position' => 'nullable|string|max:255',
+            'specialty' => 'nullable|string|max:255',
+            'avatar' => 'nullable|image|max:2048',
+            'address.country' => 'nullable|string|max:255',
+            'address.city' => 'nullable|string|max:255',
+            'address.state' => 'nullable|string|max:255',
+            'address.street' => 'nullable|string|max:255',
+            'address.postal_code' => 'nullable|string|max:20',
+        ]);
+
+        // Actualizar datos básicos
+        $user->update($request->except('address', 'avatar'));
+
+        // Manejar avatar si se proporciona
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+            $user->save();
+        }
+
+        // Actualizar dirección
+        if ($request->has('address')) {
+            $user->address()->updateOrCreate([], $request->address);
+        }
+
+        return redirect()->back()->with('success', 'Usuario actualizado correctamente');
+    }
+    public function show(User $user)
+    {
         $user = User::find($user->id);
         $user->load(['roles']);
-        return Inertia::render('Users/Show',[
-    'user' => $user]);
+        return Inertia::render('Users/Show', [
+            'user' => $user
+        ]);
     }
 }
