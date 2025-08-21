@@ -77,7 +77,7 @@
                             <!-- Empty State -->
                             <div v-if="filteredEvents.length === 0"
                                 class="p-6 rounded-xl bg-white dark:bg-gray-800 text-center text-gray-500 dark:text-gray-400">
-                                No events found
+                                No eventos encontrados
                             </div>
                         </div>
                     </div>
@@ -459,12 +459,6 @@ export default {
                 });
             }
 
-            // Filter by active status
-            if (showDeleted.value !== undefined) {
-                result = result.filter(event =>
-                    showDeleted.value ? true : event.active === 1
-                );
-            }
 
             // Sort by date
             return result.sort((a, b) => new Date(a.start) - new Date(b.start));
@@ -595,9 +589,7 @@ export default {
             });
         };
         const toggleShowDeleted = () => {
-            console.log(showDeleted.value);
             showDeleted.value = !showDeleted.value;
-            console.log(showDeleted.value);
             Inertia.get(route('events.index'), {
                 search: searchQuery.value,
                 lastDays: timeRange.value,
