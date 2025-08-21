@@ -90,7 +90,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                        }}</span>
+                                        }} ({{ patient.age }} años)</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
