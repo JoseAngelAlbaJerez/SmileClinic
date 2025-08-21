@@ -96,13 +96,11 @@ class PatientController extends Controller implements HasMiddleware
 
     public function create()
     {
-
         return Inertia::render("Patients/Create");
     }
 
     public function show(Patient $patient, Request $request)
     {
-
 
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $search = $request->input('search');
@@ -110,7 +108,6 @@ class PatientController extends Controller implements HasMiddleware
             ->join('users', 'odontographs.doctor_id', '=', 'users.id')
             ->where('odontographs.patient_id', $patient->id)
             ->select('odontographs.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
-
 
 
         if ($showDeleted) {
@@ -131,6 +128,7 @@ class PatientController extends Controller implements HasMiddleware
         $bills = Bill::where('patient_id', $patient->id)->with('doctor','patient','billdetail.procedure')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
         $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
+        $patient->age =  Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'budgets' => $budgets,
