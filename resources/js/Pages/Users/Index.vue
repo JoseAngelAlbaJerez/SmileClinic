@@ -35,7 +35,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
@@ -87,7 +87,7 @@
                                         </th>
 
 
-                                        <th scope="col" class=" ">Acciones</th>
+                                        <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,7 +96,7 @@
                                         <td class="p-4  items-center">{{ user.id }}</td>
                                         <td class="p-4  items-center">{{ user.name }} {{ user.last_name }}
                                         </td>
-                                        <td class="p-4  items-center">{{ user.date_of_birth }}</td>
+                                        <td class="p-4  items-center">{{ formatDate(user.date_of_birth) }}</td>
                                         <td class="p-4 items-center">
                                             <span
                                                 class="inline-flex items-center gap-1 bg-blue-200 text-blue-800 text-xs font-semibold px-5 py-3.5 rounded-xl">
@@ -229,7 +229,7 @@ export default {
         }
     },
     methods: {
-        formatDate(date) {
+         formatDate(date) {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },
