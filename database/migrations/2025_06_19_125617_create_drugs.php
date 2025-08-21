@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->foreignId('prescription_details_id');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
