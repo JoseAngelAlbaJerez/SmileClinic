@@ -48,6 +48,18 @@ class PermissionSeeder extends Seeder
             'cxc.update',
             'cxc.delete',
 
+            //Drugs
+            'drug.view',
+            'drug.create',
+            'drug.update',
+            'drug.delete',
+
+            //Bills
+            'bill.view',
+            'bill.create',
+            'bill.update',
+            'bill.delete',
+
             //Prescriptions
             'prescription.view',
             'prescription.create',

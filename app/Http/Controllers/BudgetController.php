@@ -36,11 +36,14 @@ class BudgetController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-        $query = Budget::query()->select('budgets.*');
+        $query = Budget::query()->select('budgets.*')
+          ->join('patients', 'budgets.patient_id', '=', 'patients.id')
+           ;
+
         if ($showDeleted == true) {
-            $query->where('active', 1);
+            $query->where('budgets.active', 1);
         } else {
-            $query->where('active', 0);
+            $query->where('budgets.active', 0);
         }
 
         if ($patient_id) {
@@ -48,7 +51,7 @@ class BudgetController extends Controller
             $createdAtDates = $patient->budget()->pluck('created_at');
 
             if ($createdAtDates->isNotEmpty()) {
-                $query->where('patient_id', $patient_id)
+                $query->where('budgets.patient_id', $patient_id)
                     ->whereIn('budgets.created_at', $createdAtDates)
                     ->latest();
             }
@@ -58,11 +61,11 @@ class BudgetController extends Controller
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%']);
+                $q->WhereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.ars LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%']);
             });
         }
 
@@ -75,14 +78,14 @@ class BudgetController extends Controller
         if ($lastDays) {
             if (is_numeric($lastDays)) {
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
-                $query->where('created_at', '>=', $dateFrom);
+                $query->where('budgets.created_at', '>=', $dateFrom);
             } else {
                 if ($lastDays === 'month') {
                     $dateFrom = Carbon::now()->startOfMonth();
-                    $query->where('created_at', '>=', $dateFrom);
+                    $query->where('budgets.created_at', '>=', $dateFrom);
                 } elseif ($lastDays === 'year') {
                     $dateFrom = Carbon::now()->startOfYear();
-                    $query->where('created_at', '>=', $dateFrom);
+                    $query->where('budgets.created_at', '>=', $dateFrom);
                 }
             }
         }
@@ -154,37 +157,37 @@ class BudgetController extends Controller
         $budgetData['doctor_id'] = Auth::id();
         $budget = Budget::create($budgetData);
         $budgetDetails  = $budget->budgetdetail()->createMany($validated['details']);
-        if ($budget->type == "Crédito") {
-            $patient = $budget->patient;
+        // if ($budget->type == "Crédito") {
+        //     $patient = $budget->patient;
 
-            if (!$patient->cxc) {
-                $CXC = CXC::create([
-                    'balance' => $budget->total,
-                    'patient_id' => $budget->patient_id,
-                    'doctor_id' => $budget->doctor_id,
-                ]);
-            } else {
-                $CXC = $patient->cxc;
-                $CXC->balance += $budget->total;
-                $CXC->save();
-            }
-            foreach ($budgetDetails as $detail) {
+        //     if (!$patient->cxc) {
+        //         $CXC = CXC::create([
+        //             'balance' => $budget->total,
+        //             'patient_id' => $budget->patient_id,
+        //             'doctor_id' => $budget->doctor_id,
+        //         ]);
+        //     } else {
+        //         $CXC = $patient->cxc;
+        //         $CXC->balance += $budget->total;
+        //         $CXC->save();
+        //     }
+        //     foreach ($budgetDetails as $detail) {
 
-                $remaining_amount = $detail->total / $detail->amount_of_payments;
-                for ($i = 0; $i < $detail->amount_of_payments; $i++) {
-                    Payment::create([
-                        'budget_detail_id' => $detail->id,
-                        'c_x_c_id' => $CXC->id,
-                        'amount_paid' => 0,
-                        'expiration_date' => $budgetData['expiration_date']->addMonth(),
-                        'remaining_amount' => $remaining_amount,
-                        'total' => $detail->total,
-                    ]);
-                }
-            }
-            $budget->c_x_c_id = $CXC->id;
-            $budget->save();
-        }
+        //         $remaining_amount = $detail->total / $detail->amount_of_payments;
+        //         for ($i = 0; $i < $detail->amount_of_payments; $i++) {
+        //             Payment::create([
+        //                 'budget_detail_id' => $detail->id,
+        //                 'c_x_c_id' => $CXC->id,
+        //                 'amount_paid' => 0,
+        //                 'expiration_date' => $budgetData['expiration_date']->addMonth(),
+        //                 'remaining_amount' => $remaining_amount,
+        //                 'total' => $detail->total,
+        //             ]);
+        //         }
+        //     }
+        //     $budget->c_x_c_id = $CXC->id;
+        //     $budget->save();
+        // }
 
 
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
@@ -211,9 +214,16 @@ class BudgetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Budget $budget)
     {
-        //
+        $patient = Patient::paginate(10);
+        $procedure = Procedure::paginate(10);
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
+        return Inertia::render('Budgets/Edit', [
+            'patient' => $patient,
+            'budget' => $budget,
+            'procedure' => $procedure,
+        ]);
     }
 
     /**

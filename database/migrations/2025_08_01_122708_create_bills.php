@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prescription_details', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
-            $table->foreignId('prescription_id');
-            $table->foreignId('drug_id');
+            $table->string('type');
             $table->boolean('active')->default(true);
+            $table->date('emission_date');
+            $table->date('expiration_date')->nullable();
+            $table->foreignId('doctor_id');
+            $table->foreignId('patient_id');
+            $table->foreignId('c_x_c_id')->nullable();
+            $table->decimal('total');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prescription_details');
+        Schema::dropIfExists('bills');
     }
 };

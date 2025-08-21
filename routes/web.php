@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\BudgetDetailController;
 use App\Http\Controllers\CXCController;
+use App\Http\Controllers\DrugController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\OdontographController;
@@ -23,13 +25,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Auth/Login');
 });
+
 
 Route::get('/dashboard', function () {
     $patients = Patient::all();
@@ -55,7 +53,7 @@ Route::get('/dashboard', function () {
 
     $percentageChange = $incomeLastWeek > 0
         ? (($incomeThisWeek - $incomeLastWeek) / $incomeLastWeek) * 100
-        : 0;
+        : 100;
 
 
     $income = Budget::where('type', '=', 'Contado')->orderByDesc('created_at')->with('budgetdetail.procedure', 'patient')->get();
@@ -92,6 +90,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('payments', PaymentController::class);
     Route::resource('prescriptions', PrescriptionController::class);
     Route::resource('users', UserController::class);
+    Route::resource('drugs', DrugController::class);
+    Route::resource('bills', BillController::class);
+
+
 
 
     //Reports
@@ -101,6 +103,8 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/budgets/{Days}', [ReportController::class, 'budgets'])->name('report.budgets');
     Route::get('reports/prescription/{prescription}', [ReportController::class, 'prescription'])->name('report.prescription');
     Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
+    Route::get('reports/bill/{bill}', [ReportController::class, 'bill'])->name('report.bill');
+
 });
 
 require __DIR__ . '/auth.php';

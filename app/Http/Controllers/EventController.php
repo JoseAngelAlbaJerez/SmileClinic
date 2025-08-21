@@ -39,7 +39,6 @@ class EventController extends Controller
 
         } else {
             $query->where('events.active', 0);
-
         }
 
         if ($patient_id) {
@@ -229,14 +228,16 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $event->load(['patient', 'doctor']);
-        $event->starttime = Carbon::parse($event->starttime)->format('H:i');
-        $event->endtime = Carbon::parse($event->endtime)->format('H:i');
-        $doctors = User::role('doctor')->paginate(10);
+       $starttime = $event->starttime = Carbon::parse($event->starttime)->format('H:i');
+       $endtime = $event->endtime = Carbon::parse($event->endtime)->format('H:i');
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
+         $event->timeRange = [$starttime, $endtime];
         return Inertia::render('Events/Edit', [
             'event' => $event,
             'doctors' => $doctors,
             'patients' => $patients,
+
         ]);
     }
 

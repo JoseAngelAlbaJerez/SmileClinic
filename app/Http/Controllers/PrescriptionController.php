@@ -112,8 +112,8 @@ class PrescriptionController extends Controller
      */
     public function create()
     {
-        $drugs = Drug::paginate(10);
-        $patient = Patient::paginate(10);
+        $drugs = Drug::orderByDesc('created_at')->paginate(10);
+        $patient = Patient::orderByDesc('created_at')->paginate(10);
         return Inertia::render('Prescription/Create', [
             'drugs' => $drugs,
             'patient' => $patient,
@@ -129,8 +129,6 @@ class PrescriptionController extends Controller
             'patient_id' => 'required|exists:patients,id',
             'details' => 'required|array|min:1',
             'details.*.description' => 'required|string',
-            'details.*.fc' => 'required|integer|min:1',
-            'details.*.time_interval' => 'required|integer|min:1',
             'details.*.drug_id' => 'required|exists:drugs,id',
         ]);
 
@@ -143,20 +141,13 @@ class PrescriptionController extends Controller
             ]);
 
             foreach ($validated['details'] as $detail) {
-                $ending_date = Carbon::now()->addHours($detail['time_interval'] * $detail['fc']);
-
-
                 $prescriptionDetail = $prescription->prescriptionsDetails()->create([
                     'description' => $detail['description'],
-                    'fc' => $detail['fc'],
                     'drug_id' => $detail['drug_id'],
-                    'time_interval' => $detail['time_interval'],
-                    'ending_date' => $ending_date,
                     'active' => true,
                 ]);
                 $prescriptionDetail->save();
             }
-
             DB::commit();
 
             return redirect()->route('prescriptions.index')->with('toast', 'Receta creada correctamente.');

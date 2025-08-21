@@ -295,7 +295,6 @@ import { markRaw } from 'vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import PhoneInput from '@/Components/PhoneInput.vue';
 import DNIInput from '@/Components/DNIInput.vue';
-const toast = useToast();
 export default {
     props: {
         errors: [Array, Object],

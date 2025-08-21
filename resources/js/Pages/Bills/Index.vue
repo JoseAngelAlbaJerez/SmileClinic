@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Cuentas Por Cobrar" />
+    <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -12,15 +12,22 @@
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
+                    <div class="my-2 flex lg:mx-10  gap-2 items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-
+                        <button @click="print()"
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                            <PrintIcon />
+                        </button>
                         <!-- Espacio flexible para separar TableDropDown de la derecha -->
                         <div class="flex ml-auto items-center gap-2">
 
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
                                 class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
-
+                            <Link :href="route('bills.create')" as="button"
+                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
+                            <AddIcon class="size-6" />
+                            Nueva Factura
+                            </Link>
                         </div>
                     </div>
 
@@ -31,7 +38,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs text-gray-700 uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
@@ -47,16 +54,15 @@
                                                     'asc' ? '↑' :
                                                     '↓'
                                             }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('doctor_id')">Pagos
-                                            Pendientes
-                                            <span v-if="form.sortField === 'doctor_id'">{{ form.sortDirection === 'asc'
+                                        <th scope="col" class="  cursor-pointer" @click="sort('type')">Tipo:
+                                            <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
                                                 ?
                                                 '↑' :
                                                 '↓'
-                                            }}</span>
+                                                }}</span>
                                         </th>
-                                        <th scope="col " class=" cursor-pointer" @click="sort('balance')">
-                                            Balance <span v-if="form.sortField === 'balance'">{{
+                                        <th scope="col " class=" cursor-pointer" @click="sort('total')">
+                                            Total <span v-if="form.sortField === 'total'">{{
                                                 form.sortDirection ===
                                                     'asc' ?
                                                     '↑' :
@@ -69,7 +75,7 @@
                                                 === 'asc' ?
                                                 '↑' :
                                                 '↓'
-                                                }}</span></th>
+                                            }}</span></th>
 
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
@@ -88,27 +94,31 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr v-for="CXCS in CXC.data" :key="CXCS.id">
-                                        <td class="p-4  items-center">{{ CXCS.id }}</td>
-                                        <td class="p-4  items-center">{{ CXCS.patient.first_name }} {{
-                                            CXCS.patient.last_name }} </td>
+                                    <tr v-for="bill in bills.data" :key="bill.id">
+                                        <td class="p-4  items-center">{{ bill.id }}</td>
+                                        <td class="p-4  items-center">{{ bill.patient.first_name }} {{
+                                            bill.patient.last_name }} </td>
+                                        <td class="p-4  items-center">{{ bill.type }} </td>
                                         <td class="p-4  items-center">
-                                            {{ pending_payments[CXCS.id].length }}
+                                            {{ new Intl.NumberFormat('es-DO', {
+                                                style:
+                                                    'currency', currency: 'DOP'
+                                            }).format(bill.total
+                                                || 0) }}
                                         </td>
-                                        <td class="p-4  items-center">$ {{ formatNumber(CXCS.balance) }} </td>
-                                        <td class="p-4  items-center">{{ formatDate(CXCS.created_at) }}</td>
+                                        <td class="p-4  items-center">{{ formatDate(bill.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
-                                                <span :class="statusIndicatorClasses(CXCS.active)" />
-                                                <p :class="statusBadgeClasses(CXCS.active)">
-                                                    <HandThumbDown v-if="CXCS.active == 0" />
+                                                <span :class="statusIndicatorClasses(bill.active)" />
+                                                <p :class="statusBadgeClasses(bill.active)">
+                                                    <HandThumbDown v-if="bill.active == 0" />
                                                     <HandThumbUp v-else />
                                                 </p>
                                             </div>
                                         </td>
                                         <td class="p-4 items-center">
-                                            <Link :href="route('CXC.show', CXCS)" class="text-blue-500 cursor-pointer">
-                                            Abrir
+                                            <Link :href="route('bills.show', bill)"
+                                                class="text-blue-500 cursor-pointer">Abrir
                                             </Link>
                                         </td>
 
@@ -118,12 +128,12 @@
 
                                 </tbody>
                             </table>
-                            <div v-if="!CXC.data.length"
+                            <div v-if="!bills.data.length"
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
                         </div>
-                        <Pagination :pagination="CXC" :filters="form" />
+                        <Pagination :pagination="bills" :filters="form" />
                     </div>
                 </div>
             </div>
@@ -173,13 +183,16 @@
                             <SecondaryButton type="button" @click="form_modal.reset()">
                                 Limpiar
                             </SecondaryButton>
-                            <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="form.processing"
+                                :class="{ 'opacity-25': form.processing }" :is-loading="form.processing">Guardar
+                            </PrimaryButton>
                         </div>
                     </form>
+
+
+
                 </div>
             </Modal>
-            <!-- Modal -->
-
 
 
         </template>
@@ -208,22 +221,17 @@ import { ref } from 'vue';
 import { markRaw } from 'vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
-import CashIcon from '@/Components/Icons/CashIcon.vue';
+import CartIcon from '@/Components/Icons/CartIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import EditIcon from '@/Components/Icons/EditIcon.vue';
-import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
-import DangerButton from '@/Components/DangerButton.vue';
-import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
-
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 export default {
 
     props: {
-        CXC: Object,
+        bills: Object,
         filters: Object,
         errors: [Array, Object],
-        pending_payments: Object
     },
     components: {
         Head,
@@ -236,7 +244,7 @@ export default {
         LastDaysFilter,
         Breadcrumb,
         TableIcon,
-        CashIcon,
+        CartIcon,
         AddIcon,
         UserIcon,
         DocumentMoney,
@@ -244,17 +252,16 @@ export default {
         PrimaryButton,
         SecondaryButton,
         Link,
-        EditIcon,
-        DeleteIcon,
-        DangerButton,
-        RestoreIcon,
+        PrintIcon
+
+
     },
 
     data() {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'c_x_c_s.updated_at',
+                sortField: this.filters?.sortField || 'bills.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '1',
@@ -262,12 +269,10 @@ export default {
             },
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(CashIcon), label: 'Cuentas Por Cobrar', to: route('CXC.index') },
+                { icon: markRaw(DocumentMoney), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showModal: ref(false),
-            showDetailModal: ref(false),
-            selectedExpense: ref(null),
             form_modal: useForm({
                 description: '',
                 amount: '',
@@ -290,8 +295,30 @@ export default {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
 
+        submit() {
+            if (!this.form_modal.description) {
+                this.error = 'Por favor, ingrese la descripción del egreso.';
+                return;
+            }
+            if (!this.form_modal.amount) {
+                this.error = 'Por favor, ingrese el monto del egreso.';
+                return;
+            }
+            if (!this.form_modal.amount < 0) {
+                this.error = 'El monto debe ser mayor a 0.';
+                return;
+            }
+
+            this.error = null;
+            this.showModal = false;
+            this.form_modal.post(route('bills.store'),);
+
+        },
+        openModal() {
 
 
+            this.showModal = true;
+        },
         statusBadgeClasses(status) {
             return {
                 1: "bg-green-200 text-green-700 px-2 py-1 rounded",
@@ -314,7 +341,7 @@ export default {
 
                 this.form.lastDays = this.filters.lastDays || '1',
                     this.form.search = this.filters.search || '',
-                    this.$inertia.get(route('CXC.index'), this.form, {
+                    this.$inertia.get(route('bills.index'), this.form, {
                         preserveState: true,
                         preserveScroll: true,
                         replace: true
@@ -327,19 +354,17 @@ export default {
             this.submitFilters();
         },
         toggleShowDeleted() {
+
             this.form.showDeleted = !this.form.showDeleted;
+
             this.submitFilters();
+
         },
-        deleteExpense(id) {
-            this.showDetailModal = false;
-            this.$inertia.delete(route('CXC.destroy', id),);
-        },
-        restoreExpense(id) {
-            this.showDetailModal = false;
-            this.$inertia.put(route('CXC.update', id),
-                { active: true },
-            );
-        },
+        async print() {
+            window.open(route('report.bills', {
+                Days: this.filters.lastDays
+            }), '_blank');
+        }
 
 
     }

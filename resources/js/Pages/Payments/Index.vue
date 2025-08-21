@@ -86,7 +86,7 @@
                                         </th>
 
 
-                                        <th scope="col" class=" ">Acciones</th>
+                                        <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -69,7 +69,7 @@
                                         completo:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.first_name }} {{
                                         patient.last_name
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -90,7 +90,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -236,12 +236,9 @@
                                                 <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
                                                 <span>Dr. {{ prescription.doctor.name }} {{
                                                     prescription.doctor.last_name
-                                                }}</span>
+                                                    }}</span>
                                             </div>
-                                            <div class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
-                                                <ClockIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                <span>Válida hasta: {{ formatDate(prescription.ending_date) }}</span>
-                                            </div>
+
                                         </div>
 
                                         <!-- Acordeón para medicamentos -->
@@ -270,18 +267,11 @@
                                                                 <p class="text-sm text-gray-600 dark:text-gray-300">{{
                                                                     detail.drugs.description }}</p>
                                                                 <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
-                                                                    <div>
-                                                                        <span class="font-medium">Frecuencia:</span>
-                                                                        <span>{{ detail.fc }} veces al día</span>
-                                                                    </div>
-                                                                    <div>
-                                                                        <span class="font-medium">Intervalo:</span>
-                                                                        <span>Cada {{ detail.time_interval }}
-                                                                            horas</span>
-                                                                    </div>
+
+
                                                                     <div class="col-span-2">
-                                                                        <span class="font-medium">Instrucciones:</span>
-                                                                        <span>{{ detail.description }}</span>
+                                                                        <span class="font-medium">Instrucciones: </span>
+                                                                        <span> {{ detail.description }}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -296,9 +286,9 @@
                                 <!-- Acciones -->
                                 <div
                                     class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-600">
-                                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                                        <span v-if="prescription.active">Activa</span>
-                                        <span v-else>Inactiva</span>
+                                    <div class="text-x text-gray-500 dark:text-gray-400">
+                                        <span v-if="prescription.active" class="text-green-500">Activa</span>
+                                        <span v-else class="text-red-500">Inactiva</span>
                                     </div>
 
                                     <div class="flex gap-2">
@@ -375,17 +365,6 @@
                                                     class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                                                     Presupuesto #{{ budget.id }}
                                                 </h3>
-                                                <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
-                                                    :class="{
-                                                        'bg-green-500  ': budget.type === 'Contado' || budget.total === 0,
-                                                        'bg-red-500': budget.type === 'Credito' && budget.total > 0
-                                                    }">
-                                                    {{ budget.type === 'Contado' ? 'PAGADO' : (budget.total === 0 ?
-                                                        'PAGADO'
-                                                        :
-                                                        'PENDIENTE') }}
-                                                </span>
-
                                             </div>
 
 
@@ -402,11 +381,16 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                    <span class="font-bold">Total: {{ budget.total }}</span>
+                                                    <span class="font-bold">
+                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(budget.total
+                                                                    || 0) }}
+                                                                </span>
                                                 </div>
                                             </div>
 
@@ -425,12 +409,23 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                            }}</p>
+                                                                }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
-                                                                <span>Precio: {{ detail.amount }}</span>
+                                                                <span>
+                                                                    Precio: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(detail.amount
+                                                                    || 0) }}
+                                                                </span>
+
                                                                 <span>Descuento: {{ detail.discount }}%</span>
-                                                                <span>Total: {{ detail.total }}</span>
+                                                                 <span>
+                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(detail.total
+                                                                    || 0) }}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -445,10 +440,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="budget.emission_date">Emitido: {{
                                                 formatDate(budget.emission_date)
-                                            }}</span>
+                                                }}</span>
                                             <span v-if="budget.expiration_date"> | Vence: {{
                                                 formatDate(budget.expiration_date)
-                                            }}</span>
+                                                }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -477,6 +472,171 @@
                                 <p class="text-gray-500 dark:text-gray-400 font-medium">No hay presupuestos registrados
                                 </p>
                                 <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo presupuesto para
+                                    comenzar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </AccessGate>
+
+                <!-- Facturas -->
+                <!-- Facturas - Diseño Mejorado -->
+                <AccessGate permission="bill.view">
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <!-- Encabezado con efecto de vidrio -->
+                        <div
+                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Facturas</h2>
+                            <div class="ml-auto flex gap-2">
+
+                                <Link v-if="bills" :href="route('bills.index', { patient_id: patient.id })"
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                <EyeIcon class="size-5" />
+                                </Link>
+                                <AccessGate permission="bill.create">
+                                    <Link :href="route('bills.create')" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                    <AddIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Facturas -->
+                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
+                            <div v-for="bill in bills" :key="bill.id"
+                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+
+
+                                <!-- Contenido del Factura -->
+                                <div class="p-4">
+                                    <div class="flex items-start mb-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <h3
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    Factura #{{ bill.id }}
+                                                </h3>
+                                                <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
+                                                    :class="{
+                                                        'bg-green-500  ': bill.type === 'Contado' || bill.total === 0,
+                                                        'bg-red-500': bill.type === 'Credito' && bill.total > 0
+                                                    }">
+                                                    {{ bill.type === 'Contado' ? 'PAGADO' : (bill.total === 0 ?
+                                                        'PAGADO'
+                                                        :
+                                                        'PENDIENTE') }}
+                                                </span>
+
+                                            </div>
+
+
+                                            <!-- Info básica en columnas -->
+                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CashIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>{{ bill.type }}</span>
+                                                </div>
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>{{ formatDate(bill.created_at) }}</span>
+                                                </div>
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
+                                                        }}</span>
+                                                </div>
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                     <span class="font-bold">
+                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(bill.total
+                                                                    || 0) }}
+                                                                </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Acordeón para detalles -->
+                                            <div class="mt-3">
+                                                <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
+                                                    <summary
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                        <span>Ver tratamientos</span>
+                                                        <ChevronDownIcon
+                                                            class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
+                                                    </summary>
+                                                    <div class="mt-2 space-y-2">
+                                                        <div v-for="(detail, index) in bill.billdetail" :key="detail.id"
+                                                            class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
+                                                            <p class="font-medium">{{ index + 1 }}. {{
+                                                                detail.procedure.name
+                                                                }}</p>
+                                                            <div class="grid grid-cols-2 gap-1 text-xs">
+                                                                <span>Cantidad: {{ detail.quantity }}</span>
+                                                                <span>
+                                                                    Precio: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(detail.amount
+                                                                    || 0) }}
+                                                                </span>
+                                                                <span>Descuento: {{ detail.discount }}%</span>
+                                                                 <span>
+                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
+                                                                        style:
+                                                                    'currency', currency: 'DOP' }).format(detail.total
+                                                                    || 0) }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </details>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Acciones -->
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-600">
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            <span v-if="bill.emission_date">Emitido: {{
+                                                formatDate(bill.emission_date)
+                                                }}</span>
+                                            <span v-if="bill.expiration_date"> | Vence: {{
+                                                formatDate(bill.expiration_date)
+                                                }}</span>
+                                        </div>
+
+                                        <div class="flex gap-2">
+                                            <Link v-if="bill.active" :href="route('bills.edit', bill)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
+                                            <EditIcon class="size-4" />
+                                            </Link>
+                                            <DangerButton v-if="bill.active" @click="deletebill(bill)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
+                                                <DeleteIcon class="size-4" />
+                                            </DangerButton>
+                                            <button v-else @click="restorebill(bill)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <RestoreIcon class="size-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje cuando no hay Facturas -->
+                        <div v-if="!bills.length" class="text-center py-6">
+                            <div class="inline-flex flex-col items-center">
+                                <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Facturas registrados
+                                </p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Factura para
                                     comenzar
                                 </p>
                             </div>
@@ -546,7 +706,7 @@
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -599,18 +759,18 @@
                 </AccessGate>
             </div>
             <AccessGate permission="odontograph.view">
-            <div class="space-y-6">
-                <!-- Encabezado Mejorado -->
-                <div
-                    class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-full">
-                            <TeethIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div class="space-y-6">
+                    <!-- Encabezado Mejorado -->
+                    <div
+                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-full">
+                                <TeethIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Odontogramas</h1>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Odontogramas</h1>
-                    </div>
 
-                    <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
 
                             <div class="relative flex-grow lg:w-96 sm:w-64">
                                 <SearchIcon
@@ -620,209 +780,216 @@
                                     class="w-full pl-10 pr-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             </div>
 
-                        <div class="flex gap-2">
-                            <AccessGate permission="odontograph.delete">
-                                <button @click="toggleshowDeleted()"
-                                    class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-blue-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-blue-600 transition-all sm:text-hidden">
-                                    <DeleteIcon class="w-5 h-5" />
-                                    <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar' }}
-                                        Eliminados</span>
-                                </button>
-                            </AccessGate>
+                            <div class="flex gap-2">
+                                <AccessGate permission="odontograph.delete">
+                                    <button @click="toggleshowDeleted()"
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-blue-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-blue-600 transition-all sm:text-hidden">
+                                        <DeleteIcon class="w-5 h-5" />
+                                        <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
+                                            }}
+                                            Eliminados</span>
+                                    </button>
+                                </AccessGate>
+                                <AccessGate permission="odontograph.create">
+                                    <Link v-if="patient.active" :href="route('odontographs.create', patient)"
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                    <AddIcon class="w-5 h-5" />
+                                    <span class="lg:inline sm:hidden">Nuevo Odontograma</span>
+                                    </Link>
+                                </AccessGate>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Odontogramas -->
+                    <div class="space-y-4">
+                        <div v-for="item in odontograph" :key="item.id"
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
+                            <!-- Encabezado del Odontograma -->
+                            <div
+                                class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                            <DocumentTextIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <div>
+                                            <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
+                                                item.id
+                                                }}</h2>
+                                            <div
+                                                class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <UserIcon class="w-4 h-4" />
+                                                <span>Dr. {{ item.doctor.name }} {{ item.doctor.last_name }}</span>
+                                                <span class="mx-1">•</span>
+                                                <CalendarIcon class="w-4 h-4" />
+                                                <span>{{ formatDate(item.created_at) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex gap-2">
+                                        <Link v-if="item.active" :href="route('odontographs.edit', item)"
+                                            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                                            title="Editar">
+                                        <EditIcon class="w-5 h-5" />
+                                        </Link>
+
+                                        <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
+                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
+                                            title="Eliminar">
+                                            <DeleteIcon class="w-5 h-5" />
+                                        </DangerButton>
+
+                                        <button v-else @click="restoreOdontograph(item)"
+                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
+                                            title="Restaurar">
+                                            <RestoreIcon class="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Visualización del Odontograma -->
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">PROCEDIMIENTOS
+                                    REGISTRADOS
+                                </h3>
+
+                                <!-- Odontograma Superior -->
+                                <div class="mb-6">
+                                    <div class="grid grid-cols-16 gap-1.5 mb-2">
+                                        <div v-for="tooth in upperTeeth" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="{
+                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
+                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                            }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <template v-if="item.data[tooth]">
+                                                    <span
+                                                        v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
+                                                            'bg-gray-800 dark:bg-gray-200': zone.charAt(0) === 'O',
+                                                            'bg-red-500': zone.charAt(0) === 'D',
+                                                            'bg-green-500': zone.charAt(0) === 'M',
+                                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                                        }" :title="`${zone}: ${proc}`"></span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Odontograma Inferior -->
+                                <div>
+                                    <div class="grid grid-cols-16 gap-1.5">
+                                        <div v-for="tooth in lowerTeeth" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="{
+                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
+                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                            }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <template v-if="item.data[tooth]">
+                                                    <span
+                                                        v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
+                                                            'bg-gray-800 dark:bg-gray-200': zone.charAt(0) === 'O',
+                                                            'bg-red-500': zone.charAt(0) === 'D',
+                                                            'bg-green-500': zone.charAt(0) === 'M',
+                                                            'bg-yellow-500': zone.charAt(0) === 'L',
+                                                            'bg-purple-500': zone.charAt(0) === 'V',
+                                                        }" :title="`${zone}: ${proc}`"></span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado vacío -->
+                        <div v-if="!odontograph.length"
+                            class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
+                            <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
+                            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron
+                                odontogramas
+                            </h3>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
+                                No hay registros de odontogramas para este paciente. Crea uno nuevo para comenzar.
+                            </p>
                             <AccessGate permission="odontograph.create">
                                 <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                    class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
                                 <AddIcon class="w-5 h-5" />
-                                <span class="lg:inline sm:hidden">Nuevo Odontograma</span>
+                                <span>Crear primer odontograma</span>
                                 </Link>
                             </AccessGate>
                         </div>
                     </div>
-                </div>
 
-                <!-- Lista de Odontogramas -->
-                <div class="space-y-4">
-                    <div v-for="item in odontograph" :key="item.id"
-                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
-                        <!-- Encabezado del Odontograma -->
-                        <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                                        <DocumentTextIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <!-- Modal de Detalle del Diente -->
+                    <div v-if="selectedToothInfo && selectedOdontograph"
+                        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity">
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md transform transition-all">
+                            <div
+                                class="p-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+                                    {{ toothNames[selectedToothInfo.tooth] || selectedToothInfo.tooth }}
+                                </h2>
+                                <button @click="closeToothDetail"
+                                    class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                                    <XIcon class="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            <div class="p-5 space-y-3">
+                                <div v-for="(proc, zone) in selectedToothInfo.zones" :key="zone"
+                                    class="flex items-start gap-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                    <div class="flex-shrink-0">
+                                        <span
+                                            class="flex items-center justify-center w-8 h-8 rounded-full text-white font-bold"
+                                            :class="{
+                                                'bg-gray-800': zone.charAt(0) === 'O',
+                                                'bg-red-500': zone.charAt(0) === 'D',
+                                                'bg-green-500': zone.charAt(0) === 'M',
+                                                'bg-yellow-500': zone.charAt(0) === 'L',
+                                                'bg-purple-500': zone.charAt(0) === 'V',
+                                            }">
+                                            {{ zone.charAt(0) }}
+                                        </span>
                                     </div>
                                     <div>
-                                        <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{ item.id
-                                        }}</h2>
-                                        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <UserIcon class="w-4 h-4" />
-                                            <span>Dr. {{ item.doctor.name }} {{ item.doctor.last_name }}</span>
-                                            <span class="mx-1">•</span>
-                                            <CalendarIcon class="w-4 h-4" />
-                                            <span>{{ formatDate(item.created_at) }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex gap-2">
-                                    <Link v-if="item.active" :href="route('odontographs.edit', item)"
-                                        class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
-                                        title="Editar">
-                                    <EditIcon class="w-5 h-5" />
-                                    </Link>
-
-                                    <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
-                                        class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
-                                        title="Eliminar">
-                                        <DeleteIcon class="w-5 h-5" />
-                                    </DangerButton>
-
-                                    <button v-else @click="restoreOdontograph(item)"
-                                        class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
-                                        title="Restaurar">
-                                        <RestoreIcon class="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Visualización del Odontograma -->
-                        <div class="p-4">
-                            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">PROCEDIMIENTOS
-                                REGISTRADOS
-                            </h3>
-
-                            <!-- Odontograma Superior -->
-                            <div class="mb-6">
-                                <div class="grid grid-cols-16 gap-1.5 mb-2">
-                                    <div v-for="tooth in upperTeeth" :key="tooth"
-                                        @click="selectToothInView(item, tooth)"
-                                        class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
-                                        :class="{
-                                            'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                            'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
-                                        }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
-                                        <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
-                                        <div class="flex justify-center gap-1 mt-1">
-                                            <template v-if="item.data[tooth]">
-                                                <span
-                                                    v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                    :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
-                                                        'bg-gray-800': zone.charAt(0) === 'O',
-                                                        'bg-red-500': zone.charAt(0) === 'D',
-                                                        'bg-green-500': zone.charAt(0) === 'M',
-                                                        'bg-yellow-500': zone.charAt(0) === 'L',
-                                                        'bg-purple-500': zone.charAt(0) === 'V',
-                                                    }" :title="`${zone}: ${proc}`"></span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="text-gray-400 text-xs">—</span>
-                                            </template>
-                                        </div>
+                                        <h4 class="font-medium text-gray-800 dark:text-white">{{ zone }}</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ proc }}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Odontograma Inferior -->
-                            <div>
-                                <div class="grid grid-cols-16 gap-1.5">
-                                    <div v-for="tooth in lowerTeeth" :key="tooth"
-                                        @click="selectToothInView(item, tooth)"
-                                        class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
-                                        :class="{
-                                            'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                            'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
-                                        }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
-                                        <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
-                                        <div class="flex justify-center gap-1 mt-1">
-                                            <template v-if="item.data[tooth]">
-                                                <span
-                                                    v-for="([zone, proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                    :key="zone" class="inline-block w-3 h-3 rounded-full" :class="{
-                                                        'bg-gray-800': zone.charAt(0) === 'O',
-                                                        'bg-red-500': zone.charAt(0) === 'D',
-                                                        'bg-green-500': zone.charAt(0) === 'M',
-                                                        'bg-yellow-500': zone.charAt(0) === 'L',
-                                                        'bg-purple-500': zone.charAt(0) === 'V',
-                                                    }" :title="`${zone}: ${proc}`"></span>
-                                            </template>
-                                            <template v-else>
-                                                <span class="text-gray-400 text-xs">—</span>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                                <button @click="closeToothDetail"
+                                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    Cerrar
+                                </button>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Estado vacío -->
-                    <div v-if="!odontograph.length"
-                        class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
-                        <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
-                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron odontogramas
-                        </h3>
-                        <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
-                            No hay registros de odontogramas para este paciente. Crea uno nuevo para comenzar.
-                        </p>
-                        <AccessGate permission="odontograph.create">
-                            <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
-                            <AddIcon class="w-5 h-5" />
-                            <span>Crear primer odontograma</span>
-                            </Link>
-                        </AccessGate>
-                    </div>
-                </div>
-
-                <!-- Modal de Detalle del Diente -->
-                <div v-if="selectedToothInfo && selectedOdontograph"
-                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity">
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md transform transition-all">
-                        <div
-                            class="p-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-                                {{ toothNames[selectedToothInfo.tooth] || selectedToothInfo.tooth }}
-                            </h2>
-                            <button @click="closeToothDetail"
-                                class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
-                                <XIcon class="w-6 h-6" />
-                            </button>
-                        </div>
-
-                        <div class="p-5 space-y-3">
-                            <div v-for="(proc, zone) in selectedToothInfo.zones" :key="zone"
-                                class="flex items-start gap-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                <div class="flex-shrink-0">
-                                    <span
-                                        class="flex items-center justify-center w-8 h-8 rounded-full text-white font-bold"
-                                        :class="{
-                                            'bg-gray-800': zone.charAt(0) === 'O',
-                                            'bg-red-500': zone.charAt(0) === 'D',
-                                            'bg-green-500': zone.charAt(0) === 'M',
-                                            'bg-yellow-500': zone.charAt(0) === 'L',
-                                            'bg-purple-500': zone.charAt(0) === 'V',
-                                        }">
-                                        {{ zone.charAt(0) }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium text-gray-800 dark:text-white">{{ zone }}</h4>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ proc }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-5 border-t border-gray-200 dark:border-gray-700 flex justify-end">
-                            <button @click="closeToothDetail"
-                                class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                Cerrar
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
             </AccessGate>
         </div>
     </AuthenticatedLayout>
@@ -868,6 +1035,7 @@ export default {
     props: {
         patient: Object,
         odontograph: Object,
+        bills: Object,
         filters: Object,
         events: Object,
         budgets: Object,
@@ -1038,8 +1206,6 @@ export default {
         restoreEvent(id) {
             this.$inertia.put(route('events.update', id),
                 { active: true },
-
-
             );
         },
         AttendEvent(event) {
@@ -1054,24 +1220,17 @@ export default {
         restoreBudgetDetail(id) {
             this.$inertia.put(route('budgetDetails.update', id),
                 { active: true },
-
-
             );
         },
         toggleshowDeleted() {
-
             this.form.showDeleted = !this.form.showDeleted;
-
             this.submitFilters();
-
         },
         submitFilters() {
             if (this.timeout) {
                 clearTimeout(this.timeout);
             }
-
             this.form.search = this.filters.search
-
             this.timeout = setTimeout(() => {
                 this.$inertia.get(route('patients.show', this.patient), this.form, {
                     preserveState: true,

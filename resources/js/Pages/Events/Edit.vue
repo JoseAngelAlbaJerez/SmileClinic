@@ -1,136 +1,161 @@
 <template>
     <AuthenticatedLayout>
         <template #header>
-
             <Breadcrumb :crumbs="crumbs" />
-
         </template>
-        <template #default class="h-full bg-gray-50 dark:bg-gray-900 dark:text-white py-12">
-            <div class="max-w-4xl mt-5 mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-10">
 
-
-
-                <form @submit.prevent="submit" class="gap-x-8 gap-y-6 space-y-6">
-                    <!-- Title -->
-                    <div>
-                        <label for="title"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
-                        <div class="relative">
-                            <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                style="pointer-events: none;" />
-                            <input v-model="form.title" id="title" type="text"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Título de la cita" />
-                        </div>
-                        <p v-if="errors.title" class="mt-1 text-xs text-red-600">{{ errors.title }}</p>
-                    </div>
-                    <!-- Doctor -->
-                    <div>
-                        <label for="doctor_id"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Doctor</label>
-                        <div @click="openUserModal()"
-                            class="block cursor-pointer w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <p v-if="form.doctor_id">{{ event.doctor.name }} {{ event.doctor.last_name }}
-                            </p>
-                            <p v-else>Seleccionar Doctor</p>
+        <template #default>
+            <div class=" dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8 ">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Form Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg ">
+                        <!-- Form Header -->
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4 rounded-t-xl">
+                            <h2 class="text-xl font-bold text-white">Nueva Cita Médica</h2>
+                            <p class="text-blue-100 text-sm">Complete los detalles de la cita</p>
                         </div>
 
+                        <!-- Form Content -->
+                        <form @submit.prevent="submit" class="space-y-6 p-6">
+                            <!-- Title -->
+                            <div class="space-y-1">
+                                <label for="title"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Título <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <EditIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.title" id="title" type="text"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Ej: Consulta de rutina" />
+                                </div>
+                                <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.title
+                                    }}</p>
+                            </div>
 
+                            <!-- Doctor & Patient Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Doctor -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Doctor <span class="text-red-500">*</span>
+                                    </label>
+                                    <div @click="openUserModal()"
+                                        class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                        <p v-if="form.doctor_id" class="truncate">
+                                            {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                        </p>
+                                        <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Doctor</p>
+                                    </div>
+                                    <p v-if="errors.doctor_id" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                        errors.doctor_id }}</p>
+                                </div>
 
-                        <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.doctor_id }}</p>
+                                <!-- Patient -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Paciente <span class="text-red-500">*</span>
+                                    </label>
+                                    <div @click="openPatientModal()"
+                                        class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                        <p v-if="form.patient_id" class="truncate">
+                                            {{ selected_patient.first_name }} {{ selected_patient.last_name }}
+                                        </p>
+                                        <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Paciente</p>
+                                    </div>
+                                    <p v-if="errors.patient_id" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                        errors.patient_id }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Date & Time Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Date -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Fecha <span class="text-red-500">*</span>
+                                    </label>
+                                    <VueDatePicker
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Seleccione la fecha" v-model="form.date"
+                                        :enable-time-picker="false" />
+                                </div>
+
+                                <!-- Time Range -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Horario <span class="text-red-500">*</span>
+                                    </label>
+                                    <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
+                                        :time-picker="true" :format="timeFormat" :is-24="true"
+                                        format="HH:mm" :enable-time-picker="true" placeholder="Seleccione horario"
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200" />
+                                </div>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div v-if="error"
+                                class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                <div class="flex items-center text-red-600 dark:text-red-400">
+
+                                    <span>{{ error }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <SecondaryButton type="button" @click="form.reset(); timeRange = []"
+                                    class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
+
+                                    Limpiar
+                                </SecondaryButton>
+                                <PrimaryButton type="submit" :disabled="form.processing"
+                                    :class="{ 'opacity-75': form.processing }"
+                                    class="hover:bg-blue-600 transition duration-200">
+
+                                    <span v-if="form.processing">Guardando...</span>
+                                    <span v-else>Guardar Cita</span>
+                                </PrimaryButton>
+                            </div>
+                        </form>
                     </div>
-                    <!-- Paciente -->
-                    <div>
-                        <label for="patient_id"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paciente</label>
-
-                        <div @click="openPatientModal()"
-                            class="block cursor-pointer  w-full text-left px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
-                            <p v-if="form.patient_id">{{ event.patient.first_name }} {{ event.patient.last_name }}
-                            </p>
-                            <p v-else>Seleccionar Paciente</p>
-                        </div>
-
-
-
-                        <p v-if="errors.ars" class="mt-1 text-xs text-red-600">{{ errors.patient_id }}</p>
-                    </div>
-
-                    <!-- Date -->
-                    <div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Fecha:</label>
-
-                            <VueDatePicker
-                                class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                placeholder="Seleccione la fecha" v-model="form.date" />
-                        </div>
-                    </div>
-
-                    <!-- starttime -->
-                    <div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Hora de Inicio:</label>
-
-                            <VueDatePicker v-model="form.starttime" model-type="format" :time-picker="true"
-                                :is-24="true" :minutes-increment="5" format="HH:mm"
-                                placeholder="Seleccione hora de inicio"
-                                class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
-
-                        </div>
-                    </div>
-                    <!-- endtime-->
-                    <div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                                for="select-item">Hora de Finalización:</label>
-
-                            <VueDatePicker v-model="form.endtime" model-type="format" :time-picker="true" :is-24="true"
-                                :minutes-increment="5" format="HH:mm" placeholder="Seleccione hora de finalización"
-                                class="border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white" />
-
-                        </div>
-                    </div>
-                    <!-- Error general -->
-                    <div v-if="error" class="mb-6 text-red-600 font-medium">
-                        {{ error }}
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                        <SecondaryButton type="button" @click="form.reset()">
-                            Limpiar
-                        </SecondaryButton>
-                        <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
-                    </div>
-                </form>
+                </div>
             </div>
 
-
-            <!-- Modal -->
-            <Modal :show="showUserModal" @close="showUserModal = false" class="lg:max-w-2xl">
-                <div class="text-gray-800 p-12 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Seleccionar Doctor
-                    </h2>
+            <!-- Doctor Selection Modal -->
+            <Modal :show="showUserModal" @close="showUserModal = false" maxWidth="2xl">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                            <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                            Seleccionar Doctor
+                        </h3>
+                        <button @click="showUserModal = false" class="text-gray-400 hover:text-gray-500">
+                            <XIcon class="h-6 w-6" />
+                        </button>
+                    </div>
                     <UserSelector :users="doctors"
-                        @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false">
-                    </UserSelector>
-
+                        @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false" />
                 </div>
             </Modal>
-            <!-- Modal -->
-            <Modal :show="showPatientModal" @close="showPatientModal = false" class="lg:max-w-2xl">
-                <div class="text-gray-800 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Seleccionar Paciente
-                    </h2>
 
+            <!-- Patient Selection Modal -->
+            <Modal :show="showPatientModal" @close="showPatientModal = false" maxWidth="2xl">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                            <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                            Seleccionar Paciente
+                        </h3>
+                        <button @click="showPatientModal = false" class="text-gray-400 hover:text-gray-500">
+                            <XIcon class="h-6 w-6" />
+                        </button>
+                    </div>
                     <PatientSelector :patients="patients"
                         @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
                 </div>
@@ -160,6 +185,8 @@ import Modal from '@/Components/Modal.vue';
 import PatientSelector from '@/Components/PatientSelector.vue';
 import { markRaw } from 'vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
+import EditIcon from '@/Components/Icons/EditIcon.vue';
+import XIcon from '@/Components/Icons/XIcon.vue';
 export default {
     props: {
         errors: [Array, Object],
@@ -184,7 +211,9 @@ export default {
         UserSelector,
         Modal,
         PatientSelector,
-        CalendarIcon
+        CalendarIcon,
+        EditIcon,
+        XIcon
 
     },
     data() {
@@ -194,26 +223,43 @@ export default {
                 title: this.event.title,
                 doctor_id: this.event.doctor_id,
                 patient_id: this.event.patient_id,
-
                 starttime: this.event.starttime,
                 endtime: this.event.endtime,
                 date: this.event.date,
-
-
             }),
             error: '',
+            timeRange: [],
+            timeFormat: 'HH:mm',
             showUserModal: ref(false),
             showPatientModal: ref(false),
-            selected_patient: '',
-            selected_doctor: '',
-              crumbs: [
-                {icon: markRaw(CalendarIcon),  label: 'Citas', to: route('events.index') },
-                {icon: markRaw(UserIcon), label: this.event.patient.first_name + ' ' + this.event.patient.last_name, to: route('patients.show',this.event.patient) },
-                {  label: 'Editar' },
+            selected_patient: this.event.patient,
+            selected_doctor: this.event.doctor,
+            crumbs: [
+                { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
+                { icon: markRaw(UserIcon), label: this.event.patient.first_name + ' ' + this.event.patient.last_name, to: route('patients.show', this.event.patient) },
+                { label: 'Editar' },
             ]
         };
     },
     methods: {
+          onTimeRangeChange(range) {
+            if (Array.isArray(range) && range.length === 2) {
+                this.form.starttime = range[0];
+                this.form.endtime = range[1];
+            } else {
+                this.form.starttime = null;
+                this.form.endtime = null;
+            }
+             const formatTime = (time) => {
+                const h = time.hours.toString().padStart(2, '0');
+                const m = time.minutes.toString().padStart(2, '0');
+                return `${h}:${m}`;
+            };
+               this.form.starttime = formatTime(this.form.starttime);
+            this.form.endtime = formatTime(this.form.endtime);
+
+        },
+
         openUserModal() {
             this.showUserModal = true;
         },
@@ -221,6 +267,7 @@ export default {
             this.showPatientModal = true;
         },
         submit() {
+
             if (!this.form.title) {
                 this.error = 'Por favor, Ingrese un título.';
                 return;
@@ -241,20 +288,17 @@ export default {
                 this.error = 'Por favor, seleccione una hora de finalización.';
                 return;
             }
+
             if (this.form.starttime > this.form.endtime) {
-                this.error = 'La hora finalización debe ser despues de la hora de inicio';
+                this.error = 'La hora de finalización debe ser después de la hora de inicio';
                 return;
-            };
-
-
+            }
             this.error = null;
-
             this.form.date = this.formatDate(this.form.date);
-
-            this.form.put(route('events.update',this.event));
+            this.form.put(route('events.update', this.event));
 
         },
-        formatDate(date) {
+         formatDate(date) {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },

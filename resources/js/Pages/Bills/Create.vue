@@ -11,7 +11,7 @@
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
                         <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-                            <h2 class="text-xl font-bold text-white">Editar Presupuesto </h2>
+                            <h2 class="text-xl font-bold text-white">Nueva Factura</h2>
                             <p class="text-blue-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
@@ -37,6 +37,20 @@
                                     </p>
                                 </div>
 
+                                <!-- Document Type -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Tipo <span class="text-red-500">*</span>
+                                    </label>
+                                    <select v-model="form.type"
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <option value="Contado">Contado</option>
+                                        <option value="Crédito">Crédito</option>
+                                    </select>
+                                    <p v-if="errors.type" class="mt-1 text-xs text-red-600 dark:text-red-400">
+                                        {{ errors.type }}
+                                    </p>
+                                </div>
 
                                 <!-- Emission Date -->
                                 <div class="space-y-1">
@@ -248,8 +262,12 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Total: <span class="text-blue-600 dark:text-blue-400">{{ formatNumber(form.total)
-                                    }}</span>
+                                    Total: <span class="text-blue-600 dark:text-blue-400">{{ new
+                                        Intl.NumberFormat('es-DO', {
+                                            style:
+                                                'currency', currency: 'DOP'
+                                        }).format(form.total
+                                            || 0) }}</span>
                                 </div>
 
                                 <!-- Form Actions -->
@@ -266,7 +284,7 @@
                                         class="hover:bg-blue-600 transition duration-200">
 
                                         <span v-if="form.processing || form_detail.processing">Guardando...</span>
-                                        <span v-else>Guardar Documento</span>
+                                        <span v-else>Guardar </span>
                                     </PrimaryButton>
                                 </div>
                             </div>
@@ -340,7 +358,6 @@ export default {
     props: {
         patient: Object,
         procedure: Object,
-        budget: Object,
         errors: [Array, Object],
     },
     components: {
@@ -363,36 +380,31 @@ export default {
         DeleteIcon
 
     },
-    mounted() {
-        if (this.budget && this.budget.budgetdetail) {
-            this.selectedProcedures = this.budget.budgetdetail.map(d => d.procedure)
-        }
-    },
-
     data() {
         return {
             form: useForm({
-                patient_id: this.budget.patient.id,
+                patient_id: '',
                 type: 'Contado',
                 emission_date: new Date(),
-                expiration_date: this.budget.expiration_date,
-                total: this.budget.total,
+                expiration_date: '',
+                total: '',
             }),
-            form_details: this.budget.budgetdetail.map(detail => useForm({
-                procedure_id: detail.procedure?.id || '',
-                amount: detail?.amount || '',
-                total: detail?.total || '',
-                treatment: detail.treatment,
-                discount: detail.discoun,
-                quantity: 1
-            })),
+            form_detail: useForm({
+                procedure_id: '',
+                amount: '',
+                total: '',
+                treatment: '',
+                discount: 0,
+                quantity: '',
 
-            budget_id: this.budget.id,
+
+            }),
+            bill_id: '',
             form_details: [],
-            selected_patient: this.budget.patient,
+            selected_patient: '',
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Presupuestos', to: route('budgets.index') },
+                { icon: markRaw(DocumentMoney), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(AddIcon), label: 'Crear' },
 
             ],
@@ -400,9 +412,7 @@ export default {
             showPatientModal: ref(false),
             error: '',
             selectedProcedureId: '',
-            selectedProcedures: this.budget.budgetdetail.map(detail => detail.procedure)
-
-
+            selectedProcedures: [],
         };
 
     },
@@ -513,14 +523,14 @@ export default {
                 details: this.form_details,
             };
 
-            axios.post(route('budgets.update'), data)
+            axios.post(route('bills.store'), data)
                 .then(response => {
-                    const budgetId = response.data.budget_id;
+                    const billId = response.data.bill_id;
 
-                    if (budgetId) {
-                        window.open(route('report.budget', { budget: budgetId }), '_blank');
+                    if (billId) {
+                        window.open(route('report.bill', { bill: billId }), '_blank');
                     }
-                    window.location.href = route('budgets.show', { budget: budgetId });
+                    window.location.href = route('bills.show', { bill: billId });
                 })
                 .catch(error => {
                     if (error.response?.status === 422) {

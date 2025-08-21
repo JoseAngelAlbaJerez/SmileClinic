@@ -89,7 +89,7 @@
                                     Horario <span class="text-red-500">*</span>
                                 </label>
                                 <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
-                                    :time-picker="true" :format="timeFormat" :is-24="true" :minutes-increment="5"
+                                    :time-picker="true" :format="timeFormat" :is-24="true"
                                     format="HH:mm" :enable-time-picker="true" placeholder="Seleccione horario"
                                     class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200" />
                             </div>
@@ -183,7 +183,6 @@ import PatientSelector from '@/Components/PatientSelector.vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import { markRaw } from 'vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
-import dayjs from 'dayjs';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
 export default {
@@ -223,9 +222,8 @@ export default {
                 attended: false,
                 starttime: '',
                 endtime: '',
-                date: '',
+                date: new Date(),
                 active: true,
-
             }),
             timeRange: [],
             timeFormat: 'HH:mm',
@@ -280,10 +278,7 @@ export default {
                 this.error = 'Por favor, seleccione una hora de finalización.';
                 return;
             }
-            if (this.form.starttime > this.form.endtime) {
-                this.error = 'La hora finalización debe ser despues de la hora de inicio';
-                return;
-            };
+
             const formatTime = (time) => {
                 const h = time.hours.toString().padStart(2, '0');
                 const m = time.minutes.toString().padStart(2, '0');

@@ -61,8 +61,25 @@ watchEffect(() => {
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
-                                <ApplicationLogo
-                                    class="block h-9 w-auto fill-current text-blue-500 dark:text-blue-200" />
+                                <div class="flex justify-center ">
+                                    <svg class="h-8  mr-2 w-auto text-blue-500" viewBox="0 0 100 100" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z"
+                                            fill="#3B82F6" />
+                                        <path
+                                            d="M65 40C65 42.7614 62.7614 45 60 45C57.2386 45 55 42.7614 55 40C55 37.2386 57.2386 35 60 35C62.7614 35 65 37.2386 65 40Z"
+                                            fill="white" />
+                                        <path
+                                            d="M45 40C45 42.7614 42.7614 45 40 45C37.2386 45 35 42.7614 35 40C35 37.2386 37.2386 35 40 35C42.7614 35 45 37.2386 45 40Z"
+                                            fill="white" />
+                                        <path d="M30 60C30 60 35 70 50 70C65 70 70 60 70 60" stroke="white"
+                                            stroke-width="4" stroke-linecap="round" />
+                                    </svg>
+                                    <h1 class="mt-2 text-blue-500    font-thin">Smile Clinic</h1>
+
+                                </div>
+
                                 </Link>
                             </div>
 
@@ -71,26 +88,37 @@ watchEffect(() => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink  v-if="can('patient.view')" :href="route('patients.index')" :active="route().current('patients.index')">
+                                <NavLink v-if="can('patient.view')" :href="route('patients.index')"
+                                    :active="route().current('patients.index')">
                                     Pacientes
                                 </NavLink>
-                                <NavLink  v-if="can('event.view')" :href="route('events.index')" :active="route().current('events.index')">
+                                <NavLink v-if="can('event.view')" :href="route('events.index')"
+                                    :active="route().current('events.index')">
                                     Citas
                                 </NavLink>
-                                <NavLink  v-if="can('budget.view')" :href="route('budgets.index')" :active="route().current('budgets.index')">
+                                <NavLink v-if="can('budget.view')" :href="route('budgets.index')"
+                                    :active="route().current('budgets.index')">
                                     Presupuestos
                                 </NavLink>
-                                  <NavLink  v-if="can('CXC.view')" :href="route('CXC.index')" :active="route().current('CXC.index')">
+                                <NavLink v-if="can('CXC.view')" :href="route('CXC.index')"
+                                    :active="route().current('CXC.index')">
                                     Cuentas por Cobrar
                                 </NavLink>
-                                <NavLink   v-if="can('expense.view')" :href="route('expenses.index')" :active="route().current('expenses.index')">
+                                <NavLink v-if="can('expense.view')" :href="route('expenses.index')"
+                                    :active="route().current('expenses.index')">
                                     Egresos
                                 </NavLink>
-                                 <NavLink  v-if="can('prescription.view')" :href="route('prescriptions.index')" :active="route().current('prescriptions.index')">
+                                <NavLink v-if="can('prescription.view')" :href="route('prescriptions.index')"
+                                    :active="route().current('prescriptions.index')">
                                     Recetas
                                 </NavLink>
-                                <NavLink  v-if="can('user.view')" :href="route('users.index')" :active="route().current('users.index')">
+                                <NavLink v-if="can('user.view')" :href="route('users.index')"
+                                    :active="route().current('users.index')">
                                     Usuarios
+                                </NavLink>
+                                <NavLink v-if="can('bill.view')" :href="route('bills.index')"
+                                    :active="route().current('bills.index')">
+                                    Facturas
                                 </NavLink>
 
                             </div>
