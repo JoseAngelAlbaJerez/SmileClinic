@@ -31,7 +31,7 @@
                             :key="zone"
                             class="inline-block w-2 h-2 rounded-full"
                             :class="{
-                                'bg-gray-800': zone === 'Oclusal',
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
                                 'bg-red-500': zone === 'Distal',
                                 'bg-green-500': zone === 'Mesial',
                                 'bg-yellow-500': zone === 'Lingual',
@@ -57,7 +57,7 @@
                                 <span
                                     class="w-3 h-3 rounded-full flex-shrink-0"
                                     :class="{
-                                        'bg-gray-800': zone === 'Oclusal',
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
                                         'bg-red-500': zone === 'Distal',
                                         'bg-green-500': zone === 'Mesial',
                                         'bg-yellow-500': zone === 'Lingual',
@@ -96,7 +96,7 @@
                             :key="zone"
                             class="inline-block w-2 h-2 rounded-full"
                             :class="{
-                                'bg-gray-800': zone === 'Oclusal',
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
                                 'bg-red-500': zone === 'Distal',
                                 'bg-green-500': zone === 'Mesial',
                                 'bg-yellow-500': zone === 'Lingual',
@@ -122,7 +122,7 @@
                                 <span
                                     class="w-3 h-3 rounded-full flex-shrink-0"
                                     :class="{
-                                        'bg-gray-800': zone === 'Oclusal',
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
                                         'bg-red-500': zone === 'Distal',
                                         'bg-green-500': zone === 'Mesial',
                                         'bg-yellow-500': zone === 'Lingual',
@@ -162,10 +162,10 @@
                             <button
                                 type="button"
                                 @click="selectZone('Oclusal')"
-                                class="p-2 rounded-lg border transition-colors"
+                                class="p-2 rounded-lg border transition-colors "
                                 :class="{
-                                    'bg-gray-800 text-white border-gray-800': selectedZone === 'Oclusal',
-                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Oclusal'
+                                    'bg-gray-800 text-white border-gray-800 dark:bg-gray-200 dark:text-gray-800': selectedZone === 'Oclusal',
+                                    'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-300': selectedZone !== 'Oclusal'
                                 }"
                             >
                                 Oclusal
@@ -252,6 +252,7 @@
                             <option value="Corona">Corona</option>
                             <option value="Implante">Implante</option>
                             <option value="Sellante">Sellante</option>
+                            <option value="Cariado">Cariado</option>
                         </select>
                     </div>
                 </div>
