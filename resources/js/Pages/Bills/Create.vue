@@ -273,7 +273,7 @@
                                 <!-- Form Actions -->
                                 <div class="flex space-x-3">
                                     <SecondaryButton type="button"
-                                        @click="form.reset(); form_detail.reset(); selectedProcedures = []"
+                                        @click="form.reset(); form_details = []; form_detail.reset(); selectedProcedures = []"
                                         class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
 
                                         Limpiar
@@ -468,14 +468,14 @@ export default {
 
         removeProcedure(index) {
             const detail = this.form_details[index];
-            const amount = parseFloat(detail.amount) || 0;
-            const discount = parseFloat(detail.discount) || 0;
-            const quantity = parseInt(detail.quantity) || 1;
-            const initial = parseFloat(detail.initial) || 0;
-            detail.total -= initial;
-            detail.total = (amount * quantity) - discount;
-            this.form.total = this.form.total - detail.total;
-            this.selectedProcedures.splice(index, 1);
+            this.form_details.splice(index, 1);
+            this.selectedProcedures = this.selectedProcedures.filter(
+                p => p.id !== detail.procedure_id
+            );
+            this.form.total = this.form_details.reduce((sum, detail) => {
+                return sum + (parseFloat(detail.total) || 0);
+            }, 0);
+
         },
 
         openProcedureModal() {
