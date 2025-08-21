@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Budget;
 use App\Models\Odontograph;
 use Illuminate\Http\Request;
@@ -127,12 +128,13 @@ class PatientController extends Controller implements HasMiddleware
 
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
+        $bills = Bill::where('patient_id', $patient->id)->with('doctor','patient','billdetail.procedure')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
-        $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->get();
-
+        $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
             'budgets' => $budgets,
+            'bills' => $bills,
             'events' => $events,
             'prescription' => $prescription,
             'odontograph' => $odontograph,
