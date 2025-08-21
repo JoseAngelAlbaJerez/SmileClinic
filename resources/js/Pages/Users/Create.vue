@@ -84,6 +84,73 @@
                                     errors.date_of_birth }}</p>
                             </div>
 
+                            <!-- DNI -->
+                            <div class="space-y-1">
+                                <label for="DNI"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    DNI <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <DNIInput v-model="form.DNI"
+                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                </div>
+                                <p v-if="errors.DNI" class="mt-1 text-sm text-red-600">{{ errors.DNI }}</p>
+                            </div>
+
+                            <!-- phone_number -->
+                            <div class="space-y-1">
+                                <label for="phone_number"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Teléfono <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <PhoneIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <PhoneInput v-model="form.phone_number"
+                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                </div>
+                                <p v-if="errors.phone_number" class="mt-1 text-sm text-red-600">{{
+                                    errors.phone_number }}</p>
+
+                            </div>
+                            <!-- Position -->
+                            <div class="space-y-1">
+                                <label for="position"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Posición <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <BuildingIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.position" id="position" type="text"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Posición" />
+                                </div>
+                                <p v-if="errors.position" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.position }}</p>
+                            </div>
+                            <!-- Specialty -->
+                            <div class="space-y-1">
+                                <label for="specialty"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Especialidad <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <AcademicCapIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <input v-model="form.specialty" id="specialty" type="text"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Especialidad" />
+                                </div>
+                                <p v-if="errors.specialty" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.specialty }}</p>
+                            </div>
                             <!-- Password -->
                             <div class="space-y-1">
                                 <label for="password"
@@ -172,7 +239,7 @@
                         </form>
                     </div>
                 </div>
-                </div>
+            </div>
         </template>
     </AuthenticatedLayout>
 </template>
@@ -199,6 +266,10 @@ import AddIcon from '@/Components/Icons/AddIcon.vue';
 import MailIcon from '@/Components/Icons/MailIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import LockClosedIcon from '@/Components/Icons/LockClosedIcon.vue';
+import DNIInput from '@/Components/DNIInput.vue';
+import PhoneInput from '@/Components/PhoneInput.vue';
+import AcademicCapIcon from '@/Components/Icons/AcademicCapIcon.vue';
+import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
 
 export default {
     props: {
@@ -220,7 +291,11 @@ export default {
         AddIcon,
         MailIcon,
         TextInput,
-        LockClosedIcon
+        LockClosedIcon,
+        DNIInput,
+        PhoneInput,
+        AcademicCapIcon,
+        BuildingIcon
     },
     data() {
         return {
@@ -233,6 +308,10 @@ export default {
                 password: '',
                 password_confirmation: '',
                 role: '',
+                DNI: '',
+                specialty: '',
+                position: '',
+                phone_number: '',
             }),
             error: '',
             crumbs: [
