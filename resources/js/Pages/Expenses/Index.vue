@@ -100,7 +100,12 @@
                                         <td class="p-4  items-center">{{ expense.description }} </td>
                                         <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
                                         }} </td>
-                                        <td class="p-4  items-center">$ {{ formatNumber(expense.amount) }} </td>
+                                        <td class="p-4  items-center"> <p>{{ new Intl.NumberFormat('es-DO',
+                                        {
+                                            style:
+                                                'currency', currency: 'DOP'
+                                        }).format(expense.amount
+                                            || 0) }}</p></td>
                                         <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
                                         <td class="p-4  items-center">
                                             <div class="flex items-center gap-2">
