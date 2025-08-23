@@ -81,11 +81,16 @@
 
                             <!-- Procedures Section -->
                             <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm mt-6">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center space-x-2">
+                                <div class="flex items-center  mb-4">
+                                    <div class="flex items-center  space-x-2">
                                         <DocumentIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
                                         <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
                                     </div>
+                                    <button @click="openBudgetModal()" :disabled="!selected_patient"
+                                        class=" ml-auto mr-2 flex items-center space-x-1 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                                        <AddIcon class="h-4 w-4" />
+                                        <span>Seleccionar Presupuesto</span>
+                                    </button>
                                     <button @click="openProcedureModal()"
                                         class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
                                         <AddIcon class="h-4 w-4" />
@@ -234,7 +239,12 @@
                                         <div
                                             class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-500">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Subtotal: {{ formatNumber(form_details[index].total) }}
+                                                <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
+                                        {
+                                            style:
+                                                'currency', currency: 'DOP'
+                                        }).format(form_details[index].total
+                                            || 0) }}</p>
                                             </span>
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
@@ -292,6 +302,20 @@
                     </div>
                 </div>
 
+                <!-- Budget Selection Modal -->
+                <Modal :show="showBudgetModal" @close="showBudgetModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold">Seleccionar Presupuesto</h3>
+
+                        <BudgetSelector v-if="selected_patient && selected_patient.budget.length"
+                            :budgets="selected_patient.budget" @selected="selectedBudgetId = $event.id; addBudget()" />
+
+                        <p v-else class="text-gray-500 italic">
+                            Este paciente no tiene presupuestos.
+                        </p>
+                    </div>
+                </Modal>
+
                 <!-- Procedure Selection Modal -->
                 <Modal :show="showProcedureModal" @close="showProcedureModal = false" maxWidth="2xl">
                     <div class="p-6">
@@ -323,8 +347,11 @@
                                 <XIcon class="h-6 w-6" />
                             </button>
                         </div>
-                        <PatientSelector :patients="patient"
-                            @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
+                        <PatientSelector :patients="patient" @selected="
+                            form.patient_id = $event.id;
+                        selected_patient = $event;
+                        showPatientModal = false
+                            " />
                     </div>
                 </Modal>
             </div>
@@ -353,6 +380,7 @@ import ProcedureSelector from '@/Components/ProcedureSelector.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
 import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
+import BudgetSelector from '@/Pages/Budgets/BudgetSelector.vue';
 
 export default {
     props: {
@@ -377,7 +405,8 @@ export default {
         XIcon,
         DocumentIcon,
         SearchIcon,
-        DeleteIcon
+        DeleteIcon,
+        BudgetSelector
 
     },
     data() {
@@ -409,9 +438,12 @@ export default {
 
             ],
             showProcedureModal: ref(false),
+            showBudgetModal: ref(false),
             showPatientModal: ref(false),
             error: '',
             selectedProcedureId: '',
+            selectedBudgetId: '',
+            selectBudget: {},
             selectedProcedures: [],
         };
 
@@ -480,6 +512,9 @@ export default {
 
         openProcedureModal() {
             this.showProcedureModal = true;
+        },
+        openBudgetModal() {
+            this.showBudgetModal = true;
         },
         openPatientModal() {
             this.showPatientModal = true;

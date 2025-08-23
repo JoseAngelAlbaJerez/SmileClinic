@@ -27,6 +27,19 @@ class BudgetController extends Controller
      */
     public function index(Request $request)
     {
+         if ($request->has('selector')) {
+        $budgets = Budget::with('patient')
+            ->when($request->search, fn($q, $search) =>
+                $q->whereHas('patient', fn($p) =>
+                    $p->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%'])
+                )
+            )
+            ->paginate(10);
+
+        return inertia('Budgets/BudgetSelector', [
+            'budgets' => $budgets
+        ]);
+    }
 
         $search = $request->input('search');
         $sortField = $request->input('sortField');

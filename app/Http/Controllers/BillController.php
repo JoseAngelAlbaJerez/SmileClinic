@@ -93,7 +93,7 @@ class BillController extends Controller
     }
      public function create()
     {
-        $patient = Patient::paginate(10);
+        $patient = Patient::with('budget.patient','budget.budgetdetail.procedure')->paginate(10);
         $procedure = Procedure::paginate(10);
         return Inertia::render('Bills/Create', [
             'patient' => $patient,
