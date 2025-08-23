@@ -14,7 +14,7 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
-use App\Models\Budget;
+use App\Models\Bill;
 use App\Models\BudgetDetail;
 use App\Models\Expenses;
 use App\Models\Patient;
@@ -42,11 +42,11 @@ Route::get('/dashboard', function () {
     $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
 
 
-    $incomeThisWeek = Budget::where('type', 'Contado')
+    $incomeThisWeek = Bill::where('type', 'Contado')
         ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
         ->sum('total');
 
-    $incomeLastWeek = Budget::where('type', 'Contado')
+    $incomeLastWeek = Bill::where('type', 'Contado')
         ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
         ->sum('total');
 
@@ -56,7 +56,7 @@ Route::get('/dashboard', function () {
         : 100;
 
 
-    $income = Budget::where('type', '=', 'Contado')->orderByDesc('created_at')->with('budgetdetail.procedure', 'patient')->get();
+    $income = Bill::where('type', '=', 'Contado')->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
     $income_sum = $income->sum('total');
 
 
