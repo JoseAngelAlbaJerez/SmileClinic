@@ -14,9 +14,9 @@
                             </p>
                             <AccessGate permission="event.delete">
                                 <button @click="toggleShowDeleted()"
-                                :class="showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                    :class="showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
                                     class="flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
-                                    <DeleteIcon /> {{ showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados'  }}
+                                    <DeleteIcon /> {{ showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
                                 </button>
                             </AccessGate>
                         </div>
@@ -111,7 +111,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <AccessGate permission="event.create" class="ml-auto" >
+                            <AccessGate permission="event.create" class="ml-auto">
                                 <Link :href="route('events.create')" as="button"
                                     class="flex justify-center  rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
                                 <AddIcon class="size-6" />
@@ -152,19 +152,19 @@
                                 <div v-for="day in previousMonthDays" :key="'prev-' + day"
                                     class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300 hover:bg-blue-50 dark:hover:bg-gray-600">
                                     <span class="text-xs font-semibold text-gray-400 dark:text-gray-500">{{ day
-                                        }}</span>
+                                    }}</span>
                                 </div>
 
                                 <!-- Current month days -->
                                 <div v-for="day in currentMonthDays" :key="day.date.getDate()"
-                                    @click="selectDate(day.date)"
-                                    class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-white dark:bg-gray-800 border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300 hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer relative"
-                                    :class="{
-                                        'rounded-bl-xl': day.isFirstDayOfWeek,
-                                        'rounded-br-xl': day.isLastDayOfWeek,
-                                        'bg-blue-50 dark:bg-blue-900/30': isToday(day.date),
-                                        'bg-blue-100 dark:bg-blue-800': isSelectedDate(day.date)
-                                    }">
+                                    @click="selectDate(day.date)" class="group relative flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-white dark:bg-gray-800
+         border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300
+         hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer" :class="{
+            'rounded-bl-xl': day.isFirstDayOfWeek,
+            'rounded-br-xl': day.isLastDayOfWeek,
+            'bg-blue-50 dark:bg-blue-900/30': isToday(day.date),
+            'bg-blue-100 dark:bg-blue-800': isSelectedDate(day.date)
+        }">
                                     <span class="text-xs font-semibold" :class="{
                                         'text-gray-900 dark:text-gray-100': !isToday(day.date) && !isSelectedDate(day.date),
                                         'text-blue-600 dark:text-blue-400': isToday(day.date),
@@ -173,23 +173,31 @@
                                         {{ day.date.getDate() }}
                                     </span>
 
-                                    <!-- Event indicators -->
+                                    <!-- Event indicators (dots or mini labels) -->
                                     <div v-for="event in getEventsForDate(day.date)" :key="event.id"
-                                        class="absolute top-9 bottom-1 left-3.5 p-1.5 xl:px-2.5 h-max rounded bg-blue-200 dark:bg-blue-400"
-                                        :class="getEventColorClass(event, true)">
-                                        <p
-                                            class="hidden xl:block text-xs font-medium mb-px whitespace-nowrap dark:text-white">
-                                            {{ event.title }}
+                                        class="absolute bottom-1 left-3.5 w-2 h-2 rounded-full"
+                                        :class="getEventDotColorClass(event)"></div>
+
+                                    <!-- Tooltip on hover -->
+                                    <div v-if="getEventsForDate(day.date).length" class="absolute z-50 hidden group-hover:block left-1/2 -translate-x-1/2 top-full mt-2
+           w-48 bg-white dark:bg-gray-900 shadow-lg rounded-lg p-3 border border-gray-200
+           dark:border-gray-700">
+                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2">
+                                            Citas del: {{ day.date.toDateString() }}
                                         </p>
-                                        <span
-                                            class="hidden xl:block text-xs font-normal whitespace-nowrap dark:text-gray-200">
-                                            {{ formatTime(event.start) }}<span v-if="event.end_date"> - {{
-                                                formatTime(event.end_date) }}</span>
-                                        </span>
-                                        <p class="xl:hidden w-2 h-2 rounded-full" :class="getEventDotColorClass(event)">
-                                        </p>
+                                        <div v-for="event in getEventsForDate(day.date)" :key="event.id"
+                                            class="mb-2 last:mb-0">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ event.title }}
+                                            </p>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">
+                                                {{ formatTime(event.start) }}
+                                                <span v-if="event.end_date"> - {{ formatTime(event.end_date) }}</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
+
 
                                 <!-- Next month days -->
                                 <div v-for="(day, index) in nextMonthDays" :key="'next-' + day"
@@ -199,7 +207,7 @@
                                         'rounded-br-xl': index === nextMonthDays.length - 1
                                     }">
                                     <span class="text-xs font-semibold text-gray-400 dark:text-gray-500">{{ day
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                         </div>
