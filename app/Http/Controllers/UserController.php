@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
@@ -77,6 +78,26 @@ class UserController extends Controller
             ],
         ]);
     }
+    public function filter(Request $request)
+    {
+        $filters = $request->input('filters', []);
+
+        $query = User::with('roles')
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->whereRaw("CONCAT(name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+            });
+
+        $users = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'users' => $users,
+            'filters' => $filters,
+        ]);
+    }
+
+
     public function create()
     {
         return Inertia::render("Users/Create");
@@ -153,7 +174,7 @@ class UserController extends Controller
 
         return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
     }
-     public function destroy($id)
+    public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->active = false;

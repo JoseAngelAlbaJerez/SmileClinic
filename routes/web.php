@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/patients/filter', [PatientController::class, 'filter'])->name('patients.filter');
     Route::resource('patients', PatientController::class);
     Route::resource('odontographs', OdontographController::class);
     Route::resource('events', EventController::class);
@@ -89,6 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('CXC', CXCController::class);
     Route::resource('payments', PaymentController::class);
     Route::resource('prescriptions', PrescriptionController::class);
+    Route::get('/users/filter', [UserController::class, 'filter'])->name('users.filter');
     Route::resource('users', UserController::class);
     Route::resource('drugs', DrugController::class);
     Route::resource('bills', BillController::class);
@@ -104,7 +106,6 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/prescription/{prescription}', [ReportController::class, 'prescription'])->name('report.prescription');
     Route::get('reports/expenses/{Days}', [ReportController::class, 'expenses'])->name('report.expenses');
     Route::get('reports/bill/{bill}', [ReportController::class, 'bill'])->name('report.bill');
-
 });
 
 require __DIR__ . '/auth.php';

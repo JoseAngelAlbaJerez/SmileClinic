@@ -16,9 +16,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+
 class PatientController extends Controller implements HasMiddleware
 {
- public static function middleware(): array
+    public static function middleware(): array
     {
         return [
             new Middleware('permission:patient.view', only: ['index', 'show']),
@@ -93,6 +94,31 @@ class PatientController extends Controller implements HasMiddleware
             ],
         ]);
     }
+    public function filter(Request $request)
+{
+    $filters = $request->input('filters', []);
+
+    $query = Patient::query()
+        ->when(!empty($filters['name']), function ($q) use ($filters) {
+            $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+        });
+
+    $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+    if ($request->wantsJson()) {
+        return response()->json([
+            'patients' => $patients
+        ]);
+    }
+
+    // si entras normal (con Inertia, no por axios)
+    return Inertia::render('Patients/Index', [
+        'patients' => $patients,
+        'filters'  => $filters,
+    ]);
+}
+
+
 
     public function create()
     {
@@ -119,15 +145,15 @@ class PatientController extends Controller implements HasMiddleware
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                ->orWhere('odontographs.id', $search);
+                    ->orWhere('odontographs.id', $search);
             });
         }
 
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
-        $budgets = Budget::where('patient_id', $patient->id)->with('doctor','patient','budgetdetail.procedure')->get();
-        $bills = Bill::where('patient_id', $patient->id)->with('doctor','patient','billdetail.procedure')->get();
+        $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure')->get();
+        $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
-        $prescription = Prescription::where('patient_id',$patient->id)->with('patient','doctor','prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
+        $prescription = Prescription::where('patient_id', $patient->id)->with('patient', 'doctor', 'prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
         $patient->age =  Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
