@@ -493,7 +493,7 @@
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Facturas</h2>
                             <div class="ml-auto flex gap-2">
 
-                                <Link v-if="bills" :href="route('bills.index', { patient_id: patient.id })"
+                                <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
                                     class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
@@ -656,7 +656,7 @@
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas Pendientes</h2>
                             <div class="ml-auto flex gap-2">
-                                <Link v-if="events" :href="route('events.index', { patient_id: patient.id })"
+                                <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
                                     class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
@@ -968,7 +968,7 @@
                                     </div>
 
                                     <div class="flex gap-2">
-                                        <Link v-if="item.active" :href="route('odontographs.edit', item)"
+                                        <Link v-if="item.active && patient.active" :href="route('odontographs.edit', item)"
                                             class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
                                             title="Editar">
                                         <EditIcon class="w-5 h-5" />
