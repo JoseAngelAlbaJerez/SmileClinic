@@ -221,7 +221,12 @@
                                         <div
                                             class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-500">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Subtotal: {{ formatNumber(form_details[index].total) }}
+                                                 <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
+                                        {
+                                            style:
+                                                'currency', currency: 'DOP'
+                                        }).format(form_details[index].total
+                                            || 0) }}</p>
                                             </span>
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
@@ -249,8 +254,12 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Total: <span class="text-blue-600 dark:text-blue-400">{{ formatNumber(form.total)
-                                        }}</span>
+                                  <p class="text-blue-600 dark:text-blue-400">Total: {{ new Intl.NumberFormat('es-DO',
+                                        {
+                                            style:
+                                                'currency', currency: 'DOP'
+                                        }).format(form.total
+                                            || 0) }}</p>
                                 </div>
 
                                 <!-- Form Actions -->
