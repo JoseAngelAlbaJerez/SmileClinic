@@ -195,6 +195,39 @@ watchEffect(() => {
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('patient.view')" :href="route('patients.index')"
+                            :active="route().current('patients.index')">
+                            Pacientes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('event.view')" :href="route('events.index')"
+                            :active="route().current('events.index')">
+                            Citas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('budget.view')" :href="route('budgets.index')"
+                            :active="route().current('budgets.index')">
+                            Presupuestos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('CXC.view')" :href="route('CXC.index')"
+                            :active="route().current('CXC.index')">
+                            Cuentas por Cobrar
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('expense.view')" :href="route('expenses.index')"
+                            :active="route().current('expenses.index')">
+                            Egresos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('prescription.view')" :href="route('prescriptions.index')"
+                            :active="route().current('prescriptions.index')">
+                            Recetas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('user.view')" :href="route('users.index')"
+                            :active="route().current('users.index')">
+                            Usuarios
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="can('bill.view')" :href="route('bills.index')"
+                            :active="route().current('bills.index')">
+                            Facturas
+                        </ResponsiveNavLink>
+
                     </div>
 
                     <!-- Responsive Settings Options -->
