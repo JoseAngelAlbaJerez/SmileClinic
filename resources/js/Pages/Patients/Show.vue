@@ -98,7 +98,8 @@
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.address }}</span>
                                 </div>
                                 <div class="flex items-start">
-                                    <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Motivo de
+                                    <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Motivo
+                                        de
                                         visita:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.motive }}</span>
                                 </div>
@@ -176,153 +177,273 @@
 
                 <!-- Recetas médicas -->
                 <!-- Recetas Médicas - Diseño Mejorado -->
-                <div
-                    class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-                    <!-- Encabezado con efecto de vidrio -->
+                <AccessGate permission="prescription.view">
                     <div
-                        class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                        <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                            <MedicalHistoryIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <!-- Encabezado con efecto de vidrio -->
+                        <div
+                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                <MedicalHistoryIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Recetas Médicas</h2>
+                            <div class="ml-auto flex gap-2">
+                                <AccessGate permission="prescription.view">
+                                    <Link :href="route('prescriptions.index', { patient_id: patient.id })"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                    <EyeIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                                <AccessGate permission="prescription.create">
+                                    <Link :href="route('prescriptions.create')" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                    <AddIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                            </div>
                         </div>
-                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Recetas Médicas</h2>
-                        <div class="ml-auto flex gap-2">
-                            <AccessGate permission="prescription.view">
-                                <Link :href="route('prescriptions.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
-                                <EyeIcon class="size-5" />
-                                </Link>
-                            </AccessGate>
-                            <AccessGate permission="prescription.create">
-                                <Link :href="route('prescriptions.create')" as="button"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
-                                <AddIcon class="size-5" />
-                                </Link>
-                            </AccessGate>
-                        </div>
-                    </div>
 
-                    <!-- Lista de recetas -->
-                    <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
-                        <div v-for="prescription in prescription" :key="prescription.id"
-                            class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                        <!-- Lista de recetas -->
+                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
+                            <div v-for="prescription in prescription" :key="prescription.id"
+                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
 
 
-                            <!-- Contenido de la receta -->
-                            <div class="p-4">
-                                <div class="flex items-start mb-3">
-                                    <div class="flex-1">
-                                        <div class="flex justify-between">
-                                            <h3
-                                                class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
-                                                Receta # - {{ prescription.id }}
+                                <!-- Contenido de la receta -->
+                                <div class="p-4">
+                                    <div class="flex items-start mb-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <h3
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    Receta # - {{ prescription.id }}
 
-                                            </h3>
-                                            <span class="  text-sm font-medium px-2 py-1 rounded-full"
-                                                :class="prescription.ending_date ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
-                                                {{ new Date(prescription.ending_date) > new Date() ? 'VIGENTE' :
-                                                    'VENCIDA' }}
-                                            </span>
+                                                </h3>
+                                                <span class="  text-sm font-medium px-2 py-1 rounded-full"
+                                                    :class="prescription.ending_date ? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-300'">
+                                                    {{ new Date(prescription.ending_date) > new Date() ? 'VIGENTE' :
+                                                        'VENCIDA' }}
+                                                </span>
 
-                                        </div>
-
-
-                                        <!-- Info básica -->
-                                        <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
-                                            <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                <span>{{ formatDate(prescription.created_at) }}</span>
                                             </div>
-                                            <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                <span>Dr. {{ prescription.doctor.name }} {{
-                                                    prescription.doctor.last_name
+
+
+                                            <!-- Info básica -->
+                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>{{ formatDate(prescription.created_at) }}</span>
+                                                </div>
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>Dr. {{ prescription.doctor.name }} {{
+                                                        prescription.doctor.last_name
                                                     }}</span>
+                                                </div>
+
                                             </div>
 
-                                        </div>
+                                            <!-- Acordeón para medicamentos -->
+                                            <div class="mt-3">
+                                                <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
+                                                    <summary
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                        <span>Ver medicamentos</span>
+                                                        <ChevronDownIcon
+                                                            class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
+                                                    </summary>
+                                                    <div class="mt-2 space-y-3">
+                                                        <div v-for="detail in prescription.prescriptions_details"
+                                                            :key="detail.id"
+                                                            class="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-500">
+                                                            <div class="flex items-start">
+                                                                <div
+                                                                    class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg mr-3">
+                                                                    <PillIcon
+                                                                        class="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                                                                </div>
+                                                                <div class="flex-1">
+                                                                    <h4
+                                                                        class="font-bold text-gray-800 dark:text-gray-100">
+                                                                        {{
+                                                                            detail.drugs.name }}</h4>
+                                                                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                                                                        {{
+                                                                            detail.drugs.description }}</p>
+                                                                    <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
 
-                                        <!-- Acordeón para medicamentos -->
-                                        <div class="mt-3">
-                                            <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
-                                                <summary
-                                                    class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
-                                                    <span>Ver medicamentos</span>
-                                                    <ChevronDownIcon
-                                                        class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
-                                                </summary>
-                                                <div class="mt-2 space-y-3">
-                                                    <div v-for="detail in prescription.prescriptions_details"
-                                                        :key="detail.id"
-                                                        class="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-500">
-                                                        <div class="flex items-start">
-                                                            <div
-                                                                class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg mr-3">
-                                                                <PillIcon
-                                                                    class="w-5 h-5 text-blue-600 dark:text-blue-300" />
-                                                            </div>
-                                                            <div class="flex-1">
-                                                                <h4 class="font-bold text-gray-800 dark:text-gray-100">
-                                                                    {{
-                                                                        detail.drugs.name }}</h4>
-                                                                <p class="text-sm text-gray-600 dark:text-gray-300">{{
-                                                                    detail.drugs.description }}</p>
-                                                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
 
-
-                                                                    <div class="col-span-2">
-                                                                        <span class="font-medium">Instrucciones: </span>
-                                                                        <span> {{ detail.description }}</span>
+                                                                        <div class="col-span-2">
+                                                                            <span class="font-medium">Instrucciones:
+                                                                            </span>
+                                                                            <span> {{ detail.description }}</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </details>
+                                                </details>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Acciones -->
-                                <div
-                                    class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-600">
-                                    <div class="text-x text-gray-500 dark:text-gray-400">
-                                        <span v-if="prescription.active" class="text-green-500">Activa</span>
-                                        <span v-else class="text-red-500">Inactiva</span>
-                                    </div>
+                                    <!-- Acciones -->
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-600">
+                                        <div class="text-x text-gray-500 dark:text-gray-400">
+                                            <span v-if="prescription.active" class="text-green-500">Activa</span>
+                                            <span v-else class="text-red-500">Inactiva</span>
+                                        </div>
 
-                                    <div class="flex gap-2">
-                                        <Link v-if="prescription.active"
-                                            :href="route('prescriptions.edit', prescription)"
-                                            class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
-                                        <EditIcon class="size-4" />
-                                        </Link>
-                                        <DangerButton v-if="prescription.active"
-                                            @click="deletePrescription(prescription)"
-                                            class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
-                                            <DeleteIcon class="size-4" />
-                                        </DangerButton>
-                                        <button v-else @click="restorePrescription(prescription)"
-                                            class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
-                                            <RestoreIcon class="size-4" />
-                                        </button>
+                                        <div class="flex gap-2">
+                                            <Link v-if="prescription.active"
+                                                :href="route('prescriptions.edit', prescription)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
+                                            <EditIcon class="size-4" />
+                                            </Link>
+                                            <DangerButton v-if="prescription.active"
+                                                @click="deletePrescription(prescription)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
+                                                <DeleteIcon class="size-4" />
+                                            </DangerButton>
+                                            <button v-else @click="restorePrescription(prescription)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <RestoreIcon class="size-4" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Mensaje cuando no hay recetas -->
-                    <div v-if="!prescription.length" class="text-center py-6 ">
-                        <div class="inline-flex flex-col items-center">
-                            <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
-                            <p class="text-gray-500 dark:text-gray-400 font-medium">No hay recetas médicas registradas
-                            </p>
-                            <p class="text-sm text-gray-400 dark:text-gray-500">Crea una nueva receta para comenzar</p>
+                        <!-- Mensaje cuando no hay recetas -->
+                        <div v-if="!prescription.length" class="text-center py-6 ">
+                            <div class="inline-flex flex-col items-center">
+                                <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay recetas médicas
+                                    registradas
+                                </p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea una nueva receta para comenzar
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </AccessGate>
 
+                <AccessGate permission="event.view">
+                    <!-- Citas Pendientes - Diseño Mejorado -->
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <!-- Encabezado con efecto de vidrio -->
+                        <div
+                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                <CalendarIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas</h2>
+                            <div class="ml-auto flex gap-2">
+                                <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                <EyeIcon class="size-5" />
+                                </Link>
+                                <AccessGate permission="event.create">
+                                    <Link :href="route('events.create')" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                    <AddIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                            </div>
+                        </div>
+
+                        <!-- Lista de citas -->
+                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
+                            <div v-for="event in events" :key="event.id"
+                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+
+
+                                <!-- Contenido de la cita -->
+                                <div class="p-4">
+                                    <div class="flex items-start mb-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <h3
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    #{{ event.id }} - {{ event.title }}
+                                                </h3>
+                                                <span class="  text-sm text-white font-medium px-2 py-1 rounded-full"
+                                                    :class="{
+                                                        'bg-green-500': event.attended,
+                                                        'bg-red-500': !event.attended
+                                                    }">
+                                                    {{ event.attended ? 'Atendido' : 'No Atendido' }}
+                                                </span>
+                                            </div>
+
+                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>{{ event.date }}</span>
+                                                </div>
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <ClockIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>{{ event.starttime }} - {{ event.endtime }}</span>
+                                                </div>
+                                                <div
+                                                    class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
+                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
+                                                    }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Acciones -->
+                                    <div
+                                        class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-600">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
+                                                class="sr-only peer">
+                                            <div
+                                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
+                                            </div>
+                                            <span class="ms-3 text-sm font-medium"
+                                                :class="event.attended ? 'text-green-500' : 'text-red-500'">
+                                                {{ event.attended ? 'Atendido' : 'No Atendido' }}
+                                            </span>
+                                        </label>
+
+                                        <div class="flex gap-2">
+                                            <Link v-if="event.active" :href="route('events.edit', event)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
+                                            <EditIcon class="size-4" />
+                                            </Link>
+                                            <DangerButton v-if="event.active" @click="deleteEvent(event)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
+                                                <DeleteIcon class="h-5 w-5" />
+                                            </DangerButton>
+                                            <button v-else @click="restoreEvent(event)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <RestoreIcon class="size-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje cuando no hay citas -->
+                        <div v-if="!events.length" class="text-center py-6">
+                            <div class="inline-flex flex-col items-center">
+                                <CalendarIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay citas programadas</p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Agrega una nueva cita para comenzar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </AccessGate>
                 <!-- Presupuestos -->
                 <!-- Presupuestos - Diseño Mejorado -->
                 <AccessGate permission="budget.view">
@@ -386,11 +507,12 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
                                                     <span class="font-bold">
-                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
-                                                                        style:
-                                                                    'currency', currency: 'DOP' }).format(budget.total
-                                                                    || 0) }}
-                                                                </span>
+                                                        Total: {{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(budget.total
+                                                            || 0) }}
+                                                    </span>
                                                 </div>
                                             </div>
 
@@ -415,16 +537,18 @@
                                                                 <span>
                                                                     Precio: {{ new Intl.NumberFormat('es-DO', {
                                                                         style:
-                                                                    'currency', currency: 'DOP' }).format(detail.amount
-                                                                    || 0) }}
+                                                                            'currency', currency: 'DOP'
+                                                                    }).format(detail.amount
+                                                                        || 0) }}
                                                                 </span>
 
                                                                 <span>Descuento: {{ detail.discount }}%</span>
-                                                                 <span>
+                                                                <span>
                                                                     Total: {{ new Intl.NumberFormat('es-DO', {
                                                                         style:
-                                                                    'currency', currency: 'DOP' }).format(detail.total
-                                                                    || 0) }}
+                                                                            'currency', currency: 'DOP'
+                                                                    }).format(detail.total
+                                                                        || 0) }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -552,12 +676,13 @@
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                     <span class="font-bold">
-                                                                    Total: {{ new Intl.NumberFormat('es-DO', {
-                                                                        style:
-                                                                    'currency', currency: 'DOP' }).format(bill.total
-                                                                    || 0) }}
-                                                                </span>
+                                                    <span class="font-bold">
+                                                        Total: {{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(bill.total
+                                                            || 0) }}
+                                                    </span>
                                                 </div>
                                             </div>
 
@@ -581,15 +706,17 @@
                                                                 <span>
                                                                     Precio: {{ new Intl.NumberFormat('es-DO', {
                                                                         style:
-                                                                    'currency', currency: 'DOP' }).format(detail.amount
-                                                                    || 0) }}
+                                                                            'currency', currency: 'DOP'
+                                                                    }).format(detail.amount
+                                                                        || 0) }}
                                                                 </span>
                                                                 <span>Descuento: {{ detail.discount }}%</span>
-                                                                 <span>
+                                                                <span>
                                                                     Total: {{ new Intl.NumberFormat('es-DO', {
                                                                         style:
-                                                                    'currency', currency: 'DOP' }).format(detail.total
-                                                                    || 0) }}
+                                                                            'currency', currency: 'DOP'
+                                                                    }).format(detail.total
+                                                                        || 0) }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -616,11 +743,11 @@
                                                 class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
                                             <EditIcon class="size-4" />
                                             </Link>
-                                            <DangerButton v-if="bill.active" @click="deletebill(bill)"
+                                            <DangerButton v-if="bill.active" @click="deleteBill(bill)"
                                                 class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
-                                            <button v-else @click="restorebill(bill)"
+                                            <button v-else @click="restoreBill(bill)"
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
@@ -644,121 +771,8 @@
                     </div>
                 </AccessGate>
 
-                <AccessGate permission="event.view">
-                    <!-- Citas Pendientes - Diseño Mejorado -->
-                    <div
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-                        <!-- Encabezado con efecto de vidrio -->
-                        <div
-                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                <CalendarIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                            </div>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas Pendientes</h2>
-                            <div class="ml-auto flex gap-2">
-                                <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
-                                <EyeIcon class="size-5" />
-                                </Link>
-                                <AccessGate permission="event.create">
-                                    <Link :href="route('events.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
-                                    <AddIcon class="size-5" />
-                                    </Link>
-                                </AccessGate>
-                            </div>
-                        </div>
-
-                        <!-- Lista de citas -->
-                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
-                            <div v-for="event in events" :key="event.id"
-                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
-
-
-                                <!-- Contenido de la cita -->
-                                <div class="p-4">
-                                    <div class="flex items-start mb-3">
-                                        <div class="flex-1">
-                                            <div class="flex justify-between">
-                                                <h3
-                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
-                                                    #{{ event.id }} - {{ event.title }}
-                                                </h3>
-                                                <span class="  text-sm text-white font-medium px-2 py-1 rounded-full"
-                                                    :class="{
-                                                        'bg-green-500': event.attended,
-                                                        'bg-red-500': !event.attended
-                                                    }">
-                                                    {{ event.attended ? 'Atendido' : 'No Atendido' }}
-                                                </span>
-                                            </div>
-
-                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
-                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                    <span>{{ event.date }}</span>
-                                                </div>
-                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <ClockIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                    <span>{{ event.starttime }} - {{ event.endtime }}</span>
-                                                </div>
-                                                <div
-                                                    class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
-                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
-                                                    <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                    }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Acciones -->
-                                    <div
-                                        class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-600">
-                                        <label class="inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
-                                                class="sr-only peer">
-                                            <div
-                                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
-                                            </div>
-                                            <span class="ms-3 text-sm font-medium"
-                                                :class="event.attended ? 'text-green-500' : 'text-red-500'">
-                                                {{ event.attended ? 'Atendido' : 'No Atendido' }}
-                                            </span>
-                                        </label>
-
-                                        <div class="flex gap-2">
-                                            <Link v-if="event.active" :href="route('events.edit', event)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
-                                            <EditIcon class="size-4" />
-                                            </Link>
-                                            <DangerButton v-if="event.active" @click="deleteEvent(event)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all transform hover:scale-110 shadow-md">
-                                                <DeleteIcon class="h-5 w-5" />
-                                            </DangerButton>
-                                            <button v-else @click="restoreEvent(event)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
-                                                <RestoreIcon class="size-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mensaje cuando no hay citas -->
-                        <div v-if="!events.length" class="text-center py-6">
-                            <div class="inline-flex flex-col items-center">
-                                <CalendarIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
-                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay citas programadas</p>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Agrega una nueva cita para comenzar
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </AccessGate>
             </div>
-            <AccessGate permission="odontograph.view" >
+            <AccessGate permission="odontograph.view">
                 <div class="space-y-6">
                     <!-- Encabezado Mejorado -->
                     <div
@@ -774,7 +788,7 @@
 
                             <div class="relative flex-grow lg:w-96 sm:w-64">
                                 <SearchIcon
-                                    class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:top-5 text-gray-400" />
                                 <input @input="submitFilters()" v-model="filters.search" type="text"
                                     placeholder="Buscar odontogramas..."
                                     class="w-full pl-10 pr-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -802,7 +816,7 @@
                     </div>
 
                     <!-- Lista de Odontogramas -->
-                    <div class="space-y-4" v-if="patient.age >=18">
+                    <div class="space-y-4" v-if="patient.age >= 18">
                         <div v-for="item in odontograph" :key="item.id"
                             class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
                             <!-- Encabezado del Odontograma -->
@@ -968,7 +982,8 @@
                                     </div>
 
                                     <div class="flex gap-2">
-                                        <Link v-if="item.active && patient.active" :href="route('odontographs.edit', item)"
+                                        <Link v-if="item.active && patient.active"
+                                            :href="route('odontographs.edit', item)"
                                             class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
                                             title="Editar">
                                         <EditIcon class="w-5 h-5" />
@@ -1240,11 +1255,11 @@ export default {
                 48, 47, 46, 45, 44, 43, 42, 41,
                 31, 32, 33, 34, 35, 36, 37, 38
             ],
-               upperTeethChild: [
-              55, 54, 53, 52, 51, 61, 62, 63, 64, 65
+            upperTeethChild: [
+                55, 54, 53, 52, 51, 61, 62, 63, 64, 65
             ],
-             lowerTeethChild: [
-              85, 84, 83, 82, 81, 71, 72, 73, 74, 75
+            lowerTeethChild: [
+                85, 84, 83, 82, 81, 71, 72, 73, 74, 75
             ],
             selectedOdontograph: null,
             selectedToothInfo: null,
@@ -1359,11 +1374,19 @@ export default {
                 { attended: event.attended },
             );
         },
-        deleteBudgetDetail(id) {
-            this.$inertia.delete(route('budgetDetails.destroy', id));
+        deleteBudget(id) {
+            this.$inertia.delete(route('budgets.destroy', id));
         },
-        restoreBudgetDetail(id) {
-            this.$inertia.put(route('budgetDetails.update', id),
+        restoreBudget(id) {
+            this.$inertia.put(route('budgets.update', id),
+                { active: true },
+            );
+        },
+        deleteBill(id) {
+            this.$inertia.delete(route('bills.destroy', id));
+        },
+        restoreBill(id) {
+            this.$inertia.put(route('bills.update', id),
                 { active: true },
             );
         },
