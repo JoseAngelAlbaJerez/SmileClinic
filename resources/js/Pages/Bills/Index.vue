@@ -9,105 +9,99 @@
 
         <template #default>
             <div
-                class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
+                class="flex items-center justify-center rounded-lg bg-white-500 py-6 sm:py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10  gap-2 items-center">
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
                         <button @click="print()"
-                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
                             <PrintIcon />
                         </button>
-                        <!-- Espacio flexible para separar TableDropDown de la derecha -->
-                        <div class="flex ml-auto items-center gap-2">
 
-                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
+                        <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
+                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
+                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('bills.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                            <AddIcon class="size-6" />
-                            Nueva Factura
+                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4">
+                            <AddIcon class="size-5 sm:size-6" />
+                            <span class="hidden sm:inline">Nueva Factura</span>
                             </Link>
                         </div>
                     </div>
 
+                    <!-- Mobile Cards (only on xs) -->
+                    <div class="sm:hidden space-y-4 mt-4">
+                        <div v-for="bill in bills.data" :key="bill.id"
+                            class="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow">
+                            <p><strong>#:</strong> {{ bill.id }}</p>
+                            <p><strong>Paciente:</strong> {{ bill.patient.first_name }} {{ bill.patient.last_name }}</p>
+                            <p><strong>Tipo:</strong> {{ bill.type }}</p>
+                            <p><strong>Total:</strong> {{ new Intl.NumberFormat('es-DO', {
+                                style: 'currency', currency:
+                                    'DOP' }).format(bill.total || 0) }}</p>
+                            <p><strong>Creación:</strong> {{ formatDate(bill.created_at) }}</p>
+                            <p><strong>Estado:</strong>
+                                <span :class="statusBadgeClasses(bill.active)">
+                                    {{ bill.active ? 'Activo' : 'Inactivo' }}
+                                </span>
+                            </p>
+                            <Link :href="route('bills.show', bill)" class="text-blue-500 mt-2 inline-block">Abrir</Link>
+                        </div>
+                    </div>
 
-                    <!-- Table -->
+                    <!-- Desktop Table (unchanged, hidden on xs) -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="hidden sm:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
                                             @click="sort('id')">
-                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
-                                                'asc' ?
-                                                '↑' :
-                                                '↓' }}</span>
+                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection === 'asc' ? '↑'
+                                                : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patient_id')">
-                                            Paciente<span v-if="form.sortField === 'patient_id'">{{
-                                                form.sortDirection ===
-                                                    'asc' ? '↑' :
-                                                    '↓'
-                                            }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('type')">Tipo:
-                                            <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span>
+                                            Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
+                                                === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " class=" cursor-pointer" @click="sort('total')">
-                                            Total <span v-if="form.sortField === 'total'">{{
-                                                form.sortDirection ===
-                                                    'asc' ?
-                                                    '↑' :
-                                                    '↓'
-                                            }}</span>
+                                        <th scope="col" class="cursor-pointer" @click="sort('type')">
+                                            Tipo: <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
+                                                ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
-                                            Fecha de
-                                            Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span></th>
-
+                                        <th scope="col" class="cursor-pointer" @click="sort('total')">
+                                            Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
+                                                'asc' ? '↑' : '↓' }}</span>
+                                        </th>
+                                        <th scope="col" class="cursor-pointer" @click="sort('created_at')">
+                                            Fecha Creación <span v-if="form.sortField === 'created_at'">{{
+                                                form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
-                                                <div class="flex items-center ">
-
+                                                <div class="flex items-center">
                                                     <h2>Estado</h2>
                                                     <FunnelIcon />
                                                 </div>
-
                                             </div>
                                         </th>
-
-
                                         <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <tr v-for="bill in bills.data" :key="bill.id">
-                                        <td class="p-4  items-center">{{ bill.id }}</td>
-                                        <td class="p-4  items-center">{{ bill.patient.first_name }} {{
-                                            bill.patient.last_name }} </td>
-                                        <td class="p-4  items-center">{{ bill.type }} </td>
-                                        <td class="p-4  items-center">
-                                            {{ new Intl.NumberFormat('es-DO', {
-                                                style:
-                                                    'currency', currency: 'DOP'
-                                            }).format(bill.total
-                                                || 0) }}
-                                        </td>
-                                        <td class="p-4  items-center">{{ formatDate(bill.created_at) }}</td>
-                                        <td class="p-4  items-center">
+                                        <td class="p-4 items-center">{{ bill.id }}</td>
+                                        <td class="p-4 items-center">{{ bill.patient.first_name }} {{
+                                            bill.patient.last_name }}</td>
+                                        <td class="p-4 items-center">{{ bill.type }}</td>
+                                        <td class="p-4 items-center">{{ new Intl.NumberFormat('es-DO', {
+                                            style:
+                                                'currency', currency: 'DOP' }).format(bill.total || 0) }}</td>
+                                        <td class="p-4 items-center">{{ formatDate(bill.created_at) }}</td>
+                                        <td class="p-4 items-center">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(bill.active)" />
                                                 <p :class="statusBadgeClasses(bill.active)">
@@ -118,14 +112,9 @@
                                         </td>
                                         <td class="p-4 items-center">
                                             <Link :href="route('bills.show', bill)"
-                                                class="text-blue-500 cursor-pointer">Abrir
-                                            </Link>
+                                                class="text-blue-500 cursor-pointer">Abrir</Link>
                                         </td>
-
                                     </tr>
-
-
-
                                 </tbody>
                             </table>
                             <div v-if="!bills.data.length"
@@ -137,65 +126,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Modal -->
-            <Modal :show="showModal" @close="showModal = false">
-                <div class="text-gray-800 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Crear Egreso
-                    </h2>
-                    <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                        <!-- Descripción -->
-                        <div>
-                            <label for="description"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
-                            <div class="relative">
-                                <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                    style="pointer-events: none;" />
-                                <input v-model="form_modal.description" id="description" type="text"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Descripción..." />
-                            </div>
-                            <p v-if="errors.description" class="mt-1 text-xs text-red-600">{{ errors.description }}</p>
-                        </div>
-
-                        <!-- Monto -->
-                        <div>
-                            <label for="amount"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monto</label>
-                            <div class="relative">
-                                <DocumentMoney class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                    style="pointer-events: none;" />
-                                <input v-model="form_modal.amount" id="amount" type="number"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Monto" />
-                            </div>
-                            <p v-if="errors.amount" class="mt-1 text-xs text-red-600">{{ errors.amount }}</p>
-                        </div>
-
-                        <!-- Error general -->
-                        <div v-if="error" class="md:col-span-2 text-red-600 font-medium">
-                            {{ error }}
-                        </div>
-
-                        <!-- Botones -->
-                        <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                            <SecondaryButton type="button" @click="form_modal.reset()">
-                                Limpiar
-                            </SecondaryButton>
-                            <PrimaryButton type="submit" :disabled="form.processing"
-                                :class="{ 'opacity-25': form.processing }" :is-loading="form.processing">Guardar
-                            </PrimaryButton>
-                        </div>
-                    </form>
-
-
-
-                </div>
-            </Modal>
-
-
         </template>
+
 
 
 

@@ -9,97 +9,91 @@
 
         <template #default>
             <div
-                class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
+                class="flex items-center justify-center rounded-lg bg-white-500 py-6 sm:py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
-                        <!-- Espacio flexible para separar TableDropDown de la derecha -->
-                        <div class="flex ml-auto items-center gap-2">
-
-                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
+                        <!-- Flexible space -->
+                        <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
+                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
+                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('prescriptions.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                            <AddIcon class="size-6" />
-                            Nueva Receta
+                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                            <AddIcon class="size-5 sm:size-6" />
+                            <span class="hidden sm:inline">Nueva Receta</span>
                             </Link>
                         </div>
                     </div>
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
-                                            class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
+                                            class="px-4 py-3 cursor-pointer whitespace-nowrap hidden md:table-cell"
                                             @click="sort('id')">
-                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
-                                                'asc' ?
-                                                '↑' :
-                                                '↓' }}</span>
+                                            #
+                                            <span v-if="form.sortField === 'id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
                                         </th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('patient_id')">Paciente
-                                            <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span>
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('patient_id')">
+                                            Paciente
+                                            <span v-if="form.sortField === 'patient_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
                                         </th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer"
+                                        <th scope="col" class="px-6 py-3 cursor-pointer hidden sm:table-cell"
                                             @click="sort('patients.motive')">
-                                            Diagnosis<span v-if="form.sortField === 'patient.motive'">{{
-                                                form.sortDirection ===
-                                                    'asc' ? '↑' :
-                                                    '↓'
-                                            }}</span></th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('users.name')">
-                                            Doctor <span v-if="form.sortField === 'users.name'">{{
-                                                form.sortDirection ===
-                                                    'asc' ?
-                                                    '↑' :
-                                                    '↓'
-                                            }}</span>
+                                            Diagnosis
+                                            <span v-if="form.sortField === 'patient.motive'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
                                         </th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
-                                            Fecha de
-                                            Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span></th>
-
+                                        <th scope="col" class="px-6 py-3 cursor-pointer hidden sm:table-cell"
+                                            @click="sort('users.name')">
+                                            Doctor
+                                            <span v-if="form.sortField === 'users.name'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 cursor-pointer hidden lg:table-cell"
+                                            @click="sort('created_at')">
+                                            Creación
+                                            <span v-if="form.sortField === 'created_at'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
-                                                <div class="flex items-center ">
-
+                                                <div class="flex items-center gap-1">
                                                     <h2>Estado</h2>
                                                     <FunnelIcon />
                                                 </div>
-
                                             </div>
                                         </th>
-
-                                        <th scope="col " class="sm:p-4">Acciones</th>
+                                        <th scope="col" class="px-6 py-3">Acciones</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-
-                                    <tr v-for="prescription in prescriptions.data" :key="prescription.id">
-                                        <td class="p-4  items-center">{{ prescription.id }}</td>
-                                        <td class="p-4  items-center">{{ prescription.patient.first_name }} {{
+                                    <tr v-for="prescription in prescriptions.data" :key="prescription.id"
+                                        class=" dark:border-gray-700">
+                                        <td class="p-4 hidden md:table-cell">{{ prescription.id }}</td>
+                                        <td class="p-4">{{ prescription.patient.first_name }} {{
                                             prescription.patient.last_name }}</td>
-                                        <td class="p-4  items-center">{{ prescription.patient.motive }} </td>
-                                        <td class="p-4  items-center">{{ prescription.doctor.name }} {{
+                                        <td class="p-4 hidden sm:table-cell">{{ prescription.patient.motive }}</td>
+                                        <td class="p-4 hidden sm:table-cell">{{ prescription.doctor.name }} {{
                                             prescription.doctor.last_name }}</td>
-                                        <td class="p-4  items-center">{{ formatDate(prescription.created_at) }}</td>
-                                        <td class="p-4  items-center">
+                                        <td class="p-4 hidden lg:table-cell">{{ formatDate(prescription.created_at) }}
+                                        </td>
+                                        <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(prescription.active)" />
                                                 <p :class="statusBadgeClasses(prescription.active)">
@@ -108,14 +102,12 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td class="p-4 items-center">
+                                        <td class="p-4">
                                             <p @click="openModal(prescription)" class="text-blue-500 cursor-pointer">
                                                 Abrir
                                             </p>
                                         </td>
-
                                     </tr>
-
                                 </tbody>
                             </table>
                             <div v-if="!prescriptions.data.length"
@@ -128,9 +120,9 @@
                 </div>
             </div>
 
-            <!-- Modal -->
+            <!-- Modal (unchanged, only ensure scrollable content on small screens) -->
             <Modal :show="showModal" @close="showModal = false" :max-width="'3xl'">
-                <div class="text-gray-800 p-5 ">
+                <div class="text-gray-800 p-4 sm:p-5 max-h-[90vh] overflow-y-auto">
                     <h2 class="text-2xl font-semibold  p-4 text-blue-500 ">
                         Detalles de la Receta
                     </h2>
@@ -239,8 +231,8 @@
                     </div>
                 </div>
             </Modal>
-
         </template>
+
 
     </AuthenticatedLayout>
 </template>

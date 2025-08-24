@@ -11,100 +11,83 @@
             <div
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
-                    <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10  gap-2 items-center">
-                        <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-                        <button @click="print()"
-                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <PrintIcon />
-                        </button>
-                        <!-- Espacio flexible para separar TableDropDown de la derecha -->
-                        <div class="flex ml-auto items-center gap-2">
 
-                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
+                    <!-- Search & Actions -->
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
+                        <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+
+                        <!-- Print -->
+                        <button @click="print()"
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <PrintIcon />
+                            <span class="hidden sm:inline">Imprimir</span>
+                        </button>
+
+                        <!-- Spacer pushes actions right -->
+                        <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
+                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
+                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
+
                             <Link :href="route('budgets.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                            <AddIcon class="size-6" />
-                            Nuevo Presupuesto
+                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <AddIcon class="size-5" />
+                            <span class="hidden sm:inline">Nuevo Presupuesto</span>
                             </Link>
                         </div>
                     </div>
 
-
-                    <!-- Table -->
+                    <!-- Table (Desktop) -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
-                                        <th scope="col"
-                                            class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
+                                        <th scope="col" class="px-4 py-3 cursor-pointer whitespace-nowrap"
                                             @click="sort('id')">
-                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
-                                                'asc' ?
-                                                '↑' :
-                                                '↓' }}</span>
+                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection === 'asc' ? '↑'
+                                                : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patient_id')">
-                                            Paciente<span v-if="form.sortField === 'patient_id'">{{
-                                                form.sortDirection ===
-                                                    'asc' ? '↑' :
-                                                    '↓'
-                                            }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('type')">Tipo
-                                            <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span>
+                                            Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
+                                                === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " class=" cursor-pointer" @click="sort('total')">
-                                            Total <span v-if="form.sortField === 'total'">{{
-                                                form.sortDirection ===
-                                                    'asc' ?
-                                                    '↑' :
-                                                    '↓'
-                                            }}</span>
+                                        <th scope="col" class="cursor-pointer" @click="sort('type')">
+                                            Tipo <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
+                                                ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
-                                            Fecha de
-                                            Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span></th>
-
+                                        <th scope="col" class="cursor-pointer" @click="sort('total')">
+                                            Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
+                                                'asc' ? '↑' : '↓' }}</span>
+                                        </th>
+                                        <th scope="col" class="cursor-pointer" @click="sort('created_at')">
+                                            Creación <span v-if="form.sortField === 'created_at'">{{ form.sortDirection
+                                                === 'asc' ? '↑' : '↓' }}</span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
-                                                <div class="flex items-center ">
-
+                                                <div class="flex items-center gap-1">
                                                     <h2>Estado</h2>
                                                     <FunnelIcon />
                                                 </div>
-
                                             </div>
                                         </th>
-
-
                                         <th scope="col" class="sm:p-4">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
 
+                                <tbody>
                                     <tr v-for="budget in budgets.data" :key="budget.id">
-                                        <td class="p-4  items-center">{{ budget.id }}</td>
-                                        <td class="p-4  items-center">{{ budget.patient.first_name }} {{
-                                            budget.patient.last_name }} </td>
-                                        <td class="p-4  items-center">{{ budget.type }} </td>
-                                        <td class="p-4  items-center">  {{ new Intl.NumberFormat('es-DO', {
-                                                                        style:
-                                                                    'currency', currency: 'DOP' }).format(budget.total
-                                                                    || 0) }} </td>
-                                        <td class="p-4  items-center">{{ formatDate(budget.created_at) }}</td>
-                                        <td class="p-4  items-center">
+                                        <td class="p-4">{{ budget.id }}</td>
+                                        <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                                        </td>
+                                        <td class="p-4">{{ budget.type }}</td>
+                                        <td class="p-4">{{ new
+                                            Intl.NumberFormat('es-DO', { style: 'currency',currency:'DOP'}).format(budget.total
+                                            || 0) }}</td>
+                                        <td class="p-4">{{ formatDate(budget.created_at) }}</td>
+                                        <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(budget.active)" />
                                                 <p :class="statusBadgeClasses(budget.active)">
@@ -113,16 +96,11 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td class="p-4 items-center">
+                                        <td class="p-4">
                                             <Link :href="route('budgets.show', budget)"
-                                                class="text-blue-500 cursor-pointer">Abrir
-                                            </Link>
+                                                class="text-blue-500 cursor-pointer">Abrir</Link>
                                         </td>
-
                                     </tr>
-
-
-
                                 </tbody>
                             </table>
                             <div v-if="!budgets.data.length"
@@ -132,25 +110,57 @@
                         </div>
                         <Pagination :pagination="budgets" :filters="form" />
                     </div>
+
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="budget in budgets.data" :key="budget.id"
+                            class="border rounded-lg p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">#{{ budget.id }}</h3>
+                                <Link :href="route('budgets.show', budget)" class="text-blue-500 text-sm">Abrir</Link>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
+                                {{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                            </p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <p><span class="font-medium">Tipo:</span> {{ budget.type }}</p>
+                                <p><span class="font-medium">Total:</span> {{ new
+                                    Intl.NumberFormat('es-DO', { style: 'currency', currency:'DOP'}).format(budget.total ||
+                                    0) }}</p>
+                                <p><span class="font-medium">Creado:</span> {{ formatDate(budget.created_at) }}</p>
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(budget.active)">
+                                        <HandThumbDown v-if="budget.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!budgets.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+                        <Pagination :pagination="budgets" :filters="form" />
+                    </div>
                 </div>
             </div>
 
             <!-- Modal -->
             <Modal :show="showModal" @close="showModal = false">
-                <div class="text-gray-800 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
-                        Crear Egreso
-                    </h2>
-                    <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="text-gray-800 p-6 sm:p-8">
+                    <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-blue-500">Crear Egreso</h2>
+                    <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+
                         <!-- Descripción -->
                         <div>
                             <label for="description"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
                             <div class="relative">
-                                <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                    style="pointer-events: none;" />
+                                <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500" />
                                 <input v-model="form_modal.description" id="description" type="text"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                                     placeholder="Descripción..." />
                             </div>
                             <p v-if="errors.description" class="mt-1 text-xs text-red-600">{{ errors.description }}</p>
@@ -161,10 +171,9 @@
                             <label for="amount"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monto</label>
                             <div class="relative">
-                                <DocumentMoney class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
-                                    style="pointer-events: none;" />
+                                <DocumentMoney class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500" />
                                 <input v-model="form_modal.amount" id="amount" type="number"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                                     placeholder="Monto" />
                             </div>
                             <p v-if="errors.amount" class="mt-1 text-xs text-red-600">{{ errors.amount }}</p>
@@ -176,21 +185,18 @@
                         </div>
 
                         <!-- Botones -->
-                        <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
-                            <SecondaryButton type="button" @click="form_modal.reset()">
-                                Limpiar
-                            </SecondaryButton>
-                            <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
+                        <div class="md:col-span-2 flex justify-end gap-3 mt-6">
+                            <SecondaryButton type="button" @click="form_modal.reset()">Limpiar</SecondaryButton>
+                            <PrimaryButton type="submit" :disabled="form.processing"
+                                :class="{ 'opacity-25': form.processing }" :is-loading="form.processing">
+                                Guardar
+                            </PrimaryButton>
                         </div>
                     </form>
-
-
-
                 </div>
             </Modal>
-
-
         </template>
+
 
 
 
@@ -355,7 +361,7 @@ export default {
             this.submitFilters();
 
         },
-          async print() {
+        async print() {
             window.open(route('report.budgets', {
                 Days: this.filters.lastDays
             }), '_blank');

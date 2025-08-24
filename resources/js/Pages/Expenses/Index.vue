@@ -13,25 +13,30 @@
                 <div class="container mx-auto w-full px-2">
 
                     <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
-                        <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-                        <button @click="print()"
-                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <PrintIcon />
-                        </button>
-                        <!-- Espacio flexible para separar TableDropDown de la derecha -->
-                        <div class="flex ml-auto items-center gap-2">
+                    <div class="my-2 flex flex-col lg:flex-row lg:mx-10 gap-2 items-stretch lg:items-center">
+                        <div class="flex gap-2">
+                            <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                            <button @click="print()"
+                                class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <PrintIcon />
 
-                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
+                            </button>
+                        </div>
+
+                        <!-- Espacio flexible para separar en responsive -->
+                        <div
+                            class="flex flex-col sm:flex-row ml-auto gap-2 items-stretch sm:items-center w-full sm:w-auto">
+                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
+                                class="rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600 w-full" />
+
                             <button @click="showModal = true;"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                                <AddIcon class="size-6" />
-                                Nuevo Egreso
+                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <AddIcon class="size-5" />
+                                <span class="hidden sm:inline">Nuevo Egreso</span>
                             </button>
                         </div>
                     </div>
-
 
                     <!-- Table -->
                     <div
@@ -44,70 +49,53 @@
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
                                             @click="sort('id')">
-                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
-                                                'asc' ?
-                                                '↑' :
+                                            #
+                                            <span v-if="form.sortField === 'id'">{{ form.sortDirection === 'asc' ? '↑' :
                                                 '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('description')">
-                                            Descripción<span v-if="form.sortField === 'description'">{{
-                                                form.sortDirection ===
-                                                    'asc' ? '↑' :
-                                                    '↓'
-                                            }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('users.id')">Creado Por:
-                                            <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span>
+                                            Descripción
+                                            <span v-if="form.sortField === 'description'">{{ form.sortDirection ===
+                                                'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " class=" cursor-pointer" @click="sort('amount')">
-                                            Monto <span v-if="form.sortField === 'amount'">{{
-                                                form.sortDirection ===
-                                                    'asc' ?
-                                                    '↑' :
-                                                    '↓'
-                                            }}</span>
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('users.id')">
+                                            Creado Por
+                                            <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc' ?
+                                                '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
-                                            Fecha de
-                                            Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span></th>
-
-                                        <th class="cursor-pointer text-nowrap p-4">
-                                            <div class="flex items-center justify-between" @click="toggleShowDeleted()">
-                                                <div class="flex items-center ">
-
-                                                    <h2>Estado</h2>
-                                                    <FunnelIcon />
-                                                </div>
-
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('amount')">
+                                            Monto
+                                            <span v-if="form.sortField === 'amount'">{{ form.sortDirection === 'asc' ?
+                                                '↑' : '↓' }}</span>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('created_at')">
+                                            Fecha de Creación
+                                            <span v-if="form.sortField === 'created_at'">{{ form.sortDirection === 'asc'
+                                                ? '↑' : '↓' }}</span>
+                                        </th>
+                                        <th class="px-6 py-3 cursor-pointer text-nowrap" @click="toggleShowDeleted()">
+                                            <div class="flex items-center justify-between">
+                                                Estado
+                                                <FunnelIcon />
                                             </div>
                                         </th>
-
-
-                                        <th scope="col" class="sm:p-4">Acciones</th>
+                                        <th scope="col" class="px-6 py-3">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
 
-                                    <tr v-for="expense in expenses.data" :key="expense.id">
-                                        <td class="p-4  items-center">{{ expense.id }}</td>
-                                        <td class="p-4  items-center">{{ expense.description }} </td>
-                                        <td class="p-4  items-center">{{ expense.user.name }} {{ expense.user.last_name
-                                        }} </td>
-                                        <td class="p-4  items-center"> <p>{{ new Intl.NumberFormat('es-DO',
-                                        {
-                                            style:
-                                                'currency', currency: 'DOP'
-                                        }).format(expense.amount
-                                            || 0) }}</p></td>
-                                        <td class="p-4  items-center">{{ formatDate(expense.created_at) }}</td>
-                                        <td class="p-4  items-center">
+                                <tbody>
+                                    <tr v-for="expense in expenses.data" :key="expense.id"
+                                        class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <td class="p-4">{{ expense.id }}</td>
+                                        <td class="p-4">{{ expense.description }}</td>
+                                        <td class="p-4">{{ expense.user.name }} {{ expense.user.last_name }}</td>
+                                        <td class="p-4">
+                                            {{ new Intl.NumberFormat('es-DO', {
+                                                style: 'currency', currency: 'DOP'
+                                            }).format(expense.amount || 0) }}
+                                        </td>
+                                        <td class="p-4">{{ formatDate(expense.created_at) }}</td>
+                                        <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(expense.active)" />
                                                 <p :class="statusBadgeClasses(expense.active)">
@@ -116,24 +104,25 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td class="p-4 items-center">
+                                        <td class="p-4">
                                             <p @click="openModal(expense)" class="text-blue-500 cursor-pointer">Abrir
                                             </p>
                                         </td>
-
                                     </tr>
-
-
-
                                 </tbody>
                             </table>
+
+                            <!-- Empty state -->
                             <div v-if="!expenses.data.length"
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
                         </div>
+
+                        <!-- Pagination -->
                         <Pagination :pagination="expenses" :filters="form" />
                     </div>
+
                 </div>
             </div>
 
@@ -182,7 +171,9 @@
                             <SecondaryButton type="button" @click="form_modal.reset()">
                                 Limpiar
                             </SecondaryButton>
-                            <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="form.processing"
+                                :class="{ 'opacity-25': form.processing }" :is-loading="form.processing">Guardar
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>
