@@ -1,4 +1,5 @@
 <template>
+    <Head title="Usuario" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />

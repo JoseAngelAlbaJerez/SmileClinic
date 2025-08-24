@@ -11,97 +11,75 @@
             <div
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
-                    <!-- Search & Exports -->
-                    <div class="my-2 flex lg:mx-10 gap-2 items-center">
+
+                    <!-- Search & Actions -->
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
-                        <!-- Espacio flexible para separar TableDropDown de la derecha -->
-                        <div class="flex ml-auto items-center gap-2">
+                        <!-- Spacer pushes actions to right on big screens -->
+                        <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
+                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
+                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
 
-                            <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar "
-                                class="rounded-lg border-0 p-1.5 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600" />
                             <AccessGate permission="patient.create">
                                 <Link :href="route('patients.create')" as="button"
-                                    class="flex justify-center gap-2 rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
-                                <AddIcon class="size-6" />
-                                Nuevo Paciente
+                                    class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <AddIcon class="size-5" />
+                                <span class="hidden sm:inline">Nuevo Paciente</span>
                                 </Link>
                             </AccessGate>
                         </div>
                     </div>
 
-
-                    <!-- Table -->
+                    <!-- Table (Desktop) -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs  uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
-                                        <th scope="col"
-                                            class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
+                                        <th scope="col" class="px-4 py-3 cursor-pointer whitespace-nowrap"
                                             @click="sort('id')">
-                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection ===
-                                                'asc' ?
-                                                '↑' :
-                                                '↓' }}</span>
+                                            # <span v-if="form.sortField === 'id'">{{ form.sortDirection === 'asc' ? '↑'
+                                                : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('first_name')">
-                                            Nombre<span v-if="form.sortField === 'first_name'">{{ form.sortDirection ===
-                                                'asc' ? '↑' :
-                                                '↓'
-                                                }}</span></th>
-                                        <th scope="col" class=" cursor-pointer" @click="sort('date_of_birth')">
+                                            Nombre <span v-if="form.sortField === 'first_name'">{{ form.sortDirection
+                                                === 'asc' ? '↑' : '↓' }}</span>
+                                        </th>
+                                        <th scope="col" class="cursor-pointer" @click="sort('date_of_birth')">
                                             Fecha de Nacimiento <span v-if="form.sortField === 'date_of_birth'">{{
-                                                form.sortDirection ===
-                                                    'asc' ?
-                                                    '↑' :
-                                                    '↓'
-                                            }}</span>
+                                                form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-
-                                        <th scope="col" class="  cursor-pointer" @click="sort('ars')">ARS
-                                            <span v-if="form.sortField === 'ars'">{{ form.sortDirection === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span>
+                                        <th scope="col" class="cursor-pointer" @click="sort('ars')">
+                                            ARS <span v-if="form.sortField === 'ars'">{{ form.sortDirection === 'asc' ?
+                                                '↑' : '↓' }}</span>
                                         </th>
-
-
-                                        <th scope="col" class=" cursor-pointer" @click="sort('created_at')">
-                                            Fecha de
-                                            Creación<span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ?
-                                                '↑' :
-                                                '↓'
-                                                }}</span></th>
-
+                                        <th scope="col" class="cursor-pointer" @click="sort('created_at')">
+                                            Fecha de Creación <span v-if="form.sortField === 'created_at'">{{
+                                                form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
-                                                <div class="flex items-center ">
-
+                                                <div class="flex items-center gap-1">
                                                     <h2>Estado</h2>
                                                     <FunnelIcon />
                                                 </div>
-
                                             </div>
                                         </th>
-
-
                                         <th scope="col" class="p-4">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
 
+                                <tbody>
                                     <tr v-for="patient in patients.data" :key="patient.id">
-                                        <td class="p-4  items-center">{{ patient.id }}</td>
-                                        <td class="p-4  items-center">{{ patient.first_name }} {{ patient.last_name }}
-                                        </td>
-                                        <td class="p-4  items-center">{{ patient.date_of_birth }}</td>
-                                        <td class="p-4  items-center">{{ patient.ars }}</td>
-                                        <td class="p-4  items-center">{{ formatDate(patient.created_at) }}</td>
-                                        <td class="p-4  items-center">
+                                        <td class="p-4">{{ patient.id }}</td>
+                                        <td class="p-4">{{ patient.first_name }} {{ patient.last_name }}</td>
+                                        <td class="p-4">{{ patient.date_of_birth }}</td>
+                                        <td class="p-4">{{ patient.ars }}</td>
+                                        <td class="p-4">{{ formatDate(patient.created_at) }}</td>
+                                        <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(patient.active)" />
                                                 <p :class="statusBadgeClasses(patient.active)">
@@ -110,24 +88,57 @@
                                                 </p>
                                             </div>
                                         </td>
-                                        <td class="p-4 items-center">
+                                        <td class="p-4">
                                             <Link :href="route('patients.show', patient.id)" class="text-blue-500">Abrir
                                             </Link>
                                         </td>
-
                                     </tr>
-
-
-
                                 </tbody>
                             </table>
+
                             <div v-if="!patients.data.length"
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
                         </div>
+
                         <Pagination :pagination="patients" :filters="form" />
                     </div>
+
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="patient in patients.data" :key="patient.id"
+                            class="border rounded-lg p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                    {{ patient.first_name }} {{ patient.last_name }}
+                                </h3>
+                                <Link :href="route('patients.show', patient.id)" class="text-blue-500 text-sm">Abrir
+                                </Link>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#{{ patient.id }}</p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <p><span class="font-medium">Nacimiento:</span> {{ patient.date_of_birth }}</p>
+                                <p><span class="font-medium">ARS:</span> {{ patient.ars }}</p>
+                                <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(patient.active)">
+                                        <HandThumbDown v-if="patient.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!patients.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+
+                        <Pagination :pagination="patients" :filters="form" />
+                    </div>
+
                 </div>
             </div>
         </template>

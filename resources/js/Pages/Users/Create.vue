@@ -1,4 +1,5 @@
 <template>
+    <Head title="Usuarios" />
     <AuthenticatedLayout>
         <template #header>
 

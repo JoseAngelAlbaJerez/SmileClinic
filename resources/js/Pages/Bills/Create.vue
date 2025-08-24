@@ -1,4 +1,5 @@
 <template>
+     <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Citas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />

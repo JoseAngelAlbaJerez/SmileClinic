@@ -1,4 +1,5 @@
 <template>
+     <Head title="Cuentas Por Cobrar" />
     <AuthenticatedLayout>
         <template #header>
             <BreadCrumb :crumbs="crumbs" />

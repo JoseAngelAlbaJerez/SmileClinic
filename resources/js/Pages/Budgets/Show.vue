@@ -1,4 +1,5 @@
 <template>
+     <Head title="Presupuestos" />
     <AuthenticatedLayout>
         <template #header>
             <BreadCrumb :crumbs="crumbs" />

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Paciente" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Receta" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
