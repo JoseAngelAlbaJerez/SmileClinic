@@ -21,9 +21,9 @@
 
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
-                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
+                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('bills.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4">
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
                             <AddIcon class="size-5 sm:size-6" />
                             <span class="hidden sm:inline">Nueva Factura</span>
                             </Link>
@@ -46,7 +46,7 @@
                                     {{ bill.active ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </p>
-                            <Link :href="route('bills.show', bill)" class="text-blue-500 mt-2 inline-block">Abrir</Link>
+                            <Link :href="route('bills.show', bill)" class="text-pink-500 mt-2 inline-block">Abrir</Link>
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
@@ -112,7 +112,7 @@
                                         </td>
                                         <td class="p-4 items-center">
                                             <Link :href="route('bills.show', bill)"
-                                                class="text-blue-500 cursor-pointer">Abrir</Link>
+                                                class="text-pink-500 cursor-pointer">Abrir</Link>
                                         </td>
                                     </tr>
                                 </tbody>

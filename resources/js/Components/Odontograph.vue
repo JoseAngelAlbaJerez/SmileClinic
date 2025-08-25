@@ -2,8 +2,8 @@
     <div class="space-y-6">
         <!-- Encabezado -->
         <div class="flex items-center gap-3">
-            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                <TeethIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                <TeethIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
             </div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Creador de Odontograma</h2>
         </div>
@@ -18,7 +18,7 @@
                     @click="selectTooth(tooth)"
                     class="relative group p-2 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                     :class="{
-                        'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': odontogram[tooth],
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
                         'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
                     }"
                 >
@@ -83,7 +83,7 @@
                     @click="selectTooth(tooth)"
                     class="relative group p-2 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                     :class="{
-                        'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': odontogram[tooth],
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
                         'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
                     }"
                 >
@@ -189,7 +189,7 @@
                                 @click="applyToAllZones"
                                 class="p-2 rounded-lg border transition-colors"
                                 :class="{
-                                    'bg-blue-500 text-white border-blue-500': selectedZone === 'Todas',
+                                    'bg-pink-500 text-white border-pink-500': selectedZone === 'Todas',
                                     'border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700': selectedZone !== 'Todas'
                                 }"
                             >
@@ -242,7 +242,7 @@
                         </label>
                         <select
                             v-model="procedure"
-                            class="w-full border dark:text-white border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            class="w-full border dark:text-white border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"
                         >
                             <option disabled value="">Seleccione un procedimiento</option>
                             <option value="Obturación">Obturación</option>
@@ -270,7 +270,7 @@
                     <button
                         type="button"
                         @click="applyProcedure"
-                        class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+                        class="px-4 py-2 rounded-lg bg-pink-600 text-white font-medium hover:bg-pink-700 transition-colors"
                         :disabled="!selectedZone || !procedure"
                         :class="{ 'opacity-50 cursor-not-allowed': !selectedZone || !procedure }"
                     >
@@ -331,8 +331,8 @@ function selectZone(zone) {
 function zoneClass(zone) {
     return {
         'border rounded px-2 py-1': true,
-        'bg-blue-600 text-white': selectedZone.value === zone,
-        'hover:bg-blue-100 dark:hover:bg-blue-800': true
+        'bg-pink-600 text-white': selectedZone.value === zone,
+        'hover:bg-pink-100 dark:hover:bg-pink-800': true
     }
 }
 

@@ -1,5 +1,5 @@
 <template>
-    <Head title="Paciente" />
+    <Head :title="patient.first_name+' '+patient.last_name" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -42,12 +42,12 @@
                 <!-- Información personal -->
                 <!-- Información del Paciente - Diseño Mejorado -->
                 <div
-                    class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                     <!-- Encabezado principal -->
                     <div
                         class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                        <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                            <UserIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                        <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                            <UserIcon class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                         </div>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Información del Paciente</h2>
                     </div>
@@ -58,8 +58,8 @@
                         <div
                             class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                    <CardIcon class="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                                <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                    <CardIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
                                 </div>
                                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Datos Personales</h3>
                             </div>
@@ -111,8 +111,8 @@
                         <div
                             class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                    <MedicalHistoryIcon class="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                                <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                    <MedicalHistoryIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
                                 </div>
                                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Antecedentes Médicos
                                 </h3>
@@ -120,7 +120,7 @@
 
                             <div class="space-y-3 text-sm">
                                 <!-- Complicaciones -->
-                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-pink-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Complicaciones
                                             médicas:</span>
@@ -137,7 +137,7 @@
                                 </div>
 
                                 <!-- Medicamentos -->
-                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-pink-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Uso de
                                             medicamentos:</span>
@@ -154,7 +154,7 @@
                                 </div>
 
                                 <!-- Alergias -->
-                                <div class="bg-blue-50 dark:bg-gray-600/50 p-3 rounded-lg">
+                                <div class="bg-pink-50 dark:bg-gray-600/50 p-3 rounded-lg">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Alergias
                                             conocidas:</span>
@@ -180,18 +180,18 @@
                 <!-- Recetas Médicas - Diseño Mejorado -->
                 <AccessGate permission="prescription.view">
                     <div
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                <MedicalHistoryIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <MedicalHistoryIcon class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Recetas Médicas</h2>
                             <div class="ml-auto flex gap-2">
                                 <AccessGate permission="prescription.view">
                                     <Link :href="route('prescriptions.index', { patient_id: patient.id })"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <EyeIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -216,7 +216,7 @@
                                         <div class="flex-1">
                                             <div class="flex justify-between">
                                                 <h3
-                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
                                                     Receta # - {{ prescription.id }}
 
                                                 </h3>
@@ -232,11 +232,11 @@
                                             <!-- Info básica -->
                                             <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ formatDate(prescription.created_at) }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ prescription.doctor.name }} {{
                                                         prescription.doctor.last_name
                                                     }}</span>
@@ -248,7 +248,7 @@
                                             <div class="mt-3">
                                                 <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
                                                     <summary
-                                                        class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
                                                         <span>Ver medicamentos</span>
                                                         <ChevronDownIcon
                                                             class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
@@ -259,9 +259,9 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-500">
                                                             <div class="flex items-start">
                                                                 <div
-                                                                    class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg mr-3">
+                                                                    class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg mr-3">
                                                                     <PillIcon
-                                                                        class="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                                                                        class="w-5 h-5 text-pink-600 dark:text-pink-300" />
                                                                 </div>
                                                                 <div class="flex-1">
                                                                     <h4
@@ -335,17 +335,17 @@
                 <AccessGate permission="event.view">
                     <!-- Citas Pendientes - Diseño Mejorado -->
                     <div
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                <CalendarIcon class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <CalendarIcon class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas</h2>
                             <div class="ml-auto flex gap-2">
                                 <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="event.create">
@@ -369,7 +369,7 @@
                                         <div class="flex-1">
                                             <div class="flex justify-between">
                                                 <h3
-                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
                                                     #{{ event.id }} - {{ event.title }}
                                                 </h3>
                                                 <span class="  text-sm text-white font-medium px-2 py-1 rounded-full"
@@ -383,16 +383,16 @@
 
                                             <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ event.date }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <ClockIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <ClockIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ event.starttime }} - {{ event.endtime }}</span>
                                                 </div>
                                                 <div
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
-                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
                                                     }}</span>
                                                 </div>
@@ -407,7 +407,7 @@
                                             <input type="checkbox" @click="AttendEvent(event)" :checked="event.attended"
                                                 class="sr-only peer">
                                             <div
-                                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
+                                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-pink-500 dark:peer-checked:bg-pink-500">
                                             </div>
                                             <span class="ms-3 text-sm font-medium"
                                                 :class="event.attended ? 'text-green-500' : 'text-red-500'">
@@ -449,18 +449,18 @@
                 <!-- Presupuestos - Diseño Mejorado -->
                 <AccessGate permission="budget.view">
                     <div
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Presupuestos</h2>
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="budgets" :href="route('budgets.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="budget.create">
@@ -484,7 +484,7 @@
                                         <div class="flex-1">
                                             <div class="flex justify-between">
                                                 <h3
-                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
                                                     Presupuesto #{{ budget.id }}
                                                 </h3>
                                             </div>
@@ -493,20 +493,20 @@
                                             <!-- Info básica en columnas -->
                                             <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CashIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CashIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ budget.type }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ formatDate(budget.created_at) }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
                                                         }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span class="font-bold">
                                                         Total: {{ new Intl.NumberFormat('es-DO', {
                                                             style:
@@ -521,7 +521,7 @@
                                             <div class="mt-3">
                                                 <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
                                                     <summary
-                                                        class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
                                                         <span>Ver tratamientos</span>
                                                         <ChevronDownIcon
                                                             class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
@@ -608,18 +608,18 @@
                 <!-- Facturas - Diseño Mejorado -->
                 <AccessGate permission="bill.view">
                     <div
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                                <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                             </div>
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Facturas</h2>
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="bill.create">
@@ -643,7 +643,7 @@
                                         <div class="flex-1">
                                             <div class="flex justify-between">
                                                 <h3
-                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
                                                     Factura #{{ bill.id }}
                                                 </h3>
                                                 <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
@@ -663,20 +663,20 @@
                                             <!-- Info básica en columnas -->
                                             <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CashIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CashIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ bill.type }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>{{ formatDate(bill.created_at) }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <UserIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
                                                         }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
-                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-blue-500" />
+                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span class="font-bold">
                                                         Total: {{ new Intl.NumberFormat('es-DO', {
                                                             style:
@@ -691,7 +691,7 @@
                                             <div class="mt-3">
                                                 <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
                                                     <summary
-                                                        class="flex items-center cursor-pointer text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
                                                         <span>Ver tratamientos</span>
                                                         <ChevronDownIcon
                                                             class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
@@ -777,10 +777,10 @@
                 <div class="space-y-6">
                     <!-- Encabezado Mejorado -->
                     <div
-                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-full">
-                                <TeethIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-full">
+                                <TeethIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                             </div>
                             <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Odontogramas</h1>
                         </div>
@@ -792,13 +792,13 @@
                                     class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:top-5 text-gray-400" />
                                 <input @input="submitFilters()" v-model="filters.search" type="text"
                                     placeholder="Buscar odontogramas..."
-                                    class="w-full pl-10 pr-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border-0 bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500" />
                             </div>
 
                             <div class="flex gap-2">
                                 <AccessGate permission="odontograph.delete">
                                     <button @click="toggleshowDeleted()"
-                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-blue-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-blue-600 transition-all sm:text-hidden">
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-pink-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-pink-600 transition-all sm:text-hidden">
                                         <DeleteIcon class="w-5 h-5" />
                                         <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
                                             }}
@@ -807,7 +807,7 @@
                                 </AccessGate>
                                 <AccessGate permission="odontograph.create">
                                     <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                     <AddIcon class="w-5 h-5" />
                                     <span class="lg:inline sm:hidden">Nuevo Odontograma</span>
                                     </Link>
@@ -825,8 +825,8 @@
                                 class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                                            <DocumentTextIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                                            <DocumentTextIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                         </div>
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
@@ -845,7 +845,7 @@
 
                                     <div class="flex gap-2">
                                         <Link v-if="item.active" :href="route('odontographs.edit', item)"
-                                            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                                            class="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 hover:bg-pink-200 dark:hover:bg-pink-800/50 transition-colors"
                                             title="Editar">
                                         <EditIcon class="w-5 h-5" />
                                         </Link>
@@ -878,8 +878,8 @@
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="{
-                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                                'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': item.data[tooth],
+                                                'hover:bg-pink-50 dark:hover:bg-pink-900/20': !item.data[tooth]
                                             }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
@@ -910,8 +910,8 @@
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="{
-                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                                'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': item.data[tooth],
+                                                'hover:bg-pink-50 dark:hover:bg-pink-900/20': !item.data[tooth]
                                             }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
@@ -949,7 +949,7 @@
                             </p>
                             <AccessGate permission="odontograph.create">
                                 <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                 <AddIcon class="w-5 h-5" />
                                 <span>Crear primer odontograma</span>
                                 </Link>
@@ -964,8 +964,8 @@
                                 class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                                            <DocumentTextIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                                            <DocumentTextIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                         </div>
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
@@ -985,7 +985,7 @@
                                     <div class="flex gap-2">
                                         <Link v-if="item.active && patient.active"
                                             :href="route('odontographs.edit', item)"
-                                            class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                                            class="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 hover:bg-pink-200 dark:hover:bg-pink-800/50 transition-colors"
                                             title="Editar">
                                         <EditIcon class="w-5 h-5" />
                                         </Link>
@@ -1018,8 +1018,8 @@
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="{
-                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                                'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': item.data[tooth],
+                                                'hover:bg-pink-50 dark:hover:bg-pink-900/20': !item.data[tooth]
                                             }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
@@ -1050,8 +1050,8 @@
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="{
-                                                'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700': item.data[tooth],
-                                                'hover:bg-blue-50 dark:hover:bg-blue-900/20': !item.data[tooth]
+                                                'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': item.data[tooth],
+                                                'hover:bg-pink-50 dark:hover:bg-pink-900/20': !item.data[tooth]
                                             }" :title="item.data[tooth] ? 'Ver detalles' : 'Sin procedimientos'">
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
@@ -1089,7 +1089,7 @@
                             </p>
                             <AccessGate permission="odontograph.create">
                                 <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                    class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                 <AddIcon class="w-5 h-5" />
                                 <span>Crear primer odontograma</span>
                                 </Link>
@@ -1154,7 +1154,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Link } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
@@ -1229,7 +1229,8 @@ export default {
         CashIcon,
         CurrencyDolarIcon,
         CardIcon,
-        AccessGate
+        AccessGate,
+        Head
     },
     data() {
         return {

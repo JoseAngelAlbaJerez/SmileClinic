@@ -53,7 +53,7 @@ watch(searchTerm, () => {
         <!-- Barra de búsqueda -->
         <div class="flex justify-between gap-4">
             <input v-model="searchTerm" type="text" placeholder="Buscar usuario por nombre..."
-                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-white" />
 
             <AccessGate role="admin">
                 <Link :href="route('users.create')" as="button"
@@ -75,13 +75,13 @@ watch(searchTerm, () => {
                 </thead>
                 <tbody>
                     <tr v-for="user in users.data" :key="user.id" class="cursor-pointer" :class="{
-                        'bg-blue-500 text-white': selectedUserId === user.id,
+                        'bg-pink-500 text-white': selectedUserId === user.id,
                         'hover:bg-gray-200 dark:hover:bg-gray-700': selectedUserId !== user.id
                     }" @click="selectUser(user)">
                         <td class="p-4 hidden sm:table-cell">{{ user.id }}</td>
                         <td class="p-4">{{ user.name }} {{ user.last_name }}</td>
                         <td class="p-4">
-                            <span class="inline-flex items-center gap-1 bg-blue-200 text-blue-800 text-xs font-semibold px-3 py-1 rounded-xl">
+                            <span class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-1 rounded-xl">
                                 <UserIcon class="w-4 h-4" />
                                 {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
                             </span>

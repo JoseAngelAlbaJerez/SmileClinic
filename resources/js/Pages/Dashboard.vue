@@ -8,19 +8,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Patients Card -->
                     <div
-                        class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-900/20 rounded-2xl shadow-md p-6 border border-blue-100 dark:border-blue-900/50">
+                        class="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-900/20 rounded-2xl shadow-md p-6 border border-pink-100 dark:border-pink-900/50">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-blue-600 dark:text-blue-300">Total Pacientes</p>
-                                <h3 class="text-2xl font-bold text-blue-800 dark:text-white mt-1">{{ patients.length }}
+                                <p class="text-sm font-medium text-pink-600 dark:text-pink-300">Total Pacientes</p>
+                                <h3 class="text-2xl font-bold text-pink-800 dark:text-white mt-1">{{ patients.length }}
                                 </h3>
                                 <div class="mt-2">
                                     <span class="text-xs text-gray-500 dark:text-gray-400">Registrados en el
                                         sistema</span>
                                 </div>
                             </div>
-                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/50">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 dark:text-blue-400"
+                            <div class="p-3 rounded-full bg-pink-100 dark:bg-pink-900/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-600 dark:text-pink-400"
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -127,13 +127,13 @@
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos Recientes</h3>
                             <Link :href="route('bills.index')"
-                                class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todos</Link>
+                                class="text-sm text-pink-600 dark:text-pink-400 hover:underline">Ver todos</Link>
                         </div>
                         <div class="space-y-3">
                             <div v-for="item in income.slice(0, 5)" :key="item.id"
-                                class="flex items-center justify-between p-3 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                class="flex items-center justify-between p-3 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
                                 <Link :href="route('bills.show', item.id)" class="flex items-center">
-                                <DocumentMoney class="w-8 h-8 text-blue-500 mr-3" />
+                                <DocumentMoney class="w-8 h-8 text-pink-500 mr-3" />
                                 <div>
                                     <p class="text-sm font-medium text-gray-900 dark:text-white">{{
                                         item.patient.first_name }} {{ item.patient.last_name }}</p>
@@ -162,7 +162,7 @@
                                 </p>
                                 <AccessGate permission="bill.create">
                                     <Link :href="route('bills.create')"
-                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                     <AddIcon class="w-5 h-5" />
                                     <span>Crear primera factura</span>
                                     </Link>
@@ -177,11 +177,11 @@
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Gastos Recientes</h3>
                             <Link :href="route('expenses.index')"
-                                class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Ver todos</Link>
+                                class="text-sm text-pink-600 dark:text-pink-400 hover:underline">Ver todos</Link>
                         </div>
                         <div class="space-y-3">
                             <div v-for="item in expense.slice(0, 5)" :key="item.id"
-                                class="flex items-center justify-between p-3 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                class="flex items-center justify-between p-3 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
                                 <div class="flex items-center">
                                     <CartIcon class="w-8 h-8 text-amber-500 mr-3" />
                                     <div>
@@ -212,7 +212,7 @@
                                 </p>
                                 <AccessGate permission="expense.create">
                                     <Link :href="route('expenses.index')"
-                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                     <AddIcon class="w-5 h-5" />
                                     <span>Crear primer egreso</span>
                                     </Link>
@@ -228,7 +228,7 @@
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Agenda de Citas</h3>
                         <Link :href="route('events.create')" as="button"
-                            class="flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors">
+                            class="flex items-center gap-2 rounded-lg bg-pink-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 transition-colors">
                         <AddIcon class="size-4" />
                         Nueva Cita
                         </Link>

@@ -13,9 +13,9 @@
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg  transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Registro de Usuario</h2>
-                            <p class="text-blue-100 text-sm">Complete la información requerida</p>
+                            <p class="text-pink-100 text-sm">Complete la información requerida</p>
                         </div>
 
                         <!-- Form Content -->
@@ -30,7 +30,7 @@
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.name" id="name" type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Nombre" />
                                 </div>
                                 <p v-if="errors.name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.name
@@ -48,7 +48,7 @@
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.last_name" id="last_name" type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Apellido" />
                                 </div>
                                 <p v-if="errors.last_name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -65,7 +65,7 @@
                                         <MailIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.email" id="email" type="email"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="correo@ejemplo.com" />
                                 </div>
                                 <p v-if="errors.email" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -78,7 +78,7 @@
                                     Fecha de Nacimiento <span class="text-red-500">*</span>
                                 </label>
                                 <VueDatePicker
-                                    class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                    class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                     v-model="form.date_of_birth" :enable-time-picker="false"
                                     placeholder="Seleccione fecha" />
                                 <p v-if="errors.date_of_birth" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -96,7 +96,7 @@
                                         <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <DNIInput v-model="form.DNI"
-                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
                                 </div>
                                 <p v-if="errors.DNI" class="mt-1 text-sm text-red-600">{{ errors.DNI }}</p>
                             </div>
@@ -112,7 +112,7 @@
                                         <PhoneIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <PhoneInput v-model="form.phone_number"
-                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
                                 </div>
                                 <p v-if="errors.phone_number" class="mt-1 text-sm text-red-600">{{
                                     errors.phone_number }}</p>
@@ -129,7 +129,7 @@
                                         <BuildingIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.position" id="position" type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Posición" />
                                 </div>
                                 <p v-if="errors.position" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -146,7 +146,7 @@
                                         <AcademicCapIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.specialty" id="specialty" type="text"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Especialidad" />
                                 </div>
                                 <p v-if="errors.specialty" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -163,7 +163,7 @@
                                         <LockClosedIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <input v-model="form.password" id="password" type="password"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="••••••••" autocomplete="new-password" />
                                 </div>
                                 <p v-if="errors.password" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
@@ -182,7 +182,7 @@
                                     </div>
                                     <input v-model="form.password_confirmation" id="password_confirmation"
                                         type="password"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="••••••••" autocomplete="new-password" />
                                 </div>
                                 <p v-if="errors.password_confirmation"
@@ -200,7 +200,7 @@
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
                                     <select v-model="form.role" id="role"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200 appearance-none">
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200 appearance-none">
                                         <option value="">Seleccione un rol</option>
                                         <option value="admin">Administrador</option>
                                         <option value="doctor">Doctor</option>
@@ -231,7 +231,7 @@
                                 </SecondaryButton>
                                 <PrimaryButton type="submit" :disabled="form.processing"
                                     :class="{ 'opacity-75': form.processing }"
-                                    class="hover:bg-blue-600 transition duration-200">
+                                    class="hover:bg-pink-600 transition duration-200">
 
                                     <span v-if="form.processing">Registrando...</span>
                                     <span v-else>Registrar Usuario</span>

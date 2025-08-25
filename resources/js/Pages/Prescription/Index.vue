@@ -18,9 +18,9 @@
                         <!-- Flexible space -->
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
-                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
+                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('prescriptions.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500">
                             <AddIcon class="size-5 sm:size-6" />
                             <span class="hidden sm:inline">Nueva Receta</span>
                             </Link>
@@ -33,7 +33,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden md:table-cell"
@@ -103,7 +103,7 @@
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <p @click="openModal(prescription)" class="text-blue-500 cursor-pointer">
+                                            <p @click="openModal(prescription)" class="text-pink-500 cursor-pointer">
                                                 Abrir
                                             </p>
                                         </td>
@@ -123,14 +123,14 @@
             <!-- Modal (unchanged, only ensure scrollable content on small screens) -->
             <Modal :show="showModal" @close="showModal = false" :max-width="'3xl'">
                 <div class="text-gray-800 p-4 sm:p-5 max-h-[90vh] overflow-y-auto">
-                    <h2 class="text-2xl font-semibold  p-4 text-blue-500 ">
+                    <h2 class="text-2xl font-semibold  p-4 text-pink-500 ">
                         Detalles de la Receta
                     </h2>
 
                     <div v-if="selectedprescription" class="space-y-3 p-4 ">
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Paciente:</span>
-                            <Link :href="route('patients.show', selectedprescription.patient.id)" class="text-blue-500">
+                            <Link :href="route('patients.show', selectedprescription.patient.id)" class="text-pink-500">
                             {{
                                 selectedprescription.patient.first_name }} {{
                                 selectedprescription.patient.last_name }}
@@ -145,7 +145,7 @@
 
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
-                            <Link :href="route('users.show', selectedprescription.doctor.id)" class="text-blue-500">
+                            <Link :href="route('users.show', selectedprescription.doctor.id)" class="text-pink-500">
                             {{ selectedprescription.doctor.name }} {{
                                 selectedprescription.doctor.last_name }}</Link>
                         </div>
@@ -156,7 +156,7 @@
                                 <!-- Encabezado clickeable -->
                                 <button @click="toggleDetail(index)"
                                     class="w-full text-left p-4 flex justify-between items-center border dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                                    <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    <h3 class="text-lg font-bold text-pink-600 dark:text-pink-400">
                                         {{ details.drugs.name }}
                                     </h3>
 

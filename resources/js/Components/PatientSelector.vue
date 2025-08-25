@@ -60,7 +60,7 @@ watch(searchTerm, () => {
         <!-- Barra de búsqueda -->
         <div class="flex justify-between gap-4">
             <input v-model="searchTerm" type="text" placeholder="Buscar paciente por nombre..."
-                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-white" />
 
             <AccessGate permission="patient.create">
                 <Link :href="route('patients.create')" as="button"
@@ -81,7 +81,7 @@ watch(searchTerm, () => {
                 </thead>
                 <tbody>
                     <tr v-for="patient in patients.data" :key="patient.id" class="cursor-pointer" :class="{
-                        'bg-blue-500 text-gray-900 dark:bg-blue-500 dark:text-white': selectedPatientId === patient.id,
+                        'bg-pink-500 text-gray-900 dark:bg-pink-500 dark:text-white': selectedPatientId === patient.id,
                         'hover:bg-gray-200 hover:text-gray-800': selectedPatientId !== patient.id
                     }" @click="selectPatient(patient)">
                         <td class="p-4 hidden sm:table-cell">{{ patient.id }}</td>

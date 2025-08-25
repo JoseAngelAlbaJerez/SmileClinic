@@ -34,8 +34,8 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-x-8 gap-y-6 ">
                     <div
-                        class="flex flex-wrap items-center gap-4 px-4 py-3 bg-blue-50 dark:bg-gray-800 rounded-lg border border-blue-100 dark:border-gray-700 shadow-sm">
-                        <div class="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                        class="flex flex-wrap items-center gap-4 px-4 py-3 bg-pink-50 dark:bg-gray-800 rounded-lg border border-pink-100 dark:border-gray-700 shadow-sm">
+                        <div class="flex items-center gap-2 text-pink-700 dark:text-pink-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                 fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -74,14 +74,14 @@
                             <!-- Tarjeta de procedimientos -->
                             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6">
                                 <div
-                                    class="bg-blue-50 dark:bg-gray-800 px-6 py-3 border-b border-blue-100 dark:border-gray-600 flex items-center gap-3">
-                                    <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                    class="bg-pink-50 dark:bg-gray-800 px-6 py-3 border-b border-pink-100 dark:border-gray-600 flex items-center gap-3">
+                                    <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Procedimientos</h3>
                                 </div>
 
                                 <div class="divide-y divide-gray-200 dark:divide-gray-800">
                                     <div v-for="details in budgets.budgetdetail" :key="details.id"
-                                        class="p-5 hover:bg-blue-50 dark:hover:bg-gray-900 transition-colors duration-200">
+                                        class="p-5 hover:bg-pink-50 dark:hover:bg-gray-900 transition-colors duration-200">
                                         <div
                                             class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
                                             <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
@@ -135,14 +135,14 @@
                             <!-- Tarjeta de procedimientos con pagos -->
                             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
                                 <div
-                                    class="bg-blue-50 dark:bg-gray-800 px-6 py-3 border-b border-blue-100 dark:border-gray-600 flex items-center gap-3">
-                                    <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                    class="bg-pink-50 dark:bg-gray-800 px-6 py-3 border-b border-pink-100 dark:border-gray-600 flex items-center gap-3">
+                                    <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Procedimientos</h3>
                                 </div>
 
                                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
                                     <div v-for="details in budgets.budgetdetail" :key="details.id"
-                                        class="p-5 hover:bg-blue-50 dark:hover:bg-gray-900 transition-colors duration-200">
+                                        class="p-5 hover:bg-pink-50 dark:hover:bg-gray-900 transition-colors duration-200">
                                         <div
                                             class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
                                             <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
@@ -174,7 +174,7 @@
                                         <div v-if="details.payment.length" class="mb-4">
                                             <h5
                                                 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500"
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500"
                                                     viewBox="0 0 20 20" fill="currentColor">
                                                     <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                                                     <path fill-rule="evenodd"

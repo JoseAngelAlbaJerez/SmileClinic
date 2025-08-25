@@ -37,7 +37,7 @@ const selectProcedure = (procedure) => {
                     :key="procedure.id"
                     class="cursor-pointer"
                     :class="{
-                        'bg-blue-500 text-gray-900 dark:bg-blue-500 dark:text-white': selectedProcedures === procedure.id,
+                        'bg-pink-500 text-gray-900 dark:bg-pink-500 dark:text-white': selectedProcedures === procedure.id,
                         'hover:bg-gray-200 hover:text-gray-800': selectedProcedures !== procedure.id
                     }"
                     @click="selectProcedure(procedure)"

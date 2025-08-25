@@ -1,5 +1,6 @@
 <template>
-     <Head title="Facturas" />
+
+    <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -11,9 +12,9 @@
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Nueva Factura</h2>
-                            <p class="text-blue-100 text-sm">Complete los detalles del documento</p>
+                            <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
                         <!-- Main Form Content -->
@@ -26,7 +27,7 @@
                                         Paciente <span class="text-red-500">*</span>
                                     </label>
                                     <button @click="openPatientModal()"
-                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <span v-if="form.patient_id" class="truncate">
                                             {{ selected_patient.first_name }} {{ selected_patient.last_name }}
@@ -38,13 +39,30 @@
                                     </p>
                                 </div>
 
+                                <!-- Doctor Selection -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Doctor <span class="text-red-500">*</span>
+                                    </label>
+                                    <div @click="openDoctorModal()"
+                                        class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                        <p v-if="form.doctor_id" class="truncate">
+                                            {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                        </p>
+                                        <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Doctor</p>
+                                    </div>
+                                    <p v-if="errors.doctor_id" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                        errors.doctor_id }}</p>
+                                </div>
+
                                 <!-- Document Type -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Tipo <span class="text-red-500">*</span>
                                     </label>
                                     <select v-model="form.type"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <option value="Contado">Contado</option>
                                         <option value="Crédito">Crédito</option>
                                     </select>
@@ -59,7 +77,7 @@
                                         Fecha Emisión <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
@@ -70,7 +88,7 @@
                                         Fecha Vencimiento <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Seleccione fecha" v-model="form.expiration_date"
                                         :enable-time-picker="false" />
                                     <p v-if="errors.expiration_date"
@@ -84,11 +102,11 @@
                             <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm mt-6">
                                 <div class="flex items-center  mb-4">
                                     <div class="flex items-center  space-x-2">
-                                        <DocumentIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <DocumentIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                         <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
                                     </div>
                                     <button @click="openBudgetModal()" :disabled="!selected_patient"
-                                        class=" ml-auto mr-2 flex items-center space-x-1 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                                        class=" ml-auto mr-2 flex items-center space-x-1 rounded-lg bg-pink-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200">
                                         <AddIcon class="h-4 w-4" />
                                         <span>Seleccionar Presupuesto</span>
                                     </button>
@@ -114,7 +132,7 @@
                                 <!-- Procedure Cards -->
                                 <div v-else class="space-y-4">
                                     <div v-for="(proc, index) in selectedProcedures" :key="proc.id"
-                                        class="bg-white dark:bg-gray-600 border border-blue-200 dark:border-blue-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+                                        class="bg-white dark:bg-gray-600 border border-pink-200 dark:border-pink-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                                         <!-- Procedure Header -->
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center space-x-2">
@@ -138,7 +156,7 @@
                                                     Tratamiento <span class="text-red-500">*</span>
                                                 </label>
                                                 <input v-model="form_details[index].treatment" type="text"
-                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                     placeholder="Descripción" />
                                                 <p v-if="form.errors[`details.${index}.treatment`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
@@ -157,7 +175,7 @@
                                                         class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
                                                     <input v-model="form_details[index].amount" type="number"
                                                         @input="calcTotal(index)"
-                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                         placeholder="0.00" />
                                                 </div>
                                                 <p v-if="form.errors[`details.${index}.amount`]"
@@ -165,6 +183,55 @@
                                                     {{ form.errors[`details.${index}.amount`] }}
                                                 </p>
                                             </div>
+                                            <!-- Doctor's Amount -->
+                                            <div class="space-y-1">
+                                                <label
+                                                    class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Monto de {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                                    <span class="text-red-500">*</span>
+                                                </label>
+                                                <div class="relative">
+                                                    <span
+                                                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
+                                                    <input v-model="form_details[index].amount_doctor" type="number"
+                                                        @input="calcTotal(index)"
+                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
+                                                        placeholder="0.00" />
+                                                </div>
+                                                <p v-if="form.errors[`details.${index}.amount`]"
+                                                    class="text-xs text-red-600 dark:text-red-400">
+                                                    {{ form.errors[`details.${index}.amount`] }}
+                                                </p>
+                                            </div>
+
+                                            <div class="space-y-1" v-if="selected_doctor">
+                                                <!-- Who provides materials -->
+                                                <div class="flex items-center justify-between">
+                                                    <label for="materials"
+                                                        class="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+
+                                                        Materiales <span class="text-red-500">*</span>
+                                                    </label>
+                                                </div>
+
+                                                <!-- Amount Input -->
+                                                <div class="relative">
+                                                    <span
+                                                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
+                                                    <input v-model="form_details[index].materials_amount" type="number"
+                                                        step="0.01" min="0" @input="calcTotal(index)" class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md
+             focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
+                                                        placeholder="0.00" />
+                                                </div>
+
+                                                <!-- Validation Errors -->
+                                                <p v-if="form.errors[`details.${index}.materials_amount`]"
+                                                    class="text-xs text-red-600 dark:text-red-400">
+                                                    {{ form.errors[`details.${index}.materials_amount`] }}
+                                                </p>
+                                            </div>
+
+
 
                                             <!-- Discount -->
                                             <div class="space-y-1">
@@ -188,7 +255,7 @@
                                                 </label>
                                                 <input v-model="form_details[index].quantity" type="number"
                                                     @input="calcTotal(index)"
-                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                     placeholder="1" min="1" />
                                                 <p v-if="form.errors[`details.${index}.quantity`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
@@ -209,7 +276,7 @@
                                                             class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
                                                         <input v-model="form_details[index].initial" type="number"
                                                             @input="calcTotal(index)"
-                                                            class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                            class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                             placeholder="0.00" />
                                                     </div>
                                                     <p v-if="form.errors[`details.${index}.initial`]"
@@ -226,7 +293,7 @@
                                                     </label>
                                                     <input v-model="form_details[index].amount_of_payments"
                                                         type="number" @input="calcTotal(index)"
-                                                        class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                        class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                         placeholder="1" min="1" />
                                                     <p v-if="form.errors[`details.${index}.amount_of_payments`]"
                                                         class="text-xs text-red-600 dark:text-red-400">
@@ -241,12 +308,16 @@
                                             class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-500">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
-                                        {
-                                            style:
-                                                'currency', currency: 'DOP'
-                                        }).format(form_details[index].total
-                                            || 0) }}</p>
+                                                    {
+                                                        style:
+                                                            'currency', currency: 'DOP'
+                                                    }).format(form_details[index].total
+                                                        || 0) }}</p>
                                             </span>
+                                            <label class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2" for="materials">Los provee Smile Clinic:</label>
+                                             <input id="materials" type="checkbox"
+                                                            v-model="form_details[index].material_provider"
+                                                            class="h-4 w-4 text-pink-600 mr-2 border-gray-300 rounded focus:ring-pink-500" />
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />
@@ -273,7 +344,7 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Total: <span class="text-blue-600 dark:text-blue-400">{{ new
+                                    Total: <span class="text-pink-600 dark:text-pink-400">{{ new
                                         Intl.NumberFormat('es-DO', {
                                             style:
                                                 'currency', currency: 'DOP'
@@ -292,7 +363,7 @@
                                     <PrimaryButton @click="submit()"
                                         :disabled="form.processing || form_detail.processing"
                                         :class="{ 'opacity-75': form.processing || form_detail.processing }"
-                                        class="hover:bg-blue-600 transition duration-200">
+                                        class="hover:bg-pink-600 transition duration-200">
 
                                         <span v-if="form.processing || form_detail.processing">Guardando...</span>
                                         <span v-else>Guardar </span>
@@ -322,7 +393,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <DocumentIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <DocumentIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Procedimiento
                             </h3>
                             <button @click="showProcedureModal = false"
@@ -340,7 +411,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Paciente
                             </h3>
                             <button @click="showPatientModal = false"
@@ -353,6 +424,22 @@
                         selected_patient = $event;
                         showPatientModal = false
                             " />
+                    </div>
+                </Modal>
+                <!-- Doctor Selection Modal -->
+                <Modal :show="showDoctorModal" @close="showDoctorModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                                Seleccionar Doctor
+                            </h3>
+                            <button @click="showDoctorModal = false" class="text-gray-400 hover:text-gray-500">
+                                <XIcon class="h-6 w-6" />
+                            </button>
+                        </div>
+                        <UserSelector :users="doctors"
+                            @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false" />
                     </div>
                 </Modal>
             </div>
@@ -372,7 +459,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import Modal from '@/Components/Modal.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import DangerButton from '@/Components/DangerButton.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DiscountInput from '@/Components/DiscountInput.vue';
@@ -382,11 +469,13 @@ import XIcon from '@/Components/Icons/XIcon.vue';
 import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import BudgetSelector from '@/Pages/Budgets/BudgetSelector.vue';
+import UserSelector from '@/Components/UserSelector.vue';
 
 export default {
     props: {
         patient: Object,
         procedure: Object,
+        doctors: Object,
         errors: [Array, Object],
     },
     components: {
@@ -407,7 +496,9 @@ export default {
         DocumentIcon,
         SearchIcon,
         DeleteIcon,
-        BudgetSelector
+        BudgetSelector,
+        Head,
+        UserSelector
 
     },
     data() {
@@ -422,6 +513,7 @@ export default {
             form_detail: useForm({
                 procedure_id: '',
                 amount: '',
+                amount_doctor: '',
                 total: '',
                 treatment: '',
                 discount: 0,
@@ -432,12 +524,14 @@ export default {
             bill_id: '',
             form_details: [],
             selected_patient: '',
+            selected_doctor: '',
             timeout: 3000,
             crumbs: [
                 { icon: markRaw(DocumentMoney), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(AddIcon), label: 'Crear' },
 
             ],
+            showDoctorModal: ref(false),
             showProcedureModal: ref(false),
             showBudgetModal: ref(false),
             showPatientModal: ref(false),
@@ -469,6 +563,7 @@ export default {
                 this.form_details.push({
                     procedure_id: found.id,
                     amount: found.cost,
+                    amount_doctor: found.cost,
                     total: found.cost,
                     treatment: found.name,
                     discount: 0,
@@ -519,6 +614,9 @@ export default {
         },
         openPatientModal() {
             this.showPatientModal = true;
+        },
+        openDoctorModal() {
+            this.showDoctorModal = true;
         },
 
         formatNumber(n) {

@@ -11,9 +11,9 @@
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Nuevo Presupuesto</h2>
-                            <p class="text-blue-100 text-sm">Complete los detalles del documento</p>
+                            <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
                         <!-- Main Form Content -->
@@ -26,7 +26,7 @@
                                         Paciente <span class="text-red-500">*</span>
                                     </label>
                                     <button @click="openPatientModal()"
-                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <span v-if="form.patient_id" class="truncate">
                                             {{ selected_patient.first_name }} {{ selected_patient.last_name }}
@@ -46,7 +46,7 @@
                                         Fecha Emisión <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
@@ -57,7 +57,7 @@
                                         Fecha Vencimiento <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Seleccione fecha" v-model="form.expiration_date"
                                         :enable-time-picker="false" />
                                     <p v-if="errors.expiration_date"
@@ -71,7 +71,7 @@
                             <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm mt-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="flex items-center space-x-2">
-                                        <DocumentIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <DocumentIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                         <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
                                     </div>
                                     <button @click="openProcedureModal()"
@@ -96,7 +96,7 @@
                                 <!-- Procedure Cards -->
                                 <div v-else class="space-y-4">
                                     <div v-for="(proc, index) in selectedProcedures" :key="proc.id"
-                                        class="bg-white dark:bg-gray-600 border border-blue-200 dark:border-blue-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+                                        class="bg-white dark:bg-gray-600 border border-pink-200 dark:border-pink-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                                         <!-- Procedure Header -->
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center space-x-2">
@@ -120,7 +120,7 @@
                                                     Tratamiento <span class="text-red-500">*</span>
                                                 </label>
                                                 <input v-model="form_details[index].treatment" type="text"
-                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                     placeholder="Descripción" />
                                                 <p v-if="form.errors[`details.${index}.treatment`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
@@ -139,7 +139,7 @@
                                                         class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
                                                     <input v-model="form_details[index].amount" type="number"
                                                         @input="calcTotal(index)"
-                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                         placeholder="0.00" />
                                                 </div>
                                                 <p v-if="form.errors[`details.${index}.amount`]"
@@ -170,7 +170,7 @@
                                                 </label>
                                                 <input v-model="form_details[index].quantity" type="number"
                                                     @input="calcTotal(index)"
-                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                     placeholder="1" min="1" />
                                                 <p v-if="form.errors[`details.${index}.quantity`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
@@ -191,7 +191,7 @@
                                                             class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
                                                         <input v-model="form_details[index].initial" type="number"
                                                             @input="calcTotal(index)"
-                                                            class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                            class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                             placeholder="0.00" />
                                                     </div>
                                                     <p v-if="form.errors[`details.${index}.initial`]"
@@ -208,7 +208,7 @@
                                                     </label>
                                                     <input v-model="form_details[index].amount_of_payments"
                                                         type="number" @input="calcTotal(index)"
-                                                        class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                                                        class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                         placeholder="1" min="1" />
                                                     <p v-if="form.errors[`details.${index}.amount_of_payments`]"
                                                         class="text-xs text-red-600 dark:text-red-400">
@@ -255,7 +255,7 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                  <p class="text-blue-600 dark:text-blue-400">Total: {{ new Intl.NumberFormat('es-DO',
+                                  <p class="text-pink-600 dark:text-pink-400">Total: {{ new Intl.NumberFormat('es-DO',
                                         {
                                             style:
                                                 'currency', currency: 'DOP'
@@ -274,7 +274,7 @@
                                     <PrimaryButton @click="submit()"
                                         :disabled="form.processing || form_detail.processing"
                                         :class="{ 'opacity-75': form.processing || form_detail.processing }"
-                                        class="hover:bg-blue-600 transition duration-200">
+                                        class="hover:bg-pink-600 transition duration-200">
 
                                         <span v-if="form.processing || form_detail.processing">Guardando...</span>
                                         <span v-else>Guardar </span>
@@ -290,7 +290,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <DocumentIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <DocumentIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Procedimiento
                             </h3>
                             <button @click="showProcedureModal = false"
@@ -308,7 +308,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Paciente
                             </h3>
                             <button @click="showPatientModal = false"

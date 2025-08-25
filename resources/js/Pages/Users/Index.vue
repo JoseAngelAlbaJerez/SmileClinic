@@ -18,9 +18,9 @@
                         <!-- Search + Button -->
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
-                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
+                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('users.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500">
                             <AddIcon class="size-5 sm:size-6" />
                             <span class="hidden sm:inline">Nuevo Usuario</span>
                             </Link>
@@ -33,7 +33,7 @@
                         <div class="overflow-x-auto w-full">
                             <table class="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden md:table-cell"
@@ -87,7 +87,7 @@
                                         <td class="p-4 hidden sm:table-cell">{{ formatDate(user.date_of_birth) }}</td>
                                         <td class="p-4">
                                             <span
-                                                class="inline-flex items-center gap-1 bg-blue-200 text-blue-800 text-xs font-semibold px-3 py-2 rounded-xl">
+                                                class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-2 rounded-xl">
                                                 <UserIcon class="w-4 h-4" />
                                                 {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
                                             </span>
@@ -103,7 +103,7 @@
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <Link :href="route('users.show', user.id)" class="text-blue-500">Abrir
+                                            <Link :href="route('users.show', user.id)" class="text-pink-500">Abrir
                                             </Link>
                                         </td>
                                     </tr>

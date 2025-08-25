@@ -24,9 +24,9 @@
                         <!-- Search and Filter Controls -->
                         <div class="mb-6 flex flex-col sm:flex-row gap-4">
                             <input v-model="searchQuery" @input="handleSearch" type="text" placeholder="Buscar..."
-                                class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                                class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
                             <select v-model="timeRange" @change="handleTimeRangeChange"
-                                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+                                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
                                 <option value="1">Hoy</option>
                                 <option value="7">Últimos 7 días</option>
                                 <option value="30">Últimos 30 días</option>
@@ -38,7 +38,7 @@
                         <div class="flex gap-5 flex-col ">
                             <!-- Event List -->
                             <div v-for="event in filteredEvents" :key="event.id"
-                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none hover:bg-blue-100">
+                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none hover:bg-pink-100">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center gap-2.5">
                                         <span class="w-2.5 h-2.5 rounded-full"
@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="dropdown relative inline-flex">
                                         <button type="button" @click="toggleDropdown(event)"
-                                            class="dropdown-toggle inline-flex justify-center py-2.5 px-1 items-center gap-2 text-sm text-black dark:text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:text-blue-600 dark:hover:text-blue-400">
+                                            class="dropdown-toggle inline-flex justify-center py-2.5 px-1 items-center gap-2 text-sm text-black dark:text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:text-pink-600 dark:hover:text-pink-400">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="4"
                                                 viewBox="0 0 12 4" fill="none">
                                                 <path
@@ -92,7 +92,7 @@
                                         currentYear }}</h5>
                                 <div class="flex items-center">
                                     <button @click="previousMonth"
-                                        class="text-blue-600 dark:text-blue-400 p-1 rounded transition-all duration-300 hover:text-white dark:hover:text-white hover:bg-blue-600 dark:hover:bg-blue-500">
+                                        class="text-pink-600 dark:text-pink-400 p-1 rounded transition-all duration-300 hover:text-white dark:hover:text-white hover:bg-pink-600 dark:hover:bg-pink-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 16 16" fill="none">
                                             <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentcolor"
@@ -101,7 +101,7 @@
                                         </svg>
                                     </button>
                                     <button @click="nextMonth"
-                                        class="text-blue-600 dark:text-blue-400 p-1 rounded transition-all duration-300 hover:text-white dark:hover:text-white hover:bg-blue-600 dark:hover:bg-blue-500">
+                                        class="text-pink-600 dark:text-pink-400 p-1 rounded transition-all duration-300 hover:text-white dark:hover:text-white hover:bg-pink-600 dark:hover:bg-pink-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 16 16" fill="none">
                                             <path d="M6.00236 3.99707L10.0025 7.99723L6 11.9998" stroke="currentcolor"
@@ -113,36 +113,36 @@
                             </div>
                             <AccessGate permission="event.create" class="ml-auto">
                                 <Link :href="route('events.create')" as="button"
-                                    class="flex justify-center  rounded-lg bg-blue-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 sm:px-4">
+                                    class="flex justify-center  rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 sm:px-4">
                                 <AddIcon class="size-6" />
                                 Nueva Cita
                                 </Link>
                             </AccessGate>
-                            <div class="flex items-center rounded-md p-1 bg-blue-50 dark:bg-gray-700 gap-px">
+                            <div class="flex items-center rounded-md p-1 bg-pink-50 dark:bg-gray-700 gap-px">
 
                                 <button @click="viewMode = 'day'"
-                                    :class="{ 'bg-blue-600 dark:bg-blue-500 text-white': viewMode === 'day', 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400': viewMode !== 'day' }"
-                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white">
+                                    :class="{ 'bg-pink-600 dark:bg-pink-500 text-white': viewMode === 'day', 'bg-pink-50 dark:bg-gray-700 text-pink-600 dark:text-pink-400': viewMode !== 'day' }"
+                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-pink-600 dark:hover:bg-pink-500 hover:text-white">
                                     Day
                                 </button>
                                 <button @click="viewMode = 'week'"
-                                    :class="{ 'bg-blue-600 dark:bg-blue-500 text-white': viewMode === 'week', 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400': viewMode !== 'week' }"
-                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white">
+                                    :class="{ 'bg-pink-600 dark:bg-pink-500 text-white': viewMode === 'week', 'bg-pink-50 dark:bg-gray-700 text-pink-600 dark:text-pink-400': viewMode !== 'week' }"
+                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-pink-600 dark:hover:bg-pink-500 hover:text-white">
                                     Week
                                 </button>
                                 <button @click="viewMode = 'month'"
-                                    :class="{ 'bg-blue-600 dark:bg-blue-500 text-white': viewMode === 'month', 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400': viewMode !== 'month' }"
-                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white">
+                                    :class="{ 'bg-pink-600 dark:bg-pink-500 text-white': viewMode === 'month', 'bg-pink-50 dark:bg-gray-700 text-pink-600 dark:text-pink-400': viewMode !== 'month' }"
+                                    class="py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-pink-600 dark:hover:bg-pink-500 hover:text-white">
                                     Month
                                 </button>
                             </div>
                         </div>
 
                         <!-- Calendar Grid -->
-                        <div class="border border-blue-200 dark:border-gray-600 rounded-xl">
-                            <div class="grid grid-cols-7 rounded-t-3xl border-b border-blue-200 dark:border-gray-600">
+                        <div class="border border-pink-200 dark:border-gray-600 rounded-xl">
+                            <div class="grid grid-cols-7 rounded-t-3xl border-b border-pink-200 dark:border-gray-600">
                                 <div v-for="day in daysOfWeek" :key="day"
-                                    class="py-3.5 border-r border-blue-200 dark:border-gray-600 bg-blue-50  dark:bg-gray-700 flex items-center justify-center text-sm font-medium text-blue-600 dark:text-blue-400"
+                                    class="py-3.5 border-r border-pink-200 dark:border-gray-600 bg-pink-50  dark:bg-gray-700 flex items-center justify-center text-sm font-medium text-pink-600 dark:text-pink-400"
                                     :class="{ 'rounded-tl-xl': day === 'Sun', 'rounded-tr-xl': day === 'Sat' }">
                                     {{ day }}
                                 </div>
@@ -150,7 +150,7 @@
                             <div class="grid grid-cols-7 rounded-b-xl">
                                 <!-- Previous month days -->
                                 <div v-for="day in previousMonthDays" :key="'prev-' + day"
-                                    class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300 hover:bg-blue-50 dark:hover:bg-gray-600">
+                                    class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-pink-200 dark:border-gray-600 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-gray-600">
                                     <span class="text-xs font-semibold text-gray-400 dark:text-gray-500">{{ day
                                     }}</span>
                                 </div>
@@ -158,17 +158,17 @@
                                 <!-- Current month days -->
                                 <div v-for="day in currentMonthDays" :key="day.date.getDate()"
                                     @click="selectDate(day.date)" class="group relative flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-white dark:bg-gray-800
-         border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300
-         hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer" :class="{
+         border-r border-b border-pink-200 dark:border-gray-600 transition-all duration-300
+         hover:bg-pink-50 dark:hover:bg-gray-700 cursor-pointer" :class="{
             'rounded-bl-xl': day.isFirstDayOfWeek,
             'rounded-br-xl': day.isLastDayOfWeek,
-            'bg-blue-50 dark:bg-blue-900/30': isToday(day.date),
-            'bg-blue-100 dark:bg-blue-800': isSelectedDate(day.date)
+            'bg-pink-50 dark:bg-pink-900/30': isToday(day.date),
+            'bg-pink-100 dark:bg-pink-800': isSelectedDate(day.date)
         }">
                                     <span class="text-xs font-semibold" :class="{
                                         'text-gray-900 dark:text-gray-100': !isToday(day.date) && !isSelectedDate(day.date),
-                                        'text-blue-600 dark:text-blue-400': isToday(day.date),
-                                        'text-blue-800': isSelectedDate(day.date)
+                                        'text-pink-600 dark:text-pink-400': isToday(day.date),
+                                        'text-pink-800': isSelectedDate(day.date)
                                     }">
                                         {{ day.date.getDate() }}
                                     </span>
@@ -201,7 +201,7 @@
 
                                 <!-- Next month days -->
                                 <div v-for="(day, index) in nextMonthDays" :key="'next-' + day"
-                                    class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-blue-200 dark:border-gray-600 transition-all duration-300 hover:bg-blue-50 dark:hover:bg-gray-600"
+                                    class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-pink-200 dark:border-gray-600 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-gray-600"
                                     :class="{
                                         'border-r-0': index === nextMonthDays.length - 1,
                                         'rounded-br-xl': index === nextMonthDays.length - 1
@@ -229,7 +229,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Paciente:</span>
-                        <Link :href="route('patients.show', eventForm.patient.id)" class="text-blue-500">{{
+                        <Link :href="route('patients.show', eventForm.patient.id)" class="text-pink-500">{{
                             eventForm.patient.first_name }} {{
                             eventForm.patient.last_name }}
                         </Link>
@@ -242,7 +242,7 @@
 
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
-                        <Link :href="route('users.show', eventForm.doctor.id)" class="text-blue-500">{{
+                        <Link :href="route('users.show', eventForm.doctor.id)" class="text-pink-500">{{
                             eventForm.doctor.name }} {{
                             eventForm.doctor.last_name }}
                         </Link>
@@ -263,7 +263,7 @@
                             <input type="checkbox" @click="AttendEvent(eventForm)" :checked="eventForm.attended"
                                 class="sr-only peer">
                             <div
-                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-blue-500 dark:peer-checked:bg-blue-500">
+                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 dark:peer-focus:ring-pink-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-pink-500 dark:peer-checked:bg-pink-500">
                             </div>
                             <span v-if="eventForm.attended"
                                 class="ms-3 text-sm font-medium text-green-300  ">Atendido</span>
@@ -488,7 +488,7 @@ export default {
         };
 
         const getEventColorClass = (event, isBg = false) => {
-            if (!event || !event.type) return isBg ? 'bg-blue-50' : 'bg-blue-600';
+            if (!event || !event.type) return isBg ? 'bg-pink-50' : 'bg-pink-600';
 
             const type = event.type.toLowerCase();
             const colors = {
@@ -504,7 +504,7 @@ export default {
         };
 
         const getEventDotColorClass = (event) => {
-            if (!event || !event.type) return 'bg-blue-600';
+            if (!event || !event.type) return 'bg-pink-600';
 
             const type = event.type.toLowerCase();
             const colors = {

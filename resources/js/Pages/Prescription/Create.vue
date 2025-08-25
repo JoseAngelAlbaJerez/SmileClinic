@@ -10,9 +10,9 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                         <!-- Form Header -->
-                        <div class="bg-blue-500 px-6 py-4">
+                        <div class="bg-pink-500 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Nueva Receta Médica</h2>
-                            <p class="text-blue-100 text-sm">Complete los detalles de la prescripción</p>
+                            <p class="text-pink-100 text-sm">Complete los detalles de la prescripción</p>
                         </div>
 
                         <!-- Main Form Content -->
@@ -24,7 +24,7 @@
                                         Paciente <span class="text-red-500">*</span>
                                     </label>
                                     <button @click="openPatientModal()"
-                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <span v-if="form.patient_id" class="truncate">
                                             {{ selected_patient.first_name }} {{ selected_patient.last_name }}
@@ -41,7 +41,7 @@
                             <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm mt-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="flex items-center space-x-2">
-                                        <RXIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                        <RXIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                         <h3 class="text-lg font-semibold dark:text-white">Receta</h3>
                                     </div>
                                     <button @click="addPrescriptionDetail()"
@@ -65,7 +65,7 @@
                                 <!-- Prescription Items -->
                                 <div v-else class="space-y-4">
                                     <div v-for="(detail, index) in form.details" :key="index"
-                                        class="bg-white dark:bg-gray-600 border border-blue-200 dark:border-blue-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+                                        class="bg-white dark:bg-gray-600 border border-pink-200 dark:border-pink-400 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
                                         <!-- Item Header -->
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center space-x-2">
@@ -91,7 +91,7 @@
                                                 <div class="flex items-center gap-2">
                                                     <!-- Botón de selección de medicamento -->
                                                     <button @click="openDrugModal(index)"
-                                                        class="flex-1 flex items-center px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                                        class="flex-1 flex items-center px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md hover:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                                         <span v-if="detail.drug_id" class="truncate">
                                                             {{drugs.data.find(d => d.id === detail.drug_id)?.name ||
                                                                 'ID: ' + detail.drug_id}}
@@ -116,7 +116,7 @@
                                                     Descripción
                                                 </label>
                                                 <textarea v-model="detail.description" type="text"
-                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                                     placeholder="Descripción" />
                                             </div>
 
@@ -146,7 +146,7 @@
                                     </SecondaryButton>
                                     <PrimaryButton @click="submit()" :disabled="form.processing"
                                         :class="{ 'opacity-75': form.processing }"
-                                        class="hover:bg-blue-600 transition duration-200">
+                                        class="hover:bg-pink-600 transition duration-200">
                                         <span v-if="form.processing">Guardando...</span>
                                         <span v-else>Guardar</span>
                                     </PrimaryButton>
@@ -161,7 +161,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <RXIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <RXIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Medicamento
                             </h3>
                             <button @click="showDrugModal = false"
@@ -178,7 +178,7 @@
                         <div class="p-6">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                    <RXIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                    <RXIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                     Crear Medicamento
                                 </h3>
                                 <button @click="createDrugModal = false"
@@ -193,7 +193,7 @@
                                 </label>
                                 <div class="relative">
                                     <input v-model="form_modal.name" id="name" type="text"
-                                        class=" w-full pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        class=" w-full pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Nombre" />
                                 </div>
 
@@ -203,7 +203,7 @@
                                     Descripción<span class="text-red-500">*</span>
                                 </label>
                                 <textarea v-model="form_modal.description" type="text"
-                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                    class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                     placeholder="Descripción" />
                             </div>
                             <!-- Form Actions -->
@@ -215,7 +215,7 @@
                                 </SecondaryButton>
                                 <PrimaryButton type="submit" :disabled="form_modal.processing"
                                     :class="{ 'opacity-75': form_modal.processing }"
-                                    class="hover:bg-blue-600 transition duration-200">
+                                    class="hover:bg-pink-600 transition duration-200">
 
                                     <span v-if="form_modal.processing">Guardando...</span>
                                     <span v-else>Guardar </span>
@@ -231,7 +231,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                <UserIcon class="h-6 w-6 inline-block mr-2 text-blue-500" />
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
                                 Seleccionar Paciente
                             </h3>
                             <button @click="showPatientModal = false"

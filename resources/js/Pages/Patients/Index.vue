@@ -19,11 +19,11 @@
                         <!-- Spacer pushes actions to right on big screens -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
-                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:ring-slate-600" />
+                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
 
                             <AccessGate permission="patient.create">
                                 <Link :href="route('patients.create')" as="button"
-                                    class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                 <AddIcon class="size-5" />
                                 <span class="hidden sm:inline">Nuevo Paciente</span>
                                 </Link>
@@ -37,7 +37,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col" class="px-4 py-3 cursor-pointer whitespace-nowrap"
                                             @click="sort('id')">
@@ -89,7 +89,7 @@
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <Link :href="route('patients.show', patient.id)" class="text-blue-500">Abrir
+                                            <Link :href="route('patients.show', patient.id)" class="text-pink-500">Abrir
                                             </Link>
                                         </td>
                                     </tr>
@@ -113,7 +113,7 @@
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
                                     {{ patient.first_name }} {{ patient.last_name }}
                                 </h3>
-                                <Link :href="route('patients.show', patient.id)" class="text-blue-500 text-sm">Abrir
+                                <Link :href="route('patients.show', patient.id)" class="text-pink-500 text-sm">Abrir
                                 </Link>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">#{{ patient.id }}</p>

@@ -35,11 +35,11 @@
 
 
               <!-- Presupuestos Section -->
-<div class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg my-6 border border-gray-200 dark:border-gray-700">
+<div class="bg-gradient-to-br from-gray-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg my-6 border border-gray-200 dark:border-gray-700">
     <!-- Section Header -->
     <div class="flex items-center gap-3 mb-6">
-        <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-            <DocumentMoney class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+        <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+            <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
         </div>
         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Presupuestos</h2>
     </div>
@@ -50,7 +50,7 @@
             <!-- Budget Header (Clickable) -->
             <div
                 @click="openAccordion(index)"
-                class="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-white dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-500"
+                class="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-white dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-pink-300 dark:hover:border-pink-500"
                 :class="{
                     'opacity-70 border-red-200 dark:border-red-800': isExpired(budgets.emission_date) || !budgets.active
                 }"
@@ -77,7 +77,7 @@
                             <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
                         </svg>
-                        <span class="font-bold text-blue-600 dark:text-blue-400">${{ formatNumber(budgets.total) }}</span>
+                        <span class="font-bold text-pink-600 dark:text-pink-400">${{ formatNumber(budgets.total) }}</span>
                     </div>
                 </div>
 
@@ -169,7 +169,7 @@
                                 <Link
                                     v-if="CXC.active"
                                     :href="route('budgets.show', budgets)"
-                                    class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                                    class="p-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
                                     title="Ver detalles"
                                 >
                                     <EyeIcon class="w-5 h-5" />
@@ -216,17 +216,17 @@
 <Modal :show="showModal" @close="showModal = false" class="max-w-4xl">
     <div class="p-0 h-full max-h-[80vh] flex flex-col">
         <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-4 rounded-t-lg">
+        <div class="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-4 rounded-t-lg">
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-bold text-white">Gestión de Pagos</h2>
-                <button @click="showModal = false" class="text-white hover:text-blue-200 transition-colors">
+                <button @click="showModal = false" class="text-white hover:text-pink-200 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
             <div v-if="selectedBudget" class="mt-2">
-                <p class="text-blue-100 font-medium">{{ selectedBudget.procedure.name }}</p>
+                <p class="text-pink-100 font-medium">{{ selectedBudget.procedure.name }}</p>
             </div>
         </div>
 
@@ -274,7 +274,7 @@
                                        type="number"
                                        min="0"
                                        :max="payment.remaining_amount"
-                                       class="w-full pl-8 pr-3 py-2 border rounded-lg dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       class="w-full pl-8 pr-3 py-2 border rounded-lg dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                                        placeholder="0.00" />
                             </div>
                             <p v-if="form_details.errors && form_details.errors[index]" class="text-red-600 text-xs mt-1">
@@ -298,7 +298,7 @@
                         <div class="flex justify-end gap-3 pt-2">
                             <button v-if="payment.remaining_amount !== 0"
                                     @click.prevent="payAll(index)"
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors flex items-center gap-1">
+                                    class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 text-sm font-medium transition-colors flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                                 </svg>

@@ -5,10 +5,10 @@
     >
       <!-- Header -->
       <div class="flex flex-row items-center justify-between px-10 py-6">
-        <TeethIcon class="h-6 w-6 text-blue-300 dark:text-white"></TeethIcon>
+        <TeethIcon class="h-6 w-6 text-pink-300 dark:text-white"></TeethIcon>
         <a
           href="#"
-          class="text-2xl font-bold tracking-widest text-blue-300 uppercase rounded-lg dark:text-white"
+          class="text-2xl font-bold tracking-widest text-pink-300 uppercase rounded-lg dark:text-white"
         >
           SmileClinic
         </a>

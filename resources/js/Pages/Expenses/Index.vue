@@ -28,10 +28,10 @@
                             class="flex flex-col sm:flex-row ml-auto gap-2 items-stretch sm:items-center w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
                                 class="rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600 w-full" />
+                   focus:outline-none focus:ring-2 focus:ring-pink-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600 w-full" />
 
                             <button @click="showModal = true;"
-                                class="flex justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                 <AddIcon class="size-5" />
                                 <span class="hidden sm:inline">Nuevo Egreso</span>
                             </button>
@@ -44,7 +44,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs uppercase bg-blue-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
@@ -105,7 +105,7 @@
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <p @click="openModal(expense)" class="text-blue-500 cursor-pointer">Abrir
+                                            <p @click="openModal(expense)" class="text-pink-500 cursor-pointer">Abrir
                                             </p>
                                         </td>
                                     </tr>
@@ -129,7 +129,7 @@
             <!-- Modal -->
             <Modal :show="showModal" @close="showModal = false">
                 <div class="text-gray-800 p-8  ">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-500  pb-2">
+                    <h2 class="text-2xl font-semibold mb-4 text-pink-500  pb-2">
                         Crear Egreso
                     </h2>
                     <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -141,7 +141,7 @@
                                 <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                     style="pointer-events: none;" />
                                 <input v-model="form_modal.description" id="description" type="text"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white"
                                     placeholder="Descripción..." />
                             </div>
                             <p v-if="errors.description" class="mt-1 text-xs text-red-600">{{ errors.description }}</p>
@@ -155,7 +155,7 @@
                                 <DocumentMoney class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                     style="pointer-events: none;" />
                                 <input v-model="form_modal.amount" id="amount" type="number"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white"
                                     placeholder="Monto" />
                             </div>
                             <p v-if="errors.amount" class="mt-1 text-xs text-red-600">{{ errors.amount }}</p>
@@ -181,7 +181,7 @@
             <!-- Modal -->
             <Modal :show="showDetailModal" @close="showDetailModal = false">
                 <div class="text-gray-800 p-5  ">
-                    <h2 class="text-2xl font-semibold p-4 text-blue-500  pb-2">
+                    <h2 class="text-2xl font-semibold p-4 text-pink-500  pb-2">
                         Detalles del Egreso
                     </h2>
 

@@ -62,7 +62,7 @@ watchEffect(() => {
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                 <div class="flex justify-center ">
-                                    <svg class="h-8  mr-2 w-auto text-blue-500" viewBox="0 0 100 100" fill="none"
+                                    <svg class="h-8  mr-2 w-auto text-pink-500" viewBox="0 0 100 100" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z"
@@ -76,7 +76,7 @@ watchEffect(() => {
                                         <path d="M30 60C30 60 35 70 50 70C65 70 70 60 70 60" stroke="white"
                                             stroke-width="4" stroke-linecap="round" />
                                     </svg>
-                                    <h1 class="mt-2 text-blue-500    font-thin">Smile Clinic</h1>
+                                    <h1 class="mt-2 text-pink-500    font-thin">Smile Clinic</h1>
 
                                 </div>
 
