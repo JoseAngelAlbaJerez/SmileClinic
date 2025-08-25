@@ -15,7 +15,7 @@ class Expenses extends Model
         static::addGlobalScope('branches', function ($query) {
             if ($user = Auth::user()) {
                 if (!$user->hasRole('admin')) {
-                    $query->where('branch_id', $user->branch_id);
+                    $query->where('expenses.branch_id', $user->branch_id);
                 }
             }
         });
