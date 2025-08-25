@@ -7,6 +7,7 @@ use App\Models\CXC;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Procedure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Database\Eloquent\Builder;
@@ -95,8 +96,11 @@ class BillController extends Controller
     {
         $patient = Patient::with('budget.patient','budget.budgetdetail.procedure')->paginate(10);
         $procedure = Procedure::paginate(10);
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
+
         return Inertia::render('Bills/Create', [
             'patient' => $patient,
+            'doctors' => $doctors,
             'procedure' => $procedure,
         ]);
     }
