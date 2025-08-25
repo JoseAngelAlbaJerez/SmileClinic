@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
 class FilterByBranch
@@ -14,21 +15,23 @@ class FilterByBranch
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-   // FiltrarPorSucursal.php
-public function handle($request, Closure $next)
-{
-    $user = Auth::user();
+    // FiltrarPorSucursal.php
+  public function handle(Request $request, Closure $next)
+    {
+        $user = Auth::user();
 
-    if (!$user) {
-        view()->share('sucursal_id', null);
-    } elseif (in_array($user->roles[0], ['admin', 'owner'])) {
-        view()->share('sucursal_id', 'all');
-    } else {
-        view()->share('sucursal_id', $user->branch_id);
+        if (!$user) {
+            $branchId = null;
+        } elseif ($user->hasAnyRole(['admin', 'owner'])) {
+            $branchId = 'all';
+        } else {
+            $branchId = $user->branch_id;
+        }
+
+        view()->share('sucursal_id', $branchId);
+
+        Inertia::share('sucursal_id', $branchId);
+
+        return $next($request);
     }
-
-    return $next($request);
-}
-
-
 }

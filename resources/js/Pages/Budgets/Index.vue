@@ -80,7 +80,7 @@
                                 <tbody>
                                     <tr v-for="budget in budgets.data" :key="budget.id">
                                         <td class="p-4">{{ budget.id }}</td>
-                                        <td class="p-4">{{ budget.patient }} {{ budget.patient }}
+                                        <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
                                         </td>
                                         <td class="p-4">{{ budget.type }}</td>
                                         <td class="p-4">{{ new
