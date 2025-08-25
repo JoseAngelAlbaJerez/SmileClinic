@@ -254,7 +254,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
-import { Link } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
@@ -288,7 +288,8 @@ export default {
         DocumentMoney,
         VueDatePicker,
         DocumentIcon,
-        RestoreIcon
+        RestoreIcon,
+        Head
     },
     data() {
         return {
