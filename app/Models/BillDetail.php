@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BillDetail extends Model
 {
@@ -19,6 +20,16 @@ class BillDetail extends Model
         "bill_id",
         "active"
     ];
+      protected static function booted()
+    {
+        static::addGlobalScope('branches', function ($query) {
+            if ($user = Auth::user()) {
+                if (!$user->hasRole('admin')) {
+                    $query->where('branch_id', $user->branch_id);
+                }
+            }
+        });
+    }
     public function procedure()
     {
         return $this->belongsTo(Procedure::class, "procedure_id", 'id');

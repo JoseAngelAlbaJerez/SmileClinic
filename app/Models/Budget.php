@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Budget extends Model
 {
@@ -17,6 +18,16 @@ class Budget extends Model
         "total",
         "c_x_c_id",
     ];
+      protected static function booted()
+    {
+        static::addGlobalScope('branches', function ($query) {
+            if ($user = Auth::user()) {
+                if (!$user->hasRole('admin')) {
+                    $query->where('branch_id', $user->branch_id);
+                }
+            }
+        });
+    }
     public function budgetdetail()
     {
         return $this->hasMany(Budgetdetail::class);

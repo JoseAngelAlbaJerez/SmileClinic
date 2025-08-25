@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Bill extends Model
 {
@@ -18,6 +19,16 @@ class Bill extends Model
     'total',
 
    ];
+     protected static function booted()
+    {
+        static::addGlobalScope('branches', function ($query) {
+            if ($user = Auth::user()) {
+                if (!$user->hasRole('admin')) {
+                    $query->where('branch_id', $user->branch_id);
+                }
+            }
+        });
+    }
    public function billdetail()
     {
         return $this->hasMany(Billdetail::class);

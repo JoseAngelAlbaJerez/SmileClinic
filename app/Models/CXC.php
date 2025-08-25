@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class CXC extends Model
 {
@@ -13,6 +14,16 @@ class CXC extends Model
         "active",
         'branch_id',
     ];
+      protected static function booted()
+    {
+        static::addGlobalScope('branches', function ($query) {
+            if ($user = Auth::user()) {
+                if (!$user->hasRole('admin')) {
+                    $query->where('branch_id', $user->branch_id);
+                }
+            }
+        });
+    }
     public function Budget()
     {
         return $this->hasMany(Budget::class,'c_x_c_id','id');

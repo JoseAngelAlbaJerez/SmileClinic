@@ -3,12 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Prescription extends Model
 {
     protected $fillable = [
         "patient_id","doctor_id",'branch_id', "active"
     ];
+      protected static function booted()
+    {
+        static::addGlobalScope('branches', function ($query) {
+            if ($user = Auth::user()) {
+                if (!$user->hasRole('admin')) {
+                    $query->where('branch_id', $user->branch_id);
+                }
+            }
+        });
+    }
     public function patient(){
         return $this->belongsTo(Patient::class);
     }
