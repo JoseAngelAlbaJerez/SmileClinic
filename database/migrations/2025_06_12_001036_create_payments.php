@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('expiration_date');
             $table->decimal('total');
             $table->boolean('active')->default(true);
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

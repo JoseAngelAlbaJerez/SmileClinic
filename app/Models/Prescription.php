@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Prescription extends Model
 {
     protected $fillable = [
-        "patient_id","doctor_id", "active"
+        "patient_id","doctor_id",'branch_id', "active"
     ];
     public function patient(){
         return $this->belongsTo(Patient::class);
@@ -21,4 +21,8 @@ class Prescription extends Model
     public function prescriptionsDetails(){
         return $this->hasMany( PrescriptionDetail::class);
 }
+ public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

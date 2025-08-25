@@ -8,6 +8,7 @@ class Bill extends Model
 {
     protected $fillable =[
     'type',
+    'branch_id',
     'active',
     'emission_date',
     'expiration_date',
@@ -32,5 +33,9 @@ class Bill extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

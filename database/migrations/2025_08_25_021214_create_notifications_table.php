@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prescription_details', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
-            $table->foreignId('prescription_id');
-            $table->foreignId('drug_id');
-            $table->boolean('active')->default(true);
-            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
+            $table->string('type');
+            $table->text('message');
+            $table->boolean('read')->default(false);
+            $table->timestamp('scheduled_for')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prescription_details');
+        Schema::dropIfExists('notifications');
     }
 };

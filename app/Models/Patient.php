@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Patient extends Model
 {
@@ -16,6 +17,7 @@ class Patient extends Model
         "alergies_detail",
         "drugs",
         "drugs_detail",
+        'branch_id',
         "motive",
         "address",
         "DNI",
@@ -23,6 +25,14 @@ class Patient extends Model
         "phone_number",
         "active",
     ];
+    protected static function booted()
+{
+    static::addGlobalScope('branches', function ($query) {
+        if ($user = Auth::user()) {
+            $query->where('branch_id', $user->branch_id);
+        }
+    });
+}
     public function odontographs(){
         return $this->hasMany(Odontograph::class,'patient_id');
     }
@@ -37,5 +47,9 @@ class Patient extends Model
     }
     public function Budget(){
         return $this->hasMany(Budget::class,"patient_id","id");
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

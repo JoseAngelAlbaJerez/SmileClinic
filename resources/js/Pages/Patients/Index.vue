@@ -61,6 +61,14 @@
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
                                         <th class="cursor-pointer text-nowrap p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-1">
+                                                    <h2>Succursal</h2>
+                                                    <FunnelIcon />
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
                                                     <h2>Estado</h2>
@@ -79,6 +87,7 @@
                                         <td class="p-4">{{ patient.date_of_birth }}</td>
                                         <td class="p-4">{{ patient.ars }}</td>
                                         <td class="p-4">{{ formatDate(patient.created_at) }}</td>
+                                        <td class="p-4">{{ patient.branch.name }}</td>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(patient.active)" />

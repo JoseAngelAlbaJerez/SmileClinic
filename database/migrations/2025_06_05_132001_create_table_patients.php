@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->date('date_of_birth');
             $table->boolean('active');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

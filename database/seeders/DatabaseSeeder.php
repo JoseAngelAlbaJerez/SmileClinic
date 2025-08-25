@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(BranchSeeder::class);
         User::factory(10)->create();
         User::factory()->create([
 
@@ -22,21 +23,25 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('12345678'),
+            'branch_id' => 1,
         ]);
           User::factory()->create([
             'name' => 'Jose Angel',
             'email' => 'joseangelalba24@gmail.com',
             'password' => Hash::make('12345678'),
+            'branch_id' => 1,
         ]);
           User::factory()->create([
             'name' => 'San Pedro',
             'email' => 'sanpedro@gmail.com',
             'password' => Hash::make('12345678'),
+            'branch_id' => 2,
         ]);
            User::factory()->create([
             'name' => 'Mario',
             'email' => 'Mario@gmail.com',
             'password' => Hash::make('12345678'),
+            'branch_id' => 2,
         ]);
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);

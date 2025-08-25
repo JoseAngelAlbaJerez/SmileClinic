@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('c_x_c_id');
             $table->decimal('total');
             $table->boolean('active')->default(true);
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

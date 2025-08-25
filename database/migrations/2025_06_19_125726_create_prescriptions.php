@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('patient_id');
             $table->foreignId('doctor_id');
-              $table->boolean('active')->default(true);
+            $table->boolean('active')->default(true);
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

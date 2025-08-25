@@ -21,6 +21,7 @@ use App\Models\Patient;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -73,6 +74,7 @@ Route::get('/dashboard', function () {
         'incomeThisWeek' => $incomeThisWeek,
         'incomeLastWeek' => $incomeLastWeek,
         'percentageChange' => round($percentageChange, 2),
+        'user' => Auth::user()->load('branch'),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

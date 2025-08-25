@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->foreignId('budget_id');
             $table->boolean('active')->default(true);
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

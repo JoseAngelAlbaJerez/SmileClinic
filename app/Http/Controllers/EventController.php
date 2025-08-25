@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Spatie\GoogleCalendar\Event as GoogleCalendarEvent;
@@ -152,6 +153,7 @@ class EventController extends Controller
 
         $validated['attended'] = false;
         $validated['active'] = true;
+        $validated['branch_id'] = Auth::user()->branch_id;
 
         $event =  Event::create($validated);
         try {

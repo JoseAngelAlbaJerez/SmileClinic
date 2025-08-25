@@ -337,7 +337,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import Modal from '@/Components/Modal.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import DangerButton from '@/Components/DangerButton.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DiscountInput from '@/Components/DiscountInput.vue';
@@ -370,7 +370,8 @@ export default {
         XIcon,
         DocumentIcon,
         SearchIcon,
-        DeleteIcon
+        DeleteIcon,
+        Head
 
     },
     data() {

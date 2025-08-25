@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('active');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +35,8 @@ return new class extends Migration
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
+
         });
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
@@ -43,6 +46,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('street')->nullable();
             $table->string('postal_code')->nullable();
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 

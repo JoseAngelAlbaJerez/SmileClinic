@@ -93,6 +93,7 @@ class ExpensesController extends Controller
             'amount' => 'required|numeric|min:0',
 
         ]);
+        $validated['branch_id'] = Auth::user()->branch_id;
         Expenses::create([
             ...$validated,
             'user_id' => Auth::id(),

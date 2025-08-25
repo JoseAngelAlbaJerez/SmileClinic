@@ -25,6 +25,7 @@ class BudgetSeeder extends Seeder
                 'active' => true,
                 'created_at' => now(),
                 'updated_at'=> now(),
+                'branch_id' => fake()->numberBetween(1, 2),
             ]);
         }
     }

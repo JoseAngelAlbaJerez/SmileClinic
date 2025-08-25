@@ -10,6 +10,7 @@ class Event extends Model
 
         'title',
         'doctor_id',
+        'branch_id',
         'patient_id',
         'attended',
         'starttime',
@@ -24,5 +25,9 @@ class Event extends Model
     }
      public function patient(){
         return $this->belongsTo(Patient::class);
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

@@ -8,6 +8,7 @@ class BillDetail extends Model
 {
    protected $fillable = [
         "procedure_id",
+        'branch_id',
         "amount",
         "initial",
         "amount_of_payments",
@@ -30,6 +31,10 @@ class BillDetail extends Model
     public function Payment()
     {
         return $this->hasMany(Payment::class, 'budget_detail_id', 'id');
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
 }

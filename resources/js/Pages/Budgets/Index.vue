@@ -80,7 +80,7 @@
                                 <tbody>
                                     <tr v-for="budget in budgets.data" :key="budget.id">
                                         <td class="p-4">{{ budget.id }}</td>
-                                        <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                                        <td class="p-4">{{ budget.patient }} {{ budget.patient }}
                                         </td>
                                         <td class="p-4">{{ budget.type }}</td>
                                         <td class="p-4">{{ new
@@ -120,7 +120,7 @@
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
-                                {{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                                {{ budget.patient }} {{ budget.patient }}
                             </p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Tipo:</span> {{ budget.type }}</p>

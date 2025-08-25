@@ -28,6 +28,7 @@ class EventSeeder extends Seeder
                 'active' => fake()->boolean(),
                 'created_at' => now(),
                 'updated_at' => now(),
+                'branch_id' => fake()->numberBetween(1, 2),
             ]);
         }
     }

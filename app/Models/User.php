@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'last_name',
         'DNI',
+        'branch_id',
         'specialty',
         'phone_number',
         'date_of_birth',
@@ -35,6 +36,10 @@ class User extends Authenticatable
     public function address()
     {
         return $this->hasOne(Address::class);
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     /**

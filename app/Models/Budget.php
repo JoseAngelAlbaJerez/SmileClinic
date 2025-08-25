@@ -13,6 +13,7 @@ class Budget extends Model
         "expiration_date",
         "doctor_id",
         "patient_id",
+        'branch_id',
         "total",
         "c_x_c_id",
     ];
@@ -31,5 +32,9 @@ class Budget extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

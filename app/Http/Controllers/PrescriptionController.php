@@ -133,9 +133,11 @@ class PrescriptionController extends Controller
         ]);
 
         DB::beginTransaction();
+
         try {
             $prescription = Prescription::create([
                 'patient_id' => $validated['patient_id'],
+                 'branch_id' => Auth::user()->branch_id,
                 'doctor_id' => Auth::id(),
                 'active' => true,
             ]);

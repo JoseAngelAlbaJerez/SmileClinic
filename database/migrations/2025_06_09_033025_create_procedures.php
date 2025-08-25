@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('coberture');
             $table->decimal('cost');
             $table->boolean('active');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

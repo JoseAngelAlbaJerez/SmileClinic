@@ -13,6 +13,7 @@ class Payment extends Model
         "budget_detail_id",
         "total",
         "active",
+        'branch_id',
         "expiration_date"
     ];
     public function CXC(){
@@ -20,5 +21,9 @@ class Payment extends Model
     }
     public function BudgetDetail(){
         return $this->belongsTo(BudgetDetail::class,"budget_detail_id","id");
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

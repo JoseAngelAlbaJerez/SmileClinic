@@ -27,19 +27,23 @@ class BudgetController extends Controller
      */
     public function index(Request $request)
     {
-         if ($request->has('selector')) {
-        $budgets = Budget::with('patient')
-            ->when($request->search, fn($q, $search) =>
-                $q->whereHas('patient', fn($p) =>
-                    $p->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%'])
+        if ($request->has('selector')) {
+            $budgets = Budget::with('patient')
+                ->when(
+                    $request->search,
+                    fn($q, $search) =>
+                    $q->whereHas(
+                        'patient',
+                        fn($p) =>
+                        $p->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%'])
+                    )
                 )
-            )
-            ->paginate(10);
+                ->paginate(10);
 
-        return inertia('Budgets/BudgetSelector', [
-            'budgets' => $budgets
-        ]);
-    }
+            return inertia('Budgets/BudgetSelector', [
+                'budgets' => $budgets
+            ]);
+        }
 
         $search = $request->input('search');
         $sortField = $request->input('sortField');
@@ -50,14 +54,9 @@ class BudgetController extends Controller
         $patient_id = $request->input('patient_id');
 
         $query = Budget::query()->select('budgets.*')
-          ->join('patients', 'budgets.patient_id', '=', 'patients.id')
-           ;
+            ->join('patients', 'budgets.patient_id', '=', 'patients.id');
 
-        if ($showDeleted == true) {
-            $query->where('budgets.active', 1);
-        } else {
-            $query->where('budgets.active', 0);
-        }
+        $query->where('budgets.active', $showDeleted ? 1 : 0);
 
         if ($patient_id) {
             $patient = Patient::find($patient_id);
@@ -73,21 +72,15 @@ class BudgetController extends Controller
 
 
         if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.ars LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%']);
+            $query->whereHas('patient', function (Builder $q) use ($search) {
+                $q->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
+                    ->orWhere('ars', 'LIKE', "%{$search}%");
             });
         }
 
-        if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
-        } else {
-            $query->latest('budgets.updated_at')
-                ->latest('budgets.created_at');
-        }
+
         if ($lastDays) {
             if (is_numeric($lastDays)) {
                 $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
@@ -102,8 +95,13 @@ class BudgetController extends Controller
                 }
             }
         }
+        if ($sortField) {
+            $query->orderBy($sortField, $sortDirection);
+        } else {
+            $query->latest('updated_at')->latest('created_at');
+        }
 
-        $budgets = $query->orderByDesc('created_at')->with('doctor', 'patient')->paginate(10);
+         $budgets = $query->paginate(10);
         return Inertia::render('Budgets/Index', [
             'budgets' => $budgets,
             'filters' => [

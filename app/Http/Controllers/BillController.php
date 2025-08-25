@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BillController extends Controller
 {
-     public function index(Request $request)
+    public function index(Request $request)
     {
 
         $search = $request->input('search');
@@ -28,7 +28,7 @@ class BillController extends Controller
         $patient_id = $request->input('patient_id');
 
         $query = Bill::query()->select('bills.*')
-        ->join('patients', 'patient_id','=' ,'patients.id');
+            ->join('patients', 'patient_id', '=', 'patients.id');
         if ($showDeleted == true) {
             $query->where('bills.active', 1);
         } else {
@@ -92,9 +92,9 @@ class BillController extends Controller
             ],
         ]);
     }
-     public function create()
+    public function create()
     {
-        $patient = Patient::with('budget.patient','budget.budgetdetail.procedure')->paginate(10);
+        $patient = Patient::with('budget.patient', 'budget.budgetdetail.procedure')->paginate(10);
         $procedure = Procedure::paginate(10);
         $doctors = User::role('doctor')->with('roles')->paginate(10);
 
@@ -104,7 +104,7 @@ class BillController extends Controller
             'procedure' => $procedure,
         ]);
     }
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'form.patient_id' => 'required|exists:patients,id',
@@ -134,11 +134,16 @@ class BillController extends Controller
         ]);
 
         $billData = $validated['form'];
+        $billData['branch_id'] = Auth::user()->branch_id;
         $billData['emission_date'] = Carbon::parse($billData['emission_date'] ?? now());
         $billData['expiration_date'] = $billData['expiration_date'] ? Carbon::parse($billData['expiration_date']) : null;
         $billData['doctor_id'] = Auth::id();
         $bill = Bill::create($billData);
-        $billDetails  = $bill->billdetail()->createMany($validated['details']);
+        $details = collect($validated['details'])->map(function ($detail) use ($bill) {
+            $detail['branch_id'] = $bill->branch_id;
+            return $detail;
+        })->toArray();
+        $billDetails = $bill->billdetail()->createMany($details);
         if ($bill->type == "Crédito") {
             $patient = $bill->patient;
 
@@ -147,6 +152,7 @@ class BillController extends Controller
                     'balance' => $bill->total,
                     'patient_id' => $bill->patient_id,
                     'doctor_id' => $bill->doctor_id,
+                    'branch_id'  => $bill->branch_id,
                 ]);
             } else {
                 $CXC = $patient->cxc;
@@ -160,6 +166,7 @@ class BillController extends Controller
                     Payment::create([
                         'bill_detail_id' => $detail->id,
                         'c_x_c_id' => $CXC->id,
+                        'branch_id'        => $bill->branch_id,
                         'amount_paid' => 0,
                         'expiration_date' => $billData['expiration_date']->addMonth(),
                         'remaining_amount' => $remaining_amount,
@@ -180,12 +187,11 @@ class BillController extends Controller
             'bill_id' => $bill->id,
         ]);
     }
-      public function show(Bill $bill)
+    public function show(Bill $bill)
     {
         $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC', 'billdetail.payment');
         return Inertia::render("Bills/Show", [
             'bills' => $bill,
         ]);
     }
-
 }

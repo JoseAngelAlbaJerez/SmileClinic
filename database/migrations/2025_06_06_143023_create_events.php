@@ -22,6 +22,7 @@ return new class extends Migration
             $table->time('starttime');
             $table->time('endtime');
             $table->boolean('active');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
         });

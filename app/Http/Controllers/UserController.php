@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
@@ -119,6 +120,8 @@ class UserController extends Controller
             ]);
 
             $validated['active'] = true;
+            $validated['branch_id'] = Auth::user()->branch_id;
+
             $user = User::create($validated);
             $user->assignRole($validated['role']);
             return redirect()->route('users.index')->with('toast', 'Usuario registrado correctamente.');

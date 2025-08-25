@@ -27,7 +27,7 @@ class OdontographController extends Controller
             'patient_id' => 'required|exists:patients,id',
             'data' => 'required|array',
         ]);
-
+        $validated['branch_id'] = Auth::user()->branch_id;
         $validated['doctor_id'] = Auth::id();
         $validated['active'] = true;
         $odontogram = Odontograph::create($validated);

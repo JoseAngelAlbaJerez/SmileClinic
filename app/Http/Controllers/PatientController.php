@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller implements HasMiddleware
 {
@@ -80,7 +81,7 @@ class PatientController extends Controller implements HasMiddleware
             }
         }
 
-        $patients = $query->orderByDesc('created_at')->paginate(10);
+        $patients = $query->with('branch')->orderByDesc('created_at')->paginate(10);
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
             'filters' => [
@@ -232,6 +233,7 @@ class PatientController extends Controller implements HasMiddleware
             ]);
 
             $validated['active'] = true;
+            $validated['branch_id'] = Auth::user()->branch_id;
             $patient = Patient::create($validated);
 
             return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');

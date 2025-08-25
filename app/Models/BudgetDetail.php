@@ -13,6 +13,7 @@ class BudgetDetail extends Model
         "amount_of_payments",
         "total",
         "treatment",
+        'branch_id',
         "discount",
         "quantity",
         "budget_id",
@@ -30,5 +31,9 @@ class BudgetDetail extends Model
     public function Payment()
     {
         return $this->hasMany(Payment::class, 'budget_detail_id', 'id');
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

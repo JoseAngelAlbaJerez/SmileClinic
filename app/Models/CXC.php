@@ -10,7 +10,8 @@ class CXC extends Model
         "patient_id",
         "doctor_id",
         "balance",
-        "active"
+        "active",
+        'branch_id',
     ];
     public function Budget()
     {
@@ -26,5 +27,9 @@ class CXC extends Model
     public function Payment()
     {
         return $this->hasMany(Payment::class);
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }
