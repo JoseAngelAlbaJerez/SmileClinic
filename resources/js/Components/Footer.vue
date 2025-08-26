@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 shadow-t py-4 mt-auto">
+  <footer class="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow-t py-4 mt-auto">
     <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-2">
       <!-- Left: Copyright -->
       <div class="flex items-center gap-2 text-sm">
