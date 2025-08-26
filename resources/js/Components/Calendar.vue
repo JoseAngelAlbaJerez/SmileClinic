@@ -68,6 +68,8 @@
                                     <span v-if="event.patient">Paciente: {{ event.patient.first_name }} {{
                                         event.patient.last_name }}</span>
                                     <span v-if="event.doctor"> | Doctor: {{ event.doctor.name }}</span>
+                                    <AccessGate role="admin" class="contents">
+                                    <span v-if="event.branch" > |  {{ event.branch.name }}</span></AccessGate>
                                 </p>
                                 <p v-if="event.description"
                                     class="text-base font-normal text-gray-600 dark:text-gray-300 mt-2">{{

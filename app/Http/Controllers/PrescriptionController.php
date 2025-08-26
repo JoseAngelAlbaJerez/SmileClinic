@@ -90,7 +90,7 @@ class PrescriptionController extends Controller
             }
         }
 
-        $prescriptions = $query->orderByDesc('prescriptions.created_at')->with('doctor', 'patient', 'prescriptionsDetails.drugs', 'budget')->paginate(10);
+        $prescriptions = $query->orderByDesc('prescriptions.created_at')->with('doctor', 'patient', 'prescriptionsDetails.drugs', 'budget','branch')->paginate(10);
 
         return Inertia::render('Prescription/Index', [
             'prescriptions' => $prescriptions,

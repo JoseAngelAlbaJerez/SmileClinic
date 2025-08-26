@@ -14,14 +14,14 @@ class BranchSeeder extends Seeder
      public function run()
     {
         Branch::create([
-            'name' => 'Sucursal Principal',
+            'name' => 'Principal',
             'address' => 'Cayetano Germosen',
             'phone' => '809-555-1234',
             'city' => 'Cayetano Germosen',
         ]);
 
         Branch::create([
-            'name' => 'Sucursal Cutupu',
+            'name' => 'Cutupu',
             'address' => 'Calle Norte 45',
             'phone' => '809-555-5678',
             'city' => 'Cutupu',

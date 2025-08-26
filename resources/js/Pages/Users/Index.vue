@@ -69,6 +69,13 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
+                                         <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                            class="cursor-pointer " @click="sort('branch_id')">
+                                            Sucursal
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -93,6 +100,9 @@
                                             </span>
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
+                                          <AccessGate role="admin">
+                                            <td class="p-4">{{ user.branch.name }}</td>
+                                        </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(user.active)" />

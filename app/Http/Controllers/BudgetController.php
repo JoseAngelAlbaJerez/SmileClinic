@@ -101,7 +101,7 @@ class BudgetController extends Controller
             $query->latest('updated_at')->latest('created_at');
         }
 
-         $budgets = $query->with('patient')->paginate(10);
+         $budgets = $query->with('patient','branch')->paginate(10);
         return Inertia::render('Budgets/Index', [
             'budgets' => $budgets,
             'filters' => [

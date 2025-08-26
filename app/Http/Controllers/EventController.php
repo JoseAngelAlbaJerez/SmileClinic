@@ -90,7 +90,7 @@ class EventController extends Controller
         }
 
         $events = $query->orderByDesc('events.created_at')
-            ->with('doctor', 'patient')
+            ->with('doctor', 'patient','branch')
             ->get()
             ->map(function ($event) {
                 return [
@@ -99,6 +99,7 @@ class EventController extends Controller
                     'start' => $event->date . 'T' . $event->starttime,
                     'end' => $event->date . 'T' . $event->endtime,
                     'patient' => $event->patient,
+                    'branch' => $event->branch,
                     'doctor' => $event->doctor,
                     'attended' => $event->attended,
                     'active' => $event->active,

@@ -70,6 +70,13 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
+                                        <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                            class="cursor-pointer " @click="sort('branch_id')">
+                                            Sucursal
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -93,6 +100,9 @@
                                             prescription.doctor.last_name }}</td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(prescription.created_at) }}
                                         </td>
+                                        <AccessGate role="admin">
+                                            <td class="p-4">{{ prescription.branch.name }}</td>
+                                        </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(prescription.active)" />
@@ -262,7 +272,6 @@ import Breadcrumb from '@/Components/BreadCrumb.vue';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
-import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import {
     ref
 } from 'vue';
@@ -275,6 +284,7 @@ import EditIcon from '@/Components/Icons/EditIcon.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import RXIcon from '@/Components/Icons/RXIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import AccessGate from '@/Components/AccessGate.vue';
 
 export default {
 
@@ -310,7 +320,8 @@ export default {
         AddIcon,
         RestoreIcon,
         RXIcon,
-        PrintIcon
+        PrintIcon,
+        AccessGate
 
     },
     watch: {

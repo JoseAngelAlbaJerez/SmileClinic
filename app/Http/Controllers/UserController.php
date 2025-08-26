@@ -26,7 +26,7 @@ class UserController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles');
+        $query = User::query()->select('users.*')->with('roles','branch');
         if ($showDeleted == true) {
             $query->where('active', 1);
         } else {

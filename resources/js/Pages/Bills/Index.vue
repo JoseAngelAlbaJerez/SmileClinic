@@ -80,6 +80,13 @@
                                             Fecha Creación <span v-if="form.sortField === 'created_at'">{{
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
+                                        <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                            class="cursor-pointer " @click="sort('branch_id')">
+                                            Sucursal
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center">
@@ -101,6 +108,9 @@
                                             style:
                                                 'currency', currency: 'DOP' }).format(bill.total || 0) }}</td>
                                         <td class="p-4 items-center">{{ formatDate(bill.created_at) }}</td>
+                                          <AccessGate role="admin">
+                                            <td class="p-4">{{ bill.branch.name }}</td>
+                                        </AccessGate>
                                         <td class="p-4 items-center">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(bill.active)" />
@@ -158,6 +168,7 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import AccessGate from '@/Components/AccessGate.vue';
 export default {
 
     props: {
@@ -184,7 +195,8 @@ export default {
         PrimaryButton,
         SecondaryButton,
         Link,
-        PrintIcon
+        PrintIcon,
+        AccessGate
 
 
     },

@@ -265,7 +265,7 @@ watchEffect(() => {
             <main>
                 <slot />
             </main>
-            <Footer />
+            <Footer class="sticky top-[100vh]" />
         </div>
     </div>
 </template>

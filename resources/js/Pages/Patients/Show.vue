@@ -6,7 +6,7 @@
         </template>
 
         <div
-            class="container mx-auto px-6 py-4  dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
+            class="container mx-auto px-6 py-4 mb-5 dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
             <div class="my-2 mt-5 flex  gap-2 items-center">
 
                 <h2 class="text-lg font-semibold ml-1"> Historial Médico de {{ patient.first_name }} {{

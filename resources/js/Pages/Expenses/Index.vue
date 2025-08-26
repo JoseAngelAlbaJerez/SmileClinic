@@ -73,6 +73,13 @@
                                             <span v-if="form.sortField === 'created_at'">{{ form.sortDirection === 'asc'
                                                 ? '↑' : '↓' }}</span>
                                         </th>
+                                         <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                            class="cursor-pointer " @click="sort('branch_id')">
+                                            Sucursal
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="px-6 py-3 cursor-pointer text-nowrap" @click="toggleShowDeleted()">
                                             <div class="flex items-center justify-between">
                                                 Estado
@@ -95,6 +102,9 @@
                                             }).format(expense.amount || 0) }}
                                         </td>
                                         <td class="p-4">{{ formatDate(expense.created_at) }}</td>
+                                         <AccessGate role="admin">
+                                            <td class="p-4">{{ expense.branch.name }}</td>
+                                        </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(expense.active)" />
@@ -188,8 +198,8 @@
                     <div v-if="selectedExpense" class="space-y-3 p-4">
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
-                            <span class="text-gray-900 dark:text-gray-300">{{ selectedExpense.user.name }} {{
-                                selectedExpense.user.last_name }}</span>
+                            <Link :href="route('users.show',selectedExpense.user)" class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.name }} {{
+                                selectedExpense.user.last_name }}</Link>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Descripción: </span>
@@ -257,7 +267,7 @@ import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
-const toast = useToast();
+import AccessGate from '@/Components/AccessGate.vue';
 export default {
 
     props: {
@@ -288,7 +298,8 @@ export default {
         DeleteIcon,
         DangerButton,
         RestoreIcon,
-        PrintIcon
+        PrintIcon,
+        AccessGate
     },
 
     data() {

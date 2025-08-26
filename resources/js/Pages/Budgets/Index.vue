@@ -65,6 +65,13 @@
                                             Creación <span v-if="form.sortField === 'created_at'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
+                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                            class="cursor-pointer " @click="sort('branch_id')">
+                                            Sucursal
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -84,9 +91,15 @@
                                         </td>
                                         <td class="p-4">{{ budget.type }}</td>
                                         <td class="p-4">{{ new
-                                            Intl.NumberFormat('es-DO', { style: 'currency',currency:'DOP'}).format(budget.total
+                                            Intl.NumberFormat('es-DO', {
+                                                style:
+                                                    'currency', currency: 'DOP'
+                                            }).format(budget.total
                                             || 0) }}</td>
                                         <td class="p-4">{{ formatDate(budget.created_at) }}</td>
+                                        <AccessGate role="admin">
+                                            <td class="p-4">{{ budget.branch.name }}</td>
+                                        </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(budget.active)" />
@@ -125,9 +138,13 @@
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Tipo:</span> {{ budget.type }}</p>
                                 <p><span class="font-medium">Total:</span> {{ new
-                                    Intl.NumberFormat('es-DO', { style: 'currency', currency:'DOP'}).format(budget.total ||
+                                    Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(budget.total
+                                        ||
                                     0) }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(budget.created_at) }}</p>
+                                <AccessGate role="admin">
+                                    <p><span class="font-medium">Sucursal:</span> {{ budget.branch.name }}</p>
+                                </AccessGate>
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
                                     <span :class="statusBadgeClasses(budget.active)">
@@ -227,6 +244,7 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import AccessGate from '@/Components/AccessGate.vue';
 export default {
 
     props: {
@@ -253,7 +271,8 @@ export default {
         PrimaryButton,
         SecondaryButton,
         Link,
-        PrintIcon
+        PrintIcon,
+        AccessGate
 
 
     },

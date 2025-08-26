@@ -66,7 +66,7 @@ class ExpensesController extends Controller
             }
         }
 
-        $expenses = $query->orderByDesc('created_at')->with('user')->paginate(10);
+        $expenses = $query->orderByDesc('created_at')->with('user','branch')->paginate(10);
 
         return Inertia::render('Expenses/Index', [
             'expenses' => $expenses,
