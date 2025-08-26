@@ -15,14 +15,18 @@ return new class extends Migration
             $table->id();
             $table->foreignId('procedure_id');
             $table->decimal('amount');
+            $table->decimal('amount_doctor');
+            $table->decimal('materials_amount');
             $table->decimal('total');
             $table->string('treatment');
             $table->integer('discount');
             $table->integer('amount_of_payments')->nullable();
             $table->decimal('initial')->nullable();
             $table->integer('quantity');
+            $table->foreignId('doctor_id');
             $table->foreignId('bill_id');
             $table->boolean('active')->default(true);
+            $table->boolean('material_provider');
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

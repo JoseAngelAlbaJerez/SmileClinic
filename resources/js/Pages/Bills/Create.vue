@@ -20,7 +20,7 @@
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -50,7 +50,7 @@
                                         <p v-if="form.doctor_id" class="truncate">
                                             {{ selected_doctor.name }} {{ selected_doctor.last_name }}
                                         </p>
-                                        <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Doctor</p>
+                                        <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar </p>
                                     </div>
                                     <p v-if="errors.doctor_id" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                         errors.doctor_id }}</p>
@@ -127,6 +127,9 @@
                                         procedimientos</h3>
                                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Agregue procedimientos para
                                         continuar</p>
+                                    <p v-if="errors.procedures" class="mt-1 text-xs text-red-600 dark:text-red-400">
+                                        {{ errors.procedures }}
+                                    </p>
                                 </div>
 
                                 <!-- Procedure Cards -->
@@ -314,10 +317,13 @@
                                                     }).format(form_details[index].total
                                                         || 0) }}</p>
                                             </span>
-                                            <label class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2" for="materials">Los provee Smile Clinic:</label>
-                                             <input id="materials" type="checkbox"
-                                                            v-model="form_details[index].material_provider"
-                                                            class="h-4 w-4 text-pink-600 mr-2 border-gray-300 rounded focus:ring-pink-500" />
+                                            <label
+                                                class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2"
+                                                for="materials">Los provee Smile
+                                                Clinic:</label>
+                                            <input id="materials" type="checkbox"
+                                                v-model="form_details[index].material_provider"
+                                                class="h-4 w-4 text-pink-600 mr-2 border-gray-300 rounded focus:ring-pink-500" />
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />
@@ -360,12 +366,11 @@
 
                                         Limpiar
                                     </SecondaryButton>
-                                    <PrimaryButton @click="submit()"
-                                        :disabled="form.processing || form_detail.processing"
-                                        :class="{ 'opacity-75': form.processing || form_detail.processing }"
+                                    <PrimaryButton @click="submit()" :disabled="form.processing"
+                                        :class="{ 'opacity-75': form.processing }"
                                         class="hover:bg-pink-600 transition duration-200">
 
-                                        <span v-if="form.processing || form_detail.processing">Guardando...</span>
+                                        <span v-if="form.processing">Guardando...</span>
                                         <span v-else>Guardar </span>
                                     </PrimaryButton>
                                 </div>
@@ -380,7 +385,7 @@
                         <h3 class="text-xl font-bold">Seleccionar Presupuesto</h3>
 
                         <BudgetSelector v-if="selected_patient && selected_patient.budget.length"
-                            :budgets="selected_patient.budget" @selected="selectedBudgetId = $event.id; addBudget()" />
+                            :budgets="selected_patient.budget" @selected="selectBudget = $event; addBudget()" />
 
                         <p v-else class="text-gray-500 italic">
                             Este paciente no tiene presupuestos.
@@ -505,6 +510,7 @@ export default {
         return {
             form: useForm({
                 patient_id: '',
+                doctor_id: '',
                 type: 'Contado',
                 emission_date: new Date(),
                 expiration_date: '',
@@ -518,8 +524,8 @@ export default {
                 treatment: '',
                 discount: 0,
                 quantity: '',
-
-
+                material_provider: false,
+                materials_amount: '',
             }),
             bill_id: '',
             form_details: [],
@@ -554,7 +560,32 @@ export default {
                 day: 'numeric',
             });
         },
+        addBudget() {
+            this.selectBudget.budgetdetail.forEach(detail => {
+                const id = parseInt(detail.procedure.id);
+                const found = this.procedure.data.find(p => p.id === id);
+                if (found && !this.selectedProcedures.some(p => p.id === id)) {
+                    this.form_details.push({
+                        procedure_id: found.id,
+                        amount: found.cost,
+                        amount_doctor: found.cost * 0.5,
+                        total: found.cost,
+                        treatment: found.name,
+                        discount: 0,
+                        quantity: 1,
+                        initial: 0,
+                        amount_of_payments: 0,
+                        material_provider: false,
+                        materials_amount: 0,
 
+                    });
+                    this.selectedProcedures.push({ ...found });
+                }
+                this.calcTotal(this.form_details.length - 1);
+            });
+
+
+        },
         addProcedure() {
 
             const id = parseInt(this.selectedProcedureId);
@@ -563,13 +594,14 @@ export default {
                 this.form_details.push({
                     procedure_id: found.id,
                     amount: found.cost,
-                    amount_doctor: found.cost,
+                    amount_doctor: found.cost * 0.5,
                     total: found.cost,
                     treatment: found.name,
                     discount: 0,
                     quantity: 1,
                     initial: 0,
                     amount_of_payments: 0,
+                    material_provider: false
                 });
                 this.selectedProcedures.push({ ...found });
             }
@@ -632,6 +664,10 @@ export default {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';
                 return;
             }
+            if (!this.form.doctor_id) {
+                this.errors.doctor_id = 'Por favor, seleccione un doctor.';
+                return;
+            }
 
             if (this.form.type === 'Crédito' && !this.form.expiration_date) {
                 this.errors.expiration_date = 'Por favor, ingrese la fecha de expiración.';
@@ -642,13 +678,12 @@ export default {
                 this.errors.procedures = 'Por favor, seleccione un procedimiento.';
                 return;
             }
-
-
             this.error = null;
-
+            this.form.processing = true;
             const data = {
                 form: {
                     patient_id: this.form.patient_id,
+                    doctor_id: this.form.doctor_id,
                     type: this.form.type,
                     emission_date: this.form.emission_date,
                     expiration_date: this.form.expiration_date,
@@ -673,6 +708,8 @@ export default {
                     } else {
                         console.error('Error al guardar el presupuesto:', error);
                     }
+                }).finally(() => {
+                    this.form.processing = false;
                 });
         },
 

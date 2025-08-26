@@ -77,7 +77,7 @@ class BillController extends Controller
             }
         }
 
-        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient','branch')->paginate(10);
+        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient', 'branch')->paginate(10);
         return Inertia::render('Bills/Index', [
             'bills' => $bills,
             'filters' => [
@@ -94,7 +94,16 @@ class BillController extends Controller
     }
     public function create()
     {
-        $patient = Patient::with('budget.patient', 'budget.budgetdetail.procedure')->paginate(10);
+        $patient = Patient::with([
+            'budget' => function ($q) {
+                $q->where('active', 1)
+                    ->with(['budgetdetail' => function ($d) {
+                        $d->where('active', 1)
+                            ->with('procedure');
+                    }, 'patient']);
+            },
+        ])->paginate(10);
+
         $procedure = Procedure::paginate(10);
         $doctors = User::role('doctor')->with('roles')->paginate(10);
 
@@ -113,10 +122,13 @@ class BillController extends Controller
             'form.expiration_date' => 'nullable|date',
             'form.total' => 'required|numeric',
             'form.amount_of_payments' => 'nullable|numeric',
-
+            'form.doctor_id' => 'required|exists:users,id',
             'details' => 'required|array|min:1',
             'details.*.treatment' => 'required|string|max:100',
             'details.*.amount' => 'required|numeric',
+            'details.*.amount_doctor' => 'required|numeric',
+            'details.*.materials_amount' => 'required|numeric',
+            'details.*.material_provider' => 'boolean',
             'details.*.total' => 'required|numeric',
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
@@ -137,7 +149,6 @@ class BillController extends Controller
         $billData['branch_id'] = Auth::user()->branch_id;
         $billData['emission_date'] = Carbon::parse($billData['emission_date'] ?? now());
         $billData['expiration_date'] = $billData['expiration_date'] ? Carbon::parse($billData['expiration_date']) : null;
-        $billData['doctor_id'] = Auth::id();
         $bill = Bill::create($billData);
         $details = collect($validated['details'])->map(function ($detail) use ($bill) {
             $detail['branch_id'] = $bill->branch_id;
