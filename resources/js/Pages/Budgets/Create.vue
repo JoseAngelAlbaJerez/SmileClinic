@@ -1,5 +1,6 @@
 <template>
-     <Head title="Presupuestos" />
+
+    <Head title="Presupuestos" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -222,12 +223,12 @@
                                         <div
                                             class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-500">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                 <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
-                                        {
-                                            style:
-                                                'currency', currency: 'DOP'
-                                        }).format(form_details[index].total
-                                            || 0) }}</p>
+                                                <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
+                                                    {
+                                                        style:
+                                                            'currency', currency: 'DOP'
+                                                    }).format(form_details[index].total
+                                                    || 0) }}</p>
                                             </span>
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
@@ -255,7 +256,7 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                  <p class="text-pink-600 dark:text-pink-400">Total: {{ new Intl.NumberFormat('es-DO',
+                                    <p class="text-pink-600 dark:text-pink-400">Total: {{ new Intl.NumberFormat('es-DO',
                                         {
                                             style:
                                                 'currency', currency: 'DOP'
@@ -271,12 +272,11 @@
 
                                         Limpiar
                                     </SecondaryButton>
-                                    <PrimaryButton @click="submit()"
-                                        :disabled="form.processing || form_detail.processing"
-                                        :class="{ 'opacity-75': form.processing || form_detail.processing }"
+                                    <PrimaryButton @click="submit()" :disabled="form.processing"
+                                        :class="{ 'opacity-75': form.processing }"
                                         class="hover:bg-pink-600 transition duration-200">
 
-                                        <span v-if="form.processing || form_detail.processing">Guardando...</span>
+                                        <span v-if="form.processing">Guardando...</span>
                                         <span v-else>Guardar </span>
                                     </PrimaryButton>
                                 </div>
@@ -459,7 +459,7 @@ export default {
             }, 0);
         },
 
-       removeProcedure(index) {
+        removeProcedure(index) {
             const detail = this.form_details[index];
 
             this.form_details.splice(index, 1);
@@ -507,7 +507,7 @@ export default {
 
 
             this.error = null;
-
+            this.form.processing = true;
             const data = {
                 form: {
                     patient_id: this.form.patient_id,
@@ -535,6 +535,8 @@ export default {
                     } else {
                         console.error('Error al guardar el presupuesto:', error);
                     }
+                }).finally(() => {
+                    this.form.processing = false;
                 });
         },
 
