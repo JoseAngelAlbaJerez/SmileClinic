@@ -127,13 +127,13 @@
                     <!-- Card Layout (Mobile) -->
                     <div class="lg:hidden grid gap-3 my-4 mx-2">
                         <div v-for="budget in budgets.data" :key="budget.id"
-                            class="border rounded-lg p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            class="border rounded-lg bg-white dark:bg-gray-200 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">#{{ budget.id }}</h3>
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
-                                {{ budget.patient }} {{ budget.patient }}
+                                {{ budget.patient.first_name }} {{ budget.patient.last_name }}
                             </p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Tipo:</span> {{ budget.type }}</p>
