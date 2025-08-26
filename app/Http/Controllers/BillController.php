@@ -161,7 +161,7 @@ class BillController extends Controller
 
         foreach ($billDetails as $detail) {
             $expense_amount = $detail->amount_doctor;
-            if ($detail->material_provider != true) {
+            if ($detail->material_provider == true) {
                 $expense_amount = $detail->amount_doctor + $detail->materials_amount;
             }
             Expenses::create([

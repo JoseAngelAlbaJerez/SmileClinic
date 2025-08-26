@@ -319,8 +319,7 @@
                                             </span>
                                             <label
                                                 class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2"
-                                                for="materials"> Smile
-                                                Clinic provee los materiales?:</label>
+                                                for="materials"> El doctor provee los materiales?:</label>
                                             <input id="materials" type="checkbox"
                                                 v-model="form_details[index].material_provider"
                                                 class="h-4 w-4 text-pink-600 mr-2 border-gray-300 rounded focus:ring-pink-500" />
