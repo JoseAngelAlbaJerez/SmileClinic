@@ -162,6 +162,7 @@ import Breadcrumb from '@/Components/BreadCrumb.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import { markRaw } from 'vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
+import AccessGate from '@/Components/AccessGate.vue';
 export default {
 
 
@@ -190,7 +191,8 @@ export default {
         Link,
         AddIcon,
         UserIcon,
-        TableIcon
+        TableIcon,
+        AccessGate
 
     },
     watch: {
