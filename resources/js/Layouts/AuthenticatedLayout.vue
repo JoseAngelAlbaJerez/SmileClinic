@@ -14,14 +14,35 @@ import { usePage } from '@inertiajs/vue3';
 import { can } from '@/useAccess.js';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Footer from '@/Components/Footer.vue';
+import BellIcon from '@/Components/Icons/BellIcon.vue';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
 const toast = useToast();
 const page = usePage();
 const shownFlash = ref(null);
+const read = ref(false)
+const showNotification = ref(false)
+const notifications = ref([])
+const checkBillDate = () => {
+    const today = new Date()
+    const day = today.getDate()
+    notifications.value = []
 
+    const daysBefore = 15 - day
+    if (daysBefore > 0 && daysBefore <= 5) {
+        notifications.value.push(`⚡ Luz pendiente: faltan ${daysBefore} día(s)`)
+        notifications.value.push(`💧 Agua pendiente: faltan ${daysBefore} día(s)`)
+    } else if (day === 15) {
+        notifications.value.push("⚡ Apaga la luz")
+        notifications.value.push("💧 Paga el agua")
+    }
+}
+ const markAsRead = () => {
+        read.value = true
+    }
 onMounted(() => {
-
+    checkBillDate()
+    setInterval(checkBillDate, 1000 * 60 * 60)
     if (
         localStorage.theme === 'dark' ||
         (!('theme' in localStorage) &&
@@ -130,8 +151,40 @@ watchEffect(() => {
                                 class="text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-500">
                                 <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5" />
                             </button>
+                            <!-- Notification Dropdown -->
+                            <div class="relative ml-2">
+                                <Dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button @click="notificationOpen = !notificationOpen; markAsRead()"
+                                                class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-300">
+                                                <BellIcon class="h-5 w-5" />
+                                                <span v-if="notifications.length && !read"
+                                                    class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white text-xs font-bold">
+                                                    {{ notifications.length }}
+                                                </span>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content>
+                                        <div v-if="notifications.length">
+                                            <p v-for="(note, index) in notifications" :key="index"
+                                                class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
+                                                {{ note }}
+                                            </p>
+                                        </div>
+                                        <div v-else>
+                                            <p
+                                                class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
+                                                No tiene notificaciones pendientes.
+                                            </p>
+                                        </div>
+                                    </template>
+                                </Dropdown>
+                            </div>
                             <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
+                            <div class="relative ms-1">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
