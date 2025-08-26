@@ -11,12 +11,10 @@
 
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
-                    <div v-if="patient.age >= 18">
+                    <div >
                         <Odontograph v-model="odontogramData" />
                     </div>
-                    <div v-else>
-                        <OdontographChild v-model="odontogramData" />
-                    </div>
+
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
                         {{ error }}
@@ -44,7 +42,7 @@ import Odontograph from '@/Components/Odontograph.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref, markRaw } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import OdontographChild from '@/Components/OdontographChild.vue';
 
 export default {
@@ -56,7 +54,8 @@ export default {
         Odontograph,
         PrimaryButton,
         SecondaryButton,
-        OdontographChild
+        OdontographChild,
+        Head
     },
     props: {
         patient: Object,

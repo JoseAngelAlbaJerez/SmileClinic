@@ -245,13 +245,15 @@
                             class="w-full border dark:text-white border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"
                         >
                             <option disabled value="">Seleccione un procedimiento</option>
-                            <option value="Obturación">Obturación</option>
+                            <option value="Ausencia">Ausencia</option>
                             <option value="Endodoncia">Endodoncia</option>
+                            <option value="EndodonciaAplicada">Endodoncia Aplicada</option>
                             <option value="Extracción">Extracción</option>
-                            <option value="Limpieza">Limpieza</option>
-                            <option value="Corona">Corona</option>
+                            <option value="Puente">Puente</option>
+                            <option value="Corona">Corona (necesita)</option>
+                            <option value="CoronaAplicada">Corona Aplicada</option>
                             <option value="Implante">Implante</option>
-                            <option value="Sellante">Sellante</option>
+                            <option value="Restauración">Restauración</option>
                             <option value="Cariado">Cariado</option>
                         </select>
                     </div>
