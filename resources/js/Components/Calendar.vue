@@ -38,7 +38,7 @@
                         <div class="flex gap-5 flex-col ">
                             <!-- Event List -->
                             <div v-for="event in filteredEvents" :key="event.id"
-                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none hover:bg-pink-100">
+                                class="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-sm dark:shadow-none hover:bg-pink-100 dark:hover:bg-pink-900">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center gap-2.5">
                                         <span class="w-2.5 h-2.5 rounded-full"
