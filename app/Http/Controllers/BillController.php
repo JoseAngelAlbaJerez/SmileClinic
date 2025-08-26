@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\CXC;
+use App\Models\Expenses;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Procedure;
@@ -13,6 +14,7 @@ use Inertia\Inertia;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BillController extends Controller
 {
@@ -152,9 +154,24 @@ class BillController extends Controller
         $bill = Bill::create($billData);
         $details = collect($validated['details'])->map(function ($detail) use ($bill) {
             $detail['branch_id'] = $bill->branch_id;
+            $detail['doctor_id'] = $bill->doctor_id;
             return $detail;
         })->toArray();
         $billDetails = $bill->billdetail()->createMany($details);
+
+        foreach ($billDetails as $detail) {
+            $expense_amount = $detail->amount_doctor;
+            if ($detail->material_provider != true) {
+                $expense_amount = $detail->amount_doctor + $detail->materials_amount;
+            }
+            Expenses::create([
+                'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name.' Mano de Obra',
+                'amount' => $expense_amount,
+                'active' => true,
+                'user_id' => Auth::id(),
+                'branch_id' => $detail->branch_id,
+            ]);
+        }
         if ($bill->type == "Crédito") {
             $patient = $bill->patient;
 

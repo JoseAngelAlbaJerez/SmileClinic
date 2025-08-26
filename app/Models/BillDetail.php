@@ -7,11 +7,15 @@ use Illuminate\Support\Facades\Auth;
 
 class BillDetail extends Model
 {
-   protected $fillable = [
+    protected $fillable = [
         "procedure_id",
+        "doctor_id",
         'branch_id',
         "amount",
         "initial",
+        'amount_doctor',
+        'materials_amount',
+        'material_provider',
         "amount_of_payments",
         "total",
         "treatment",
@@ -20,7 +24,7 @@ class BillDetail extends Model
         "bill_id",
         "active"
     ];
-      protected static function booted()
+    protected static function booted()
     {
         static::addGlobalScope('branches', function ($query) {
             if ($user = Auth::user()) {
@@ -39,13 +43,17 @@ class BillDetail extends Model
     {
         return $this->belongsTo(Bill::class, 'bill_id', 'id');
     }
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
     public function Payment()
     {
         return $this->hasMany(Payment::class, 'budget_detail_id', 'id');
     }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
-
 }
