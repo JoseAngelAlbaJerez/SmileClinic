@@ -37,7 +37,7 @@ class BudgetController extends Controller
                         fn($p) =>
                         $p->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%'])
                     )
-                )
+                )->where('active','=',1)
                 ->paginate(10);
 
             return inertia('Budgets/BudgetSelector', [
@@ -163,11 +163,16 @@ class BudgetController extends Controller
         ]);
 
         $budgetData = $validated['form'];
+        $budgetData['branch_id'] = Auth::user()->branch_id;
         $budgetData['emission_date'] = Carbon::parse($budgetData['emission_date'] ?? now());
         $budgetData['expiration_date'] = $budgetData['expiration_date'] ? Carbon::parse($budgetData['expiration_date']) : null;
         $budgetData['doctor_id'] = Auth::id();
         $budget = Budget::create($budgetData);
-        $budgetDetails  = $budget->budgetdetail()->createMany($validated['details']);
+         $details = collect($validated['details'])->map(function ($detail) use ($budget) {
+            $detail['branch_id'] = $budget->branch_id;
+            return $detail;
+        })->toArray();
+        $budgetDetails  = $budget->budgetdetail()->createMany($details);
         // if ($budget->type == "Crédito") {
         //     $patient = $budget->patient;
 
