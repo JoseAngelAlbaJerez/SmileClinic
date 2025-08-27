@@ -15,6 +15,7 @@ import { can } from '@/useAccess.js';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Footer from '@/Components/Footer.vue';
 import BellIcon from '@/Components/Icons/BellIcon.vue';
+import InfoCircle from '@/Components/Icons/InfoCircle.vue';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
 const toast = useToast();
@@ -174,9 +175,11 @@ watchEffect(() => {
                                                 {{ note }}
                                             </p>
                                         </div>
-                                        <div v-else>
+                                        <div v-else class="flex justify-center">
+
                                             <p
                                                 class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
+                                               <InfoCircle class="mx-auto mb-2 dark:text-white w-7 h-7"/>
                                                 No tiene notificaciones pendientes.
                                             </p>
                                         </div>
