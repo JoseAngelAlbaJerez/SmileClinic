@@ -16,6 +16,7 @@ class Budget extends Model
         "patient_id",
         'branch_id',
         "total",
+        "currency",
         "c_x_c_id",
     ];
       protected static function booted()

@@ -30,6 +30,7 @@ class BudgetSeeder extends Seeder
                 'patient_id' => $patient?->id,
                 'total' => fake()->numberBetween(1000, 50000),
                 'emission_date' => now(),
+                'currency' => fake()->randomElement(['DOP', 'US']),
                 'expiration_date' => now()->addMonth(),
                 'active' => true,
                 'created_at' => now(),

@@ -20,7 +20,7 @@
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -51,21 +51,17 @@
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
-
-                                <!-- Expiration Date (Conditional) -->
-                                <div class="space-y-1" v-if="form.type == 'Crédito'">
+                                <!-- Emission Date -->
+                                <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Fecha Vencimiento <span class="text-red-500">*</span>
+                                        Moneda <span class="text-red-500">*</span>
                                     </label>
-                                    <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
-                                        placeholder="Seleccione fecha" v-model="form.expiration_date"
-                                        :enable-time-picker="false" />
-                                    <p v-if="errors.expiration_date"
-                                        class="mt-1 text-xs text-red-600 dark:text-red-400">
-                                        {{ errors.expiration_date }}
-                                    </p>
+                                    <select v-model="form.currency" class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
+                                        <option value="DOP"> RD$ - Peso Dominicano</option>
+                                        <option value="US"> US$ - Dolar Americano</option>
+                                    </select>
                                 </div>
+
                             </div>
 
                             <!-- Procedures Section -->
@@ -228,7 +224,7 @@
                                                         style:
                                                             'currency', currency: 'DOP'
                                                     }).format(form_details[index].total
-                                                    || 0) }}</p>
+                                                        || 0) }}</p>
                                             </span>
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
@@ -378,6 +374,7 @@ export default {
         return {
             form: useForm({
                 patient_id: '',
+                currency:'DOP',
                 type: 'Contado',
                 emission_date: new Date(),
                 expiration_date: '',
@@ -512,6 +509,7 @@ export default {
                 form: {
                     patient_id: this.form.patient_id,
                     type: this.form.type,
+                    currency: this.form.currency,
                     emission_date: this.form.emission_date,
                     expiration_date: this.form.expiration_date,
                     total: this.form.total,

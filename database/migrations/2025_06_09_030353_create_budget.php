@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->string('currency');
             $table->boolean('active')->default(true);
             $table->date('emission_date');
             $table->date('expiration_date')->nullable();
