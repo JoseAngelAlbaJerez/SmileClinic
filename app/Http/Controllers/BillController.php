@@ -7,6 +7,7 @@ use App\Models\CXC;
 use App\Models\Expenses;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\PendingExpense;
 use App\Models\Procedure;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -164,13 +165,23 @@ class BillController extends Controller
             if ($detail->material_provider == true) {
                 $expense_amount = $detail->amount_doctor + $detail->materials_amount;
             }
-            Expenses::create([
-                'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name.' Mano de Obra',
-                'amount' => $expense_amount,
-                'active' => true,
-                'user_id' => Auth::id(),
-                'branch_id' => $detail->branch_id,
-            ]);
+            if ($detail->doctor->specialty) {
+                Expenses::create([
+                    'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name . ' Mano de Obra',
+                    'amount'      => $expense_amount,
+                    'active'      => true,
+                    'user_id'     => Auth::id(),
+                    'branch_id'   => $detail->branch_id,
+                ]);
+            }else {
+                 PendingExpense::create([
+            'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name . ' Mano de Obra',
+            'amount'      => $expense_amount,
+            'user_id'     => Auth::id(),
+            'branch_id'   => $detail->branch_id,
+        ]);
+            }
+
         }
         if ($bill->type == "Crédito") {
             $patient = $bill->patient;
