@@ -16,6 +16,14 @@
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
+
+                        <!-- Print -->
+                        <button @click="showReport = true"
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <PrintIcon />
+                        </button>
+                        <ReportModal :open="showReport" @close="showReport = false" table="patients" />
+
                         <!-- Spacer pushes actions to right on big screens -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
@@ -118,7 +126,7 @@
                     <!-- Card Layout (Mobile) -->
                     <div class="lg:hidden grid gap-3 my-4 mx-2">
                         <div v-for="patient in patients.data" :key="patient.id"
-                            class="border rounded-lg bg-white dark:bg-gray-200 p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            class="border rounded-lg bg-white  p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
                                     {{ patient.first_name }} {{ patient.last_name }}
@@ -188,6 +196,9 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import { markRaw } from 'vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ReportModal from '@/Components/ReportModal.vue';
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import { ref } from 'vue';
 export default {
 
 
@@ -217,7 +228,9 @@ export default {
         AddIcon,
         UserIcon,
         TableIcon,
-        AccessGate
+        AccessGate,
+        ReportModal,
+        PrintIcon
 
     },
     watch: {
@@ -240,7 +253,8 @@ export default {
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
-            ]
+            ],
+            showReport: ref(false)
 
         }
     },

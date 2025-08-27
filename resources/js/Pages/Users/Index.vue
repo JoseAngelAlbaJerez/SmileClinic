@@ -14,6 +14,11 @@
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row mx-4 lg:mx-10 gap-2 sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                        <button @click="showReport = true"
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
+                            <PrintIcon />
+                        </button>
+                        <ReportModal :open="showReport" @close="showReport = false" table="users" />
 
                         <!-- Search + Button -->
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
@@ -69,7 +74,7 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                         <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
                                             class="cursor-pointer " @click="sort('branch_id')">
                                             Sucursal
                                             <span v-if="form.sortField === 'branch_id'">
@@ -100,7 +105,7 @@
                                             </span>
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
-                                          <AccessGate role="admin">
+                                        <AccessGate role="admin">
                                             <td class="p-4">{{ user.branch.name }}</td>
                                         </AccessGate>
                                         <td class="p-4">
@@ -163,6 +168,9 @@ import UserIcon from '@/Components/Icons/UserIcon.vue';
 import { markRaw } from 'vue';
 import TableIcon from '@/Components/Icons/TableIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import ReportModal from '@/Components/ReportModal.vue';
+import { ref } from 'vue';
 export default {
 
 
@@ -192,7 +200,9 @@ export default {
         AddIcon,
         UserIcon,
         TableIcon,
-        AccessGate
+        AccessGate,
+        PrintIcon,
+        ReportModal
 
     },
     watch: {
@@ -215,7 +225,8 @@ export default {
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
-            ]
+            ],
+            showReport: ref(false)
 
         }
     },

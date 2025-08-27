@@ -12,6 +12,13 @@
                         <div class="flex justify-between mb-2">
                             <p class="text-lg font-normal text-gray-600 dark:text-gray-300 ">No faltes al horario
                             </p>
+                             <!-- Print -->
+                        <button @click="showReport = true"
+                            class="flex justify-center ml-auto mr-2 gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <PrintIcon />
+                        </button>
+                          <ReportModal :open="showReport" @close="showReport = false" table="events" />
+
                             <AccessGate permission="event.delete">
                                 <button @click="toggleShowDeleted()"
                                     :class="showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
@@ -309,6 +316,8 @@ import RestoreIcon from './Icons/RestoreIcon.vue';
 import Modal from './Modal.vue';
 import AddIcon from './Icons/AddIcon.vue';
 import AccessGate from './AccessGate.vue';
+import ReportModal from './ReportModal.vue';
+import PrintIcon from './Icons/PrintIcon.vue';
 export default {
     props: {
         initialEvents: {
@@ -336,7 +345,9 @@ export default {
         RestoreIcon,
         Modal,
         AddIcon,
-        AccessGate
+        AccessGate,
+        ReportModal,
+        PrintIcon
 
     },
 
@@ -349,6 +360,7 @@ export default {
         const activeDropdown = ref(null);
         const showEventModal = ref(false);
         const editingEvent = ref(null);
+        const showReport = ref(false);
         const viewMode = ref('month');
         const searchQuery = ref(props.filters.search || '');
         const timeRange = ref(props.filters.lastDays || '1');
@@ -649,6 +661,7 @@ export default {
             activeDropdown,
             showEventModal,
             editingEvent,
+            showReport,
             viewMode,
             searchQuery,
             timeRange,

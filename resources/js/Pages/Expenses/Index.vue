@@ -16,11 +16,13 @@
                     <div class="my-2 flex flex-col lg:flex-row lg:mx-10 gap-2 items-stretch lg:items-center">
                         <div class="flex gap-2">
                             <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-                            <button @click="print()"
+                            <button @click="showReport = true"
                                 class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                                 <PrintIcon />
 
                             </button>
+                             <ReportModal :open="showReport" @close="showReport = false" table="expenses" />
+
                         </div>
 
                         <!-- Espacio flexible para separar en responsive -->
@@ -268,6 +270,7 @@ import DangerButton from '@/Components/DangerButton.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ReportModal from '@/Components/ReportModal.vue';
 export default {
 
     props: {
@@ -299,7 +302,8 @@ export default {
         DangerButton,
         RestoreIcon,
         PrintIcon,
-        AccessGate
+        AccessGate,
+        ReportModal
     },
 
     data() {
@@ -325,6 +329,7 @@ export default {
                 amount: '',
             }),
             error: '',
+            showReport: ref(false)
 
         }
     },

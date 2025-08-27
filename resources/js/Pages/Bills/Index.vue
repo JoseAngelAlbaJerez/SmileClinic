@@ -14,10 +14,11 @@
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-                        <button @click="print()"
+                        <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
                             <PrintIcon />
                         </button>
+                        <ReportModal :open="showReport" @close="showReport = false" table="bills" />
 
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
@@ -169,6 +170,7 @@ import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ReportModal from '@/Components/ReportModal.vue';
 export default {
 
     props: {
@@ -196,8 +198,8 @@ export default {
         SecondaryButton,
         Link,
         PrintIcon,
-        AccessGate
-
+        AccessGate,
+        ReportModal
 
     },
 
@@ -222,7 +224,7 @@ export default {
                 amount: '',
             }),
             error: '',
-
+            showReport: ref(false)
         }
     },
     mounted() {

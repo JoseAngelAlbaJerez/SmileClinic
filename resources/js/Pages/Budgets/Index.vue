@@ -17,11 +17,11 @@
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
                         <!-- Print -->
-                        <button @click="print()"
+                        <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                             <PrintIcon />
-                            <span class="hidden sm:inline">Imprimir</span>
                         </button>
+                          <ReportModal :open="showReport" @close="showReport = false" table="budgets" />
 
                         <!-- Spacer pushes actions right -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
@@ -245,6 +245,7 @@ import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ReportModal from '@/Components/ReportModal.vue';
 export default {
 
     props: {
@@ -272,7 +273,8 @@ export default {
         SecondaryButton,
         Link,
         PrintIcon,
-        AccessGate
+        AccessGate,
+        ReportModal
 
 
     },
@@ -298,7 +300,7 @@ export default {
                 amount: '',
             }),
             error: '',
-
+            showReport: ref(false)
         }
     },
     mounted() {

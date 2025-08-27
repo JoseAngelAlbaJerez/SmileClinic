@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\BudgetDetailController;
 use App\Http\Controllers\CXCController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\Bill;
+use App\Models\Branch;
 use App\Models\BudgetDetail;
 use App\Models\Expenses;
 use App\Models\Patient;
@@ -33,8 +35,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $patients = Patient::all();
     $users = User::all();
-
-
+    $branches = Branch::all();
     $now = Carbon::now();
     $startOfThisWeek = $now->copy()->startOfWeek();
     $endOfThisWeek = $now->copy()->endOfWeek();
@@ -66,6 +67,7 @@ Route::get('/dashboard', function () {
 
     return Inertia::render('Dashboard', [
         'patients' => $patients,
+        'branches' => $branches,
         'users' => $users,
         'income_sum' => $income_sum,
         'expense_sum' => $expense_sum,
@@ -96,9 +98,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('drugs', DrugController::class);
     Route::resource('bills', BillController::class);
+    Route::resource('branches', BranchController::class);
 
 
 
+    // Report Modal
+    Route::get('/report/fields', [ReportController::class, 'fields'])->name('report.fields');
+    Route::get('/report/{table}', [ReportController::class, 'generate'])->name('report.generate');
 
     //Reports
     Route::get('reports/patient/{patient}', [ReportController::class, 'patient'])->name('report.patient');

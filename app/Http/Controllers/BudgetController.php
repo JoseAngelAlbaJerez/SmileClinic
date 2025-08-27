@@ -138,6 +138,7 @@ class BudgetController extends Controller
         $validated = $request->validate([
             'form.patient_id' => 'required|exists:patients,id',
             'form.type' => 'required|string',
+            'form.currency' => 'required|string',
             'form.emission_date' => 'required|date',
             'form.expiration_date' => 'nullable|date',
             'form.total' => 'required|numeric',

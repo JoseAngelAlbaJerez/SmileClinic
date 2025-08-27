@@ -13,8 +13,16 @@
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
-                        <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                          <div class="flex gap-2">
+                            <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                            <button @click="showReport = true"
+                                class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <PrintIcon />
 
+                            </button>
+                             <ReportModal :open="showReport" @close="showReport = false" table="prescriptions" />
+
+                        </div>
                         <!-- Flexible space -->
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
@@ -285,6 +293,7 @@ import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import RXIcon from '@/Components/Icons/RXIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ReportModal from '@/Components/ReportModal.vue';
 
 export default {
 
@@ -321,7 +330,8 @@ export default {
         RestoreIcon,
         RXIcon,
         PrintIcon,
-        AccessGate
+        AccessGate,
+        ReportModal
 
     },
     watch: {
@@ -353,7 +363,8 @@ export default {
                 icon: markRaw(TableIcon),
                 label: 'Listado'
             }
-            ]
+            ],
+            showReport: ref(false),
 
         }
     },

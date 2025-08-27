@@ -10,6 +10,10 @@ use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Patient;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Inertia\Inertia;
 
 class ReportController extends Controller
 {
@@ -26,6 +30,46 @@ class ReportController extends Controller
             'isRemoteEnabled' => true,
             'isHtml5ParserEnabled' => true,
         ])->stream('budget.pdf');
+    }
+     public function fields(Request $request)
+    {
+        $table = $request->get('table');
+
+        if (!$table || !Schema::hasTable($table)) {
+            return response()->json(['error' => 'Invalid table'], 400);
+        }
+
+        $columns = Schema::getColumnListing($table);
+
+        return response()->json($columns);
+    }
+     public function generate(Request $request, $table)
+    {
+        if (!Schema::hasTable($table)) {
+            return back()->with('error', 'Invalid table.');
+        }
+
+        $fields = $request->input('fields', []);
+        $dateFrom = $request->input('dateFrom');
+        $dateTo   = $request->input('dateTo');
+
+        $columns = !empty($fields) ? $fields : Schema::getColumnListing($table);
+
+        $query = DB::table($table)->select($columns);
+
+        if ($dateFrom && $dateTo && Schema::hasColumn($table, 'created_at')) {
+            $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+        }
+
+        $data = $query->get();
+
+            return Inertia::render('Reports/View', [
+            'table'  => $table,
+            'fields' => $columns,
+            'data'   => $data,
+            'dateFrom' => $dateFrom,
+            'dateTo'   => $dateTo,
+        ]);
     }
       public function bill(Bill $bill)
     {
