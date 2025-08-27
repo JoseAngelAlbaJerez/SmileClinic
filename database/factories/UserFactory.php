@@ -29,7 +29,8 @@ class UserFactory extends Factory
             'name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'DNI' => fake()->numerify('#########'),
-            'specialty' => fake()->word(),
+
+            'specialty' => fake()->randomElement(['Endodontist','Orthodontist','Periodontist','Prosthodontist','Oral and Maxillofacial Surgeon','Oral and Maxillofacial Radiologist','Dentist Anesthesiologists','Oral and Maxillofacial Pathologist','Pediatric Dentist or Pedodontist'] ),
             'phone_number' => fake()->phoneNumber(),
             'date_of_birth' => fake()->date('Y-m-d', '-18 years'),
             'position' => fake()->jobTitle(),

@@ -71,6 +71,8 @@ watch(searchTerm, () => {
                         <th class="px-4 py-3 hidden sm:table-cell">#</th>
                         <th class="px-6 py-3">Nombre</th>
                         <th class="px-6 py-3">Rol</th>
+                        <th class="px-6 py-3">Especialidad</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +88,7 @@ watch(searchTerm, () => {
                                 {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
                             </span>
                         </td>
+                        <td class="p-4">{{ user.specialty }} </td>
                     </tr>
                 </tbody>
             </table>
