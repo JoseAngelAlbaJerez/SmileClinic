@@ -11,9 +11,9 @@
         <!-- Odontograma Superior -->
             <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">ARCADA SUPERIOR</h3>
         <div class="grid grid-cols-2 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="grid grid-cols-8 gap-1.5 ">
+            <div class="grid grid-cols-8 mr-4 gap-1.5 ">
                 <div
-                    v-for="tooth in upperLeftTeeth"
+                    v-for="tooth in upperLeftTeethTop"
                     :key="tooth"
                     @click="selectTooth(tooth)"
                     class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
@@ -71,12 +71,132 @@
                     </div>
                 </div>
             </div>
-             <div class="grid grid-cols-8 ml-4 gap-1.5">
+             <div class="grid grid-cols-8 gap-1.5 ">
                 <div
-                    v-for="tooth in upperRightTeeth"
+                    v-for="tooth in upperRightTeethTop"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
+
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="grid grid-cols-5 mr-4 mt-2 ml-auto gap-1.5">
+                <div
+                    v-for="tooth in upperLeftTeethBot"
                     :key="tooth"
                     @click="selectTooth(tooth)"
                     class="relative group p-3 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
+
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="grid grid-cols-5 mr-auto mt-2 gap-1.5  ">
+                <div
+                    v-for="tooth in upperRightTeethBot"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                     :class="{
                         'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
                         'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
@@ -133,12 +253,132 @@
             </div>
         </div>
 
-
+        <!-- Odontograma Inferior -->
        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">ARCADA INFERIOR</h3>
         <div class="grid grid-cols-2 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="grid grid-cols-8 gap-1.5">
+            <div class="grid grid-cols-5 ml-auto mr-4 gap-1.5 ">
                 <div
-                    v-for="tooth in LowerLeftTeeth"
+                    v-for="tooth in LowerLeftTeethTop"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
+
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="grid grid-cols-8 gap-1.5 mr-auto">
+                <div
+                    v-for="tooth in LowerRightTeethTop"
+                    :key="tooth"
+                    @click="selectTooth(tooth)"
+                    class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    :class="{
+                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
+                        'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
+                    }"
+                >
+                    <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}</div>
+
+                    <!-- Indicadores de zonas -->
+                    <div v-if="odontogram[tooth]" class="flex justify-center gap-1 mt-1">
+                        <span
+                            v-for="(proc, zone) in odontogram[tooth]"
+                            :key="zone"
+                            class="inline-block w-2 h-2 rounded-full"
+                            :class="{
+                                'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                'bg-red-500': zone === 'Distal',
+                                'bg-green-500': zone === 'Mesial',
+                                'bg-yellow-500': zone === 'Lingual',
+                                'bg-purple-500': zone === 'Vestibular'
+                            }"
+                        ></span>
+                    </div>
+
+                    <!-- Tooltip mejorado -->
+                    <div
+                        v-if="odontogram[tooth]"
+                        class="absolute z-10 left-1/2 transform -translate-x-1/2 -top-28 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-3 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border border-gray-200 dark:border-gray-700"
+                    >
+                        <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                            {{ toothNames[tooth] || `Diente ${tooth}` }}
+                        </h4>
+                        <div class="space-y-1 text-sm">
+                            <div
+                                v-for="(proc, zone) in odontogram[tooth]"
+                                :key="zone"
+                                class="flex items-center gap-2"
+                            >
+                                <span
+                                    class="w-3 h-3 rounded-full flex-shrink-0"
+                                    :class="{
+                                        'bg-gray-800 dark:bg-gray-200': zone === 'Oclusal',
+                                        'bg-red-500': zone === 'Distal',
+                                        'bg-green-500': zone === 'Mesial',
+                                        'bg-yellow-500': zone === 'Lingual',
+                                        'bg-purple-500': zone === 'Vestibular'
+                                    }"
+                                ></span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ zone }}:</span>
+                                <span class="text-gray-600 dark:text-gray-400">{{ proc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="grid grid-cols-8 mr-4 mt-2  gap-1.5">
+                <div
+                    v-for="tooth in LowerLeftTeethBot"
                     :key="tooth"
                     @click="selectTooth(tooth)"
                     class="relative group p-3 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
@@ -196,12 +436,12 @@
                     </div>
                 </div>
             </div>
-             <div class="grid grid-cols-8 ml-4 gap-1.5">
+             <div class="grid grid-cols-8  mt-2 gap-1.5 ">
                 <div
-                    v-for="tooth in LowerRightTeeth"
+                    v-for="tooth in LowerRightTeethBot"
                     :key="tooth"
                     @click="selectTooth(tooth)"
-                    class="relative group p-3 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                    class="relative group p-3 rounded-md   border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                     :class="{
                         'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': odontogram[tooth],
                         'hover:bg-gray-50 dark:hover:bg-gray-700': !odontogram[tooth]
@@ -422,10 +662,21 @@ const selectedTooth = ref(null)
 const selectedZone = ref('')
 const procedure = ref('')
 
-const upperLeftTeeth = [18, 17, 16, 15, 14, 13, 12, 11, 55, 54, 53, 52, 51]
-const LowerLeftTeeth = [48, 47, 46, 45, 44, 43, 42, 41,85, 84, 83, 82, 81 ]
-const upperRightTeeth = [21, 22, 23, 24, 25, 26, 27, 28, 61, 62, 63, 64, 65]
-const LowerRightTeeth = [31, 32, 33, 34, 35, 36, 37, 38, 71, 72, 73, 74, 75]
+const upperLeftTeethTop = [18, 17, 16, 15, 14, 13, 12, 11,]
+const upperLeftTeethBot=[55, 54, 53, 52, 51]
+
+const upperRightTeethTop = [21, 22, 23, 24, 25, 26, 27, 28,]
+const upperRightTeethBot =[ 61, 62, 63, 64, 65]
+
+const LowerLeftTeethTop= [85, 84, 83, 82, 81]
+const LowerLeftTeethBot = [48, 47, 46, 45, 44, 43, 42, 41]
+
+
+
+const LowerRightTeethBot= [31, 32, 33, 34, 35, 36, 37, 38,]
+const LowerRightTeethTop = [ 71, 72, 73, 74, 75]
+
+
 
 const toothNames = {
     11: "Incisivo central superior derecho", 12: "Incisivo lateral superior derecho", 13: "Canino superior derecho",

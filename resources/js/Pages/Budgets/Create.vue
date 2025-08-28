@@ -51,14 +51,14 @@
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
-                                <!-- Emission Date -->
+                                <!-- Currency -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Moneda <span class="text-red-500">*</span>
                                     </label>
                                     <select v-model="form.currency" class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
                                         <option value="DOP"> RD$ - Peso Dominicano</option>
-                                        <option value="US"> US$ - Dolar Americano</option>
+                                        <option value="USD"> USD$ - Dolar Americano</option>
                                     </select>
                                 </div>
 
@@ -222,7 +222,7 @@
                                                 <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
                                                     {
                                                         style:
-                                                            'currency', currency: 'DOP'
+                                                            'currency', currency: form.currency
                                                     }).format(form_details[index].total
                                                         || 0) }}</p>
                                             </span>
@@ -255,7 +255,7 @@
                                     <p class="text-pink-600 dark:text-pink-400">Total: {{ new Intl.NumberFormat('es-DO',
                                         {
                                             style:
-                                                'currency', currency: 'DOP'
+                                                'currency', currency: form.currency
                                         }).format(form.total
                                             || 0) }}</p>
                                 </div>

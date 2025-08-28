@@ -93,7 +93,7 @@
                                         <td class="p-4">{{ new
                                             Intl.NumberFormat('es-DO', {
                                                 style:
-                                                    'currency', currency: 'DOP'
+                                                    'currency', currency: budget.currency
                                             }).format(budget.total
                                             || 0) }}</td>
                                         <td class="p-4">{{ formatDate(budget.created_at) }}</td>

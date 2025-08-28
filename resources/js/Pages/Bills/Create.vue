@@ -82,19 +82,16 @@
                                         :enable-time-picker="false" />
                                 </div>
 
-                                <!-- Expiration Date (Conditional) -->
-                                <div class="space-y-1" v-if="form.type == 'Crédito'">
+                                <!-- Currency -->
+                                <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Fecha Vencimiento <span class="text-red-500">*</span>
+                                        Moneda <span class="text-red-500">*</span>
                                     </label>
-                                    <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
-                                        placeholder="Seleccione fecha" v-model="form.expiration_date"
-                                        :enable-time-picker="false" />
-                                    <p v-if="errors.expiration_date"
-                                        class="mt-1 text-xs text-red-600 dark:text-red-400">
-                                        {{ errors.expiration_date }}
-                                    </p>
+                                    <select v-model="form.currency"
+                                        class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
+                                        <option value="DOP"> RD$ - Peso Dominicano</option>
+                                        <option value="USD"> USD$ - Dolar Americano</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -313,13 +310,14 @@
                                                 <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
                                                     {
                                                         style:
-                                                            'currency', currency: 'DOP'
+                                                            'currency', currency: form.currency
                                                     }).format(form_details[index].total
                                                         || 0) }}</p>
                                             </span>
                                             <label
                                                 class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2"
-                                                for="materials"> ¿El doctor provee los materiales? </label>
+                                                for="materials"> ¿El doctor provee
+                                                los materiales? </label>
                                             <input id="materials" type="checkbox"
                                                 v-model="form_details[index].material_provider"
                                                 class="h-4 w-4 text-pink-600 mr-4 border-gray-300 rounded focus:ring-pink-500" />
@@ -352,7 +350,7 @@
                                     Total: <span class="text-pink-600 dark:text-pink-400">{{ new
                                         Intl.NumberFormat('es-DO', {
                                             style:
-                                                'currency', currency: 'DOP'
+                                                'currency', currency: form.currency
                                         }).format(form.total
                                             || 0) }}</span>
                                 </div>
@@ -511,6 +509,7 @@ export default {
                 patient_id: '',
                 doctor_id: '',
                 type: 'Contado',
+                currency:'DOP',
                 emission_date: new Date(),
                 expiration_date: '',
                 total: '',
@@ -560,20 +559,21 @@ export default {
             });
         },
         addBudget() {
+            this.form.currency = this.selectBudget.currency;
             this.selectBudget.budgetdetail.forEach(detail => {
                 const id = parseInt(detail.procedure.id);
                 const found = this.procedure.data.find(p => p.id === id);
                 if (found && !this.selectedProcedures.some(p => p.id === id)) {
                     this.form_details.push({
                         procedure_id: found.id,
-                        amount: found.cost,
-                        amount_doctor: found.cost * 0.5,
-                        total: found.cost,
+                        amount: detail.amount,
+                        amount_doctor: found.amount * 0.5,
+                        total: found.total,
                         treatment: found.name,
-                        discount: 0,
-                        quantity: 1,
-                        initial: 0,
-                        amount_of_payments: 0,
+                        discount: detail.discount,
+                        quantity: detail.quantity,
+                        initial: detail.initial,
+                        amount_of_payments: detail.amount_of_payments,
                         material_provider: false,
                         materials_amount: 0,
 
@@ -618,6 +618,7 @@ export default {
             detail.total -= initial;
             const discounted = (detail.total * discount) / 100;
             detail.total -= discounted;
+            detail.amount_doctor = detail.amount * 0.5;
 
             this.form.total = this.form_details.reduce((sum, detail) => {
                 const total = parseFloat(detail.total) || 0;
@@ -687,6 +688,8 @@ export default {
                     emission_date: this.form.emission_date,
                     expiration_date: this.form.expiration_date,
                     total: this.form.total,
+                    currency: this.form.currency,
+
                 },
                 details: this.form_details,
             };
