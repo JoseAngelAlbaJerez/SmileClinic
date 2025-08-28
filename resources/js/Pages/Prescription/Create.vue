@@ -18,7 +18,7 @@
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Patient Selection -->
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Paciente <span class="text-red-500">*</span>
