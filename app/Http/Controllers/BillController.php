@@ -126,6 +126,7 @@ class BillController extends Controller
             'form.total' => 'required|numeric',
             'form.amount_of_payments' => 'nullable|numeric',
             'form.doctor_id' => 'required|exists:users,id',
+            'form.currency' => 'required|string',
             'details' => 'required|array|min:1',
             'details.*.treatment' => 'required|string|max:100',
             'details.*.amount' => 'required|numeric',

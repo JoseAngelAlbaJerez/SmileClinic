@@ -19,6 +19,7 @@ class Bill extends Model
     'total',
     'material_provider',
     'amount_doctor',
+    'currency',
     'doctor_id',
     'materials_amount'
    ];
