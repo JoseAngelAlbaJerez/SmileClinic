@@ -163,7 +163,6 @@
                                          <th>Inicial</th>
                                 @endif
                             <th>Monto</th>
-                            <th>Descuento</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -178,7 +177,6 @@
                                     <td style="text-align:right;">$ {{ number_format($detail->initial, 2) }}</td>
                                 @endif
                                 <td style="text-align:right;">$ {{ number_format($detail->amount, 2) }}</td>
-                                <td style="text-align:right;">{{ $detail->discount }}%</td>
                                 <td style="text-align:right;">$ {{ number_format($detail->total, 2) }}</td>
                             </tr>
                             @php $sumaTotal += $detail->total; @endphp
