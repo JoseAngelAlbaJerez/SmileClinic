@@ -126,9 +126,11 @@ class EventController extends Controller
     {
         $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
+        $events = Event::all()->load('doctor','patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
+            'events' => $events,
         ]);
     }
 
