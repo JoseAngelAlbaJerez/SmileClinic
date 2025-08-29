@@ -71,7 +71,7 @@
                                         completo:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.first_name }} {{
                                         patient.last_name
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -92,7 +92,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                        }} ({{ patient.age }} años)</span>
+                                    }} ({{ patient.age }} años)</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -240,7 +240,7 @@
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ prescription.doctor.name }} {{
                                                         prescription.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
 
                                             </div>
@@ -312,6 +312,10 @@
                                             <button v-else @click="restorePrescription(prescription)"
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
+                                            </button>
+                                            <button @click="printPrescription(prescription)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon   class="size-4" />
                                             </button>
                                         </div>
                                     </div>
@@ -395,7 +399,7 @@
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -504,7 +508,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -533,7 +537,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -566,10 +570,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="budget.emission_date">Emitido: {{
                                                 formatDate(budget.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="budget.expiration_date"> | Vence: {{
                                                 formatDate(budget.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -584,6 +588,10 @@
                                             <button v-else @click="restoreBudget(budget)"
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
+                                            </button>
+                                             <button @click="printBudget(budget)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon   class="size-4" />
                                             </button>
                                         </div>
                                     </div>
@@ -638,14 +646,14 @@
                                 class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
 
 
-                                <!-- Contenido del Factura -->
+                                <!-- Contenido del Recibo -->
                                 <div class="p-4">
                                     <div class="flex items-start mb-3">
                                         <div class="flex-1">
                                             <div class="flex justify-between">
                                                 <h3
                                                     class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
-                                                    Factura #{{ bill.id }}
+                                                    Recibo #{{ bill.id }}
                                                 </h3>
                                                 <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
                                                     :class="{
@@ -674,7 +682,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -702,7 +710,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -734,10 +742,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="bill.emission_date">Emitido: {{
                                                 formatDate(bill.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="bill.expiration_date"> | Vence: {{
                                                 formatDate(bill.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -753,6 +761,10 @@
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
+                                             <button @click="printBill(bill)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon   class="size-4" />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -765,7 +777,7 @@
                                 <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
                                 <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
                                 </p>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Factura para
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Recibo para
                                     comenzar
                                 </p>
                             </div>
@@ -802,7 +814,7 @@
                                         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-pink-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-pink-600 transition-all sm:text-hidden">
                                         <DeleteIcon class="w-5 h-5" />
                                         <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
-                                            }}
+                                        }}
                                             Eliminados</span>
                                     </button>
                                 </AccessGate>
@@ -832,7 +844,7 @@
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
                                                 item.id
-                                                }}</h2>
+                                            }}</h2>
                                             <div
                                                 class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                                 <UserIcon class="w-4 h-4" />
@@ -885,8 +897,8 @@
                                             <div class="flex justify-center gap-1 mt-1">
                                                 <template v-if="item.data[tooth]">
                                                     <span
-                                                        v-for="([ proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                         class="inline-block w-3 h-3 rounded-full "
+                                                        v-for="([proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        class="inline-block w-3 h-3 rounded-full "
                                                         :class="procedureStyles[proc]" :title="` ${proc}`">
 
                                                     </span>
@@ -913,8 +925,8 @@
                                             <div class="flex justify-center gap-1 mt-1">
                                                 <template v-if="item.data[tooth]">
                                                     <span
-                                                        v-for="([ proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                         class="inline-block w-3 h-3  rounded-full"
+                                                        v-for="([proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
+                                                        class="inline-block w-3 h-3  rounded-full"
                                                         :class="procedureStyles[proc]" :title="` ${proc}`">
 
                                                     </span>
