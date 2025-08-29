@@ -56,13 +56,12 @@ class RoleSeeder extends Seeder
             'patient.update',
             'patient.delete',
             'odontograph.view',
+            'odontograph.create',
             'budget.view',
             'budget.create',
-            'budget.update',
             'budget.delete',
             'bill.view',
             'bill.create',
-            'bill.update',
             'bill.delete',
             'event.view',
             'event.create',
@@ -70,8 +69,12 @@ class RoleSeeder extends Seeder
             'event.delete',
             'expense.view',
             'expense.create',
-            'expense.update',
             'expense.delete',
+            'drug.view',
+            'drug.create',
+            'prescription.view',
+            'prescription.create',
+            'prescription.delete',
         ]);
 
         $user = User::where('name', 'Test User')->first();
@@ -81,7 +84,7 @@ class RoleSeeder extends Seeder
         $user->syncRoles('staff');
 
         $user = User::where('name', 'Mario')->first();
-        $user->syncRoles('patient');
+        $user->syncRoles('staff');
 
         $user = User::where('name', 'Jose Angel')->first();
         $user->syncRoles('doctor');
