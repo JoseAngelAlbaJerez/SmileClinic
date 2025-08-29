@@ -21,7 +21,7 @@
                                 <PrintIcon />
 
                             </button>
-                             <ReportModal :open="showReport" @close="showReport = false" table="expenses" />
+                             <ReportModal :open="showReport" @close="showReport = false" table="expenses"  :default-selected="['id', 'amount', 'description','created_at']"  />
 
                         </div>
 
@@ -152,9 +152,33 @@
                             <div class="relative">
                                 <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                     style="pointer-events: none;" />
-                                <input v-model="form_modal.description" id="description" type="text"
-                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white"
-                                    placeholder="Descripción..." />
+
+                            <select
+                            v-model="form_modal.description"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white"
+                        >
+                            <option disabled value="">Seleccione un tipo de egreso</option>
+                            <option value="Luz">Luz</option>
+                            <option value="Local">Local</option>
+                            <option value="Envíos">Envíos</option>
+                            <option value="Depósito">Depósito</option>
+                            <option value="TSS">TSS</option>
+                            <option value="Contabilidad">Contabilidad</option>
+                            <option value="Laboratorio">Laboratorio</option>
+                            <option value="Empleado">Empleado</option>
+                            <option value="Publicidad">Publicidad</option>
+                            <option value="Teléfono">Teléfono</option>
+                            <option value="Gastos ">Gastos </option>
+                            <option value="Dra. Castro">Dra. Castro</option>
+                            <option value="Dra. Madelin">Dra. Madelin</option>
+                            <option value="Dra. Odalisa">Dra. Odalisa</option>
+                            <option value="Dra. Orquídea ">Dra. Orquídea </option>
+                            <option value="Dra. Orquídea ">Dra. Orquídea </option>
+                            <option value="Dra. Paloma">Dra. Paloma</option>
+                            <option value="Dra. Paloma">Dr. Francisco</option>
+
+
+                        </select>
                             </div>
                             <p v-if="errors.description" class="mt-1 text-xs text-red-600">{{ errors.description }}</p>
                         </div>
