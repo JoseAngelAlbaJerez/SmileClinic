@@ -146,7 +146,7 @@ class BillController extends Controller
                     }
                 }
             ],
-            'details.*.initial' => 'nullable|integer',
+
         ]);
 
         $billData = $validated['form'];
