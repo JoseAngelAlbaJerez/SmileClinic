@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Procedure extends Model
 {
-    protected $fillable = ["name", "coberture",'branch_id', "cost", "active"];
+    protected $fillable = ["name", "coberture",'branch_id', "cost", "active","insuranced_amount"];
 
       protected static function booted()
     {
