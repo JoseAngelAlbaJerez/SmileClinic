@@ -141,7 +141,7 @@ watchEffect(() => {
                                 </NavLink>
                                 <NavLink v-if="can('bill.view')" :href="route('bills.index')"
                                     :active="route().current('bills.index') || route().current('bills.show') || route().current('bills.edit')">
-                                    Facturas
+                                    Recibos
                                 </NavLink>
 
                             </div>
@@ -282,7 +282,7 @@ watchEffect(() => {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink v-if="can('bill.view')" :href="route('bills.index')"
                             :active="route().current('bills.index')">
-                            Facturas
+                            Recibos
                         </ResponsiveNavLink>
 
                     </div>

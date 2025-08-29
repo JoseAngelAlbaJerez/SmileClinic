@@ -1,5 +1,5 @@
 <template>
-     <Head title="Facturas" />
+     <Head title="Recibos" />
     <AuthenticatedLayout>
         <template #header>
             <BreadCrumb :crumbs="crumbs" />
@@ -303,7 +303,7 @@ export default {
     data() {
         return {
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Facturas', to: route('bills.index') },
+                { icon: markRaw(DocumentMoney), label: 'Recibos', to: route('bills.index') },
                 { icon: markRaw(UserIcon), label: this.bills.patient.first_name + ' ' + this.bills.patient.last_name, to: route('patients.show', this.bills.patient) },
                 { icon: markRaw(DocumentIcon), label: this.bills.id },
 

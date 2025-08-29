@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Facturas" />
+    <Head title="Recibos" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -531,7 +531,7 @@ export default {
             selected_doctor: '',
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Facturas', to: route('bills.index') },
+                { icon: markRaw(DocumentMoney), label: 'Recibos', to: route('bills.index') },
                 { icon: markRaw(AddIcon), label: 'Crear' },
 
             ],

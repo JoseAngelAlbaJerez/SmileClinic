@@ -605,8 +605,8 @@
                     </div>
                 </AccessGate>
 
-                <!-- Facturas -->
-                <!-- Facturas - Diseño Mejorado -->
+                <!-- Recibos -->
+                <!-- Recibos - Diseño Mejorado -->
                 <AccessGate permission="bill.view">
                     <div
                         class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
@@ -616,7 +616,7 @@
                             <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                 <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-300" />
                             </div>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Facturas</h2>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Recibos</h2>
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
@@ -632,7 +632,7 @@
                             </div>
                         </div>
 
-                        <!-- Lista de Facturas -->
+                        <!-- Lista de Recibos -->
                         <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
                             <div v-for="bill in bills" :key="bill.id"
                                 class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
@@ -759,11 +759,11 @@
                             </div>
                         </div>
 
-                        <!-- Mensaje cuando no hay Facturas -->
+                        <!-- Mensaje cuando no hay Recibos -->
                         <div v-if="!bills.length" class="text-center py-6">
                             <div class="inline-flex flex-col items-center">
                                 <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
-                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Facturas registrados
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
                                 </p>
                                 <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Factura para
                                     comenzar

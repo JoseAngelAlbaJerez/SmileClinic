@@ -165,10 +165,10 @@
                                 class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
                                 <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
                                 <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron
-                                    facturas
+                                    recibos
                                 </h3>
                                 <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
-                                    No hay registros de facturas. Crea una nueva para comenzar.
+                                    No hay registros de recibos. Crea una nueva para comenzar.
                                 </p>
                                 <AccessGate permission="bill.create">
                                     <Link :href="route('bills.create')"
