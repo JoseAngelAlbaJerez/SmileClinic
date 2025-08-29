@@ -90,7 +90,7 @@ class PrescriptionController extends Controller
             }
         }
 
-        $prescriptions = $query->orderByDesc('prescriptions.created_at')->with('doctor', 'patient', 'prescriptionsDetails.drugs', 'budget','branch')->paginate(10);
+        $prescriptions = $query->orderByDesc('prescriptions.created_at')->with('doctor', 'patient', 'prescriptionsDetails.drugs', 'budget', 'branch')->paginate(10);
 
         return Inertia::render('Prescription/Index', [
             'prescriptions' => $prescriptions,
@@ -137,7 +137,7 @@ class PrescriptionController extends Controller
         try {
             $prescription = Prescription::create([
                 'patient_id' => $validated['patient_id'],
-                 'branch_id' => Auth::user()->branch_id,
+                'branch_id' => Auth::user()->branch_id,
                 'doctor_id' => Auth::id(),
                 'active' => true,
             ]);
@@ -146,6 +146,7 @@ class PrescriptionController extends Controller
                 $prescriptionDetail = $prescription->prescriptionsDetails()->create([
                     'description' => $detail['description'],
                     'drug_id' => $detail['drug_id'],
+                    'branch_id' => Auth::user()->branch_id,
                     'active' => true,
                 ]);
                 $prescriptionDetail->save();
