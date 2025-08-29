@@ -158,13 +158,13 @@ class ReportController extends Controller
     }
     public function prescription(Prescription $prescription)
     {
-
-        $pdf = Pdf::loadView('Reports.prescription', compact('prescription'))->setPaper('a4')->setOptions([
-            'isRemoteEnabled' => true,
-            'isHtml5ParserEnabled' => true,
+        $prescription->load(['patient', 'doctor', 'prescriptionsDetails.drugs']);
+        $prescription->patient->age = \Carbon\Carbon::parse( $prescription->patient->date_of_birth)->age;
+        return Inertia::render('Reports/Prescription', [
+            'prescription' => $prescription,
         ]);
-        return  $pdf->stream('prescription.pdf');
     }
+
     public function expenses($Days)
     {
 
