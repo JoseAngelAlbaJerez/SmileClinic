@@ -69,7 +69,7 @@
                                 <div>
                                     <label for="DNI"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        DNI <span class="text-red-500">*</span>
+                                        DNI
                                     </label>
                                     <div class="relative">
                                         <div
@@ -86,7 +86,7 @@
                                 <div>
                                     <label for="phone_number"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Teléfono <span class="text-red-500">*</span>
+                                        Teléfono
                                     </label>
                                     <div class="relative">
                                         <div
@@ -104,7 +104,7 @@
                                 <div>
                                     <label for="ars"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        ARS <span class="text-red-500">*</span>
+                                        ARS
                                     </label>
                                     <select v-model="form.ars"
                                         class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
@@ -120,7 +120,7 @@
                                 <!-- Date of Birth -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Fecha de Nacimiento <span class="text-red-500">*</span>
+                                        Fecha de Nacimiento
                                     </label>
                                     <VueDatePicker v-model="form.date_of_birth"
                                         class="border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 [&_.dp__input]:dark:bg-gray-700 [&_.dp__input]:dark:text-white" />
@@ -130,7 +130,7 @@
                                 <div class="md:col-span-2">
                                     <label for="address"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Dirección <span class="text-red-500">*</span>
+                                        Dirección
                                     </label>
                                     <div class="relative">
                                         <div
@@ -223,7 +223,7 @@
                                 <div class="md:col-span-2">
                                     <label for="motive"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Motivo de consulta <span class="text-red-500">*</span>
+                                        Motivo de consulta
                                     </label>
                                     <textarea id="motive" v-model="form.motive" rows="4"
                                         class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
@@ -353,26 +353,7 @@ export default {
                 this.error = 'Por favor, ingrese el apellido.';
                 return;
             }
-            if (!this.form.DNI) {
-                this.error = 'Por favor, ingrese el DNI.';
-                return;
-            }
-            if (!this.form.phone_number) {
-                this.error = 'Por favor, ingrese el número de télefono.';
-                return;
-            }
-            if (!this.form.ars) {
-                this.error = 'Por favor, seleccione un seguro médico.';
-                return;
-            }
-            if (!this.form.date_of_birth) {
-                this.error = 'Por favor, seleccione la fecha de nacimiento.';
-                return;
-            }
-            if (!this.form.address) {
-                this.error = 'Por favor, ingrese la dirección.';
-                return;
-            }
+
             if (this.form.drugs == true && this.form.drugs_detail == '') {
                 this.error = 'Por favor, asigne un detalle al medicamento.';
                 return;
@@ -385,8 +366,10 @@ export default {
                 this.error = 'Por favor, asigne un detalle a las complicaciones.';
                 return;
             }
-
+            if (this.form.date_of_birth) {
             this.form.date_of_birth = this.formatDate(this.form.date_of_birth);
+
+            }
 
             this.error = null;
             this.form.post(route('patients.store'),);

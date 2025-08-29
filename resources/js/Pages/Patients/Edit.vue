@@ -354,14 +354,8 @@ export default {
                 this.error = 'Por favor, ingrese el DNI.';
                 return;
             }
-            if (!this.form.phone_number) {
-                this.error = 'Por favor, ingrese el número de télefono.';
-                return;
-            }
-            if (!this.form.ars) {
-                this.error = 'Por favor, seleccione un seguro médico.';
-                return;
-            }
+
+
             if (!this.form.date_of_birth) {
                 this.error = 'Por favor, seleccione la fecha de nacimiento.';
                 return;
