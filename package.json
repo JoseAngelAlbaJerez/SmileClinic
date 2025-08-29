@@ -6,12 +6,14 @@
         "build": "vite build",
         "dev": "vite"
     },
+    "overrides": {
+        "axios": "^1.11.0"
+    },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/vite": "^4.0.0",
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.12",
-        "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.4.31",
@@ -27,6 +29,7 @@
         "@fullcalendar/vue3": "^6.1.18",
         "@inertiajs/inertia": "^0.11.1",
         "@inertiajs/vue3": "^2.0.14",
+        "@selemondev/vue3-signature-pad": "^1.4.0",
         "@vuepic/vue-datepicker": "^11.0.2",
         "dayjs": "^1.11.13",
         "vue-simple-calendar": "^7.2.1",
