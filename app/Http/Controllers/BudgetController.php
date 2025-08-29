@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 use App\Models\Event;
+use App\Models\Insurance;
 use App\Models\Patient;
 use App\Models\Payment;
 use Illuminate\Validation\ValidationException;
@@ -37,7 +38,7 @@ class BudgetController extends Controller
                         fn($p) =>
                         $p->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%'])
                     )
-                )->where('active','=',1)
+                )->where('active', '=', 1)
                 ->paginate(10);
 
             return inertia('Budgets/BudgetSelector', [
@@ -101,7 +102,7 @@ class BudgetController extends Controller
             $query->latest('updated_at')->latest('created_at');
         }
 
-         $budgets = $query->with('patient','branch')->paginate(10);
+        $budgets = $query->with('patient', 'branch')->paginate(10);
         return Inertia::render('Budgets/Index', [
             'budgets' => $budgets,
             'filters' => [
@@ -135,7 +136,9 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info($request);
         $validated = $request->validate([
+            // Budget
             'form.patient_id' => 'required|exists:patients,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
@@ -144,6 +147,7 @@ class BudgetController extends Controller
             'form.total' => 'required|numeric',
             'form.amount_of_payments' => 'nullable|numeric',
 
+            // Budget details
             'details' => 'required|array|min:1',
             'details.*.treatment' => 'required|string|max:100',
             'details.*.amount' => 'required|numeric',
@@ -151,71 +155,80 @@ class BudgetController extends Controller
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
             'details.*.procedure_id' => 'required|integer',
-            'details.*.amount_of_payments' => [
-                'nullable',
-                'integer',
-                function ($attribute, $value, $fail) use ($request) {
-                    if ($request->input('form.type') === 'Crédito' && (!is_numeric($value) || $value <= 1)) {
-                        $fail("La cantidad de pagos debe ser mayor que 1 cuando el tipo es Crédito.");
-                    }
-                }
-            ],
+            'details.*.amount_of_payments' => 'nullable|integer',
             'details.*.initial' => 'nullable|integer',
-        ]);
 
+            // Insurance
+            'ars' => 'required|string|max:255',
+            'affiliate_signature' => 'nullable|string',
+            'reclaimer_signature' => 'nullable|string',
+        ]);
+        // --- Create budget ---
         $budgetData = $validated['form'];
         $budgetData['branch_id'] = Auth::user()->branch_id;
+        $budgetData['doctor_id'] = Auth::id();
         $budgetData['emission_date'] = Carbon::parse($budgetData['emission_date'] ?? now());
         $budgetData['expiration_date'] = $budgetData['expiration_date'] ? Carbon::parse($budgetData['expiration_date']) : null;
-        $budgetData['doctor_id'] = Auth::id();
+
         $budget = Budget::create($budgetData);
-         $details = collect($validated['details'])->map(function ($detail) use ($budget) {
+
+        // --- Create budget details ---
+        $details = collect($validated['details'])->map(function ($detail) use ($budget) {
             $detail['branch_id'] = $budget->branch_id;
             return $detail;
         })->toArray();
-        $budgetDetails  = $budget->budgetdetail()->createMany($details);
-        // if ($budget->type == "Crédito") {
-        //     $patient = $budget->patient;
+        $budget->budgetdetail()->createMany($details);
 
-        //     if (!$patient->cxc) {
-        //         $CXC = CXC::create([
-        //             'balance' => $budget->total,
-        //             'patient_id' => $budget->patient_id,
-        //             'doctor_id' => $budget->doctor_id,
-        //         ]);
-        //     } else {
-        //         $CXC = $patient->cxc;
-        //         $CXC->balance += $budget->total;
-        //         $CXC->save();
-        //     }
-        //     foreach ($budgetDetails as $detail) {
+        // --- Create insurance using the budget ID ---
+        Insurance::create([
+            'budget_id' => $budget->id,
+            'patient_id' => $budget->patient_id,
+            'branch_id' => $budget->branch_id,
+            'ars' => $validated['ars'],
+            'affiliate_signature' => $validated['affiliate_signature'] ?? null,
+            'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
+        ]);
 
-        //         $remaining_amount = $detail->total / $detail->amount_of_payments;
-        //         for ($i = 0; $i < $detail->amount_of_payments; $i++) {
-        //             Payment::create([
-        //                 'budget_detail_id' => $detail->id,
-        //                 'c_x_c_id' => $CXC->id,
-        //                 'amount_paid' => 0,
-        //                 'expiration_date' => $budgetData['expiration_date']->addMonth(),
-        //                 'remaining_amount' => $remaining_amount,
-        //                 'total' => $detail->total,
-        //             ]);
-        //         }
-        //     }
-        //     $budget->c_x_c_id = $CXC->id;
-        //     $budget->save();
-        // }
-
-
+        // Load relations for returning to the page
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
+     return back()->with('toast', 'Presupuesto y seguro guardados correctamente');
 
-
-        return response()->json([
-            'budget_id' => $budget->id,
-        ]);
     }
 
+
+
+    // if ($budget->type == "Crédito") {
+    //     $patient = $budget->patient;
+
+    //     if (!$patient->cxc) {
+    //         $CXC = CXC::create([
+    //             'balance' => $budget->total,
+    //             'patient_id' => $budget->patient_id,
+    //             'doctor_id' => $budget->doctor_id,
+    //         ]);
+    //     } else {
+    //         $CXC = $patient->cxc;
+    //         $CXC->balance += $budget->total;
+    //         $CXC->save();
+    //     }
+    //     foreach ($budgetDetails as $detail) {
+
+    //         $remaining_amount = $detail->total / $detail->amount_of_payments;
+    //         for ($i = 0; $i < $detail->amount_of_payments; $i++) {
+    //             Payment::create([
+    //                 'budget_detail_id' => $detail->id,
+    //                 'c_x_c_id' => $CXC->id,
+    //                 'amount_paid' => 0,
+    //                 'expiration_date' => $budgetData['expiration_date']->addMonth(),
+    //                 'remaining_amount' => $remaining_amount,
+    //                 'total' => $detail->total,
+    //             ]);
+    //         }
+    //     }
+    //     $budget->c_x_c_id = $CXC->id;
+    //     $budget->save();
+    // }
 
     /**
      * Display the specified resource.
@@ -223,8 +236,11 @@ class BudgetController extends Controller
     public function show(Budget $budget)
     {
         $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
+        $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,
+            'insurance' => $insurance,
+
         ]);
     }
 

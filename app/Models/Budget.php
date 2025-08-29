@@ -41,6 +41,10 @@ class Budget extends Model
     {
         return $this->hasOne(CXC::class,'id','c_x_c_id' );
     }
+     public function Insurance()
+    {
+        return $this->hasOne(Insurance::class,'id' );
+    }
     public function patient()
     {
         return $this->belongsTo(Patient::class);

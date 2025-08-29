@@ -152,8 +152,9 @@
                                                     class="block text-xs font-medium text-gray-700 dark:text-gray-300">
                                                     Descuento
                                                 </label>
-                                                <input class="block w-full  pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white" v-model="form_details[index].discount"
-                                                    @input="calcTotal(index)" />
+                                                <input
+                                                    class="block w-full  pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
+                                                    v-model="form_details[index].discount" @input="calcTotal(index)" />
                                                 <p v-if="form.errors[`details.${index}.discount`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
                                                     {{ form.errors[`details.${index}.discount`] }}
@@ -236,8 +237,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-6 md:p-8 rounded shadow-lg" v-show="form.patient_id != ''">
-                                <form @submit.prevent="submitInsurance" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-6 md:p-8 rounded shadow-lg" v-if="insurance_form.ars != ''">
+                                <form @submit.prevent="" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Personal Information Section -->
                                     <div class="md:col-span-2">
                                         <h3
@@ -512,21 +513,20 @@
                                             Firmas
                                         </h3>
                                     </div>
-
                                     <!-- Affiliate Signature -->
                                     <div class="md:col-span-1 mb-10">
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Firma del Afiliado
                                         </label>
                                         <vue-signature-pad ref="affiliatePad"
-                                            class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white"
+                                            :options="{ penColor: 'black', backgroundColor: 'white' }"
+                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
                                             style="width: 100%; height: 120px;" />
                                         <div class="flex space-x-2 mt-2">
                                             <SecondaryButton type="button" @click="clearAffiliateSignature"
                                                 class="px-3 py-1 bg-gray-200 rounded">
-                                                Limpiar</SecondaryButton>
-                                            <button type="button" @click="saveAffiliateSignature"
-                                                class="px-3 py-1 bg-pink-500 text-white rounded">Guardar</button>
+                                                Limpiar
+                                            </SecondaryButton>
                                         </div>
                                     </div>
 
@@ -536,16 +536,17 @@
                                             Firma del Reclamante
                                         </label>
                                         <vue-signature-pad ref="reclaimerPad"
-                                            class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white"
+                                            :options="{ penColor: 'black', backgroundColor: 'white' }"
+                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
                                             style="width: 100%; height: 120px;" />
                                         <div class="flex space-x-2 mt-2">
                                             <SecondaryButton type="button" @click="clearReclaimerSignature"
                                                 class="px-3 py-1 bg-gray-200 rounded">
-                                                Limpiar</SecondaryButton>
-                                            <button type="button" @click="saveReclaimerSignature"
-                                                class="px-3 py-1 bg-pink-500 text-white rounded">Guardar</button>
+                                                Limpiar
+                                            </SecondaryButton>
                                         </div>
                                     </div>
+
 
 
 
@@ -679,6 +680,7 @@ import CardIcon from '@/Components/Icons/CardIcon.vue';
 // @ts-ignore
 import { VueSignaturePad } from "vue-signature-pad"
 import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
+import { Inertia } from '@inertiajs/inertia';
 
 
 export default {
@@ -724,6 +726,7 @@ export default {
                 emission_date: new Date(),
                 expiration_date: '',
                 total: '',
+                processing: false,
             }),
             insurance_form: useForm({
                 first_name: "",
@@ -739,8 +742,8 @@ export default {
                 procedure: "",
                 amount: "",
                 autorized_amount: "",
-                affiliate_signature: "",
-                reclaimer_signature: "",
+                affiliate_signature: null,
+                reclaimer_signature: null,
                 ars: "",
 
             }),
@@ -768,20 +771,13 @@ export default {
             error: '',
             selectedProcedureId: '',
             selectedProcedures: [],
+            affiliatePad: ref(null),
+            reclaimerPad: ref(null),
+
         };
 
     },
-    mounted() {
-        const resize = () => {
-            this.$refs.affiliatePad.resizeCanvas();
-            this.$refs.reclaimerPad.resizeCanvas();
-        };
-        resize();
-        window.addEventListener("resize", resize);
-    },
-    beforeUnmount() {
-        window.removeEventListener("resize", this.resize);
-    },
+
 
 
     methods: {
@@ -794,6 +790,8 @@ export default {
                 day: 'numeric',
             });
         },
+
+
         onPatientSelected(patient) {
             this.insurance_form.first_name = patient.first_name || '';
             this.insurance_form.last_name = patient.last_name || '';
@@ -805,28 +803,26 @@ export default {
 
             this.showPatientModal = false;
         },
-        saveAffiliateSignature() {
-            this.insurance_form.affiliate_signature =
-                this.$refs.affiliatePad.saveSignature()
-        },
+
         clearAffiliateSignature() {
-            this.$refs.affiliatePad.clearSignature()
-            this.insurance_form.affiliate_signature = ""
-        },
-        saveReclaimerSignature() {
-            this.insurance_form.reclaimer_signature =
-                this.$refs.reclaimerPad.saveSignature()
+            this.$refs.affiliatePad.clearSignature();
+            this.insurance_form.affiliate_signature = null;
         },
         clearReclaimerSignature() {
-            this.$refs.reclaimerPad.clearSignature()
-            this.insurance_form.reclaimer_signature = ""
+            this.$refs.reclaimerPad.clearSignature();
+            this.insurance_form.reclaimer_signature = null;
         },
-        submitInsurance() {
-            this.saveAffiliateSignature()
-            this.saveReclaimerSignature()
+        saveSignatures() {
+            if (this.$refs.affiliatePad) {
+                this.insurance_form.affiliate_signature = this.$refs.affiliatePad.saveSignature().data;
+            }
+            if (this.$refs.affiliatePad) {
+                this.insurance_form.reclaimer_signature = this.$refs.reclaimerPad.saveSignature().data;
+            }
+        },
 
-            Inertia.post("/insurance/submit", this.insurance_form)
-        },
+
+
 
         addProcedure() {
 
@@ -897,6 +893,7 @@ export default {
         },
 
         submit() {
+            this.form.processing = true;
             if (!this.form.patient_id) {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';
                 return;
@@ -913,9 +910,12 @@ export default {
             }
 
 
+
             this.error = null;
-            this.form.processing = true;
-            const data = {
+
+
+             this.saveSignatures();
+            const payload = {
                 form: {
                     patient_id: this.form.patient_id,
                     type: this.form.type,
@@ -923,29 +923,36 @@ export default {
                     emission_date: this.form.emission_date,
                     expiration_date: this.form.expiration_date,
                     total: this.form.total,
+                    amount_of_payments: this.form.amount_of_payments || null,
                 },
-                details: this.form_details,
+                details: this.form_details.map(d => ({
+                    procedure_id: d.procedure_id,
+                    amount: d.amount,
+                    total: d.total,
+                    treatment: d.treatment,
+                    discount: d.discount,
+                    quantity: d.quantity,
+                    amount_of_payments: d.amount_of_payments || null,
+                    initial: d.initial || null,
+                })),
+                ars: this.insurance_form.ars,
+                affiliate_signature: this.insurance_form.affiliate_signature,
+                reclaimer_signature: this.insurance_form.reclaimer_signature,
             };
 
-            axios.post(route('budgets.store'), data)
-                .then(response => {
-                    const budgetId = response.data.budget_id;
-
-                    if (budgetId) {
-                        window.open(route('report.budget', { budget: budgetId }), '_blank');
-                    }
-                    window.location.href = route('budgets.show', { budget: budgetId });
-                })
-                .catch(error => {
-                    if (error.response?.status === 422) {
-                        this.form.errors = error.response.data.errors;
-                        this.form_detail.errors = error.response.data.errors;
-                    } else {
-                        console.error('Error al guardar el presupuesto:', error);
-                    }
-                }).finally(() => {
+            Inertia.post(route('budgets.store'), payload, {
+                onSuccess: (page) => {
+                    console.log('Budget and insurance saved successfully');
+                    this.errors = errors;
+                },
+                onError: (errors) => {
+                    console.log('Validation errors:', errors);
+                },
+                onFinish: () => {
                     this.form.processing = false;
-                });
+                }
+            });
+
         },
 
 

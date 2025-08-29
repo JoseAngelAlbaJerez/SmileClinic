@@ -8,6 +8,7 @@ use App\Http\Controllers\CXCController;
 use App\Http\Controllers\DrugController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\OdontographController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PaymentController;
@@ -99,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('drugs', DrugController::class);
     Route::resource('bills', BillController::class);
     Route::resource('branches', BranchController::class);
+    Route::resource('insurances', InsuranceController::class);
 
 
 
