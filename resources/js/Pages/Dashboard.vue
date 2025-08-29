@@ -174,7 +174,7 @@
                                     <Link :href="route('bills.create')"
                                         class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
                                     <AddIcon class="w-5 h-5" />
-                                    <span>Crear primera factura</span>
+                                    <span>Crear primera Recibo</span>
                                     </Link>
                                 </AccessGate>
                             </div>

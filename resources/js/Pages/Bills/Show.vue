@@ -8,7 +8,7 @@
             <div
                 class="container mx-auto px-6 py-4  dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
                 <div class="my-2 mt-5 flex  gap-2 items-center p-1">
-                    <h2 class="text-lg font-semibold "> Factura de {{ bills.patient.first_name }} {{
+                    <h2 class="text-lg font-semibold "> Recibo de {{ bills.patient.first_name }} {{
                         bills.patient.last_name }}
                     </h2>
                     <div v-if="bills.active" class=" flex ml-auto gap-2 mb-2 ">
