@@ -133,9 +133,22 @@ class UserController extends Controller
     }
     public function update(User $user, Request $request)
     {
+        Log::info($request);
+
         if ($request->has('active')) {
             $this->restore($user);
             return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+        }
+
+        // Manejar avatar si se proporciona
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+            $user->save();
+        }
+        // Actualizar dirección
+        if ($request->has('address')) {
+            $user->address()->updateOrCreate([], $request->address);
         }
         // Validación de datos
         $validated = $request->validate([
@@ -153,20 +166,8 @@ class UserController extends Controller
             'address.postal_code' => 'nullable|string|max:20',
         ]);
 
-        // Actualizar datos básicos
         $user->update($request->except('address', 'avatar'));
 
-        // Manejar avatar si se proporciona
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
-            $user->save();
-        }
-
-        // Actualizar dirección
-        if ($request->has('address')) {
-            $user->address()->updateOrCreate([], $request->address);
-        }
 
         return redirect()->back()->with('success', 'Usuario actualizado correctamente');
     }
