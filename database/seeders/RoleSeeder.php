@@ -80,10 +80,10 @@ class RoleSeeder extends Seeder
         $user = User::where('name', 'Test User')->first();
         $user->syncRoles('admin');
 
-        $user = User::where('name', 'San Pedro')->first();
+        $user = User::where('name', 'Cayetano Germosen')->first();
         $user->syncRoles('staff');
 
-        $user = User::where('name', 'Mario')->first();
+        $user = User::where('name', 'Cutupu')->first();
         $user->syncRoles('staff');
 
         $user = User::where('name', 'Jose Angel')->first();
