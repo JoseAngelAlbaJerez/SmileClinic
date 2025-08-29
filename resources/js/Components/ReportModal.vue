@@ -94,9 +94,51 @@
                     Dejar vacío si no desea filtrar por fecha.
                 </p>
             </div>
+            <div class="mb-6" v-if="table == 'expenses'">
+                <div class="flex items-center mb-3">
+                    <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Búsqueda</label>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <select v-model="search"
+                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
+                        <option disabled value="">Seleccione un tipo de egreso</option>
+                        <option value="Luz">Luz</option>
+                        <option value="Local">Local</option>
+                        <option value="Envíos">Envíos</option>
+                        <option value="Depósito">Depósito</option>
+                        <option value="TSS">TSS</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Laboratorio">Laboratorio</option>
+                        <option value="Empleado">Empleado</option>
+                        <option value="Publicidad">Publicidad</option>
+                        <option value="Teléfono">Teléfono</option>
+                        <option value="Gastos ">Gastos </option>
+                        <option value="Dra. Castro">Dra. Castro</option>
+                        <option value="Dra. Madelin">Dra. Madelin</option>
+                        <option value="Dra. Odalisa">Dra. Odalisa</option>
+                        <option value="Dra. Orquídea ">Dra. Orquídea </option>
+                        <option value="Dra. Orquídea ">Dra. Orquídea </option>
+                        <option value="Dra. Paloma">Dra. Paloma</option>
+                        <option value="Dra. Paloma">Dr. Francisco</option>
 
+
+                    </select>
+                </div>
+            </div>
             <!-- Search -->
-            <div class="mb-6">
+            <div class="mb-6" v-else>
                 <div class="flex items-center mb-3">
                     <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -119,82 +161,6 @@
                 </div>
             </div>
 
-
-
-            <!-- Order By -->
-            <div class="mb-6">
-                <div class="flex items-center mb-3">
-                    <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"></path>
-                    </svg>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ordenar Por</label>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"></path>
-                            </svg>
-                        </div>
-                        <select v-model="orderBy"
-                            class="pl-10 border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500 appearance-none">
-                            <option value="">-- Seleccionar campo --</option>
-                            <option v-for="f in fields" :key="f" :value="f">{{ f }}</option>
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-                            </svg>
-                        </div>
-                        <select v-model="orderDirection"
-                            class="pl-10 border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500 appearance-none">
-                            <option value="asc">Ascendente</option>
-                            <option value="desc">Descendente</option>
-                        </select>
-                        <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Limit -->
-            <div class="mb-6">
-                <div class="flex items-center mb-3">
-                    <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Límite de Filas</label>
-                </div>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                            </path>
-                        </svg>
-                    </div>
-                    <input type="number" v-model="limit"
-                        class="pl-10 border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-sm w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                        placeholder="Ej. 100" />
-                </div>
-            </div>
             <!-- Active only -->
             <div class="mb-6 flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div class="flex items-center">
@@ -219,7 +185,6 @@
 
             </div>
 
-
             <!-- Actions -->
             <div class="flex justify-end space-x-3 pt-4 border-t">
                 <button @click="close" class="px-5 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-700">Cancelar</button>
@@ -238,7 +203,11 @@ import Modal from "./Modal.vue"
 import InfoCircle from "./Icons/InfoCircle.vue"
 const props = defineProps({
     open: Boolean,
-    table: String, // dynamic table name
+    table: String,
+    defaultSelected: {
+        type: Array,
+        default: () => []
+    }
 })
 
 const emit = defineEmits(["close"])
@@ -251,7 +220,7 @@ const orderBy = ref("")
 const orderDirection = ref("asc")
 const limit = ref("")
 const search = ref("")
-const active = ref(false)
+const active = ref(true)
 const groupBy = ref("")
 
 watch(() => props.open, async (val) => {
@@ -260,6 +229,7 @@ watch(() => props.open, async (val) => {
             params: { table: props.table }
         })
         fields.value = data
+        selectedFields.value = fields.value.filter(f => props.defaultSelected.includes(f))
     }
 })
 
