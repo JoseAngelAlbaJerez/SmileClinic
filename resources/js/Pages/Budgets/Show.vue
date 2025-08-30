@@ -91,16 +91,15 @@
                             <div class="space-y-4">
                                 <div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">ARS</p>
-                                     <img v-if="insurance.ars === 'Humano'" src="/img/Humano.svg"
-                                                alt="ARS Humano" class="h-20" />
-                                            <img v-else-if="insurance.ars === 'Universal'" src="/img/Universal.svg"
-                                                alt="ARS Universal" class="h-20" />
-                                            <img v-else-if="insurance.ars === 'Monumental'"
-                                                src="/img/Monumental.jpg" alt="ARS Monumental" class="h-20" />
-                                            <img v-else-if="insurance.ars === 'Senasa'" src="/img/SENASA.webp"
-                                                alt="ARS Senasa" class="h-20" />
-                                            <img v-else src="/img/default-insurance-logo.png" alt="Seguro"
-                                                class="h-20" />
+                                    <img v-if="insurance.ars === 'Humano'" src="/img/Humano.svg" alt="ARS Humano"
+                                        class="h-20" />
+                                    <img v-else-if="insurance.ars === 'Universal'" src="/img/Universal.svg"
+                                        alt="ARS Universal" class="h-20" />
+                                    <img v-else-if="insurance.ars === 'Monumental'" src="/img/Monumental.jpg"
+                                        alt="ARS Monumental" class="h-20" />
+                                    <img v-else-if="insurance.ars === 'Senasa'" src="/img/SENASA.webp" alt="ARS Senasa"
+                                        class="h-20" />
+                                    <img v-else src="/img/default-insurance-logo.png" alt="Seguro" class="h-20" />
                                 </div>
 
                                 <div>
@@ -108,7 +107,16 @@
                                     <p class="font-medium text-gray-800 dark:text-gray-200">{{
                                         insurance.id || 'No proporcionado' }}</p>
                                 </div>
-
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Firma del Afiliado</p>
+                                    <div v-if="insurance.affiliate_signature">
+                                        <img :src="insurance.affiliate_signature" alt="Firma del Afiliado"
+                                            class="h-24 border border-gray-300 dark:border-gray-600 rounded-md bg-white" />
+                                    </div>
+                                    <p v-else class="font-medium text-gray-800 dark:text-gray-200">
+                                        No especificado
+                                    </p>
+                                </div>
                                 <div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">Firma del Reclamante</p>
                                     <div v-if="insurance.reclaimer_signature">
@@ -120,16 +128,7 @@
                                     </p>
                                 </div>
 
-                                <div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Firma del Afiliado</p>
-                                    <div v-if="insurance.affiliate_signature">
-                                        <img :src="insurance.affiliate_signature" alt="Firma del Afiliado"
-                                            class="h-24 border border-gray-300 dark:border-gray-600 rounded-md bg-white" />
-                                    </div>
-                                    <p v-else class="font-medium text-gray-800 dark:text-gray-200">
-                                        No especificado
-                                    </p>
-                                </div>
+
 
                             </div>
 
@@ -210,7 +209,7 @@
                                                     style:
                                                         'currency', currency: budgets.currency
                                                 }).format(details.amount
-                                                || 0) }}</p>
+                                                    || 0) }}</p>
 
                                             <div v-if="budgets.active && details.active">
                                                 <button @click="deleteBudgetDetail(details.id)"
@@ -324,21 +323,21 @@
                                                                     style:
                                                                         'currency', currency: budgets.currency
                                                                 }).format(payment.amount
-                                                                || 0) }}</p>
+                                                                    || 0) }}</p>
                                                             <p><span
                                                                     class="text-gray-500 dark:text-gray-400">Restante:</span>
                                                                 {{ new Intl.NumberFormat('es-DO', {
                                                                     style:
                                                                         'currency', currency: budgets.currency
                                                                 }).format(payment.remaining_amount
-                                                                || 0) }} </p>
+                                                                    || 0) }} </p>
                                                             <p><span
                                                                     class="text-gray-500 dark:text-gray-400">Total:</span>
                                                                 {{ new Intl.NumberFormat('es-DO', {
                                                                     style:
                                                                         'currency', currency: budgets.currency
                                                                 }).format(payment.total
-                                                                || 0) }} </p>
+                                                                    || 0) }} </p>
                                                             <p><span
                                                                     class="text-gray-500 dark:text-gray-400">Vence:</span>
                                                                 {{ formatDate(payment.expiration_date) }}</p>
@@ -355,7 +354,7 @@
                                                     style:
                                                         'currency', currency: budgets.currency
                                                 }).format(details.total
-                                                || 0) }}
+                                                    || 0) }}
                                             </p>
 
                                             <div v-if="budgets.active && details.active">
