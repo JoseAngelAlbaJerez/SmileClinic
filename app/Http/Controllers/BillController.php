@@ -137,6 +137,7 @@ class BillController extends Controller
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
             'details.*.procedure_id' => 'required|integer',
+            'details.*.initial' => 'nullable|integer',
             'details.*.amount_of_payments' => [
                 'nullable',
                 'integer',

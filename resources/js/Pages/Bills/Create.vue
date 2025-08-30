@@ -262,6 +262,26 @@
                                                     {{ form.errors[`details.${index}.quantity`] }}
                                                 </p>
                                             </div>
+                                             <!-- Doctor's Amount -->
+                                            <div class="space-y-1">
+                                                <label
+                                                    class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    Abonado
+                                                    <span class="text-red-500">*</span>
+                                                </label>
+                                                <div class="relative">
+                                                    <span
+                                                        class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
+                                                    <input v-model="form_details[index].initial" type="number"
+                                                        @input="calcTotal(index)"
+                                                        class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
+                                                        placeholder="0.00" />
+                                                </div>
+                                                <p v-if="form.errors[`details.${index}.initial`]"
+                                                    class="text-xs text-red-600 dark:text-red-400">
+                                                    {{ form.errors[`details.${index}.initial`] }}
+                                                </p>
+                                            </div>
 
                                             <!-- Credit-specific fields -->
                                             <template v-if="form.type == 'Crédito'">
@@ -616,8 +636,7 @@ export default {
             const initial = parseFloat(detail.initial) || 0;
             detail.total = (amount * quantity);
             detail.total -= initial;
-            const discounted = (detail.total * discount) / 100;
-            detail.total -= discounted;
+            detail.total -= discount;
             detail.amount_doctor = detail.amount * 0.5;
 
             this.form.total = this.form_details.reduce((sum, detail) => {
