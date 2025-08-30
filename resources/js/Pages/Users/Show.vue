@@ -46,7 +46,7 @@
 
     <!-- Profile Overview Card -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6 border border-gray-200 dark:border-gray-700">
-        <div class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Resumen del Perfil</h3>
         </div>
 
@@ -100,7 +100,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Personal Information Card -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-            <div class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <div class="bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Información Personal</h3>
                 <button @click="openEditModal('personal')" class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +150,7 @@
 
         <!-- Address Information Card -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-            <div class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <div class="bg-pink-50   dark:bg-gray-900  px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Dirección</h3>
                 <button @click="openEditModal('address')" class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -189,7 +189,7 @@
 
     <!-- Password Update Card -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 mt-6">
-        <div class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class=" bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Seguridad de la Cuenta</h3>
         </div>
 
