@@ -20,7 +20,7 @@
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -56,20 +56,7 @@
                                         errors.doctor_id }}</p>
                                 </div>
 
-                                <!-- Document Type -->
-                                <div class="space-y-1">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Tipo <span class="text-red-500">*</span>
-                                    </label>
-                                    <select v-model="form.type"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
-                                        <option value="Contado">Contado</option>
-                                        <option value="Crédito">Crédito</option>
-                                    </select>
-                                    <p v-if="errors.type" class="mt-1 text-xs text-red-600 dark:text-red-400">
-                                        {{ errors.type }}
-                                    </p>
-                                </div>
+
 
                                 <!-- Emission Date -->
                                 <div class="space-y-1">
@@ -283,44 +270,8 @@
                                                 </p>
                                             </div>
 
-                                            <!-- Credit-specific fields -->
-                                            <template v-if="form.type == 'Crédito'">
-                                                <!-- Initial Payment -->
-                                                <div class="space-y-1">
-                                                    <label
-                                                        class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                                                        Inicial <span class="text-red-500">*</span>
-                                                    </label>
-                                                    <div class="relative">
-                                                        <span
-                                                            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
-                                                        <input v-model="form_details[index].initial" type="number"
-                                                            @input="calcTotal(index)"
-                                                            class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
-                                                            placeholder="0.00" />
-                                                    </div>
-                                                    <p v-if="form.errors[`details.${index}.initial`]"
-                                                        class="text-xs text-red-600 dark:text-red-400">
-                                                        {{ form.errors[`details.${index}.initial`] }}
-                                                    </p>
-                                                </div>
 
-                                                <!-- Number of Payments -->
-                                                <div class="space-y-1">
-                                                    <label
-                                                        class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                                                        Cuotas <span class="text-red-500">*</span>
-                                                    </label>
-                                                    <input v-model="form_details[index].amount_of_payments"
-                                                        type="number" @input="calcTotal(index)"
-                                                        class="block w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
-                                                        placeholder="1" min="1" />
-                                                    <p v-if="form.errors[`details.${index}.amount_of_payments`]"
-                                                        class="text-xs text-red-600 dark:text-red-400">
-                                                        {{ form.errors[`details.${index}.amount_of_payments`] }}
-                                                    </p>
-                                                </div>
-                                            </template>
+
                                         </div>
 
                                         <!-- Procedure Footer -->
