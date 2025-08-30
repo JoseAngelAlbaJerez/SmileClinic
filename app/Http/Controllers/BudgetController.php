@@ -136,9 +136,7 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request);
         $validated = $request->validate([
-            // Budget
             'form.patient_id' => 'required|exists:patients,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
@@ -147,7 +145,6 @@ class BudgetController extends Controller
             'form.total' => 'required|numeric',
             'form.amount_of_payments' => 'nullable|numeric',
 
-            // Budget details
             'details' => 'required|array|min:1',
             'details.*.treatment' => 'required|string|max:100',
             'details.*.amount' => 'required|numeric',
@@ -158,12 +155,10 @@ class BudgetController extends Controller
             'details.*.amount_of_payments' => 'nullable|integer',
             'details.*.initial' => 'nullable|integer',
 
-            // Insurance
             'ars' => 'required|string|max:255',
             'affiliate_signature' => 'nullable|string',
             'reclaimer_signature' => 'nullable|string',
         ]);
-        // --- Create budget ---
         $budgetData = $validated['form'];
         $budgetData['branch_id'] = Auth::user()->branch_id;
         $budgetData['doctor_id'] = Auth::id();
@@ -172,14 +167,12 @@ class BudgetController extends Controller
 
         $budget = Budget::create($budgetData);
 
-        // --- Create budget details ---
         $details = collect($validated['details'])->map(function ($detail) use ($budget) {
             $detail['branch_id'] = $budget->branch_id;
             return $detail;
         })->toArray();
         $budget->budgetdetail()->createMany($details);
 
-        // --- Create insurance using the budget ID ---
         Insurance::create([
             'budget_id' => $budget->id,
             'patient_id' => $budget->patient_id,
@@ -189,7 +182,6 @@ class BudgetController extends Controller
             'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
         ]);
 
-        // Load relations for returning to the page
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
      return back()->with('toast', 'Presupuesto y seguro guardados correctamente');
@@ -198,37 +190,7 @@ class BudgetController extends Controller
 
 
 
-    // if ($budget->type == "Crédito") {
-    //     $patient = $budget->patient;
 
-    //     if (!$patient->cxc) {
-    //         $CXC = CXC::create([
-    //             'balance' => $budget->total,
-    //             'patient_id' => $budget->patient_id,
-    //             'doctor_id' => $budget->doctor_id,
-    //         ]);
-    //     } else {
-    //         $CXC = $patient->cxc;
-    //         $CXC->balance += $budget->total;
-    //         $CXC->save();
-    //     }
-    //     foreach ($budgetDetails as $detail) {
-
-    //         $remaining_amount = $detail->total / $detail->amount_of_payments;
-    //         for ($i = 0; $i < $detail->amount_of_payments; $i++) {
-    //             Payment::create([
-    //                 'budget_detail_id' => $detail->id,
-    //                 'c_x_c_id' => $CXC->id,
-    //                 'amount_paid' => 0,
-    //                 'expiration_date' => $budgetData['expiration_date']->addMonth(),
-    //                 'remaining_amount' => $remaining_amount,
-    //                 'total' => $detail->total,
-    //             ]);
-    //         }
-    //     }
-    //     $budget->c_x_c_id = $CXC->id;
-    //     $budget->save();
-    // }
 
     /**
      * Display the specified resource.
