@@ -112,35 +112,35 @@ watchEffect(() => {
                                     Dashboard
                                 </NavLink>
                                 <NavLink v-if="can('patient.view')" :href="route('patients.index')"
-                                    :active="route().current('patients.index') || route().current('patients.show') || route().current('patients.edit')">
+                                    :active="route().current('patients.index') || route().current('patients.create') || route().current('patients.show') || route().current('patients.edit')">
                                     Pacientes
                                 </NavLink>
                                 <NavLink v-if="can('event.view')" :href="route('events.index')"
-                                    :active="route().current('events.index') || route().current('events.show') || route().current('events.edit')">
+                                    :active="route().current('events.index')  || route().current('events.create') || route().current('events.show') || route().current('events.edit')">
                                     Citas
                                 </NavLink>
                                 <NavLink v-if="can('budget.view')" :href="route('budgets.index')"
-                                    :active="route().current('budgets.index') || route().current('budgets.show') || route().current('budgets.edit')">
+                                    :active="route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.show') || route().current('budgets.edit')">
                                     Presupuestos
                                 </NavLink>
                                 <NavLink v-if="can('CXC.view')" :href="route('CXC.index')"
-                                    :active="route().current('CXC.index') || route().current('CXC.show') || route().current('CXC.edit')">
-                                    Cuentas por Cobrar
+                                    :active="route().current('CXC.index') || route().current('CXC.create') || route().current('CXC.show') || route().current('CXC.edit')">
+                                    Pagos
                                 </NavLink>
                                 <NavLink v-if="can('expense.view')" :href="route('expenses.index')"
-                                    :active="route().current('expenses.index') || route().current('expenses.edit')">
+                                    :active="route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit')">
                                     Egresos
                                 </NavLink>
                                 <NavLink v-if="can('prescription.view')" :href="route('prescriptions.index')"
-                                    :active="route().current('prescriptions.index') || route().current('prescriptions.show') || route().current('prescriptions.edit')">
+                                    :active="route().current('prescriptions.index') || route().current('prescriptions.create') || route().current('prescriptions.show') || route().current('prescriptions.edit')">
                                     Recetas
                                 </NavLink>
                                 <NavLink v-if="can('user.view')" :href="route('users.index')"
-                                    :active="route().current('users.index') || route().current('users.show') || route().current('users.edit')">
+                                    :active="route().current('users.index') || route().current('users.create') || route().current('users.show') || route().current('users.edit')">
                                     Usuarios
                                 </NavLink>
                                 <NavLink v-if="can('bill.view')" :href="route('bills.index')"
-                                    :active="route().current('bills.index') || route().current('bills.show') || route().current('bills.edit')">
+                                    :active="route().current('bills.index') || route().current('bills.create') || route().current('bills.show') || route().current('bills.edit')">
                                     Recibos
                                 </NavLink>
 
