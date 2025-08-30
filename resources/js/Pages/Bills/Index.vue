@@ -37,7 +37,6 @@
                             class="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow">
                             <p><strong>#:</strong> {{ bill.id }}</p>
                             <p><strong>Paciente:</strong> {{ bill.patient.first_name }} {{ bill.patient.last_name }}</p>
-                            <p><strong>Tipo:</strong> {{ bill.type }}</p>
                             <p><strong>Total:</strong> {{ new Intl.NumberFormat('es-DO', {
                                 style: 'currency', currency:
                                     'DOP' }).format(bill.total || 0) }}</p>
@@ -69,10 +68,7 @@
                                             Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="cursor-pointer" @click="sort('type')">
-                                            Tipo: <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
-                                                ? '↑' : '↓' }}</span>
-                                        </th>
+
                                         <th scope="col" class="cursor-pointer" @click="sort('total')">
                                             Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
                                                 'asc' ? '↑' : '↓' }}</span>
@@ -104,7 +100,6 @@
                                         <td class="p-4 items-center">{{ bill.id }}</td>
                                         <td class="p-4 items-center">{{ bill.patient.first_name }} {{
                                             bill.patient.last_name }}</td>
-                                        <td class="p-4 items-center">{{ bill.type }}</td>
                                         <td class="p-4 items-center">{{ new Intl.NumberFormat('es-DO', {
                                             style:
                                                 'currency', currency: 'DOP' }).format(bill.total || 0) }}</td>
