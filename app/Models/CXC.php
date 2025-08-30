@@ -14,7 +14,7 @@ class CXC extends Model
         "active",
         'branch_id',
     ];
-      protected static function booted()
+    protected static function booted()
     {
         static::addGlobalScope('branches', function ($query) {
             if ($user = Auth::user()) {
@@ -26,10 +26,16 @@ class CXC extends Model
     }
     public function Budget()
     {
-        return $this->hasMany(Budget::class,'c_x_c_id','id');
+        return $this->hasMany(Budget::class, 'c_x_c_id', 'id');
     }
-    public function CXCDetail(){
-        return $this->hasMany(CXCDetail::class,'c_x_c_id','id');
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'c_x_c_id');
+    }
+
+    public function CXCDetail()
+    {
+        return $this->hasMany(CXCDetail::class, 'c_x_c_id', 'id');
     }
     public function Patient()
     {
@@ -39,7 +45,7 @@ class CXC extends Model
     {
         return $this->hasMany(Payment::class);
     }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

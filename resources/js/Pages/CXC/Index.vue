@@ -31,7 +31,7 @@
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
-                                    class="text-xs text-gray-700 uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
+                                    class="text-xs  uppercase bg-pink-500 text-white dark:bg-gray-800 dark:text-gray-200">
                                     <tr>
                                         <th scope="col"
                                             class="px-4 py-3 cursor-pointer whitespace-nowrap hidden sm:table-cell"
@@ -47,14 +47,7 @@
                                                     'asc' ? '↑' :
                                                     '↓'
                                             }}</span></th>
-                                        <th scope="col" class="  cursor-pointer" @click="sort('doctor_id')">Pagos
-                                            Pendientes
-                                            <span v-if="form.sortField === 'doctor_id'">{{ form.sortDirection === 'asc'
-                                                ?
-                                                '↑' :
-                                                '↓'
-                                            }}</span>
-                                        </th>
+
                                         <th scope="col " class=" cursor-pointer" @click="sort('balance')">
                                             Balance <span v-if="form.sortField === 'balance'">{{
                                                 form.sortDirection ===
@@ -92,9 +85,7 @@
                                         <td class="p-4  items-center">{{ CXCS.id }}</td>
                                         <td class="p-4  items-center">{{ CXCS.patient.first_name }} {{
                                             CXCS.patient.last_name }} </td>
-                                        <td class="p-4  items-center">
-                                            {{ pending_payments[CXCS.id].length }}
-                                        </td>
+
                                         <td class="p-4  items-center">$ {{ formatNumber(CXCS.balance) }} </td>
                                         <td class="p-4  items-center">{{ formatDate(CXCS.created_at) }}</td>
                                         <td class="p-4  items-center">
