@@ -173,9 +173,8 @@
                             <option value="Dra. Madelin">Dra. Madelin</option>
                             <option value="Dra. Odalisa">Dra. Odalisa</option>
                             <option value="Dra. Orquídea ">Dra. Orquídea </option>
-                            <option value="Dra. Orquídea ">Dra. Orquídea </option>
                             <option value="Dra. Paloma">Dra. Paloma</option>
-                            <option value="Dra. Paloma">Dr. Francisco</option>
+                            <option value="Dr. Francisco">Dr. Francisco</option>
 
 
                         </select>
