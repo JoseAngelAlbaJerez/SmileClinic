@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('description');
             $table->decimal('amount');
-             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->boolean('active');
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
+            $table->foreignId('doctor_id')->nullable()->constrained()->onDelete('cascade')->on('users');;
             $table->timestamps();
 
         });

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('expiration_date')->nullable();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
-            $table->foreignId('c_x_c_id')->nullable();
+            $table->foreignId('c_x_c_id')->nullable()->constrained('c_x_c_s');
             $table->decimal('total');
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();

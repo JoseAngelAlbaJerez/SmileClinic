@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class Expenses extends Model
 {
     protected $fillable =[
-        "description","amount","active","user_id",'branch_id',
+        "description","amount","active","user_id",'branch_id',"doctor_id"
     ];
       protected static function booted()
     {
