@@ -43,10 +43,10 @@ class PermissionSeeder extends Seeder
             'expense.update',
             'expense.delete',
             //CXC
-            'cxc.view',
-            'cxc.create',
-            'cxc.update',
-            'cxc.delete',
+            'CXC.view',
+            'CXC.create',
+            'CXC.update',
+            'CXC.delete',
 
             //Drugs
             'drug.view',
