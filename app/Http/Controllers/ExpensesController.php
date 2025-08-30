@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expenses;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -93,11 +94,13 @@ class ExpensesController extends Controller
             'amount' => 'required|numeric|min:0',
 
         ]);
-        $validated['branch_id'] = Auth::user()->branch_id;
+        $doctor = User::where('name', '=',$validated['description'])->first();
         Expenses::create([
             ...$validated,
             'user_id' => Auth::id(),
-            'active' => true
+            'branch_id'=> Auth::user()->branch_id,
+            'active' => true,
+            'doctor_id'=> $doctor->id
         ]);
 
         return redirect()->back()->with('toast', 'Egreso registrado correctamente.');
