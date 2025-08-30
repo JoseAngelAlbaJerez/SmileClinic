@@ -169,24 +169,30 @@ class BillController extends Controller
             }
             if ($detail->doctor->specialty) {
                 Expenses::create([
-                    'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name . ' Mano de Obra',
+                    'description' => $detail->doctor->name,
                     'amount'      => $expense_amount,
                     'active'      => true,
                     'user_id'     => Auth::id(),
                     'branch_id'   => $detail->branch_id,
+                    'doctor_id' => $bill->doctor_id
                 ]);
-            }else {
-                 PendingExpense::create([
-            'description' => $detail->doctor->name . ' ' . $detail->doctor->last_name . ' Mano de Obra',
-            'amount'      => $expense_amount,
-            'user_id'     => Auth::id(),
-            'branch_id'   => $detail->branch_id,
-        ]);
-            }
+            } else {
+                PendingExpense::create([
+                    'description' => $detail->doctor->name,
+                    'amount'      => $expense_amount,
+                    'user_id'     => Auth::id(),
+                    'branch_id'   => $detail->branch_id,
+                    'doctor_id' => $bill->doctor_id
 
+                ]);
+            }
         }
-        if ($bill->type == "Crédito") {
+
+        $initialSum = $billDetails->sum('initial');
+
+        if ($bill->total > $initialSum) {
             $patient = $bill->patient;
+            Log::info($patient->cxc);
 
             if (!$patient->cxc) {
                 $CXC = CXC::create([
@@ -195,32 +201,17 @@ class BillController extends Controller
                     'doctor_id' => $bill->doctor_id,
                     'branch_id'  => $bill->branch_id,
                 ]);
+                $bill->c_x_c_id = $CXC->id;
+                $bill->save();
             } else {
                 $CXC = $patient->cxc;
                 $CXC->balance += $bill->total;
                 $CXC->save();
             }
-            foreach ($billDetails as $detail) {
-
-                $remaining_amount = $detail->total / $detail->amount_of_payments;
-                for ($i = 0; $i < $detail->amount_of_payments; $i++) {
-                    Payment::create([
-                        'bill_detail_id' => $detail->id,
-                        'c_x_c_id' => $CXC->id,
-                        'branch_id'        => $bill->branch_id,
-                        'amount_paid' => 0,
-                        'expiration_date' => $billData['expiration_date']->addMonth(),
-                        'remaining_amount' => $remaining_amount,
-                        'total' => $detail->total,
-                    ]);
-                }
-            }
-            $bill->c_x_c_id = $CXC->id;
-            $bill->save();
         }
 
 
-        $bill->load(['billdetail', 'doctor', 'patient', 'CXC']);
+        $bill->load(['billdetail', 'doctor', 'patient', 'cxc']);
 
 
 
