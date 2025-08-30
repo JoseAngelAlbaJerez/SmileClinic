@@ -16,10 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(BranchSeeder::class);
-        User::factory()
-            ->has(Address::factory()->count(1))
-            ->count(10)
-            ->create();
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -44,6 +41,85 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'branch_id' => 2,
         ]);
+        User::factory()->create([
+            'name' => 'Dra. Castro',
+            'email' => 'Castro@gmail.com',
+            'password' => Hash::make('12345678'),
+            'branch_id' => 1,
+        ]);
+        User::factory()->create([
+            'name' => 'Dra. Madelin',
+            'email' => 'Madelin@gmail.com',
+            'password' => Hash::make('12345678'),
+            'branch_id' => 1,
+        ]);
+        User::factory()->create([
+            'name' => 'Dra. Odalisa',
+            'email' => 'Odalisa@gmail.com',
+            'password' => Hash::make('12345678'),
+            'branch_id' => 1,
+        ]);
+        User::factory()->create([
+            'name' => 'Dra. Paloma',
+            'email' => 'Paloma@gmail.com',
+            'password' => Hash::make('12345678'),
+            'branch_id' => 2,
+        ]);
+        User::factory()->create([
+            'name' => 'Dr. Francisco',
+            'email' => 'Francisco@gmail.com',
+            'password' => Hash::make('12345678'),
+            'branch_id' => 2,
+        ]);
+
+        $user = User::where('name', 'Dra. Castro')->first();
+        $user->address()->create([
+            'country'     => 'República Dominicana',
+            'city'        => 'Santo Domingo',
+            'state'       => 'Distrito Nacional',
+            'street'      => 'Av. Independencia #123',
+            'postal_code' => '10101',
+            'branch_id'   => $user->branch_id,
+        ]);
+
+        $user = User::where('name', 'Dra. Madelin')->first();
+        $user->address()->create([
+            'country'     => 'República Dominicana',
+            'city'        => 'Santo Domingo',
+            'state'       => 'Distrito Nacional',
+            'street'      => 'Calle 27 de Febrero #456',
+            'postal_code' => '10102',
+            'branch_id'   => $user->branch_id,
+        ]);
+        $user = User::where('name', 'Dra. Odalisa')->first();
+        $user->address()->create([
+            'country'     => 'República Dominicana',
+            'city'        => 'Santo Domingo',
+            'state'       => 'Distrito Nacional',
+            'street'      => 'Av. Independencia #123',
+            'postal_code' => '10101',
+            'branch_id'   => $user->branch_id,
+        ]);
+        $user = User::where('name', 'Dra. Paloma')->first();
+        $user->address()->create([
+            'country'     => 'República Dominicana',
+            'city'        => 'Santo Domingo',
+            'state'       => 'Distrito Nacional',
+            'street'      => 'Av. Independencia #123',
+            'postal_code' => '10101',
+            'branch_id'   => $user->branch_id,
+        ]);
+        $user = User::where('name', 'Dr. Francisco')->first();
+          $user->address()->create([
+            'country'     => 'República Dominicana',
+            'city'        => 'Santo Domingo',
+            'state'       => 'Distrito Nacional',
+            'street'      => 'Calle 27 de Febrero #456',
+            'postal_code' => '10102',
+            'branch_id'   => $user->branch_id,
+        ]);
+
+
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(PatientSeeder::class);
@@ -54,6 +130,5 @@ class DatabaseSeeder extends Seeder
         $this->call(DrugSeeder::class);
         $this->call(BudgetSeeder::class);
         $this->call(EventSeeder::class);
-
     }
 }

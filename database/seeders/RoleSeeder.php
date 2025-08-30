@@ -87,13 +87,22 @@ class RoleSeeder extends Seeder
         $user->syncRoles('staff');
 
         $user = User::where('name', 'Jose Angel')->first();
+        $user->syncRoles('admin');
+
+         $user = User::where('name', 'Dra. Castro')->first();
         $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Madelin')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Odalisa')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Paloma')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dr. Francisco')->first();
+        $user->syncRoles('doctor');
+
 
         $users = User::where('name', '!=', 'Test User')->get();
         $roles = Role::all()->pluck('name')->toArray();
-        foreach ($users as $user) {
-            $randrole = $roles[array_rand($roles)];
-            $user->assignRole($randrole);
-        }
+
     }
 }
