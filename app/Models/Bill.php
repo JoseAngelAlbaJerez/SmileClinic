@@ -41,10 +41,11 @@ class Bill extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function CXC()
-    {
-        return $this->hasOne(CXC::class,'id','c_x_c_id' );
-    }
+   public function cxc()
+{
+    return $this->belongsTo(CXC::class, 'c_x_c_id');
+}
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);
