@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
@@ -24,7 +26,7 @@ class UserController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles');
+        $query = User::query()->select('users.*')->with('roles','branch');
         if ($showDeleted == true) {
             $query->where('active', 1);
         } else {
@@ -77,6 +79,26 @@ class UserController extends Controller
             ],
         ]);
     }
+    public function filter(Request $request)
+    {
+        $filters = $request->input('filters', []);
+
+        $query = User::with('roles')
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->whereRaw("CONCAT(name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+            });
+
+        $users = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'users' => $users,
+            'filters' => $filters,
+        ]);
+    }
+
+
     public function create()
     {
         return Inertia::render("Users/Create");
@@ -98,6 +120,8 @@ class UserController extends Controller
             ]);
 
             $validated['active'] = true;
+            $validated['branch_id'] = Auth::user()->branch_id;
+
             $user = User::create($validated);
             $user->assignRole($validated['role']);
             return redirect()->route('users.index')->with('toast', 'Usuario registrado correctamente.');
@@ -109,6 +133,23 @@ class UserController extends Controller
     }
     public function update(User $user, Request $request)
     {
+        Log::info($request);
+
+        if ($request->has('active')) {
+            $this->restore($user);
+            return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+        }
+
+        // Manejar avatar si se proporciona
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+            $user->save();
+        }
+        // Actualizar dirección
+        if ($request->has('address')) {
+            $user->address()->updateOrCreate([], $request->address);
+        }
         // Validación de datos
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -125,22 +166,25 @@ class UserController extends Controller
             'address.postal_code' => 'nullable|string|max:20',
         ]);
 
-        // Actualizar datos básicos
         $user->update($request->except('address', 'avatar'));
 
-        // Manejar avatar si se proporciona
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
-            $user->save();
-        }
-
-        // Actualizar dirección
-        if ($request->has('address')) {
-            $user->address()->updateOrCreate([], $request->address);
-        }
 
         return redirect()->back()->with('success', 'Usuario actualizado correctamente');
+    }
+    private function restore(User $user)
+    {
+        $user->active = 1;
+        $user->save();
+
+        return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+    }
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->active = false;
+        $user->save();
+
+        return redirect()->back()->with('toast', 'Usuario desactivado correctamente.');
     }
     public function show(User $user)
     {

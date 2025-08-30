@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->string('currency');
             $table->boolean('active')->default(true);
             $table->date('emission_date');
             $table->date('expiration_date')->nullable();
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->foreignId('patient_id');
             $table->foreignId('c_x_c_id')->nullable();
             $table->decimal('total');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

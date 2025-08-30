@@ -67,16 +67,11 @@ class CXCController extends Controller
         }
 
         $CXC = $query->orderByDesc('created_at')->with('Patient', 'Budget')->paginate(10);
-        $pending_payments = Payment::whereIn('c_x_c_id', $CXC->pluck('id'))
-            ->where('remaining_amount', '>', 0)
-            ->where('active', true)
-            ->get()
-            ->groupBy('c_x_c_id');
+
 
 
         return Inertia::render('CXC/Index', [
             'CXC' => $CXC,
-            'pending_payments' => $pending_payments,
             'filters' => [
                 'search' => $search,
                 'sortField' => $sortField,
@@ -112,25 +107,25 @@ class CXCController extends Controller
         $search = $request->input('search');
         $query = Budget::with('doctor', 'patient')
             ->join('users', 'odontographs.doctor_id', '=', 'users.id')
-            ->select('budgets.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
+            ->select('bills.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
 
 
 
         if ($showDeleted) {
-            $query->where('budgets.active', true);
+            $query->where('bills.active', true);
         } else {
-            $query->where('budgets.active', false);
+            $query->where('bills.active', false);
         }
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhere('budgets.id', $search);
+                    ->orWhere('bills.id', $search);
             });
         }
 
 
-        $CXC = CXC::with('patient', 'budget.budgetdetail.procedure', 'CXCDetail', 'budget.budgetdetail.Payment')->find($CXC->id);
+        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'bills.billdetail.Payment')->find($CXC->id);
 
         return Inertia::render('CXC/Show', [
             'CXC' => $CXC,

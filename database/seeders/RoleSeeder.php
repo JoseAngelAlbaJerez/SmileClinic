@@ -56,13 +56,12 @@ class RoleSeeder extends Seeder
             'patient.update',
             'patient.delete',
             'odontograph.view',
+            'odontograph.create',
             'budget.view',
             'budget.create',
-            'budget.update',
             'budget.delete',
             'bill.view',
             'bill.create',
-            'bill.update',
             'bill.delete',
             'event.view',
             'event.create',
@@ -70,27 +69,40 @@ class RoleSeeder extends Seeder
             'event.delete',
             'expense.view',
             'expense.create',
-            'expense.update',
             'expense.delete',
+            'drug.view',
+            'drug.create',
+            'prescription.view',
+            'prescription.create',
+            'prescription.delete',
         ]);
 
         $user = User::where('name', 'Test User')->first();
         $user->syncRoles('admin');
 
-        $user = User::where('name', 'San Pedro')->first();
+        $user = User::where('name', 'Cayetano Germosen')->first();
         $user->syncRoles('staff');
 
-        $user = User::where('name', 'Mario')->first();
-        $user->syncRoles('patient');
+        $user = User::where('name', 'Cutupu')->first();
+        $user->syncRoles('staff');
 
         $user = User::where('name', 'Jose Angel')->first();
+        $user->syncRoles('admin');
+
+         $user = User::where('name', 'Dra. Castro')->first();
         $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Madelin')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Odalisa')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dra. Paloma')->first();
+        $user->syncRoles('doctor');
+         $user = User::where('name', 'Dr. Francisco')->first();
+        $user->syncRoles('doctor');
+
 
         $users = User::where('name', '!=', 'Test User')->get();
         $roles = Role::all()->pluck('name')->toArray();
-        foreach ($users as $user) {
-            $randrole = $roles[array_rand($roles)];
-            $user->assignRole($randrole);
-        }
+
     }
 }

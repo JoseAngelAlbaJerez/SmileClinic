@@ -33,7 +33,7 @@ const filteredDrugs = computed(() => {
     <div class="my-4 mx-4 lg:mx-10">
         <div class="flex justify-between gap-4">
             <input v-model="searchTerm" type="text" placeholder="Buscar medicamentos por nombre..."
-                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-white" />
 
         </div>
    <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg">
@@ -50,7 +50,7 @@ const filteredDrugs = computed(() => {
                     :key="drug.id"
                     class="cursor-pointer"
                     :class="{
-                        'bg-blue-500 text-gray-900 dark:bg-blue-500 dark:text-white': selectedDrugs === drug.id,
+                        'bg-pink-500 text-gray-900 dark:bg-pink-500 dark:text-white': selectedDrugs === drug.id,
                         'hover:bg-gray-200 hover:text-gray-800': selectedDrugs !== drug.id
                     }"
                     @click="selectDrug(drug)"

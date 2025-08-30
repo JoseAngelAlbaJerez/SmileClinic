@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Drug;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DrugController extends Controller
 {
@@ -33,6 +34,7 @@ class DrugController extends Controller
             'description' => 'required|string|max:255',
             'active' => 'boolean'
         ]);
+        $validated['branch_id'] = Auth::user()->branch_id;
         Drug::create($validated);
         return redirect()->back()->with('toast', 'Medicamento registrado correctamente.');
 

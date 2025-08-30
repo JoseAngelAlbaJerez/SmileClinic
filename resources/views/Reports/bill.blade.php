@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Factura Smile Clinic</title>
+    <title>Recibo Smile Clinic</title>
     <style>
         @font-face {
             font-family: 'Montserrat';
@@ -129,7 +129,7 @@
                 <img height="50" width="200" src="{{ public_path('img/Logo-COLOR.jpg') }}">
             </td>
             <td>
-                <h2>Factura</h2>
+                <h2>Recibo</h2>
             </td>
         </tr>
         <tr class="intro">
@@ -139,7 +139,7 @@
                 Fecha: <strong>{{ \Carbon\Carbon::parse($bill->created_at)->format('d/m/Y') }}</strong><br>
             </td>
             <td>
-                <span class="num">Factura ID: # {{ $bill->id }}</span><br>
+                <span class="num">Recibo ID: # {{ $bill->id }}</span><br>
 
 
                 @if ($bill->CXC)

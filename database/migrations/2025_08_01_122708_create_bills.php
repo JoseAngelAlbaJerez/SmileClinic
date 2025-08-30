@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->string('currency');
             $table->boolean('active')->default(true);
             $table->date('emission_date');
             $table->date('expiration_date')->nullable();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
-            $table->foreignId('c_x_c_id')->nullable();
+            $table->foreignId('c_x_c_id')->nullable()->constrained('c_x_c_s');
             $table->decimal('total');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

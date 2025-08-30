@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+
 class PatientSeeder extends Seeder
 {
     /**
@@ -35,7 +36,8 @@ class PatientSeeder extends Seeder
                 'date_of_birth' => fake()->date('Y-m-d', '2008-01-01'),
                 'active' => true,
                 'created_at' => now(),
-                'updated_at'=> now(),
+                'updated_at' => now(),
+                'branch_id' => fake()->numberBetween(1, 2),
             ]);
         }
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PatientController;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/expenses', [ExpensesController::class, 'index']);
     Route::get('/expenses/{id}', [ExpensesController::class, 'show']);
+    Route::get('/notifications', function () {
+    return Notification::where('read', false)
+        ->where('scheduled_for', '<=', now())
+        ->latest()
+        ->get();
+});
+
 });

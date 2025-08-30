@@ -31,7 +31,7 @@
           <label class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
             <input
               type="radio"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+              class="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 focus:ring-pink-500"
               :value="option.value"
               name="lastDays"
               :checked="option.value === modelValue"

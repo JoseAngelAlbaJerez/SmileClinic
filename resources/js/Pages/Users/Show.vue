@@ -1,369 +1,379 @@
 <template>
+    <Head title="Usuario" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
         </template>
 
-        <div class="container mx-auto px-6 mt-5 py-4 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-             <div class="my-2 mt-5 flex  gap-2 items-center">
-
-            <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-                Perfil
-            </h3>
-            <div v-if="user.active" class=" flex ml-auto gap-2 mb-2 ">
-                    <button @click="print()"
-                        class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                        <PrintIcon />
-                    </button>
-
-                    <AccessGate role="admin">
-                        <DangerButton @click="deleteUser(user.id)"
-                            class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <DeleteIcon />
-                        </DangerButton>
-                    </AccessGate>
-                </div>
-
-                <div class="flex ml-auto gap-2" v-else>
-                    <PrimaryButton @click="restoreUser(user.id)"
-                        class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                        <RestoreIcon /> Restaurar
-                    </PrimaryButton>
-                </div>
-                </div>
-            <!-- Profile Header Section -->
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6 ">
-                <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-                    <div class="flex flex-col items-center w-full gap-6 xl:flex-row">
-                        <div class="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-                            <img :src="user.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'" alt="user" class="w-full h-full object-cover">
-                        </div>
-                        <div class="order-3 xl:order-2">
-                            <h4 class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                                {{ user.name }} {{ user.last_name }}
-                            </h4>
-                            <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    {{ user.roles[0]?.name || 'No role assigned' }}
-                                </p>
-                                <div class="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    {{ user.specialty || 'No specialty' }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
-                            <button v-for="(social, index) in socialLinks" :key="index"
-                                    class="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-                                <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path :d="social.icon" fill=""></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button @click="openEditModal('profile')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
-                        </svg>
-                        Edit
-                    </button>
-                </div>
-            </div>
-
-            <!-- Personal Information Section -->
-            <div class="p-5 mb-6 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
-                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-                            Información Personal
-                        </h4>
-
-                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Nombre
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.name }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Apellido
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.last_name }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Correo Electrónico
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.email }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Teléfono
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.phone_number || 'No proporcionado' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Puesto
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.position || 'No especificado' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Especialidad
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.specialty || 'No especificada' }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button @click="openEditModal('personal')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
-                        </svg>
-                        Edit
-                    </button>
-                </div>
-            </div>
-
-            <!-- Address Section -->
-            <div class="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-                <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
-                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-                            Dirección
-                        </h4>
-
-                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    País
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.address?.country || 'No especificado' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Ciudad/Estado
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.address?.city || 'No especificado' }}, {{ user.address?.state || 'No especificado' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Código Postal
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.address?.postal_code || 'No especificado' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                    Dirección
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ user.address?.street || 'No especificada' }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button @click="openEditModal('address')" class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto">
-                        <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.0911 2.78206C14.2125 1.90338 12.7878 1.90338 11.9092 2.78206L4.57524 10.116C4.26682 10.4244 4.0547 10.8158 3.96468 11.2426L3.31231 14.3352C3.25997 14.5833 3.33653 14.841 3.51583 15.0203C3.69512 15.1996 3.95286 15.2761 4.20096 15.2238L7.29355 14.5714C7.72031 14.4814 8.11172 14.2693 8.42013 13.9609L15.7541 6.62695C16.6327 5.74827 16.6327 4.32365 15.7541 3.44497L15.0911 2.78206ZM12.9698 3.84272C13.2627 3.54982 13.7376 3.54982 14.0305 3.84272L14.6934 4.50563C14.9863 4.79852 14.9863 5.2734 14.6934 5.56629L14.044 6.21573L12.3204 4.49215L12.9698 3.84272ZM11.2597 5.55281L5.6359 11.1766C5.53309 11.2794 5.46238 11.4099 5.43238 11.5522L5.01758 13.5185L6.98394 13.1037C7.1262 13.0737 7.25666 13.003 7.35947 12.9002L12.9833 7.27639L11.2597 5.55281Z" fill=""></path>
-                        </svg>
-                        Edit
-                    </button>
-                </div>
-            </div>
-            <div
-                    class="p-5 border border-gray-200 rounded-2xl  dark:border-gray-800 lg:p-6 mt-5"
-                >
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
+       <div class="container mx-auto px-4 py-6">
+    <!-- Header Section -->
+    <div class="flex flex-col gap-4 mb-8 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white/90">Perfil de Usuario</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Gestione la información de su perfil y preferencias</p>
         </div>
 
-        <!-- Edit Profile Modal -->
-        <Modal :show="showModal" @close="closeModal" maxWidth="2xl">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">
-                        {{ modalTitle }}
-                    </h3>
-                    <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        <div v-if="user.active" class="flex gap-2">
+            <button @click="print()"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m4 4h6a2 2 0 002-2v-4a2 2 0 00-2-2h-6a2 2 0 00-2 2v4a2 2 0 002 2z" />
+                </svg>
+                Imprimir
+            </button>
+
+            <AccessGate role="admin">
+                <button @click="deleteUser(user.id)"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Eliminar
+                </button>
+            </AccessGate>
+        </div>
+
+        <div class="flex gap-2" v-else>
+            <button @click="restoreUser(user.id)"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Restaurar Usuario
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Overview Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6 border border-gray-200 dark:border-gray-700">
+        <div class="bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Resumen del Perfil</h3>
+        </div>
+
+        <div class="p-6">
+            <div class="flex flex-col items-center gap-6 md:flex-row md:items-start">
+                <div class="relative">
+                    <div class="w-24 h-24 overflow-hidden border-4 border-white dark:border-gray-800 rounded-full shadow-lg">
+                        <img :src="user.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                            alt="user" class="w-full h-full object-cover">
+                    </div>
+                    <button @click="openEditModal('profile')" class="absolute bottom-0 right-0 p-1.5 bg-pink-500 rounded-full text-white shadow-md hover:bg-pink-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                         </svg>
                     </button>
                 </div>
 
-                <form @submit.prevent="saveChanges">
-                    <div class="space-y-4">
-                        <!-- Profile Edit Form -->
-                        <div v-if="activeModal === 'profile'" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Avatar
-                                </label>
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-16 h-16 rounded-full overflow-hidden border border-gray-300">
-                                        <img :src="form.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'" alt="Avatar" class="w-full h-full object-cover">
-                                    </div>
-                                    <input type="file" @change="handleAvatarChange" class="hidden" ref="avatarInput" accept="image/*">
-                                    <button type="button" @click="$refs.avatarInput.click()" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
-                                        Cambiar
-                                    </button>
-                                </div>
-                            </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white/90 mb-2">{{ user.name }} {{ user.last_name }}</h2>
 
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Nombre
-                                    </label>
-                                    <input v-model="form.name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
+                    <div class="flex flex-col items-center gap-2 md:flex-row md:gap-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200">
+                            {{ user.roles[0]?.name || 'Sin rol asignado' }}
+                        </span>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Apellido
-                                    </label>
-                                    <input v-model="form.last_name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Especialidad
-                                </label>
-                                <input v-model="form.specialty" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                        </div>
-
-                        <!-- Personal Info Edit Form -->
-                        <div v-if="activeModal === 'personal'" class="space-y-4">
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Nombre
-                                    </label>
-                                    <input v-model="form.name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Apellido
-                                    </label>
-                                    <input v-model="form.last_name" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Correo Electrónico
-                                </label>
-                                <input v-model="form.email" type="email" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Teléfono
-                                </label>
-                                <input v-model="form.phone_number" type="tel" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Puesto
-                                </label>
-                                <input v-model="form.position" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                        </div>
-
-                        <!-- Address Edit Form -->
-                        <div v-if="activeModal === 'address'" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    País
-                                </label>
-                                <input v-model="form.address.country" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Ciudad
-                                    </label>
-                                    <input v-model="form.address.city" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                        Estado/Provincia
-                                    </label>
-                                    <input v-model="form.address.state" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Dirección
-                                </label>
-                                <input v-model="form.address.street" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                                    Código Postal
-                                </label>
-                                <input v-model="form.address.postal_code" type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                        </div>
+                        <span v-if="user.specialty" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                            {{ user.specialty }}
+                        </span>
                     </div>
 
-                    <div class="mt-6 flex justify-end space-x-3">
-                        <button type="button" @click="closeModal" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Guardar Cambios
-                        </button>
+                    <div class="mt-4 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+                        <span class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            {{ user.email }}
+                        </span>
+
+                        <span v-if="user.phone_number" class="flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            {{ user.phone_number }}
+                        </span>
                     </div>
-                </form>
+                </div>
             </div>
-        </Modal>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Personal Information Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div class="bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Información Personal</h3>
+                <button @click="openEditModal('personal')" class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nombre</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.name }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Apellido</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.last_name }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Correo Electrónico</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.email }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Teléfono</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.phone_number || 'No proporcionado' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Puesto</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.position || 'No especificado' }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Especialidad</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.specialty || 'No especificada' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div class="bg-pink-50   dark:bg-gray-900  px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Dirección</h3>
+                <button @click="openEditModal('address')" class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">País</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.address?.country || 'No especificado' }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ciudad/Estado</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">
+                            {{ user.address?.city || 'No especificado' }}{{ user.address?.state ? ', ' + user.address.state : '' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Código Postal</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.address?.postal_code || 'No especificado' }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dirección</p>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.address?.street || 'No especificada' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Update Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 mt-6">
+        <div class=" bg-pink-50   dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Seguridad de la Cuenta</h3>
+        </div>
+
+        <div class="p-6">
+            <UpdatePasswordForm class="max-w-xl" />
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <Modal :show="showModal" @close="closeModal" maxWidth="2xl">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90">
+                    {{ modalTitle }}
+                </h3>
+                <button @click="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form @submit.prevent="saveChanges">
+                <div class="space-y-6">
+                    <!-- Profile Edit Form -->
+                    <div v-if="activeModal === 'profile'" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Avatar
+                            </label>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
+                                    <img :src="form.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                        alt="Avatar" class="w-full h-full object-cover">
+                                </div>
+                                <input type="file" @change="handleAvatarChange" class="hidden" ref="avatarInput"
+                                    accept="image/*">
+                                <button type="button" @click="$refs.avatarInput.click()"
+                                    class="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    Cambiar Imagen
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Nombre
+                                </label>
+                                <input v-model="form.name" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Apellido
+                                </label>
+                                <input v-model="form.last_name" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Especialidad
+                            </label>
+                            <input v-model="form.specialty" type="text"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
+                        </div>
+                    </div>
+
+                    <!-- Personal Info Edit Form -->
+                    <div v-if="activeModal === 'personal'" class="space-y-6">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Nombre
+                                </label>
+                                <input v-model="form.name" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Apellido
+                                </label>
+                                <input v-model="form.last_name" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Correo Electrónico
+                            </label>
+                            <input v-model="form.email" type="email"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-indigo-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Teléfono
+                            </label>
+                            <input v-model="form.phone_number" type="tel"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Puesto
+                            </label>
+                            <input v-model="form.position" type="text"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                        </div>
+                    </div>
+
+                    <!-- Address Edit Form -->
+                    <div v-if="activeModal === 'address'" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                País
+                            </label>
+                            <input v-model="form.address.country" type="text"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Ciudad
+                                </label>
+                                <input v-model="form.address.city" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                    Estado/Provincia
+                                </label>
+                                <input v-model="form.address.state" type="text"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Dirección
+                            </label>
+                            <input v-model="form.address.street" type="text"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+                                Código Postal
+                            </label>
+                            <input v-model="form.address.postal_code" type="text"
+                                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end space-x-3">
+                    <button type="button" @click="closeModal"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-pink-600 border border-transparent rounded-md shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </Modal>
+</div>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import { ref, computed, markRaw } from 'vue';
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage  } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Inertia } from '@inertiajs/inertia';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
 import Modal from '@/Components/Modal.vue';
 import UpdatePasswordForm from '../Profile/Partials/UpdatePasswordForm.vue';
@@ -385,10 +395,10 @@ const props = defineProps({
         required: true
     },
 });
-const  crumbs = [
-                { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
-                { label: props.user.name + ' ' + props.user.last_name }
-            ];
+const crumbs = [
+    { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
+    { label: props.user.name + ' ' + props.user.last_name }
+];
 const showModal = ref(false);
 const activeModal = ref('');
 const isLoading = ref(false);
@@ -431,6 +441,15 @@ const openEditModal = (type) => {
     activeModal.value = type;
     showModal.value = true;
 };
+const deleteUser = (id) => {
+  Inertia.delete(route('users.destroy', id))
+}
+
+const restoreUser = () => {
+  Inertia.put(route('users.update', props.user.id), {
+    active: true,
+  })
+}
 
 const closeModal = () => {
     showModal.value = false;

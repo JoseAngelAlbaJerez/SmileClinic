@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('prescription_id');
             $table->foreignId('drug_id');
             $table->boolean('active')->default(true);
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Odontograma" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -10,9 +11,10 @@
 
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
-                    <div>
+                    <div >
                         <Odontograph v-model="odontogramData" />
                     </div>
+
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
                         {{ error }}
@@ -40,7 +42,8 @@ import Odontograph from '@/Components/Odontograph.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref, markRaw } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+import OdontographChild from '@/Components/OdontographChild.vue';
 
 export default {
     components: {
@@ -50,7 +53,9 @@ export default {
         AddIcon,
         Odontograph,
         PrimaryButton,
-        SecondaryButton
+        SecondaryButton,
+        OdontographChild,
+        Head
     },
     props: {
         patient: Object,

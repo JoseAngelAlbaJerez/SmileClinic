@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Spatie\GoogleCalendar\Event as GoogleCalendarEvent;
@@ -89,7 +90,7 @@ class EventController extends Controller
         }
 
         $events = $query->orderByDesc('events.created_at')
-            ->with('doctor', 'patient')
+            ->with('doctor', 'patient','branch')
             ->get()
             ->map(function ($event) {
                 return [
@@ -98,6 +99,7 @@ class EventController extends Controller
                     'start' => $event->date . 'T' . $event->starttime,
                     'end' => $event->date . 'T' . $event->endtime,
                     'patient' => $event->patient,
+                    'branch' => $event->branch,
                     'doctor' => $event->doctor,
                     'attended' => $event->attended,
                     'active' => $event->active,
@@ -124,9 +126,11 @@ class EventController extends Controller
     {
         $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
+        $events = Event::all()->load('doctor','patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
+            'events' => $events,
         ]);
     }
 
@@ -152,6 +156,7 @@ class EventController extends Controller
 
         $validated['attended'] = false;
         $validated['active'] = true;
+        $validated['branch_id'] = Auth::user()->branch_id;
 
         $event =  Event::create($validated);
         try {

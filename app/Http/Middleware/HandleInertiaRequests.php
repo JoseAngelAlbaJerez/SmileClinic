@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames(),
                     'permissions' => $user->getAllPermissions()->pluck('name'),
+                    'branch' => $user->branch,
                 ]) : null,
             ],
             'flash' => [

@@ -1,4 +1,5 @@
 <template>
+    <Head title="Paciente" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -10,9 +11,9 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Registro de Paciente</h2>
-                            <p class="text-blue-100 mt-1">Complete todos los campos requeridos</p>
+                            <p class="text-pink-100 mt-1">Complete todos los campos requeridos</p>
                         </div>
 
                         <!-- Form Content -->
@@ -22,7 +23,7 @@
                                 <div class="md:col-span-2">
                                     <h3
                                         class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-500"
                                             viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd"
                                                 d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -44,7 +45,7 @@
                                             <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <input v-model="form.first_name" id="first_name" type="text"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Nombre" />
                                     </div>
                                     <p v-if="errors.first_name" class="mt-1 text-sm text-red-600">{{ errors.first_name
@@ -58,7 +59,7 @@
                                         Apellido <span class="text-red-500">*</span>
                                     </label>
                                     <input v-model="form.last_name" id="last_name" type="text"
-                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Apellido" />
                                     <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name }}
                                     </p>
@@ -76,7 +77,7 @@
                                             <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <DNIInput v-model="form.DNI"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
                                     </div>
                                     <p v-if="errors.DNI" class="mt-1 text-sm text-red-600">{{ errors.DNI }}</p>
                                 </div>
@@ -93,7 +94,7 @@
                                             <PhoneIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <PhoneInput v-model="form.phone_number"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" />
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
                                     </div>
                                     <p v-if="errors.phone_number" class="mt-1 text-sm text-red-600">{{
                                         errors.phone_number }}</p>
@@ -106,7 +107,7 @@
                                         ARS <span class="text-red-500">*</span>
                                     </label>
                                     <select v-model="form.ars"
-                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
                                         <option value="">Seleccione una opción</option>
                                         <option value="ARS Humano">ARS Humano</option>
                                         <option value="ARS Universal">ARS Universal</option>
@@ -122,7 +123,7 @@
                                         Fecha de Nacimiento <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker v-model="form.date_of_birth"
-                                        class="border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 [&_.dp__input]:dark:bg-gray-700 [&_.dp__input]:dark:text-white" />
+                                        class="border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 [&_.dp__input]:dark:bg-gray-700 [&_.dp__input]:dark:text-white" />
                                 </div>
 
                                 <!-- Address -->
@@ -137,7 +138,7 @@
                                             <LocationIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <input v-model="form.address" id="address" type="text"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Dirección completa" />
                                     </div>
                                     <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
@@ -147,7 +148,7 @@
                                 <div class="md:col-span-2 mt-6">
                                     <h3
                                         class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-500"
                                             viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd"
                                                 d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53 0l-.563-.187a1.993 1.993 0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z"
@@ -161,7 +162,7 @@
                                 <div class="flex items-center space-x-3">
                                     <input id="complications" type="checkbox" v-model="form.complications"
                                         :true-value="1" :false-value="0"
-                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                                        class="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500" />
                                     <label for="complications"
                                         class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         ¿Tiene complicaciones médicas?
@@ -175,7 +176,7 @@
                                         Detalle de complicaciones
                                     </label>
                                     <textarea id="complications_detail" v-model="form.complications_detail" rows="3"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Describe las complicaciones médicas"></textarea>
                                 </div>
 
@@ -183,7 +184,7 @@
                                 <div class="flex items-center space-x-3">
                                     <input id="drugs" type="checkbox" v-model="form.drugs" :true-value="1"
                                         :false-value="0"
-                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                                        class="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500" />
                                     <label for="drugs" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         ¿Toma medicamentos?
                                     </label>
@@ -196,7 +197,7 @@
                                         Detalle de medicamentos
                                     </label>
                                     <textarea id="drugs_detail" v-model="form.drugs_detail" rows="3"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Enumere los medicamentos"></textarea>
                                 </div>
 
@@ -204,7 +205,7 @@
                                 <div class="flex items-center space-x-3">
                                     <input id="alergies" type="checkbox" v-model="form.alergies":true-value="1"
                                         :false-value="0"
-                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                                        class="h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500" />
                                     <label for="alergies" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         ¿Tiene alergias?
                                     </label>
@@ -217,7 +218,7 @@
                                         Detalle de alergias
                                     </label>
                                     <textarea id="alergies_detail" v-model="form.alergies_detail" rows="3"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Describa las alergias"></textarea>
                                 </div>
 
@@ -228,7 +229,7 @@
                                         Motivo de consulta <span class="text-red-500">*</span>
                                     </label>
                                     <textarea id="motive" v-model="form.motive" rows="4"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                         placeholder="Describa el motivo de la consulta"></textarea>
                                     <p v-if="errors.motive" class="mt-1 text-sm text-red-600">{{ errors.motive }}</p>
                                 </div>
@@ -353,14 +354,8 @@ export default {
                 this.error = 'Por favor, ingrese el DNI.';
                 return;
             }
-            if (!this.form.phone_number) {
-                this.error = 'Por favor, ingrese el número de télefono.';
-                return;
-            }
-            if (!this.form.ars) {
-                this.error = 'Por favor, seleccione un seguro médico.';
-                return;
-            }
+
+
             if (!this.form.date_of_birth) {
                 this.error = 'Por favor, seleccione la fecha de nacimiento.';
                 return;

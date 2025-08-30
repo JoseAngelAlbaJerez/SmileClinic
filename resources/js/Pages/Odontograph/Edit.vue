@@ -1,4 +1,5 @@
 <template>
+    <Head title="Odontograma" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
