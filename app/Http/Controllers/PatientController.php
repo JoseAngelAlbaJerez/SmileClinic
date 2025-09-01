@@ -96,28 +96,28 @@ class PatientController extends Controller implements HasMiddleware
         ]);
     }
     public function filter(Request $request)
-{
-    $filters = $request->input('filters', []);
+    {
+        $filters = $request->input('filters', []);
 
-    $query = Patient::query()
-        ->when(!empty($filters['name']), function ($q) use ($filters) {
-            $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
-        });
+        $query = Patient::query()
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+            });
 
-    $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
-    if ($request->wantsJson()) {
-        return response()->json([
-            'patients' => $patients
+        if ($request->wantsJson()) {
+            return response()->json([
+                'patients' => $patients
+            ]);
+        }
+
+        // si entras normal (con Inertia, no por axios)
+        return Inertia::render('Patients/Index', [
+            'patients' => $patients,
+            'filters'  => $filters,
         ]);
     }
-
-    // si entras normal (con Inertia, no por axios)
-    return Inertia::render('Patients/Index', [
-        'patients' => $patients,
-        'filters'  => $filters,
-    ]);
-}
 
 
 
@@ -189,6 +189,7 @@ class PatientController extends Controller implements HasMiddleware
             'DNI' => 'required|string|max:255',
             'phone_number' => 'nullable|string|max:255',
             'ars' => 'nullable|string|max:255',
+            'ars_id' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string|max:255',
             'motive' => 'nullable|string|max:255',
@@ -219,6 +220,7 @@ class PatientController extends Controller implements HasMiddleware
                 'first_name'           => 'required|string|max:100',
                 'last_name'            => 'required|string|max:100',
                 'ars'            => 'nullable|string|max:100',
+                'ars_id' => 'nullable|string|max:255',
                 'DNI'                  => 'nullable|string|max:20|unique:patients,DNI',
                 'phone_number'         => 'nullable|string|max:20',
                 'date_of_birth'        => 'nullable|date|before:today',

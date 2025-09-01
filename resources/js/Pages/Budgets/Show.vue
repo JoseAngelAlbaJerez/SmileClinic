@@ -105,7 +105,7 @@
                                 <div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">Número de Afiliado</p>
                                     <p class="font-medium text-gray-800 dark:text-gray-200">{{
-                                        insurance.id || 'No proporcionado' }}</p>
+                                        budgets.patient.ars_id || 'No proporcionado' }}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">Firma del Afiliado</p>

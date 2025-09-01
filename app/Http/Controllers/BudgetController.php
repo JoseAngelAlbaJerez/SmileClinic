@@ -172,8 +172,8 @@ class BudgetController extends Controller
             return $detail;
         })->toArray();
         $budget->budgetdetail()->createMany($details);
-
-        Insurance::create([
+        if ($budget->patient->ars) {
+            Insurance::create([
             'budget_id' => $budget->id,
             'patient_id' => $budget->patient_id,
             'branch_id' => $budget->branch_id,
@@ -181,10 +181,12 @@ class BudgetController extends Controller
             'affiliate_signature' => $validated['affiliate_signature'] ?? null,
             'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
         ]);
+        }
+
 
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-     return back()->with('toast', 'Presupuesto y seguro guardados correctamente');
+     return redirect('budgets.index')->with('toast', 'Presupuesto y seguro guardados correctamente');
 
     }
 

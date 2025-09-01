@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('ars')->nullable();
+            $table->string('ars_id')->nullable();
             $table->boolean('complications')->default(false);
             $table->string('complications_detail')->nullable();
             $table->boolean('alergies')->default(false);

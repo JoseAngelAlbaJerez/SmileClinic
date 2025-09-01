@@ -22,6 +22,7 @@ class Patient extends Model
         "address",
         "DNI",
         'ars',
+        'ars_id',
         "phone_number",
         "active",
     ];

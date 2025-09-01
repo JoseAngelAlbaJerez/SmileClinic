@@ -23,6 +23,7 @@ class PatientSeeder extends Seeder
                 'first_name' => fake()->firstName(),
                 'last_name' => fake()->lastName(),
                 'ars' => fake()->randomElement(['Humano', 'Monumental', 'Universal', 'Senasa']),
+                'ars_id' => fake()->unique()->numerify('########'),
                 'complications' => $complications,
                 'complications_detail' => $complications ? fake()->sentence() : '',
                 'alergies' => $alergies,

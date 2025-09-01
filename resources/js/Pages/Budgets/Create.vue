@@ -342,7 +342,7 @@
                                     </div>
 
                                     <!-- Address -->
-                                    <div class="md:col-span-2">
+                                    <div >
                                         <label for="address"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Dirección
@@ -357,6 +357,24 @@
                                                 placeholder="Ingrese dirección completa" />
                                         </div>
                                         <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}
+                                        </p>
+                                    </div>
+                                     <!-- Address -->
+                                    <div >
+                                        <label for="address"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Número de Afiliado
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.ars_id" id="ars_id" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese el Número de Afiliado completo" />
+                                        </div>
+                                        <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}
                                         </p>
                                     </div>
 
@@ -745,7 +763,7 @@ export default {
                 affiliate_signature: null,
                 reclaimer_signature: null,
                 ars: "",
-
+                ars_id: "",
             }),
             form_detail: useForm({
                 procedure_id: '',
@@ -800,6 +818,7 @@ export default {
             this.insurance_form.address = patient.address || '';
             this.insurance_form.ars = patient.ars || '';
             this.insurance_form.diagnosis = patient.motive || '';
+            this.insurance_form.ars_id = patient.ars_id || '';
 
             this.showPatientModal = false;
         },

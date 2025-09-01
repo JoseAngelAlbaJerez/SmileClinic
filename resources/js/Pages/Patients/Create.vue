@@ -116,9 +116,25 @@
                                     </select>
                                     <p v-if="errors.ars" class="mt-1 text-sm text-red-600">{{ errors.ars }}</p>
                                 </div>
+                                 <!-- ARS_id -->
+                                <div v-if="form.ars != '' ">
+                                    <label for="ARS_id"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Número de Afiliado
+                                    </label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                        </div>
+                                        <DNIInput v-model="form.ars_id"
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
+                                    </div>
+                                    <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}</p>
+                                </div>
 
                                 <!-- Date of Birth -->
-                                <div>
+                                <div :class=" form.ars != '' ?'md:col-span-2' : ''">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Fecha de Nacimiento
                                     </label>
@@ -335,6 +351,7 @@ export default {
                 alergies_detail: '',
                 address: '',
                 motive: '',
+                ars_id:'',
             }),
             error: '',
             crumbs: [
@@ -351,6 +368,10 @@ export default {
             }
             if (!this.form.last_name) {
                 this.error = 'Por favor, ingrese el apellido.';
+                return;
+            }
+            if (this.form.ars != "" && !this.form.ars_id) {
+                 this.error = 'Por favor, asigne un Número de Afiliado.';
                 return;
             }
 

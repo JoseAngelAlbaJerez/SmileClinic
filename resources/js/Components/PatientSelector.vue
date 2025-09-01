@@ -94,28 +94,7 @@ watch(searchTerm, () => {
                 No hay registros disponibles.
             </div>
 
-            <!-- Paginación LOCAL -->
-            <div v-if="patients.last_page > 1" class="flex justify-center items-center gap-2 py-3">
-                <button
-                    :disabled="!patients.prev_page_url"
-                    @click="fetchPatients(patients.prev_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Anterior
-                </button>
 
-                <span class="text-sm text-gray-600 dark:text-gray-300">
-                    Página {{ patients.current_page }} de {{ patients.last_page }}
-                </span>
-
-                <button
-                    :disabled="!patients.next_page_url"
-                    @click="fetchPatients(patients.next_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Siguiente
-                </button>
-            </div>
         </div>
 
         <!-- Indicador -->
