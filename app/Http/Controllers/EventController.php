@@ -37,7 +37,6 @@ class EventController extends Controller
 
         if ($showDeleted == true) {
             $query->where('events.active', 1);
-
         } else {
             $query->where('events.active', 0);
         }
@@ -90,7 +89,7 @@ class EventController extends Controller
         }
 
         $events = $query->orderByDesc('events.created_at')
-            ->with('doctor', 'patient','branch')
+            ->with('doctor', 'patient', 'branch')
             ->get()
             ->map(function ($event) {
                 return [
@@ -126,7 +125,7 @@ class EventController extends Controller
     {
         $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
-        $events = Event::all()->load('doctor','patient');
+        $events = Event::all()->load('doctor', 'patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
@@ -154,10 +153,26 @@ class EventController extends Controller
 
         $endDateTime = Carbon::parse($request->input('date') . ' ' . $request->input('endtime'))->setTimezone($timezone);
 
+
+        $constraint = Event::where('doctor_id', $validated['doctor_id'])
+            ->where('date', $validated['date'])
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('starttime', [$request->starttime, $request->endtime])
+                    ->orWhereBetween('endtime', [$request->starttime, $request->endtime])
+                    ->orWhere(function ($q) use ($request) {
+                        $q->where('starttime', '<=', $request->starttime)
+                            ->where('endtime', '>=', $request->endtime);
+                    });
+            })
+            ->exists();
+
+        if ($constraint) {
+            return back()->withInput()->with('toast', 'Ya existe una cita en ese horario para ese doctor.')
+                ->with('toastStyle', 'danger');
+        }
         $validated['attended'] = false;
         $validated['active'] = true;
         $validated['branch_id'] = Auth::user()->branch_id;
-
         $event =  Event::create($validated);
         try {
             $googleEvent = GoogleCalendarEvent::create([
@@ -233,11 +248,11 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $event->load(['patient', 'doctor']);
-       $starttime = $event->starttime = Carbon::parse($event->starttime)->format('H:i');
-       $endtime = $event->endtime = Carbon::parse($event->endtime)->format('H:i');
+        $starttime = $event->starttime = Carbon::parse($event->starttime)->format('H:i');
+        $endtime = $event->endtime = Carbon::parse($event->endtime)->format('H:i');
         $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = Patient::paginate(10);
-         $event->timeRange = [$starttime, $endtime];
+        $event->timeRange = [$starttime, $endtime];
         return Inertia::render('Events/Edit', [
             'event' => $event,
             'doctors' => $doctors,
