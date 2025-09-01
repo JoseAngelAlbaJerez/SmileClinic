@@ -12,6 +12,10 @@
                         <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }} - {{
                             branch.address }}</option>
                     </select>
+                     <button @click="print()"
+                            class="flex justify-center ml-2 gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                            <PrintIcon /> Cuadre de Caja Diario
+                        </button>
                 </div>
 
                 <!-- Stats Cards -->
@@ -265,6 +269,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import { ref } from 'vue';
+import PrintIcon from '@/Components/Icons/PrintIcon.vue';
+import { router } from "@inertiajs/vue3"
 
 export default {
     props: {
@@ -291,6 +297,7 @@ export default {
         AccessGate,
         AuthenticatedLayout,
         AddIcon,
+        PrintIcon
 
     },
     methods: {
@@ -304,6 +311,9 @@ export default {
         formatNumber(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+        print(){
+            router.visit(route("report.dailycashbalance"));
+        }
 
 
     },

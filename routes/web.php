@@ -80,6 +80,7 @@ Route::get('/dashboard', function () {
         'user' => Auth::user()->load('branch'),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/report/dailycashbalance', [ReportController::class, 'dailycashbalance'])->name('report.dailycashbalance');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

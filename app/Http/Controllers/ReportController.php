@@ -10,6 +10,8 @@ use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Patient;
+use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -104,6 +106,71 @@ class ReportController extends Controller
             'groupBy'   => $groupBy,
         ]);
     }
+    public function dailycashbalance()
+    {
+        $today = Carbon::today();
+
+
+        $expenses = Expenses::whereDate('created_at', $today)->get();
+        Log::info($expenses);
+        $bills = Bill::whereDate('created_at', $today)->where('total', '>', 0)->get();
+        Log::info($bills);
+
+        $payments = Payment::whereDate('created_at', $today)->get();
+        Log::info($payments);
+
+        $income = $bills->sum('total') + $payments->sum('amount_paid');
+        Log::info($income);
+
+        $incomeDetails = [];
+
+        foreach ($bills as $bill) {
+            $incomeDetails[] = [
+                'description' => 'Bill #' . $bill->id,
+                'amount'      => $bill->total,
+                'date'        => $bill->created_at->format('Y-m-d'),
+            ];
+        }
+
+        foreach ($payments as $payment) {
+            $incomeDetails[] = [
+                'description' => 'Payment #' . $payment->id,
+                'amount'      => $payment->amount_paid,
+                'date'        => $payment->created_at->format('Y-m-d'),
+            ];
+        }
+        $dailySummary = [];
+
+        foreach ($incomeDetails as $inc) {
+            $dailySummary[] = [
+                'date'        => $inc['date'],
+                'description' => $inc['description'],
+                'income'      => $inc['amount'],
+                'expenses'    => 0,
+                'balance'     => $inc['amount'],
+            ];
+        }
+
+        foreach ($expenses as $exp) {
+            $dailySummary[] = [
+                'date'        => $exp->created_at->format('Y-m-d'),
+                'description' => $exp->description ?? ('Expense #' . $exp->id),
+                'income'      => 0,
+                'expenses'    => $exp->amount,
+                'balance'     => -$exp->amount,
+            ];
+        }
+        usort($dailySummary, fn($a, $b) => strtotime($a['date']) <=> strtotime($b['date']));
+        return Inertia::render('Reports/DailyCashBalance', [
+            'income'        => $incomeDetails,
+            'expenses'      => $expenses,
+            'income_total'  => $bills->sum('total') + $payments->sum('amount_paid'),
+            'expenses_total' => $expenses->sum('amount'),
+            'net_balance'   => $bills->sum('total') + $payments->sum('amount_paid') - $expenses->sum('amount'),
+            'dailySummary'   => $dailySummary,
+            'today'         => $today
+        ]);
+    }
 
     public function bill(Bill $bill)
     {
@@ -159,7 +226,7 @@ class ReportController extends Controller
     public function prescription(Prescription $prescription)
     {
         $prescription->load(['patient', 'doctor', 'prescriptionsDetails.drugs']);
-        $prescription->patient->age = \Carbon\Carbon::parse( $prescription->patient->date_of_birth)->age;
+        $prescription->patient->age = \Carbon\Carbon::parse($prescription->patient->date_of_birth)->age;
         return Inertia::render('Reports/Prescription', [
             'prescription' => $prescription,
         ]);
