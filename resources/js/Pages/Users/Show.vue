@@ -371,7 +371,7 @@
 
 <script setup>
 import { ref, computed, markRaw } from 'vue';
-import { Link, router, usePage  } from '@inertiajs/vue3';
+import { Head, Link, router, usePage  } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
@@ -379,14 +379,8 @@ import Modal from '@/Components/Modal.vue';
 import UpdatePasswordForm from '../Profile/Partials/UpdatePasswordForm.vue';
 import { useToast } from 'vue-toastification';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
-import PrintIcon from '@/Components/Icons/PrintIcon.vue';
-import EditIcon from '@/Components/Icons/EditIcon.vue';
-import AccessGate from '@/Components/AccessGate.vue';
-import DangerButton from '@/Components/DangerButton.vue';
-import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
-import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 
+import AccessGate from '@/Components/AccessGate.vue';
 const toast = useToast();
 
 const props = defineProps({
