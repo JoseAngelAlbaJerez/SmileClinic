@@ -29,14 +29,34 @@ const checkBillDate = () => {
     const day = today.getDate()
     notifications.value = []
 
-    const daysBefore = 15 - day
-    if (daysBefore > 0 && daysBefore <= 5) {
-        notifications.value.push(`⚡ Luz pendiente: faltan ${daysBefore} día(s)`)
-        notifications.value.push(`💧 Agua pendiente: faltan ${daysBefore} día(s)`)
-    } else if (day === 15) {
-        notifications.value.push("⚡ Apaga la luz")
-        notifications.value.push("💧 Paga el agua")
+    const branch = page.props.auth.user.branch.name
+    const isAdmin = page.props.auth.user.roles[0] === 'admin'
+    const dueDates = {
+        "Cutupu": {
+            "⚡ Luz": 7,
+            "💧 Agua": 20,
+            "🏢 Local": 20,
+            "📞 Teléfono": 1,
+        },
+        "Principal": {
+            "⚡ Luz": 20,
+            "💧 Agua": 10,
+            "📞 Teléfono": 7,
+            "🏢 Local": 8,
+        }
     }
+    const branchesToCheck = isAdmin ? Object.keys(dueDates) : [branch]
+    branchesToCheck.forEach(b => {
+        Object.entries(dueDates[b]).forEach(([label, dueDay]) => {
+            const daysBefore = dueDay - day
+
+            if (daysBefore > 0 && daysBefore <= 5) {
+                notifications.value.push(`${label} (${b}): faltan ${daysBefore} día(s)`)
+            } else if (day === dueDay) {
+                notifications.value.push(`${label} (${b}): ¡HOY debes pagar!`)
+            }
+        })
+    })
 }
  const markAsRead = () => {
         read.value = true
@@ -170,10 +190,10 @@ watchEffect(() => {
 
                                     <template #content>
                                         <div v-if="notifications.length">
-                                            <p v-for="(note, index) in notifications" :key="index"
+                                            <Link :href="route('expenses.index')" v-for="(note, index) in notifications" :key="index"
                                                 class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
                                                 {{ note }}
-                                            </p>
+                                            </Link>
                                         </div>
                                         <div v-else class="flex justify-center">
 
