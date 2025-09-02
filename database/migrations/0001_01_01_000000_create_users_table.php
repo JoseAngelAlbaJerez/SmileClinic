@@ -49,6 +49,13 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+        Schema::create('notes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('description');
+            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

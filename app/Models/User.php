@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-      protected $fillable = [
+    protected $fillable = [
         'name',
         'last_name',
         'DNI',
@@ -33,12 +33,18 @@ class User extends Authenticatable
         'password',
         'active'
     ];
-
+    protected $casts = [
+        'address' => 'array',
+    ];
     public function address()
     {
         return $this->hasOne(Address::class);
     }
-     public function branch()
+    public function notes()
+    {
+        return $this->hasOne(Note::class);
+    }
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
@@ -64,8 +70,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-             'active' => 'boolean',
-               'date_of_birth' => 'date',
+            'active' => 'boolean',
+            'date_of_birth' => 'date',
         ];
     }
 }
