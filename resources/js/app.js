@@ -22,8 +22,8 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(Toast, {
-                position: POSITION.BOTTOM_RIGHT,
-                timeout: 3000,
+                position: POSITION.TOP_RIGHT,
+                timeout: 5000,
             })
             .use(ZiggyVue)
             .mount(el);
