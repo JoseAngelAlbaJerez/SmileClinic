@@ -5,18 +5,30 @@
 
         <div class="py-8">
             <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 p-5 rounded-xl">
-                <div class="flex justify-center mb-2">
-                    <label for="" class="text-md text-bold text-gray-900 dark:text-gray-100">Sucursal Actual: </label>
-                    <select v-model="form.branch" @change="handleBranchChange"
-                        class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
-                        <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }} - {{
-                            branch.address }}</option>
-                    </select>
-                     <button @click="print()"
-                            class="flex justify-center ml-2 gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <PrintIcon /> Cuadre de Caja Diario
-                        </button>
+                <div
+                    class="flex flex-col gap-2 md:flex-row items-start md:items-center justify-between mb-4 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 space-y-3 md:space-y-0">
+
+                    <div
+                        class="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4 flex-1 w-full">
+                        <label class="text-lg font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                            Sucursal Actual:
+                        </label>
+
+                        <select v-model="form.branch" @change="handleBranchChange"
+                            class="w-full md:flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
+                            <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+                                {{ branch.name }} - {{ branch.address }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <button @click="print"
+                        class="w-full md:w-auto flex items-center justify-center mt-2 md:mt-0 px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                        <PrintIcon class="w-5 h-5 mr-2" />
+                        Cuadre de Caja Diario
+                    </button>
                 </div>
+
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -311,7 +323,7 @@ export default {
         formatNumber(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
-        print(){
+        print() {
             router.visit(route("report.dailycashbalance"));
         }
 
