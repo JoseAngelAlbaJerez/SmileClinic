@@ -77,7 +77,6 @@
                                     <select v-model="form.currency"
                                         class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
                                         <option value="DOP"> RD$ - Peso Dominicano</option>
-                                        <option value="USD"> USD$ - Dolar Americano</option>
                                     </select>
                                 </div>
                             </div>
