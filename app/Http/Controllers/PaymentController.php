@@ -8,6 +8,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -98,32 +99,17 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'pagos' => 'required|array|min:1',
-            'pagos.*.budget_id' => 'required|exists:budgets,id',
-            'pagos.*.amount_paid' => 'required|numeric|min:0.01',
-            'pagos.*.remaining_amount' => 'required|numeric|min:0',
-            'pagos.*.total' => 'required|numeric|min:0',
+        Payment::create([
+            'c_x_c_id' => $request->patient['c_x_c']['id'],
+            'total'    => $request->patient['c_x_c']['balance'],
+            'amount_paid' => $request->paymentAmount,
+            'active' => 1,
+            'branch_id' => Auth::user()->branch_id,
         ]);
+        $CXC = CXC::find($request->patient['c_x_c']['id']);
+        $CXC->balance = $request->balance;
+        $CXC->save();
 
-        $registrados = [];
-
-        foreach ($request->pagos as $pago) {
-            $budget = Budget::find($pago['budget_id']);
-            $detail = $budget->budgetdetail()->first();
-
-            if (!$budget || !$budget->c_x_c_id || !$detail) {
-                continue;
-            }
-
-            $registrados[] = Payment::create([
-                'budget_detail_id' => $detail->id,
-                'c_x_c_id' => $budget->c_x_c_id,
-                'amount_paid' => $pago['amount_paid'],
-                'remaining_amount' => $pago['remaining_amount'],
-                'total' => $pago['total'],
-            ]);
-        }
 
         return redirect()->back()->with('toast', 'Pago registrado correctamente.');
     }

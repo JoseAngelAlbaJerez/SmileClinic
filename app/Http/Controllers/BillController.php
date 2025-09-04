@@ -97,7 +97,7 @@ class BillController extends Controller
     }
     public function create()
     {
-        $patient = Patient::with([
+        $patient = Patient::with(['CXC','bill.billdetail',
             'budget' => function ($q) {
                 $q->where('active', 1)
                     ->with(['budgetdetail' => function ($d) {
@@ -221,7 +221,7 @@ class BillController extends Controller
     }
     public function show(Bill $bill)
     {
-        $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC', 'billdetail.payment');
+        $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC', 'billdetail');
         return Inertia::render("Bills/Show", [
             'bills' => $bill,
         ]);

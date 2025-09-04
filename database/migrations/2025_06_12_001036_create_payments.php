@@ -15,9 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('c_x_c_id');
             $table->foreignId('amount_paid');
-            $table->foreignId('remaining_amount');
-            $table->foreignId('budget_detail_id');
-            $table->date('expiration_date');
             $table->decimal('total');
             $table->boolean('active')->default(true);
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');

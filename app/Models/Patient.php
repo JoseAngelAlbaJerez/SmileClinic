@@ -44,6 +44,9 @@ class Patient extends Model
     {
         return $this->hasMany(Event::class, "patient_id", "id");
     }
+    public function bill(){
+         return $this->hasMany(Bill::class, "patient_id", "id");
+    }
     public function Prescriptions()
     {
         return $this->hasMany(Prescription::class, "patient_id", "id");

@@ -13,14 +13,184 @@
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
                         <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
-                            <h2 class="text-xl font-bold text-white">Nueva Recibo</h2>
+                            <h2 class="text-xl font-bold text-white">Nuevo Recibo</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
                         <!-- Main Form Content -->
-                        <div class="p-6 space-y-6">
+                        <div class="p-6 space-y-6" v-if="selected_patient.c_x_c > 0">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Patient Selection -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Paciente <span class="text-red-500">*</span>
+                                    </label>
+                                    <button @click="openPatientModal()"
+                                        class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                        <span v-if="form.patient_id" class="truncate">
+                                            {{ selected_patient.first_name }} {{ selected_patient.last_name }}
+                                        </span>
+                                        <span v-else class="text-gray-400 dark:text-gray-400">Seleccionar</span>
+                                    </button>
+                                    <p v-if="errors.patient_id" class="mt-1 text-xs text-red-600 dark:text-red-400">
+                                        {{ errors.patient_id }}
+                                    </p>
+                                </div>
+
+                                <!-- Emission Date -->
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Fecha Emisión <span class="text-red-500">*</span>
+                                    </label>
+                                    <VueDatePicker
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
+                                        placeholder="Seleccione fecha" v-model="form.emission_date"
+                                        :enable-time-picker="false" />
+                                </div>
+
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 p-6 rounded-2xl shadow-lg mt-6 border border-gray-100 dark:border-gray-600">
+                                <div class="flex items-center mb-6">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                                            <svg class="w-6 h-6 text-pink-600 dark:text-pink-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-xl font-bold dark:text-white">Realizar Pago</h3>
+                                    </div>
+                                </div>
+
+                                <!-- Empty State -->
+                                <div v-if="!selected_patient.bill" class="text-center py-8">
+                                    <div
+                                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-600 mb-4">
+                                        <svg class="h-8 w-8 text-gray-400 dark:text-gray-300" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No hay pagos
+                                        pendientes</h3>
+                                    <p class="text-gray-500 dark:text-gray-400 mb-4">Agregue recibos para continuar</p>
+                                    <p v-if="errors.procedures"
+                                        class="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
+                                        {{ errors.procedures }}
+                                    </p>
+                                </div>
+
+                                <!-- Payment Cards -->
+                                <div v-else class="space-y-6">
+                                    <div
+                                        class="flex flex-col md:flex-row justify-between gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                                        <div>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Fecha de creación:</p>
+                                            <p class="text-md font-medium dark:text-white">{{
+                                                formatDate(selected_patient.c_x_c.created_at) }}</p>
+                                        </div>
+                                        <div class="text-left md:text-right">
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Balance restante:</p>
+                                            <p class="text-lg font-bold text-pink-600 dark:text-pink-400">
+                                                {{ new Intl.NumberFormat('es-DO', {
+                                                    style: 'currency', currency: 'DOP'
+                                                }).format(payment_form.balance || 0) }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p v-if="payment_form.errors.length"
+                                        class="p-3 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                        {{ payment_form.errors }}
+                                    </p>
+
+                                    <!-- Payment Form -->
+                                    <form @submit.prevent="makePayment()"
+                                        class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm">
+                                        <div class="mb-4">
+                                            <label for="paymentAmount"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Monto a pagar
+                                            </label>
+                                            <div class="relative">
+
+                                                <input @input="calcPayment()" v-model="payment_form.paymentAmount"
+                                                    id="paymentAmount" type="number" min="1" step="0.01"
+                                                    placeholder="0.00"
+                                                    class=" mt-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                                            </div>
+                                        </div>
+
+                                        <button type="submit"
+                                            :disabled="!payment_form.paymentAmount || payment_form.paymentAmount <= 0"
+                                            class="mt-2 w-full bg-gradient-to-r from-pink-600 to-pink-700 text-white font-medium rounded-lg px-4 py-3 hover:from-pink-700 hover:to-pink-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                Registrar Pago
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Summary and Actions -->
+                            <div
+                                class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6">
+                                <!-- Error Message -->
+                                <div v-if="errors.length" class="flex-1">
+                                    <div
+                                        class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                        <div class="flex items-center text-red-600 dark:text-red-400">
+
+                                            <span>{{ errors }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total -->
+                                <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Total: <span class="text-pink-600 dark:text-pink-400">{{ new
+                                        Intl.NumberFormat('es-DO', {
+                                            style:
+                                                'currency', currency: form.currency
+                                        }).format(form.total
+                                            || 0) }}</span>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="flex space-x-3">
+                                    <SecondaryButton type="button"
+                                        @click="form.reset(); form_details = []; form_detail.reset(); selectedProcedures = []"
+                                        class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
+
+                                        Limpiar
+                                    </SecondaryButton>
+                                    <PrimaryButton @click="submit()" :disabled="form.processing"
+                                        :class="{ 'opacity-75': form.processing }"
+                                        class="hover:bg-pink-600 transition duration-200">
+
+                                        <span v-if="form.processing">Guardando...</span>
+                                        <span v-else>Guardar </span>
+                                    </PrimaryButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="p-6 space-y-6">
+                            <!-- Client and Document Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -69,16 +239,7 @@
                                         :enable-time-picker="false" />
                                 </div>
 
-                                <!-- Currency -->
-                                <div class="space-y-1">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Moneda <span class="text-red-500">*</span>
-                                    </label>
-                                    <select v-model="form.currency"
-                                        class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
-                                        <option value="DOP"> RD$ - Peso Dominicano</option>
-                                    </select>
-                                </div>
+
                             </div>
 
                             <!-- Procedures Section -->
@@ -248,7 +409,7 @@
                                                     {{ form.errors[`details.${index}.quantity`] }}
                                                 </p>
                                             </div>
-                                             <!-- Doctor's Amount -->
+                                            <!-- Doctor's Amount -->
                                             <div class="space-y-1">
                                                 <label
                                                     class="block text-xs font-medium text-gray-700 dark:text-gray-300">
@@ -394,7 +555,8 @@
                         <PatientSelector :patients="patient" @selected="
                             form.patient_id = $event.id;
                         selected_patient = $event;
-                        showPatientModal = false
+                        showPatientModal = false;
+                        payment_form.balance = $event.c_x_c.balance
                             " />
                     </div>
                 </Modal>
@@ -479,7 +641,7 @@ export default {
                 patient_id: '',
                 doctor_id: '',
                 type: 'Contado',
-                currency:'DOP',
+                currency: 'DOP',
                 emission_date: new Date(),
                 expiration_date: '',
                 total: '',
@@ -494,6 +656,11 @@ export default {
                 quantity: '',
                 material_provider: false,
                 materials_amount: '',
+            }),
+            payment_form: useForm({
+                paymentAmount: null,
+                patient: {},
+                balance: 0,
             }),
             bill_id: '',
             form_details: [],
@@ -514,6 +681,7 @@ export default {
             selectedBudgetId: '',
             selectBudget: {},
             selectedProcedures: [],
+
         };
 
     },
@@ -527,6 +695,24 @@ export default {
                 month: 'long',
                 day: 'numeric',
             });
+        },
+        async makePayment() {
+            if (!this.payment_form.paymentAmount) {
+                this.payment_form.errors = 'Por favor, ingrese un monto.';
+                return;
+            }
+            this.payment_form.patient = this.selected_patient;
+            this.payment_form.post(route('payments.store'), {
+                onSuccess: () => {
+                    this.payment_form.reset();
+                    this.form.reset();
+                }
+            });
+        },
+        calcPayment() {
+            const balanceBefore = parseFloat(this.selected_patient?.c_x_c?.balance || 0);
+            const payingNow = parseFloat(this.payment_form.paymentAmount || 0);
+            this.payment_form.balance = Math.max(balanceBefore - payingNow, 0);
         },
         addBudget() {
             this.form.currency = this.selectBudget.currency;

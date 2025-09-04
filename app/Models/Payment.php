@@ -10,12 +10,9 @@ class Payment extends Model
     protected $fillable = [
         "c_x_c_id",
         "amount_paid",
-        "remaining_amount",
-        "budget_detail_id",
         "total",
         "active",
         'branch_id',
-        "expiration_date"
     ];
       protected static function booted()
     {

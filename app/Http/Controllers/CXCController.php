@@ -27,7 +27,7 @@ class CXCController extends Controller
 
 
         $query = CXC::query()->select('c_x_c_s.*')
-            ->join('budgets', 'c_x_c_s.patient_id', '=', 'budgets.id');
+            ->join('bills', 'c_x_c_s.patient_id', '=', 'bills.id');
         if ($showDeleted == true) {
             $query->where('c_x_c_s.active', 1);
         } else {
@@ -38,8 +38,8 @@ class CXCController extends Controller
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('budgets.type LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('budgets.total LIKE ?', ['%' . $search . '%']);
+                    ->orWhereRaw('bills.type LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('bills.total LIKE ?', ['%' . $search . '%']);
             });
         }
 
@@ -66,7 +66,7 @@ class CXCController extends Controller
             }
         }
 
-        $CXC = $query->orderByDesc('created_at')->with('Patient', 'Budget')->paginate(10);
+        $CXC = $query->orderByDesc('created_at')->with('Patient', 'bills')->paginate(10);
 
 
 
@@ -125,7 +125,7 @@ class CXCController extends Controller
         }
 
 
-        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'bills.billdetail.Payment')->find($CXC->id);
+        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'bills.billdetail')->find($CXC->id);
 
         return Inertia::render('CXC/Show', [
             'CXC' => $CXC,
