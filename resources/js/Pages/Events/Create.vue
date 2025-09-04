@@ -35,7 +35,7 @@
                                 </div>
                                 <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                     errors.title
-                                    }}</p>
+                                }}</p>
                             </div>
 
                             <!-- Doctor & Patient Row -->
@@ -128,35 +128,53 @@
                     </div>
                     <!-- Appointments of the Selected Date -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col h-full">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                            <CalendarIcon class="h-5 w-5 text-pink-500 mr-2" />
-                            Citas del {{ form.date ? new Date(form.date).toLocaleDateString() : 'día seleccionado' }}
+                        <!-- Header -->
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center space-x-2">
+                            <CalendarIcon class="h-5 w-5 text-pink-500" />
+                            <span>
+                                Citas del {{ form.date ? new Date(form.date).toLocaleDateString() : 'día seleccionado'
+                                }}
+                            </span>
                         </h3>
 
-                        <div v-if="!form.date" class="text-gray-500 dark:text-gray-400">
+                        <!-- No date selected -->
+                        <div v-if="!form.date" class="text-gray-500 dark:text-gray-400 mb-4">
                             Seleccione una fecha para ver las citas.
                         </div>
 
-                        <div v-else-if="filteredAppointments.length === 0" class="text-gray-500 dark:text-gray-400">
+                        <!-- No appointments -->
+                        <div v-else-if="filteredAppointments.length === 0"
+                            class="text-gray-500 dark:text-gray-400 mb-4">
                             No hay citas para esta fecha.
                         </div>
 
                         <!-- Scrollable appointment list -->
-                        <ul v-else class="divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto pr-2"
-                            style="max-height: 400px;">
-                            <li v-for="appt in filteredAppointments" :key="appt.id" class="py-3">
-                                <p class="text-sm font-semibold text-gray-800 dark:text-white">
-                                    {{ appt.title }}
-                                </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    Doctor: {{ appt.doctor.name }} {{ appt.doctor.last_name }} — Paciente: {{
-                                        appt.patient.first_name }} {{ appt.patient.last_name }}
-                                </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    Horario: {{ formatTime(appt.starttime) }} - {{ formatTime(appt.endtime) }}
-                                </p>
-                            </li>
-                        </ul>
+                        <div v-else class="overflow-y-auto pr-2" style="max-height: 400px;">
+                            <ul class="space-y-4">
+                                <li v-for="appt in filteredAppointments" :key="appt.id"
+                                    class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
+                                    <!-- Appointment Header -->
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-md font-semibold text-gray-800 dark:text-white">
+                                            {{ appt.title }}
+                                        </h4>
+                                        <!-- Optional badge or icon -->
+                                        <!-- <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">Confirmada</span> -->
+                                    </div>
+                                    <!-- Doctor and Patient info -->
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
+                                        <strong>Doctor:</strong> Dra. {{ appt.doctor.name }} {{ appt.doctor.last_name }}
+                                        — <strong>Paciente:</strong> {{ appt.patient.first_name }} {{
+                                        appt.patient.last_name }}
+                                    </p>
+                                    <!-- Time info -->
+                                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                                        <strong>Horario:</strong> {{ formatTime(appt.starttime) }} - {{
+                                        formatTime(appt.endtime) }}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
