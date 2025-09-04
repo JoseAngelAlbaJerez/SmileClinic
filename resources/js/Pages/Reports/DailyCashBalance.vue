@@ -5,7 +5,7 @@
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white flex gap-1.5">
                     <DocumentMoney class="text-pink-500 h-8 w-8" />
-                    Daily Cash Balance Report
+                    Cuadre de Caja Diario
                 </h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-1">
                     Generado el {{ currentDate }}
@@ -120,7 +120,7 @@
                     </div>
                     <div v-if="!income || income.length === 0" class="px-6 py-8 text-center">
                         <i class="fas fa-receipt text-gray-300 dark:text-gray-600 text-4xl mb-3"></i>
-                        <p class="text-gray-500 dark:text-gray-400">No income records found</p>
+                        <p class="text-gray-500 dark:text-gray-400">No se encontraron registros.</p>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                     </div>
                     <div v-if="!expenses || expenses.length === 0" class="px-6 py-8 text-center">
                         <i class="fas fa-money-bill text-gray-300 dark:text-gray-600 text-4xl mb-3"></i>
-                        <p class="text-gray-500 dark:text-gray-400">No expense records found</p>
+                        <p class="text-gray-500 dark:text-gray-400">No se encontraron registros.</p>
                     </div>
                 </div>
             </div>
@@ -170,16 +170,16 @@
                         <tr>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Date</th>
+                                Fecha</th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Description</th>
+                                Descripción</th>
                             <th
                                 class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Income</th>
+                                Ingreso</th>
                             <th
                                 class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Expenses</th>
+                                Egreso</th>
                             <th
                                 class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                 Balance</th>
@@ -225,7 +225,7 @@
                         <tr v-if="!dailySummary || dailySummary.length === 0">
                             <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                                 <i class="fas fa-inbox text-gray-300 dark:text-gray-600 text-4xl mb-3"></i>
-                                <p>No transactions recorded</p>
+                                <p>No se encontraron registros.</p>
                             </td>
                         </tr>
                     </tbody>
