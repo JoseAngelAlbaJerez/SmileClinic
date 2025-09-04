@@ -960,7 +960,6 @@ export default {
 
             Inertia.post(route('budgets.store'), payload, {
                 onSuccess: (page) => {
-                    console.log('Budget and insurance saved successfully');
                     this.errors = errors;
                 },
                 onError: (errors) => {
