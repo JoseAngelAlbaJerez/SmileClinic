@@ -126,7 +126,7 @@ class ReportController extends Controller
 
         foreach ($bills as $bill) {
             $incomeDetails[] = [
-                'description' => 'Bill #' . $bill->id,
+                'description' => 'Recibo #' . $bill->id,
                 'amount'      => $bill->total,
                 'date'        => $bill->created_at->format('Y-m-d'),
             ];
@@ -134,7 +134,7 @@ class ReportController extends Controller
 
         foreach ($payments as $payment) {
             $incomeDetails[] = [
-                'description' => 'Payment #' . $payment->id,
+                'description' => 'Pago # ' . $payment->id,
                 'amount'      => $payment->amount_paid,
                 'date'        => $payment->created_at->format('Y-m-d'),
             ];
