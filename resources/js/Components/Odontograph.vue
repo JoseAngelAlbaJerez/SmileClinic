@@ -15,14 +15,7 @@
             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 mr-4">
                 <div v-for="tooth in upperLeftTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -85,14 +78,7 @@
             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 ">
                 <div v-for="tooth in upperRightTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -155,14 +141,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4 mt-2 ml-auto gap-1.5">
                 <div v-for="tooth in upperLeftTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -225,14 +204,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
                 <div v-for="tooth in upperRightTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -301,14 +273,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4 mt-2 ml-auto gap-1.5">
                 <div v-for="tooth in LowerLeftTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -369,14 +334,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
                 <div v-for="tooth in LowerRightTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -437,14 +395,7 @@
               <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 mr-4">
                 <div v-for="tooth in LowerLeftTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -505,14 +456,7 @@
              <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 ">
                 <div v-for="tooth in LowerRightTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                    :class="{
-                        'bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700': getStatuses(tooth).length > 0,
-                        'hover:bg-gray-50 dark:hover:bg-gray-700': getStatuses(tooth).length === 0,
-                        'bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700': getStatuses(tooth).includes('Cariado'),
-                        'bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700': getStatuses(tooth).includes('Restauración'),
-                        'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700': getStatuses(tooth).includes('Corona'),
-                        'bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800': getStatuses(tooth).includes('CoronaAplicada'),
-                    }">
+                      :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -768,11 +712,43 @@ function zoneClass(zone) {
     }
 }
 const getStatuses = (tooth) => {
-    const value = odontogram.value[tooth];
-    if (!value) return [];
-    if (Array.isArray(value)) return value;
-    return Object.values(value);
+  const value = odontogram.value[tooth];
+  if (!value) return [];
+
+  if (Array.isArray(value)) {
+    return [...value];
+  }
+
+  return Object.values({ ...value });
 };
+
+const getToothClass = (tooth) => {
+  const statuses = getStatuses(tooth);
+
+  if (statuses.includes("Cariado")) {
+    return "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700";
+  }
+
+  if (statuses.includes("Restauración")) {
+    return "bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700";
+  }
+
+  if (statuses.includes("Corona")) {
+    return "bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700";
+  }
+
+  if (statuses.includes("CoronaAplicada")) {
+    return "bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800";
+  }
+
+  if (statuses.length > 0) {
+    return "bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700";
+  }
+
+  return "hover:bg-gray-50 dark:hover:bg-gray-700";
+};
+
+
 function applyProcedure() {
     if (procedure.value && selectedZone.value) {
         if (!odontogram.value[selectedTooth.value]) {
