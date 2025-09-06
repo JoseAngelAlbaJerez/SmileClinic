@@ -186,7 +186,7 @@ class BudgetController extends Controller
 
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-     return back()->with('toast', 'Presupuesto y seguro guardados correctamente');
+     return redirect()->route('bills.create')->with('toast', 'Presupuesto y seguro guardados correctamente');
 
     }
 
