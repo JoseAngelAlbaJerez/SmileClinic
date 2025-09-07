@@ -199,7 +199,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,

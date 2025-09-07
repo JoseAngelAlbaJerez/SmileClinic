@@ -194,7 +194,11 @@
                                             </div>
                                             <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                 <p class="text-sm text-gray-500 dark:text-gray-400">Descuento</p>
-                                                <p class="font-medium">{{ details.discount }}%</p>
+                                                <p class="font-medium">{{  new Intl.NumberFormat('es-DO', {
+                                                    style:
+                                                        'currency', currency: budgets.currency
+                                                }).format(details.discount
+                                                    || 0)}}</p>
                                             </div>
                                             <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                 <p class="text-sm text-gray-500 dark:text-gray-400">Cantidad</p>
@@ -208,7 +212,7 @@
                                                 {
                                                     style:
                                                         'currency', currency: budgets.currency
-                                                }).format(details.amount
+                                                }).format(details.amount - details.discount
                                                     || 0) }}</p>
 
                                             <div v-if="budgets.active && details.active">

@@ -49,19 +49,55 @@ class DashboardController extends Controller
 
         $expense = Expenses::orderByDesc('created_at')->get();
         $expense_sum = $expense->sum('amount');
+        $role = Auth::user()->roles()->first();
+        switch ($role) {
+            case 'admin':
+                return Inertia::render('Dashboard', [
+                    'patients' => $patients,
+                    'branches' => $branches,
+                    'users' => $users,
+                    'income_sum' => $income_sum,
+                    'expense_sum' => $expense_sum,
+                    'income' => $income,
+                    'expense' => $expense,
+                    'incomeThisWeek' => $incomeThisWeek,
+                    'incomeLastWeek' => $incomeLastWeek,
+                    'percentageChange' => round($percentageChange, 2),
+                    'user' => Auth::user()->load('branch'),
+                ]);
+            case 'staff':
+                return Inertia::render('DashboardStaff', [
+                    'patients' => $patients,
+                    'branches' => $branches,
+                    'users' => $users,
+                    'income_sum' => $income_sum,
+                    'expense_sum' => $expense_sum,
+                    'income' => $income,
+                    'expense' => $expense,
+                    'incomeThisWeek' => $incomeThisWeek,
+                    'incomeLastWeek' => $incomeLastWeek,
+                    'percentageChange' => round($percentageChange, 2),
+                    'user' => Auth::user()->load('branch'),
+                ]);
+                case 'doctor':
+                return Inertia::render('DashboardDoctor', [
+                    'patients' => $patients,
+                    'branches' => $branches,
+                    'users' => $users,
+                    'income_sum' => $income_sum,
+                    'expense_sum' => $expense_sum,
+                    'income' => $income,
+                    'expense' => $expense,
+                    'incomeThisWeek' => $incomeThisWeek,
+                    'incomeLastWeek' => $incomeLastWeek,
+                    'percentageChange' => round($percentageChange, 2),
+                    'user' => Auth::user()->load('branch'),
+                ]);
 
-        return Inertia::render('Dashboard', [
-            'patients' => $patients,
-            'branches' => $branches,
-            'users' => $users,
-            'income_sum' => $income_sum,
-            'expense_sum' => $expense_sum,
-            'income' => $income,
-            'expense' => $expense,
-            'incomeThisWeek' => $incomeThisWeek,
-            'incomeLastWeek' => $incomeLastWeek,
-            'percentageChange' => round($percentageChange, 2),
-            'user' => Auth::user()->load('branch'),
-        ]);
+
+            default:
+                # code...
+                break;
+        }
     }
 }

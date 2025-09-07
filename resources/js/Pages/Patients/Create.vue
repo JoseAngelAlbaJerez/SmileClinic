@@ -127,7 +127,7 @@
                                             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                         </div>
-                                        <DNIInput v-model="form.ars_id"
+                                        <input v-model="form.ars_id"  placeholder="21333326432231"
                                             class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
                                     </div>
                                     <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}</p>

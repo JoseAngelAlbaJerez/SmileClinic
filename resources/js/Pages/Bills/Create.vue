@@ -18,7 +18,7 @@
                         </div>
 
                         <!-- Main Form Content -->
-                        <div class="p-6 space-y-6" v-if="selected_patient.c_x_c > 0">
+                        <div class="p-6 space-y-6" v-if="selected_patient.c_x_c?.balance > 0">
                             <!-- Client and Document Info -->
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -512,7 +512,7 @@
                     <div class="p-6">
                         <h3 class="text-xl font-bold">Seleccionar Presupuesto</h3>
 
-                        <BudgetSelector v-if="selected_patient && selected_patient.budget.length"
+                        <BudgetSelector v-if="selected_patient && selected_patient.budget"
                             :budgets="selected_patient.budget" @selected="selectBudget = $event; addBudget()" />
 
                         <p v-else class="text-gray-500 italic">
@@ -552,12 +552,7 @@
                                 <XIcon class="h-6 w-6" />
                             </button>
                         </div>
-                        <PatientSelector :patients="patient" @selected="
-                            form.patient_id = $event.id;
-                        selected_patient = $event;
-                        showPatientModal = false;
-                        payment_form.balance = $event.c_x_c.balance
-                            " />
+                        <PatientSelector :patients="patient" @selected="SelectPatient($event)" />
                     </div>
                 </Modal>
                 <!-- Doctor Selection Modal -->
@@ -813,7 +808,17 @@ export default {
             const now = new Date();
             return now.toISOString().slice(0, 16);
         },
+        SelectPatient(event) {
 
+            this.form.patient_id = event.id;
+            this.selected_patient = event;
+            this.showPatientModal = false;
+
+            if (event.c_x_c) {
+            this.payment_form.balance = event.c_x_c.balance
+            }
+
+        },
         submit() {
             if (!this.form.patient_id) {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';

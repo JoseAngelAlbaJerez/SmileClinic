@@ -99,7 +99,7 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
 
-        Payment::create([
+       $payment = Payment::create([
             'c_x_c_id' => $request->patient['c_x_c']['id'],
             'total'    => $request->patient['c_x_c']['balance'],
             'amount_paid' => $request->paymentAmount,

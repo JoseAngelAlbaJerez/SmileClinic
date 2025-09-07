@@ -99,7 +99,17 @@ class PatientController extends Controller implements HasMiddleware
     {
         $filters = $request->input('filters', []);
 
-        $query = Patient::query()
+        $query = Patient::with([
+            'CXC',
+            'bill.billdetail',
+            'budget' => function ($q) {
+                $q->where('active', 1)
+                    ->with([
+                        'budgetdetail' => fn($d) => $d->where('active', 1)->with('procedure'),
+                        'patient'
+                    ]);
+            }
+        ])
             ->when(!empty($filters['name']), function ($q) use ($filters) {
                 $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
             });
@@ -112,7 +122,6 @@ class PatientController extends Controller implements HasMiddleware
             ]);
         }
 
-        // si entras normal (con Inertia, no por axios)
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
             'filters'  => $filters,
