@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
         $expense = Expenses::orderByDesc('created_at')->get();
         $expense_sum = $expense->sum('amount');
-        $role = Auth::user()->roles()->first();
+        $role = Auth::user()->getRoleNames()[0] ?? null;
         switch ($role) {
             case 'admin':
                 return Inertia::render('Dashboard', [

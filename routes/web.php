@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BudgetController;
@@ -17,15 +18,6 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
-use App\Models\Bill;
-use App\Models\Branch;
-use App\Models\BudgetDetail;
-use App\Models\Expenses;
-use App\Models\Patient;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,8 +25,10 @@ Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::get('/dashboard', [DashboardController::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class,'dashboard'])->middleware(['auth'])->name('dashboard');
 Route::get('/report/dailycashbalance', [ReportController::class, 'dailycashbalance'])->name('report.dailycashbalance');
 
 Route::middleware('auth')->group(function () {
