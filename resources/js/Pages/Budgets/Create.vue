@@ -697,7 +697,8 @@ import CardIcon from '@/Components/Icons/CardIcon.vue';
 // @ts-ignore
 import { VueSignaturePad } from "vue-signature-pad"
 import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3'
+
 
 
 export default {
@@ -958,12 +959,12 @@ export default {
                 reclaimer_signature: this.insurance_form.reclaimer_signature,
             };
 
-            Inertia.post(route('budgets.store'), payload, {
+            router.post(route('budgets.store'), payload, {
                 onSuccess: (page) => {
-                    this.errors = errors;
+
                 },
                 onError: (errors) => {
-                    console.log('Validation errors:', errors);
+                   this.errors = errors;
                 },
                 onFinish: () => {
                     this.form.processing = false;
