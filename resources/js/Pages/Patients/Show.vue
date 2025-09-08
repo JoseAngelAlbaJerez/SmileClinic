@@ -71,7 +71,7 @@
                                         completo:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.first_name }} {{
                                         patient.last_name
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -92,7 +92,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                        }} ({{ patient.age }} años)</span>
+                                    }} ({{ patient.age }} años)</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -240,7 +240,7 @@
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ prescription.doctor.name }} {{
                                                         prescription.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
 
                                             </div>
@@ -399,7 +399,7 @@
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -508,7 +508,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -537,7 +537,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -570,10 +570,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="budget.emission_date">Emitido: {{
                                                 formatDate(budget.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="budget.expiration_date"> | Vence: {{
                                                 formatDate(budget.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -682,7 +682,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -710,7 +710,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -742,10 +742,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="bill.emission_date">Emitido: {{
                                                 formatDate(bill.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="bill.expiration_date"> | Vence: {{
                                                 formatDate(bill.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -814,7 +814,7 @@
                                         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-pink-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-pink-600 transition-all sm:text-hidden">
                                         <DeleteIcon class="w-5 h-5" />
                                         <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
-                                            }}
+                                        }}
                                             Eliminados</span>
                                     </button>
                                 </AccessGate>
@@ -844,7 +844,7 @@
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
                                                 item.id
-                                                }}</h2>
+                                            }}</h2>
                                             <div
                                                 class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                                 <UserIcon class="w-4 h-4" />
@@ -1090,9 +1090,9 @@
                                     </div>
 
 
-                                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5"
-                                      >
-                                    <div v-for="tooth in upperRightTeethBot" :key="tooth"
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
+                                        <div v-for="tooth in upperRightTeethBot" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="toothClass(item.data[tooth])">
@@ -1159,14 +1159,14 @@
                                         </div>
 
 
-                                </div>
+                                    </div>
 
 
                                 </div>
 
                                 <!-- Odontograma Inferior -->
                                 <div class=" grid grid-cols-2">
-                                      <div
+                                    <div
                                         class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4  mt-2 ml-auto gap-1.5">
                                         <div v-for="tooth in LowerLeftTeethTop" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
@@ -1236,9 +1236,9 @@
                                     </div>
 
 
-                                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5"
-                                      >
-                                    <div v-for="tooth in LowerRightTeethTop" :key="tooth"
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
+                                        <div v-for="tooth in LowerRightTeethTop" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="toothClass(item.data[tooth])">
@@ -1305,7 +1305,7 @@
                                         </div>
 
 
-                                </div>
+                                    </div>
 
                                     <div
                                         class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 mt-2 lg:grid-cols-8 gap-1.5 mr-4">
@@ -1664,6 +1664,26 @@ export default {
                 36: "1er molar inferior izquierdo",
                 37: "2do molar inferior izquierdo",
                 38: "3er molar inferior izquierdo",
+                51: "Incisivo central superior derecho (temporal)",
+                52: "Incisivo lateral superior derecho (temporal)",
+                53: "Canino superior derecho (temporal)",
+                54: "1er molar superior derecho (temporal)",
+                55: "2do molar superior derecho (temporal)",
+                61: "Incisivo central superior izquierdo (temporal)",
+                62: "Incisivo lateral superior izquierdo (temporal)",
+                63: "Canino superior izquierdo (temporal)",
+                64: "1er molar superior izquierdo (temporal)",
+                65: "2do molar superior izquierdo (temporal)",
+                71: "Incisivo central inferior izquierdo (temporal)",
+                72: "Incisivo lateral inferior izquierdo (temporal)",
+                73: "Canino inferior izquierdo (temporal)",
+                74: "1er molar inferior izquierdo (temporal)",
+                75: "2do molar inferior izquierdo (temporal)",
+                81: "Incisivo central inferior derecho (temporal)",
+                82: "Incisivo lateral inferior derecho (temporal)",
+                83: "Canino inferior derecho (temporal)",
+                84: "1er molar inferior derecho (temporal)",
+                85: "2do molar inferior derecho (temporal)"
             },
             procedureStyles: {
                 Cariado: "bg-red-300",

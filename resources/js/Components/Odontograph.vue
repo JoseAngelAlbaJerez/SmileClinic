@@ -683,16 +683,36 @@ const toothNames = {
     11: "Incisivo central superior derecho", 12: "Incisivo lateral superior derecho", 13: "Canino superior derecho",
     14: "1er premolar superior derecho", 15: "2do premolar superior derecho", 16: "1er molar superior derecho",
     17: "2do molar superior derecho", 18: "3er molar superior derecho",
+
     21: "Incisivo central superior izquierdo", 22: "Incisivo lateral superior izquierdo", 23: "Canino superior izquierdo",
     24: "1er premolar superior izquierdo", 25: "2do premolar superior izquierdo", 26: "1er molar superior izquierdo",
     27: "2do molar superior izquierdo", 28: "3er molar superior izquierdo",
+
     41: "Incisivo central inferior derecho", 42: "Incisivo lateral inferior derecho", 43: "Canino inferior derecho",
     44: "1er premolar inferior derecho", 45: "2do premolar inferior derecho", 46: "1er molar inferior derecho",
     47: "2do molar inferior derecho", 48: "3er molar inferior derecho",
+
     31: "Incisivo central inferior izquierdo", 32: "Incisivo lateral inferior izquierdo", 33: "Canino inferior izquierdo",
     34: "1er premolar inferior izquierdo", 35: "2do premolar inferior izquierdo", 36: "1er molar inferior izquierdo",
-    37: "2do molar inferior izquierdo", 38: "3er molar inferior izquierdo"
-}
+    37: "2do molar inferior izquierdo", 38: "3er molar inferior izquierdo",
+
+    51: "Incisivo central superior derecho (temporal)", 52: "Incisivo lateral superior derecho (temporal)",
+    53: "Canino superior derecho (temporal)", 54: "1er molar superior derecho (temporal)",
+    55: "2do molar superior derecho (temporal)",
+
+    61: "Incisivo central superior izquierdo (temporal)", 62: "Incisivo lateral superior izquierdo (temporal)",
+    63: "Canino superior izquierdo (temporal)", 64: "1er molar superior izquierdo (temporal)",
+    65: "2do molar superior izquierdo (temporal)",
+
+    71: "Incisivo central inferior izquierdo (temporal)", 72: "Incisivo lateral inferior izquierdo (temporal)",
+    73: "Canino inferior izquierdo (temporal)", 74: "1er molar inferior izquierdo (temporal)",
+    75: "2do molar inferior izquierdo (temporal)",
+
+    81: "Incisivo central inferior derecho (temporal)", 82: "Incisivo lateral inferior derecho (temporal)",
+    83: "Canino inferior derecho (temporal)", 84: "1er molar inferior derecho (temporal)",
+    85: "2do molar inferior derecho (temporal)"
+};
+
 
 function selectTooth(tooth) {
     selectedTooth.value = tooth
