@@ -603,6 +603,7 @@ import UserSelector from '@/Components/UserSelector.vue';
 export default {
     props: {
         patient: Object,
+        patients: Object,
         procedure: Object,
         doctors: Object,
         errors: [Array, Object],
@@ -633,7 +634,7 @@ export default {
     data() {
         return {
             form: useForm({
-                patient_id: '',
+                patient_id: this.patients?.id || '',
                 doctor_id: '',
                 type: 'Contado',
                 currency: 'DOP',
@@ -655,11 +656,11 @@ export default {
             payment_form: useForm({
                 paymentAmount: null,
                 patient: {},
-                balance: 0,
+                balance: this.patients?.c_x_c?.balance||0,
             }),
             bill_id: '',
             form_details: [],
-            selected_patient: '',
+            selected_patient: this.patients || '',
             selected_doctor: '',
             timeout: 3000,
             crumbs: [
@@ -795,6 +796,7 @@ export default {
             this.showBudgetModal = true;
         },
         openPatientModal() {
+            console.log(this.patients)
             this.showPatientModal = true;
         },
         openDoctorModal() {

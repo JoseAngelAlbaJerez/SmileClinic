@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\Budget;
+use App\Models\CXC;
 use App\Models\Odontograph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -162,11 +163,13 @@ class PatientController extends Controller implements HasMiddleware
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure')->get();
         $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure')->get();
+        $CXC = CXC::where('patient_id', $patient->id)->with('Payment')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
         $prescription = Prescription::where('patient_id', $patient->id)->with('patient', 'doctor', 'prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
         $patient->age =  Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
+            'CXCS' => $CXC,
             'budgets' => $budgets,
             'bills' => $bills,
             'events' => $events,

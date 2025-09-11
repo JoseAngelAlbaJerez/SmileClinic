@@ -71,7 +71,7 @@
                                         completo:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.first_name }} {{
                                         patient.last_name
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -92,7 +92,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                    }} ({{ patient.age }} años)</span>
+                                        }} ({{ patient.age }} años)</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -240,7 +240,7 @@
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ prescription.doctor.name }} {{
                                                         prescription.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
 
                                             </div>
@@ -399,7 +399,7 @@
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -508,7 +508,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -537,7 +537,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                            }}</p>
+                                                                }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -570,10 +570,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="budget.emission_date">Emitido: {{
                                                 formatDate(budget.emission_date)
-                                            }}</span>
+                                                }}</span>
                                             <span v-if="budget.expiration_date"> | Vence: {{
                                                 formatDate(budget.expiration_date)
-                                            }}</span>
+                                                }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -632,7 +632,7 @@
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="bill.create">
-                                    <Link :href="route('bills.create')" as="button"
+                                    <Link :href="route('bills.create',{ patient_id: patient.id })" as="button"
                                         class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
@@ -682,7 +682,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -710,7 +710,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                            }}</p>
+                                                                }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -742,10 +742,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="bill.emission_date">Emitido: {{
                                                 formatDate(bill.emission_date)
-                                            }}</span>
+                                                }}</span>
                                             <span v-if="bill.expiration_date"> | Vence: {{
                                                 formatDate(bill.expiration_date)
-                                            }}</span>
+                                                }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -773,6 +773,152 @@
 
                         <!-- Mensaje cuando no hay Recibos -->
                         <div v-if="!bills.length" class="text-center py-6">
+                            <div class="inline-flex flex-col items-center">
+                                <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
+                                </p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Recibo para
+                                    comenzar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </AccessGate>
+                <!-- Recibos - Diseño Mejorado -->
+                <AccessGate permission="CXC.view">
+                    <div
+                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <!-- Encabezado con efecto de vidrio -->
+                        <div
+                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-300" />
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Pagos </h2>
+                            <div class="ml-auto flex gap-2">
+
+                                <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
+                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                <EyeIcon class="size-5" />
+                                </Link>
+                                <AccessGate permission="CXC.create">
+                                    <Link :href="route('bills.create', { patient_id: patient.id })" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                    <AddIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Recibos -->
+                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
+                            <div v-for="CXC in CXCS" :key="CXC.id"
+                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                <!-- Contenido del Recibo -->
+                                <div class="p-4">
+                                    <div class="flex items-start mb-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <h3
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
+                                                    Cuenta #{{ CXC.id }}
+                                                </h3>
+                                                <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
+                                                    :class="{
+                                                        'bg-green-500  ': CXC.balance === 0,
+                                                        'bg-red-500': CXC.balance > 0
+                                                    }">
+                                                    {{ CXC.balance === 0 ? 'PAGADO' : 'PENDIENTE' }}
+                                                </span>
+
+                                            </div>
+
+
+                                            <!-- Info básica en columnas -->
+                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
+
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
+                                                    <span>{{ formatDate(CXC.created_at) }}</span>
+                                                </div>
+
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
+                                                    <span class="font-bold">
+                                                        Balance: {{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(CXC.balance
+                                                            || 0) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Acordeón para detalles -->
+                                            <div class="mt-3">
+                                                <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
+                                                    <summary
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
+                                                        <span>Ver pagos</span>
+                                                        <ChevronDownIcon
+                                                            class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
+                                                    </summary>
+                                                    <div class="mt-2 space-y-2">
+                                                        <div v-for="(detail, index) in CXC.payment" :key="detail.id"
+                                                            class="flex flex-col p-4 rounded-2xl shadow-sm
+           bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                                            <div class="flex items-center justify-between mb-2">
+                                                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                                    Pago #{{ index + 1 }}
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="flex items-center justify-between">
+                                                                <p
+                                                                    class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                                                    Monto pagado
+                                                                </p>
+                                                                <p
+                                                                    class="text-md font-semibold text-green-600 dark:text-green-400">
+                                                                    {{
+                                                                        new Intl.NumberFormat('es-DO', {
+                                                                    style: 'currency',
+                                                                    currency: 'DOP'
+                                                                    }).format(detail.amount_paid || 0)
+                                                                    }}
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="flex items-center justify-between mt-1">
+                                                                <p
+                                                                    class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                                                    Restante
+                                                                </p>
+                                                                <p
+                                                                    class="text-md font-semibold text-pink-600 dark:text-pink-400">
+                                                                    {{
+                                                                        new Intl.NumberFormat('es-DO', {
+                                                                    style: 'currency',
+                                                                    currency: 'DOP'
+                                                                    }).format(detail.total - detail.amount_paid || 0)
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </details>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje cuando no hay Recibos -->
+                        <div v-if="!CXCS.length" class="text-center py-6">
                             <div class="inline-flex flex-col items-center">
                                 <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
                                 <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
@@ -814,7 +960,7 @@
                                         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-pink-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-pink-600 transition-all sm:text-hidden">
                                         <DeleteIcon class="w-5 h-5" />
                                         <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
-                                        }}
+                                            }}
                                             Eliminados</span>
                                     </button>
                                 </AccessGate>
@@ -844,7 +990,7 @@
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
                                                 item.id
-                                            }}</h2>
+                                                }}</h2>
                                             <div
                                                 class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                                 <UserIcon class="w-4 h-4" />
@@ -1554,6 +1700,7 @@ export default {
         patient: Object,
         odontograph: Object,
         bills: Object,
+        CXCS: Object,
         filters: Object,
         events: Object,
         budgets: Object,

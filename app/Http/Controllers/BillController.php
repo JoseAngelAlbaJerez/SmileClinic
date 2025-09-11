@@ -95,9 +95,33 @@ class BillController extends Controller
             ],
         ]);
     }
-    public function create()
+    public function create(Request $request)
     {
-        $patient = Patient::with(['CXC','bill.billdetail',
+        $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patients = Patient::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        }else{
+            $patients = null;
+        }
+
+        $patient = Patient::with([
+            'CXC',
+            'bill.billdetail',
             'budget' => function ($q) {
                 $q->where('active', 1)
                     ->with(['budgetdetail' => function ($d) {
@@ -107,11 +131,13 @@ class BillController extends Controller
             },
         ])->paginate(10);
 
+
         $procedure = Procedure::paginate(10);
         $doctors = User::role('doctor')->with('roles')->paginate(10);
 
         return Inertia::render('Bills/Create', [
             'patient' => $patient,
+            'patients' => $patients,
             'doctors' => $doctors,
             'procedure' => $procedure,
         ]);
