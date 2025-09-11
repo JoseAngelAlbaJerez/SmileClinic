@@ -58,9 +58,9 @@ const checkBillDate = () => {
         })
     })
 }
- const markAsRead = () => {
-        read.value = true
-    }
+const markAsRead = () => {
+    read.value = true
+}
 onMounted(() => {
     checkBillDate()
     setInterval(checkBillDate, 1000 * 60 * 60)
@@ -136,7 +136,7 @@ watchEffect(() => {
                                     Pacientes
                                 </NavLink>
                                 <NavLink v-if="can('event.view')" :href="route('events.index')"
-                                    :active="route().current('events.index')  || route().current('events.create') || route().current('events.show') || route().current('events.edit')">
+                                    :active="route().current('events.index') || route().current('events.create') || route().current('events.show') || route().current('events.edit')">
                                     Citas
                                 </NavLink>
                                 <NavLink v-if="can('budget.view')" :href="route('budgets.index')"
@@ -190,16 +190,17 @@ watchEffect(() => {
 
                                     <template #content>
                                         <div v-if="notifications.length">
-                                            <Link :href="route('expenses.index')" v-for="(note, index) in notifications" :key="index"
+                                            <Link :href="route('expenses.index')" v-for="(note, index) in notifications"
+                                                :key="index"
                                                 class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
-                                                {{ note }}
+                                            {{ note }}
                                             </Link>
                                         </div>
                                         <div v-else class="flex justify-center">
 
                                             <p
                                                 class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
-                                               <InfoCircle class="mx-auto mb-2 dark:text-white w-7 h-7"/>
+                                                <InfoCircle class="mx-auto mb-2 dark:text-white w-7 h-7" />
                                                 No tiene notificaciones pendientes.
                                             </p>
                                         </div>
@@ -304,8 +305,17 @@ watchEffect(() => {
                             :active="route().current('bills.index')">
                             Recibos
                         </ResponsiveNavLink>
-
+                        <div class="flex items-center">
+                            <button @click="() => { switchTheme(); isDark = !isDark }" class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition
+                   text-gray-600 hover:bg-gray-100 hover:text-gray-900
+                   dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+                                <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5 mr-2" />
+                                <span>{{ isDark ? 'Modo Oscuro' : 'Modo Claro' }}</span>
+                            </button>
+                        </div>
                     </div>
+
+
 
                     <!-- Responsive Settings Options -->
                     <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
