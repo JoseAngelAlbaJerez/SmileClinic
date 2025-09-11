@@ -192,7 +192,7 @@
                             <div class="ml-auto flex gap-2">
                                 <AccessGate permission="prescription.view">
                                     <Link :href="route('prescriptions.index', { patient_id: patient.id })"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                     <EyeIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -350,7 +350,7 @@
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas</h2>
                             <div class="ml-auto flex gap-2">
                                 <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="event.create">
@@ -465,7 +465,7 @@
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="budgets" :href="route('budgets.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="budget.create">
@@ -628,7 +628,7 @@
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="bill.create">
@@ -798,7 +798,7 @@
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="CXC.create">
