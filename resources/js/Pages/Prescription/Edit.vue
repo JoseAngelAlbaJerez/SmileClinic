@@ -76,7 +76,7 @@
                                             <button @click="removePrescriptionDetail(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />
-                                                Eliminar
+
                                             </button>
                                         </div>
 

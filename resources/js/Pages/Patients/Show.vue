@@ -797,7 +797,7 @@
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Pagos </h2>
                             <div class="ml-auto flex gap-2">
 
-                                <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
+                                <Link v-if="bills.length" :href="route('CXC.index', { patient_id: patient.id })"
                                     class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
@@ -1007,13 +1007,13 @@
 
                                         <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
                                             class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
-                                            title="Eliminar">
+                                            >
                                             <DeleteIcon class="w-5 h-5" />
                                         </DangerButton>
 
                                         <button v-else @click="restoreOdontograph(item)"
                                             class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
-                                            title="Restaurar">
+                                            >
                                             <RestoreIcon class="w-5 h-5" />
                                         </button>
                                     </div>
