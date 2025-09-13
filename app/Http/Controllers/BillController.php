@@ -115,7 +115,7 @@ class BillController extends Controller
                     }
                 ])
                 ->first();
-        }else{
+        } else {
             $patients = null;
         }
 
@@ -218,7 +218,6 @@ class BillController extends Controller
 
         if ($bill->total > $initialSum) {
             $patient = $bill->patient;
-            Log::info($patient->cxc);
 
             if (!$patient->cxc) {
                 $CXC = CXC::create([
@@ -231,9 +230,15 @@ class BillController extends Controller
                 $bill->save();
             } else {
                 $CXC = $patient->cxc;
+                $bill->c_x_c_id = $CXC->id;
+                $bill->save();
                 $CXC->balance += $bill->total;
                 $CXC->save();
             }
+            return response()->json([
+                'redirect' => route('CXC.show', $CXC->id),
+                'bill_id' => $bill->id,
+            ]);
         }
 
 
@@ -242,12 +247,13 @@ class BillController extends Controller
 
 
         return response()->json([
+            'redirect' => route('bills.show', $bill->id),
             'bill_id' => $bill->id,
         ]);
     }
     public function show(Bill $bill)
     {
-        $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC', 'billdetail');
+        $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC.Payment', 'billdetail');
         return Inertia::render("Bills/Show", [
             'bills' => $bill,
         ]);

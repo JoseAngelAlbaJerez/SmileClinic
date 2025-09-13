@@ -171,7 +171,7 @@
                                 </div>
 
                                 <!-- Form Actions -->
-                                <div class="flex space-x-3">
+                                <div class="flex space-x-3" v-if="!selected_patient.bill">
                                     <SecondaryButton type="button"
                                         @click="form.reset(); form_details = []; form_detail.reset(); selectedProcedures = []"
                                         class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
@@ -510,7 +510,7 @@
                 <!-- Budget Selection Modal -->
                 <Modal :show="showBudgetModal" @close="showBudgetModal = false" maxWidth="2xl">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold">Seleccionar Presupuesto</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Seleccionar Presupuesto</h3>
 
                         <BudgetSelector v-if="selected_patient && selected_patient.budget"
                             :budgets="selected_patient.budget" @selected="selectBudget = $event; addBudget()" />
@@ -656,7 +656,7 @@ export default {
             payment_form: useForm({
                 paymentAmount: null,
                 patient: {},
-                balance: this.patients?.c_x_c?.balance||0,
+                balance: this.patients?.c_x_c?.balance || 0,
             }),
             bill_id: '',
             form_details: [],
@@ -796,7 +796,6 @@ export default {
             this.showBudgetModal = true;
         },
         openPatientModal() {
-            console.log(this.patients)
             this.showPatientModal = true;
         },
         openDoctorModal() {
@@ -817,7 +816,7 @@ export default {
             this.showPatientModal = false;
 
             if (event.c_x_c) {
-            this.payment_form.balance = event.c_x_c.balance
+                this.payment_form.balance = event.c_x_c.balance
             }
 
         },
@@ -858,12 +857,7 @@ export default {
 
             axios.post(route('bills.store'), data)
                 .then(response => {
-                    const billId = response.data.bill_id;
-
-                    if (billId) {
-                        window.open(route('report.bill', { bill: billId }), '_blank');
-                    }
-                    window.location.href = route('bills.show', { bill: billId });
+                  window.location.href = response.data.redirect;
                 })
                 .catch(error => {
                     if (error.response?.status === 422) {

@@ -9,6 +9,7 @@ class Payment extends Model
 {
     protected $fillable = [
         "c_x_c_id",
+        "bill_id",
         "amount_paid",
         "total",
         "active",
@@ -24,11 +25,11 @@ class Payment extends Model
             }
         });
     }
+    public function bills(){
+        return $this->belongsTo(Bill::class,'bill_id','id');
+    }
     public function CXC(){
         return $this->belongsTo(CXC::class,"c_x_c_id","id");
-    }
-    public function BudgetDetail(){
-        return $this->belongsTo(BudgetDetail::class,"budget_detail_id","id");
     }
      public function branch()
     {

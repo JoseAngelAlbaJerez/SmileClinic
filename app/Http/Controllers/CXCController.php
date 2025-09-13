@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Budget;
+use App\Models\Bill;
 use App\Models\CXC;
+use App\Models\Patient;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +25,7 @@ class CXCController extends Controller
         $activeStates = $request->input('activeStates', []);
         $lastDays = $request->input('lastDays', '30');
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
+        $patient_id = $request->input('patient_id');
 
 
         $query = CXC::query()->select('c_x_c_s.*')
@@ -32,6 +34,16 @@ class CXCController extends Controller
             $query->where('c_x_c_s.active', 1);
         } else {
             $query->where('c_x_c_s.active', 0);
+        }
+        if ($patient_id) {
+            $patient = Patient::find($patient_id);
+            $createdAtDates = $patient->bill()->pluck('created_at');
+
+            if ($createdAtDates->isNotEmpty()) {
+                $query->where('c_x_c_s.patient_id', $patient_id)
+                    ->whereIn('c_x_c_s.created_at', $createdAtDates)
+                    ->latest();
+            }
         }
 
         if ($search) {
@@ -72,6 +84,7 @@ class CXCController extends Controller
 
         return Inertia::render('CXC/Index', [
             'CXC' => $CXC,
+            'patient_id' => $patient_id,
             'filters' => [
                 'search' => $search,
                 'sortField' => $sortField,
@@ -105,7 +118,7 @@ class CXCController extends Controller
     {
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $search = $request->input('search');
-        $query = Budget::with('doctor', 'patient')
+        $query = Bill::with('doctor', 'patient')
             ->join('users', 'odontographs.doctor_id', '=', 'users.id')
             ->select('bills.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
 
@@ -125,7 +138,7 @@ class CXCController extends Controller
         }
 
 
-        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'bills.billdetail')->find($CXC->id);
+        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'Payment')->find($CXC->id);
 
         return Inertia::render('CXC/Show', [
             'CXC' => $CXC,

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('c_x_c_id');
+            $table->unsignedBigInteger('bill_id');
             $table->decimal('amount_paid', 10, 2);
             $table->decimal('total', 10, 2);
             $table->boolean('active')->default(true);

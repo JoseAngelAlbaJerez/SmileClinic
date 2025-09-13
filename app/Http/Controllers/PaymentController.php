@@ -98,9 +98,10 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-
+        $bill = collect($request->patient['bill'])->last();
        $payment = Payment::create([
             'c_x_c_id' => $request->patient['c_x_c']['id'],
+            'bill_id'=> $bill['id'] ?? null,
             'total'    => $request->patient['c_x_c']['balance'],
             'amount_paid' => $request->paymentAmount,
             'active' => 1,
@@ -111,7 +112,7 @@ class PaymentController extends Controller
         $CXC->save();
 
 
-        return redirect()->back()->with('toast', 'Pago registrado correctamente.');
+        return redirect()->route('CXC.show',$CXC->id)->with('toast', 'Pago registrado correctamente.');
     }
 
 
@@ -164,6 +165,7 @@ class PaymentController extends Controller
             $CXC->balance -= $diferencia;
             $CXC->save();
         }
+
         return redirect()->back()->with('toast', 'Pago actualizados correctamente.');
     }
 

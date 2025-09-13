@@ -14,21 +14,21 @@
                     <div v-if="bills.active" class=" flex ml-auto gap-2 mb-2 ">
                         <button @click="print()"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <PrintIcon /> Imprimir
+                            <PrintIcon />
                         </button>
                         <Link :href="route('bills.edit', bills)"
                             class="flex justify-center gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
-                        <EditIcon /> Editar
+                        <EditIcon />
                         </Link>
                         <DangerButton @click="deletebill(bills.id)"
                             class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                            <DeleteIcon /> Eliminar
+                            <DeleteIcon />
                         </DangerButton>
                     </div>
                     <div class="flex ml-auto gap-2" v-else>
                         <PrimaryButton @click="restorebill(bills.id)"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                            <RestoreIcon /> Restaurar
+                            <RestoreIcon />
                         </PrimaryButton>
                     </div>
                 </div>
@@ -123,16 +123,7 @@
                                             <p class="font-semibold text-lg">Subtotal: ${{ formatNumber(details.total)
                                                 }}</p>
 
-                                            <div v-if="bills.active && details.active">
-                                                <DangerButton @click="deletebillDetail(details.id)"
-                                                    class="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                                                    <DeleteIcon class="w-4 h-4" /> Eliminar
-                                                </DangerButton>
-                                            </div>
-                                            <button v-else @click="restorebillDetail(details.id)"
-                                                class="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                                                <RestoreIcon class="w-4 h-4" /> Restaurar
-                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -235,12 +226,12 @@
                                             <div v-if="bills.active && details.active">
                                                 <DangerButton @click="deletebillDetail(details.id)"
                                                     class="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                                                    <DeleteIcon class="w-4 h-4" /> Eliminar
+                                                    <DeleteIcon class="w-4 h-4" />
                                                 </DangerButton>
                                             </div>
                                             <button v-else @click="restorebillDetail(details.id)"
                                                 class="flex items-center gap-1 px-3 py-1.5 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                                                <RestoreIcon class="w-4 h-4" /> Restaurar
+                                                <RestoreIcon class="w-4 h-4" />
                                             </button>
                                         </div>
                                     </div>

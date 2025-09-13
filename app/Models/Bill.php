@@ -45,6 +45,10 @@ class Bill extends Model
 {
     return $this->belongsTo(CXC::class, 'c_x_c_id');
 }
+   public function payments()
+{
+    return $this->hasMany(Payment::class);
+}
 
 
     public function patient()
