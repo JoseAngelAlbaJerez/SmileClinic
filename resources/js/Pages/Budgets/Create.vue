@@ -537,7 +537,7 @@
                                         </label>
                                         <vue-signature-pad ref="affiliatePad"
                                             :options="{ penColor: 'black', backgroundColor: 'white' }"
-                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
+                                            class="border border-gray-300 dark:border-gray-600  rounded-lg"
                                             style="width: 100%; height: 120px;" />
                                         <div class="flex space-x-2 mt-2">
                                             <SecondaryButton type="button" @click="clearAffiliateSignature"
