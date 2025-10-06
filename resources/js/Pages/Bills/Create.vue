@@ -134,11 +134,6 @@
                                             :disabled="!payment_form.paymentAmount || payment_form.paymentAmount <= 0"
                                             class="mt-2 w-full bg-gradient-to-r from-pink-600 to-pink-700 text-white font-medium rounded-lg px-4 py-3 hover:from-pink-700 hover:to-pink-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg">
                                             <span class="flex items-center justify-center">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
                                                 Registrar Pago
                                             </span>
                                         </button>
