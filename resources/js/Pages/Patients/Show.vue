@@ -43,7 +43,7 @@
                 <!-- Información personal -->
                 <!-- Información del Paciente - Diseño Mejorado -->
                 <div
-                    class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                     <!-- Encabezado principal -->
                     <div
                         class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -57,7 +57,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Columna 1: Información Personal -->
                         <div
-                            class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            class="bg-white dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                     <CardIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
@@ -110,7 +110,7 @@
 
                         <!-- Columna 2: Antecedentes Médicos -->
                         <div
-                            class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            class="bg-white dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                     <MedicalHistoryIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
@@ -181,7 +181,7 @@
                 <!-- Recetas Médicas - Diseño Mejorado -->
                 <AccessGate permission="prescription.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -340,7 +340,7 @@
                 <AccessGate permission="event.view">
                     <!-- Citas Pendientes - Diseño Mejorado -->
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -454,7 +454,7 @@
                 <!-- Presupuestos - Diseño Mejorado -->
                 <AccessGate permission="budget.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -617,7 +617,7 @@
                 <!-- Recibos - Diseño Mejorado -->
                 <AccessGate permission="bill.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -787,7 +787,7 @@
                 <!-- Recibos - Diseño Mejorado -->
                 <AccessGate permission="CXC.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -936,7 +936,7 @@
                 <div class="space-y-6">
                     <!-- Encabezado Mejorado -->
                     <div
-                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-pink-50 dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-full">
                                 <TeethIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
@@ -2035,7 +2035,7 @@ p span:first-child {
 }
 
 .scroll-beauty::-webkit-scrollbar-thumb {
-    background-color: #3b82f6;
+    background-color: #ec4899 ;
     /* azul */
     border-radius: 6px;
 }
