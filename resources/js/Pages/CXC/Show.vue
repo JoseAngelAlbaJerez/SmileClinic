@@ -18,7 +18,7 @@
                 <div class="container mx-auto px-4 py-6">
                     <!-- Header Section -->
                     <div
-                        class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 p-6 rounded-xl shadow-md mb-6 border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-900  p-6 rounded-xl shadow-md mb-6 border border-gray-200 dark:border-gray-700">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Cuenta de {{
