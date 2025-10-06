@@ -10,6 +10,7 @@ class Event extends Model
     protected $fillable = [
 
         'title',
+        'attended_at',
         'doctor_id',
         'branch_id',
         'patient_id',
