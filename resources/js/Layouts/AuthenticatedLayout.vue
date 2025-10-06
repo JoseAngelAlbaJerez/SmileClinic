@@ -109,7 +109,7 @@ watchEffect(() => {
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z"
-                                            fill="#3B82F6" />
+                                            fill="#ec4899 " />
                                         <path
                                             d="M65 40C65 42.7614 62.7614 45 60 45C57.2386 45 55 42.7614 55 40C55 37.2386 57.2386 35 60 35C62.7614 35 65 37.2386 65 40Z"
                                             fill="white" />
@@ -169,7 +169,7 @@ watchEffect(() => {
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <button @click="() => { switchTheme(); isDark = !isDark }"
-                                class="text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-500">
+                                class="text-gray-500 hover:text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-100 dark:hover:text-gray-500">
                                 <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5" />
                             </button>
                             <!-- Notification Dropdown -->
