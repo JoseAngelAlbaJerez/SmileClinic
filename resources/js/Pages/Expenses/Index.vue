@@ -247,7 +247,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
 
@@ -300,7 +300,7 @@ import CartIcon from '@/Components/Icons/CartIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { useToast } from 'vue-toastification';
+import { router } from '@inertiajs/vue3'
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
@@ -459,7 +459,7 @@ export default {
             );
         },
         print() {
-            Inertia.visit(route("report.dailycashbalance"));
+            router.visit(route("report.dailycashbalance"))
         }
 
     }
