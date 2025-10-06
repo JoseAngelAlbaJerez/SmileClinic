@@ -227,6 +227,7 @@ class EventController extends Controller
     private function attend(Event $event, $attended)
     {
         $event->attended = $attended;
+        $event->attended_at = now();
         $event->save();
         if ($event->attended == 1) {
             return redirect()->back()->with('toast', 'Cita atendida correctamente');
