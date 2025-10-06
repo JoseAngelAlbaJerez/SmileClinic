@@ -110,35 +110,32 @@ class ReportController extends Controller
     {
         $today = Carbon::today();
 
-
         $expenses = Expenses::whereDate('created_at', $today)->get();
-        Log::info($expenses);
         $bills = Bill::whereDate('created_at', $today)->where('total', '>', 0)->get();
-        Log::info($bills);
-
         $payments = Payment::whereDate('created_at', $today)->get();
-        Log::info($payments);
-
-        $income = $bills->sum('total') + $payments->sum('amount_paid');
-        Log::info($income);
 
         $incomeDetails = [];
 
-        foreach ($bills as $bill) {
-            $incomeDetails[] = [
-                'description' => 'Recibo #' . $bill->id,
-                'amount'      => $bill->total,
-                'date'        => $bill->created_at->format('Y-m-d'),
-            ];
+        if ($bills->isNotEmpty()) {
+            foreach ($bills as $bill) {
+                $incomeDetails[] = [
+                    'description' => 'Recibo #' . $bill->id,
+                    'amount'      => $bill->total,
+                    'date'        => optional($bill->created_at)->format('Y-m-d'),
+                ];
+            }
         }
 
-        foreach ($payments as $payment) {
-            $incomeDetails[] = [
-                'description' => 'Pago # ' . $payment->id,
-                'amount'      => $payment->amount_paid,
-                'date'        => $payment->created_at->format('Y-m-d'),
-            ];
+        if ($payments->isNotEmpty()) {
+            foreach ($payments as $payment) {
+                $incomeDetails[] = [
+                    'description' => 'Pago # ' . $payment->id,
+                    'amount'      => $payment->amount_paid,
+                    'date'        => optional($payment->created_at)->format('Y-m-d'),
+                ];
+            }
         }
+
         $dailySummary = [];
 
         foreach ($incomeDetails as $inc) {
@@ -151,26 +148,33 @@ class ReportController extends Controller
             ];
         }
 
-        foreach ($expenses as $exp) {
-            $dailySummary[] = [
-                'date'        => $exp->created_at->format('Y-m-d'),
-                'description' => $exp->description ?? ('Expense #' . $exp->id),
-                'income'      => 0,
-                'expenses'    => $exp->amount,
-                'balance'     => -$exp->amount,
-            ];
+        if ($expenses->isNotEmpty()) {
+            foreach ($expenses as $exp) {
+                $dailySummary[] = [
+                    'date'        => optional($exp->created_at)->format('Y-m-d'),
+                    'description' => $exp->description ?? ('Expense #' . $exp->id),
+                    'income'      => 0,
+                    'expenses'    => $exp->amount,
+                    'balance'     => -$exp->amount,
+                ];
+            }
         }
-        usort($dailySummary, fn($a, $b) => strtotime($a['date']) <=> strtotime($b['date']));
+
+        if (!empty($dailySummary)) {
+            usort($dailySummary, fn($a, $b) => strtotime($a['date']) <=> strtotime($b['date']));
+        }
+
         return Inertia::render('Reports/DailyCashBalance', [
-            'income'        => $incomeDetails,
-            'expenses'      => $expenses,
-            'income_total'  => $bills->sum('total') + $payments->sum('amount_paid'),
+            'income'         => $incomeDetails,
+            'expenses'       => $expenses,
+            'income_total'   => $bills->sum('total') + $payments->sum('amount_paid'),
             'expenses_total' => $expenses->sum('amount'),
-            'net_balance'   => $bills->sum('total') + $payments->sum('amount_paid') - $expenses->sum('amount'),
+            'net_balance'    => $bills->sum('total') + $payments->sum('amount_paid') - $expenses->sum('amount'),
             'dailySummary'   => $dailySummary,
-            'today'         => $today
+            'today'          => $today
         ]);
     }
+
 
     public function bill(Bill $bill)
     {
