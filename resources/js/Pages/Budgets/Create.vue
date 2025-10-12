@@ -72,7 +72,7 @@
                                         <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
                                     </div>
                                     <button @click="openProcedureModal()"
-                                        class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                                        class="flex items-center space-x-1 rounded-lg bg-pink-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200">
                                         <AddIcon class="h-4 w-4" />
                                         <span>Agregar</span>
                                     </button>

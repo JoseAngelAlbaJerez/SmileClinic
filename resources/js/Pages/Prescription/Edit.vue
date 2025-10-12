@@ -46,7 +46,7 @@
                                         <h3 class="text-lg font-semibold dark:text-white">Receta</h3>
                                     </div>
                                     <button @click="addPrescriptionDetail()"
-                                        class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                                        class="flex items-center space-x-1 rounded-lg bg-pink-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200">
                                         <AddIcon class="size-4" />
                                     </button>
                                 </div>
@@ -104,7 +104,7 @@
                                                     <!-- Botón pequeño para agregar medicamento -->
                                                     <AccessGate permission="drug.create">
                                                         <button @click="openCreateDrugModal()" as="button"
-                                                            class="flex justify-center items-center rounded-md bg-green-500 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                                            class="flex justify-center items-center rounded-md bg-pink-500 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                                             <AddIcon class="size-4" />
                                                         </button>
                                                     </AccessGate>

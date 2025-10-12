@@ -194,7 +194,7 @@
                                                     <div class="flex items-center gap-2 ml-auto">
                                                         <Link v-if="CXC.active"
                                                             :href="route('bills.create', { patient_id: CXC.patient.id })"
-                                                            class="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                                                            class="p-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
                                                             title="Ver detalles">
                                                         <AddIcon class="w-5 h-5"></AddIcon>
                                                         </Link>

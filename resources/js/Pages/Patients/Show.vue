@@ -198,7 +198,7 @@
                                 </AccessGate>
                                 <AccessGate permission="prescription.create">
                                     <Link :href="route('prescriptions.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -310,11 +310,11 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restorePrescription(prescription)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printPrescription(prescription)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <PrintIcon class="size-4" />
                                             </button>
                                         </div>
@@ -355,7 +355,7 @@
                                 </Link>
                                 <AccessGate permission="event.create">
                                     <Link :href="route('events.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -430,7 +430,7 @@
                                                 <DeleteIcon class="h-5 w-5" />
                                             </DangerButton>
                                             <button v-else @click="restoreEvent(event)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                         </div>
@@ -470,7 +470,7 @@
                                 </Link>
                                 <AccessGate permission="budget.create">
                                     <Link :href="route('budgets.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -586,11 +586,11 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restoreBudget(budget)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printBudget(budget)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <PrintIcon class="size-4" />
                                             </button>
                                         </div>
@@ -633,7 +633,7 @@
                                 </Link>
                                 <AccessGate permission="bill.create">
                                     <Link :href="route('bills.create',{ patient_id: patient.id })" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -758,11 +758,11 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restoreBill(bill)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printBill(bill)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
                                                 <PrintIcon class="size-4" />
                                             </button>
                                         </div>
@@ -803,7 +803,7 @@
                                 </Link>
                                 <AccessGate permission="CXC.create">
                                     <Link :href="route('bills.create', { patient_id: patient.id })" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -966,7 +966,7 @@
                                 </AccessGate>
                                 <AccessGate permission="odontograph.create">
                                     <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500  text-white font-medium shadow-sm transition-all">
                                     <AddIcon class="w-5 h-5" />
                                     <span class="lg:inline sm:hidden">Nuevo Odontograma</span>
                                     </Link>
