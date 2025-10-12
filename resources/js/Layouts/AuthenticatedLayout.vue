@@ -127,7 +127,7 @@ watchEffect(() => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden lg:flex space-x-8 lg:ms-10 lg:-my-px">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
@@ -167,7 +167,7 @@ watchEffect(() => {
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden lg:ms-6 lg:flex lg:items-center">
                             <button @click="() => { switchTheme(); isDark = !isDark }"
                                 class="text-gray-500 hover:text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-100 dark:hover:text-gray-500">
                                 <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5" />
@@ -239,7 +239,7 @@ watchEffect(() => {
                         </div>
 
                         <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
+                        <div class="-me-2 flex items-center lg:hidden">
                             <button @click="
                                 showingNavigationDropdown =
                                 !showingNavigationDropdown
