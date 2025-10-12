@@ -95,13 +95,24 @@ class ExpensesController extends Controller
 
         ]);
         $doctor = User::where('name', '=',$validated['description'])->first();
-        Expenses::create([
+       if ($doctor) {
+          Expenses::create([
             ...$validated,
             'user_id' => Auth::id(),
             'branch_id'=> Auth::user()->branch_id,
             'active' => true,
             'doctor_id'=> $doctor->id
         ]);
+       }else{
+          Expenses::create([
+            ...$validated,
+            'user_id' => Auth::id(),
+            'branch_id'=> Auth::user()->branch_id,
+            'active' => true,
+            'doctor_id'=> null
+        ]);
+       }
+
 
         return redirect()->back()->with('toast', 'Egreso registrado correctamente.');
     }
