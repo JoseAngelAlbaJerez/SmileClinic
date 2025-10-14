@@ -14,7 +14,7 @@ class PrescriptionSeeder extends Seeder
      */
     public function run(): void
     {
-         foreach (range(1, 10) as $i) {
+         foreach (range(1, 100) as $i) {
 
              $branchId = fake()->numberBetween(1, 2);
 

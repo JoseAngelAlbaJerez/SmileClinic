@@ -14,7 +14,7 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 20) as $i) {
+        foreach (range(1, 100) as $i) {
             $complications = fake()->boolean();
             $alergies = fake()->boolean();
             $drugs = fake()->boolean();
