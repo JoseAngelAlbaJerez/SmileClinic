@@ -331,23 +331,7 @@ export default {
     data() {
         return {
             error: '',
-            form: useForm({
-                first_name: this.patient.first_name || '',
-                last_name: this.patient.last_name || '',
-                DNI: this.patient.DNI || '',
-                phone_number: this.patient.phone_number || '',
-                ars: this.patient.ars || '',
-                date_of_birth: this.patient.date_of_birth || '',
-                complications: this.patient.complications ? 1 : 0,
-                complications_detail: this.patient.complications_detail || '',
-                drugs: this.patient.drugs ? 1 : 0,
-                drugs_detail: this.patient.drugs_detail || '',
-                alergies: this.patient.alergies ? 1 : 0,
-                alergies_detail: this.patient.alergies_detail || '',
-                address: this.patient.address || '',
-                motive: this.patient.motive || '',
-                 ars_id: this.patient.ars_id||'',
-            }),
+            form: useForm({...this.patient}),
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { label: this.patient.first_name + ' ' + this.patient.last_name, to: route('patients.show', this.patient) }
@@ -356,8 +340,6 @@ export default {
     },
     methods: {
         submit() {
-
-
             if (!this.form.first_name) {
                 this.error = 'Por favor, ingrese el nombre.';
                 return;
@@ -370,7 +352,6 @@ export default {
                 this.error = 'Por favor, ingrese el DNI.';
                 return;
             }
-
 
             if (!this.form.date_of_birth) {
                 this.error = 'Por favor, seleccione la fecha de nacimiento.';
