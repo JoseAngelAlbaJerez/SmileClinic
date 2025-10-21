@@ -20,8 +20,7 @@ class EventSeeder extends Seeder
 
              $branchId = fake()->numberBetween(1, 2);
 
-            $patient = Patient::where('branch_id', $branchId)
-                ->inRandomOrder()
+            $patient = Patient::inRandomOrder()
                 ->first();
            $doctor = User::role('doctor')->where('branch_id', $branchId)
                 ->inRandomOrder()

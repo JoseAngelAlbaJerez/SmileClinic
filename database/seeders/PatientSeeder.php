@@ -32,13 +32,12 @@ class PatientSeeder extends Seeder
                 'drugs_detail' => $drugs ? fake()->word() : '',
                 'motive' => fake()->sentence(3),
                 'address' => fake()->address(),
-                'DNI' => fake()->unique()->numerify('########'),
+                'DNI' => fake()->unique()->numerify('###########'),
                 'phone_number' => fake()->numerify('809#######'),
                 'date_of_birth' => fake()->date('Y-m-d', '2008-01-01'),
                 'active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'branch_id' => fake()->numberBetween(1, 2),
             ]);
         }
     }
