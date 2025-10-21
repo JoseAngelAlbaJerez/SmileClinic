@@ -26,16 +26,7 @@ class Patient extends Model
         "phone_number",
         "active",
     ];
-    protected static function booted()
-    {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('patients.branch_id', $user->branch_id);
-                }
-            }
-        });
-    }
+   
     public function odontographs()
     {
         return $this->hasMany(Odontograph::class, 'patient_id');
@@ -59,8 +50,5 @@ class Patient extends Model
     {
         return $this->hasMany(Budget::class, "patient_id", "id");
     }
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class, 'branch_id');
-    }
+   
 }

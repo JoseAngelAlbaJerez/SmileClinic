@@ -55,7 +55,7 @@ class PatientController extends Controller implements HasMiddleware
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%']);
+                   ;
             });
         }
 
@@ -82,7 +82,7 @@ class PatientController extends Controller implements HasMiddleware
             }
         }
 
-        $patients = $query->with('branch')->orderByDesc('created_at')->paginate(10);
+        $patients = $query->orderByDesc('created_at')->paginate(10);
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
             'filters' => [
@@ -116,7 +116,6 @@ class PatientController extends Controller implements HasMiddleware
             });
 
         $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
-
         if ($request->wantsJson()) {
             return response()->json([
                 'patients' => $patients
@@ -247,7 +246,6 @@ class PatientController extends Controller implements HasMiddleware
             ]);
 
             $validated['active'] = true;
-            $validated['branch_id'] = Auth::user()->branch_id;
             $patient = Patient::create($validated);
 
             return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');

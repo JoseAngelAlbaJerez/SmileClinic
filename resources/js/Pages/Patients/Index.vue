@@ -68,13 +68,7 @@
                                             Fecha de Creación <span v-if="form.sortField === 'created_at'">{{
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
-                                            class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursal
-                                            <span v-if="form.sortField === 'branch_id'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
+                                       
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -94,9 +88,7 @@
                                         <td class="p-4">{{ patient.date_of_birth }}</td>
                                         <td class="p-4">{{ patient.ars }}</td>
                                         <td class="p-4">{{ formatDate(patient.created_at) }}</td>
-                                        <AccessGate role="admin">
-                                            <td class="p-4">{{ patient.branch.name }}</td>
-                                        </AccessGate>
+                                       
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(patient.active)" />
@@ -139,9 +131,7 @@
                                 <p><span class="font-medium">Nacimiento:</span> {{ patient.date_of_birth }}</p>
                                 <p><span class="font-medium">ARS:</span> {{ patient.ars }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
-                                <AccessGate role="admin">
-                                             <p><span class="font-medium">Sucursal:</span> {{ patient.branch.name }}</p>
-                                        </AccessGate>
+                               
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
                                     <span :class="statusBadgeClasses(patient.active)">
@@ -268,8 +258,6 @@ export default {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },
-
-
         statusBadgeClasses(status) {
             return {
                 1: "bg-green-200 text-green-700 px-2 py-1 rounded",
