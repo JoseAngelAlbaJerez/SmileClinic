@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
-use App\Models\CXC;
-use App\Models\CXCDetail;
 use App\Models\Procedure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
