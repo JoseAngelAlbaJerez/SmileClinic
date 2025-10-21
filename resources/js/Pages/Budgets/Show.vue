@@ -8,10 +8,41 @@
         <template #default>
             <div
                 class="container mx-auto px-6 py-4  dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
-                <div class="my-2 mt-5 flex  gap-2 items-center p-1">
-                    <h2 class="text-lg font-semibold "> Presupuesto de {{ budgets.patient.first_name }} {{
-                        budgets.patient.last_name }}
-                    </h2>
+                <div
+                        class="bg-pink-50 dark:bg-gray-800  p-6 rounded-xl shadow-md  border border-gray-200 dark:border-gray-700 mb-2">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between  gap-4">
+                    <div>
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Presupuesto de de {{
+                                    budgets.patient.first_name }} {{ budgets.patient.last_name }} <div
+                                        class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <p><span class="font-semibold">Fecha: </span>{{ formatDate(budgets.created_at) }}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-green-600 dark:text-green-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path
+                                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <p><span class="font-semibold">Balance:</span> {{ new Intl.NumberFormat('es-DO',
+                                            {
+                                                style:
+                                                    'currency', currency: 'DOP'
+                                            }).format(budgets.total
+                                                || 0) }}</p>
+                                    </div>
+                                </h1>
+
+                            </div>
                     <div v-if="budgets.active" class=" flex ml-auto gap-2 mb-2 ">
                         <button @click="print()"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
@@ -33,46 +64,9 @@
                         </PrimaryButton>
                     </div>
                 </div>
+                  </div>
                 <div class="grid grid-cols-1 gap-6">
-                    <!-- Header Card with Budget Information -->
-                    <div
-                        class="flex flex-wrap items-center gap-4 px-4 py-3 bg-pink-50 dark:bg-gray-800 rounded-lg border border-pink-100 dark:border-gray-700 shadow-sm">
-                        <div class="flex items-center gap-2 text-pink-700 dark:text-pink-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <p><span class="font-semibold">Tipo:</span> {{ budgets.type }}</p>
-                        </div>
-
-                        <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <p><span class="font-semibold">Fecha:</span> {{ budgets.emission_date }}</p>
-                        </div>
-
-                        <div class="flex items-center gap-2 text-green-600 dark:text-green-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <p><span class="font-semibold">Total:</span> {{ new Intl.NumberFormat('es-DO', {
-                                style:
-                                    'currency', currency: budgets.currency
-                            }).format(budgets.total
-                                || 0) }}</p>
-                        </div>
-                    </div>
+                  
 
                     <!-- Insurance Information Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" v-if="insurance">
@@ -90,7 +84,7 @@
                             <!-- Insurance Details -->
                             <div class="space-y-4">
                                 <div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">ARS</p>
+                                    <p class="text-sm text-gray-500 rounded-sm dark:text-gray-400">ARS</p>
                                     <img v-if="insurance.ars === 'Humano'" src="/img/Humano.svg" alt="ARS Humano"
                                         class="h-20" />
                                     <img v-else-if="insurance.ars === 'Universal'" src="/img/Universal.svg"
@@ -178,8 +172,8 @@
                                             </h4>
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                                                :class="details.procedure.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="details.procedure.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ details.procedure.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
@@ -267,8 +261,8 @@
                                             </h4>
                                             <span
                                                 class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                                                :class="details.procedure.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ details.procedure.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="details.procedure.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ details.procedure.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
