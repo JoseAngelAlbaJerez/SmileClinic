@@ -202,7 +202,6 @@ class EventController extends Controller
             return redirect()->back()->with('toast', 'Cita restaurada correctamente');
         } else if ($request->has('attended')) {
             $this->attend($event, $request->attended);
-            return redirect()->back()->with('toast', 'Cita atendida correctamente');
         }
         $data = $request->validate([
             'title'       => 'required|string|max:100',
