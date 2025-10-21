@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('procedures', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('coberture');
+            $table->boolean('coverage');
             $table->decimal('insuranced_amount');
             $table->decimal('cost');
             $table->boolean('active');

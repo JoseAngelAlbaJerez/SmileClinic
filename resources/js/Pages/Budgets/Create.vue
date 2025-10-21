@@ -103,8 +103,8 @@
                                                     proc.name }}</h4>
                                             </div>
                                             <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
