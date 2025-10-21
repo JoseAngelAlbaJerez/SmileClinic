@@ -127,7 +127,7 @@ watchEffect(() => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden lg:flex space-x-8 lg:ms-10 lg:-my-px">
+                            <div class="hidden lg:flex space-x-8 lg:ms-10 lg:-my-px ">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
@@ -143,10 +143,7 @@ watchEffect(() => {
                                     :active="route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.show') || route().current('budgets.edit')">
                                     Presupuestos
                                 </NavLink>
-                                <NavLink v-if="can('CXC.view')" :href="route('CXC.index')"
-                                    :active="route().current('CXC.index') || route().current('CXC.create') || route().current('CXC.show') || route().current('CXC.edit')">
-                                    Pagos
-                                </NavLink>
+                                
                                 <NavLink v-if="can('expense.view')" :href="route('expenses.index')"
                                     :active="route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit')">
                                     Egresos
