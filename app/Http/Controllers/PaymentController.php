@@ -112,7 +112,7 @@ class PaymentController extends Controller
         $CXC->save();
 
 
-        return redirect()->route('CXC.show',$CXC->id)->with('toast', 'Pago registrado correctamente.');
+        return redirect()->route('bills.show',$CXC->id)->with('toast', 'Pago registrado correctamente.');
     }
 
 
