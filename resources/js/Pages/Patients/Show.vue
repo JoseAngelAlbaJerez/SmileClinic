@@ -71,17 +71,18 @@
                                         completo:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ patient.first_name }} {{
                                         patient.last_name
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
                                         class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Cédula/DNI:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.DNI }}</span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{ formatDNI(patient.DNI) }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
                                         class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Teléfono:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.phone_number }}</span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{
+                                        formatPhoneNumber(patient.phone_number)}}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -92,7 +93,7 @@
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ formatDate(patient.date_of_birth)
-                                        }} ({{ patient.age }} años)</span>
+                                    }} ({{ patient.age }} años)</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -240,7 +241,7 @@
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ prescription.doctor.name }} {{
                                                         prescription.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
 
                                             </div>
@@ -310,7 +311,7 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restorePrescription(prescription)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printPrescription(prescription)"
@@ -399,7 +400,7 @@
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -430,7 +431,7 @@
                                                 <DeleteIcon class="h-5 w-5" />
                                             </DangerButton>
                                             <button v-else @click="restoreEvent(event)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                         </div>
@@ -508,7 +509,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -537,7 +538,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -570,10 +571,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="budget.emission_date">Emitido: {{
                                                 formatDate(budget.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="budget.expiration_date"> | Vence: {{
                                                 formatDate(budget.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -586,7 +587,7 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restoreBudget(budget)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printBudget(budget)"
@@ -632,7 +633,7 @@
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="bill.create">
-                                    <Link :href="route('bills.create',{ patient_id: patient.id })" as="button"
+                                    <Link :href="route('bills.create', { patient_id: patient.id })" as="button"
                                         class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
@@ -682,7 +683,7 @@
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
                                                     <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
@@ -710,7 +711,7 @@
                                                             class="bg-gray-50 dark:bg-gray-600 p-2 rounded-lg">
                                                             <p class="font-medium">{{ index + 1 }}. {{
                                                                 detail.procedure.name
-                                                                }}</p>
+                                                            }}</p>
                                                             <div class="grid grid-cols-2 gap-1 text-xs">
                                                                 <span>Cantidad: {{ detail.quantity }}</span>
                                                                 <span>
@@ -742,10 +743,10 @@
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             <span v-if="bill.emission_date">Emitido: {{
                                                 formatDate(bill.emission_date)
-                                                }}</span>
+                                            }}</span>
                                             <span v-if="bill.expiration_date"> | Vence: {{
                                                 formatDate(bill.expiration_date)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <div class="flex gap-2">
@@ -758,7 +759,7 @@
                                                 <DeleteIcon class="size-4" />
                                             </DangerButton>
                                             <button v-else @click="restoreBill(bill)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printBill(bill)"
@@ -770,7 +771,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Mensaje cuando no hay Recibos -->
                         <div v-if="!bills.length" class="text-center py-6">
                             <div class="inline-flex flex-col items-center">
@@ -882,9 +882,9 @@
                                                                     class="text-md font-semibold text-green-600 dark:text-green-400">
                                                                     {{
                                                                         new Intl.NumberFormat('es-DO', {
-                                                                    style: 'currency',
-                                                                    currency: 'DOP'
-                                                                    }).format(detail.amount_paid || 0)
+                                                                            style: 'currency',
+                                                                            currency: 'DOP'
+                                                                        }).format(detail.amount_paid || 0)
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -898,9 +898,9 @@
                                                                     class="text-md font-semibold text-pink-600 dark:text-pink-400">
                                                                     {{
                                                                         new Intl.NumberFormat('es-DO', {
-                                                                    style: 'currency',
-                                                                    currency: 'DOP'
-                                                                    }).format(detail.total - detail.amount_paid || 0)
+                                                                            style: 'currency',
+                                                                            currency: 'DOP'
+                                                                        }).format(detail.total - detail.amount_paid || 0)
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -960,7 +960,7 @@
                                         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 from-rose-500 to-pink-500 text-white font-medium shadow-sm hover:from-rose-600 hover:to-pink-600 transition-all sm:text-hidden">
                                         <DeleteIcon class="w-5 h-5" />
                                         <span class="lg:inline sm:hidden ">{{ !form.showDeleted ? 'Ocultar' : 'Mostrar'
-                                            }}
+                                        }}
                                             Eliminados</span>
                                     </button>
                                 </AccessGate>
@@ -990,7 +990,7 @@
                                         <div>
                                             <h2 class="font-semibold text-gray-800 dark:text-white">Odontograma #{{
                                                 item.id
-                                                }}</h2>
+                                            }}</h2>
                                             <div
                                                 class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                                 <UserIcon class="w-4 h-4" />
@@ -1006,14 +1006,12 @@
 
 
                                         <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
-                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
-                                            >
+                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors">
                                             <DeleteIcon class="w-5 h-5" />
                                         </DangerButton>
 
                                         <button v-else @click="restoreOdontograph(item)"
-                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
-                                            >
+                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors">
                                             <RestoreIcon class="w-5 h-5" />
                                         </button>
                                     </div>
@@ -1848,9 +1846,15 @@ export default {
         }
     },
 
-
-
     methods: {
+        formatPhoneNumber(number) {
+            if (!number) return "";
+            return number.slice(0, 3) + '-' + number.slice(3, 6) + '-' + number.slice(6,10)
+        },
+        formatDNI(number) {
+            if (!number) return "";
+            return number.slice(0, 3) + '-' + number.slice(3, 10) + '-' + number.slice(10);
+        },
         selectToothInView(item, tooth) {
             this.selectedOdontograph = item
             const zones = item.data[tooth] || null
@@ -2035,7 +2039,7 @@ p span:first-child {
 }
 
 .scroll-beauty::-webkit-scrollbar-thumb {
-    background-color: #ec4899 ;
+    background-color: #ec4899;
     /* azul */
     border-radius: 6px;
 }
