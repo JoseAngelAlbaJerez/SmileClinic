@@ -17,7 +17,6 @@ class Bill extends Model
     'patient_id',
     'c_x_c_id',
     'total',
-    'material_provider',
     'amount_doctor',
     'currency',
     'doctor_id',

@@ -15,7 +15,6 @@ class BillDetail extends Model
         "initial",
         'amount_doctor',
         'materials_amount',
-        'material_provider',
         "amount_of_payments",
         "total",
         "treatment",
