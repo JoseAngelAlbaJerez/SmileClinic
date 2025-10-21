@@ -9,6 +9,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CXCController extends Controller
@@ -114,42 +115,7 @@ class CXCController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CXC $CXC, Request $request)
-    {
-        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
-        $search = $request->input('search');
-        $query = Bill::with('doctor', 'patient')
-            ->join('users', 'odontographs.doctor_id', '=', 'users.id')
-            ->select('bills.*', 'users.name as doctor_name', 'users.last_name as doctor_last_name');
-
-
-
-        if ($showDeleted) {
-            $query->where('bills.active', true);
-        } else {
-            $query->where('bills.active', false);
-        }
-
-        if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhere('bills.id', $search);
-            });
-        }
-
-
-        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'CXCDetail', 'Payment')->find($CXC->id);
-
-        return Inertia::render('CXC/Show', [
-            'CXC' => $CXC,
-
-            'filters' => [
-                'search' => $search,
-                'showDeleted' => $showDeleted,
-
-            ],
-        ]);
-    }
+   
 
     /**
      * Show the form for editing the specified resource.
