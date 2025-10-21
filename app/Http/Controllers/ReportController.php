@@ -187,7 +187,7 @@ class ReportController extends Controller
     }
     public function CXC(CXC $CXC)
     {
-        $CXC->load(['Budget', 'CXCDetail', 'patient', 'Payment']);
+        $CXC->load(['Budget', 'patient', 'Payment']);
 
         return Pdf::loadView('Reports.CXC', compact('CXC'))->setPaper('a4', 'landscape')->setOptions([
             'isRemoteEnabled' => true,
