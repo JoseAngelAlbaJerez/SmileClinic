@@ -284,8 +284,8 @@
                                                     proc.name }}</h4>
                                             </div>
                                             <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
@@ -440,13 +440,7 @@
                                                     }).format(form_details[index].total
                                                         || 0) }}</p>
                                             </span>
-                                            <label
-                                                class=" text-sm font-medium text-gray-700 dark:text-gray-300 ml-auto mr-2"
-                                                for="materials"> ¿El doctor provee
-                                                los materiales? </label>
-                                            <input id="materials" type="checkbox"
-                                                v-model="form_details[index].material_provider"
-                                                class="h-4 w-4 text-pink-600 mr-4 border-gray-300 rounded focus:ring-pink-500" />
+                                           
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />
@@ -645,7 +639,6 @@ export default {
                 treatment: '',
                 discount: 0,
                 quantity: '',
-                material_provider: false,
                 materials_amount: '',
             }),
             payment_form: useForm({
@@ -721,7 +714,6 @@ export default {
                         quantity: detail.quantity,
                         initial: detail.initial,
                         amount_of_payments: detail.amount_of_payments,
-                        material_provider: false,
                         materials_amount: 0,
 
                     });
@@ -747,7 +739,6 @@ export default {
                     quantity: 1,
                     initial: 0,
                     amount_of_payments: 0,
-                    material_provider: false
                 });
                 this.selectedProcedures.push({ ...found });
             }
