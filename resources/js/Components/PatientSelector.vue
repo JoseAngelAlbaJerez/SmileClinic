@@ -64,7 +64,7 @@ watch(searchTerm, () => {
 
             <AccessGate permission="patient.create">
                 <Link :href="route('patients.create')" as="button"
-                    class="flex justify-center mb-3 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
+                    class="flex justify-center mb-3 rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
                     <AddIcon class="size-6" />
                 </Link>
             </AccessGate>
@@ -94,28 +94,7 @@ watch(searchTerm, () => {
                 No hay registros disponibles.
             </div>
 
-            <!-- Paginación LOCAL -->
-            <div v-if="patients.last_page > 1" class="flex justify-center items-center gap-2 py-3">
-                <button
-                    :disabled="!patients.prev_page_url"
-                    @click="fetchPatients(patients.prev_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Anterior
-                </button>
 
-                <span class="text-sm text-gray-600 dark:text-gray-300">
-                    Página {{ patients.current_page }} de {{ patients.last_page }}
-                </span>
-
-                <button
-                    :disabled="!patients.next_page_url"
-                    @click="fetchPatients(patients.next_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Siguiente
-                </button>
-            </div>
         </div>
 
         <!-- Indicador -->

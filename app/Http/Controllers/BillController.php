@@ -52,10 +52,7 @@ class BillController extends Controller
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->WhereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.ars LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%']);
+                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%']);
             });
         }
 
@@ -95,9 +92,33 @@ class BillController extends Controller
             ],
         ]);
     }
-    public function create()
+    public function create(Request $request)
     {
+        $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patients = Patient::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patients = null;
+        }
+
         $patient = Patient::with([
+            'CXC',
+            'bill.billdetail',
             'budget' => function ($q) {
                 $q->where('active', 1)
                     ->with(['budgetdetail' => function ($d) {
@@ -107,11 +128,13 @@ class BillController extends Controller
             },
         ])->paginate(10);
 
+
         $procedure = Procedure::paginate(10);
         $doctors = User::role('doctor')->with('roles')->paginate(10);
 
         return Inertia::render('Bills/Create', [
             'patient' => $patient,
+            'patients' => $patients,
             'doctors' => $doctors,
             'procedure' => $procedure,
         ]);
@@ -132,7 +155,6 @@ class BillController extends Controller
             'details.*.amount' => 'required|numeric',
             'details.*.amount_doctor' => 'required|numeric',
             'details.*.materials_amount' => 'required|numeric',
-            'details.*.material_provider' => 'boolean',
             'details.*.total' => 'required|numeric',
             'details.*.discount' => 'required|integer',
             'details.*.quantity' => 'required|integer',
@@ -164,9 +186,9 @@ class BillController extends Controller
 
         foreach ($billDetails as $detail) {
             $expense_amount = $detail->amount_doctor;
-            if ($detail->material_provider == true) {
-                $expense_amount = $detail->amount_doctor + $detail->materials_amount;
-            }
+
+            $expense_amount = $detail->amount_doctor + ($detail->materials_amount / 2);
+
             if ($detail->doctor->specialty) {
                 Expenses::create([
                     'description' => $detail->doctor->name,
@@ -192,7 +214,6 @@ class BillController extends Controller
 
         if ($bill->total > $initialSum) {
             $patient = $bill->patient;
-            Log::info($patient->cxc);
 
             if (!$patient->cxc) {
                 $CXC = CXC::create([
@@ -205,9 +226,14 @@ class BillController extends Controller
                 $bill->save();
             } else {
                 $CXC = $patient->cxc;
+                $bill->c_x_c_id = $CXC->id;
+                $bill->save();
                 $CXC->balance += $bill->total;
                 $CXC->save();
             }
+            return Inertia::render('Bills/Show', [
+                'CXC' => $CXC,
+            ]);
         }
 
 
@@ -215,15 +241,20 @@ class BillController extends Controller
 
 
 
-        return response()->json([
-            'bill_id' => $bill->id,
+        return Inertia::render('Bills/Show', [
+            'CXC' => $bill->CXC,
+
         ]);
     }
     public function show(Bill $bill)
     {
-        $bill->load('doctor', 'patient', 'billdetail.procedure', 'CXC', 'billdetail.payment');
-        return Inertia::render("Bills/Show", [
-            'bills' => $bill,
+
+        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'Payment')->find($bill->c_x_c_id);
+
+        return Inertia::render('Bills/Show', [
+            'CXC' => $CXC,
+
+
         ]);
     }
 }

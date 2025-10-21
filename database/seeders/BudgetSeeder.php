@@ -16,12 +16,11 @@ class BudgetSeeder extends Seeder
     public function run(): void
     {
 
-        foreach (range(1, 10) as $i) {
+        foreach (range(1, 100) as $i) {
 
             $branchId = fake()->numberBetween(1, 2);
 
-            $patient = Patient::where('branch_id', $branchId)
-                ->inRandomOrder()
+            $patient = Patient::inRandomOrder()
                 ->first();
 
             DB::table('budgets')->insert([
@@ -30,7 +29,7 @@ class BudgetSeeder extends Seeder
                 'patient_id' => $patient?->id,
                 'total' => fake()->numberBetween(1000, 50000),
                 'emission_date' => now(),
-                'currency' => fake()->randomElement(['DOP', 'USD']),
+                'currency' => fake()->randomElement(['DOP']),
                 'expiration_date' => now()->addMonth(),
                 'active' => true,
                 'created_at' => now(),

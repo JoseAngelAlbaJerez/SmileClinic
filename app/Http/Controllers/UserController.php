@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,7 +27,7 @@ class UserController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles','branch');
+        $query = User::query()->select('users.*')->with('roles', 'branch');
         if ($showDeleted == true) {
             $query->where('active', 1);
         } else {
@@ -133,22 +134,35 @@ class UserController extends Controller
     }
     public function update(User $user, Request $request)
     {
-        Log::info($request);
+        if ($request->has('description')) {
+            $user->notes()->updateOrCreate(
+                [
+                    'user_id'   => $user->id,
+                    'branch_id' => Auth::user()->branch_id,
+                ],
+                [
+                    'description' => $request->description,
+                ]
+            );
+
+            return redirect()->back()->with('toast', 'Nota registrada correctamente.');
+        }
 
         if ($request->has('active')) {
             $this->restore($user);
             return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
         }
 
-        // Manejar avatar si se proporciona
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
             $user->save();
         }
-        // Actualizar dirección
         if ($request->has('address')) {
-            $user->address()->updateOrCreate([], $request->address);
+            $user->address()->updateOrCreate(
+                ['user_id' => $user->id],
+                $request->input('address')
+            );
         }
         // Validación de datos
         $validated = $request->validate([
@@ -166,8 +180,7 @@ class UserController extends Controller
             'address.postal_code' => 'nullable|string|max:20',
         ]);
 
-        $user->update($request->except('address', 'avatar'));
-
+        $user->update($request->except('avatar', 'address'));
 
         return redirect()->back()->with('success', 'Usuario actualizado correctamente');
     }
@@ -188,8 +201,7 @@ class UserController extends Controller
     }
     public function show(User $user)
     {
-        $user = User::find($user->id);
-        $user->load(['roles']);
+        $user = User::with(['roles.permissions', 'notes', 'address'])->findOrFail($user->id);
         return Inertia::render('Users/Show', [
             'user' => $user
         ]);

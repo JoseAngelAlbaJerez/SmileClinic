@@ -20,7 +20,7 @@ defineProps({
                 <header class="flex justify-between items-center py-6">
                     <div class="flex items-center">
                         <svg class="h-12 w-auto text-pink-500" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z" fill="#3B82F6"/>
+                            <path d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z" fill="#ec4899 "/>
                             <path d="M65 40C65 42.7614 62.7614 45 60 45C57.2386 45 55 42.7614 55 40C55 37.2386 57.2386 35 60 35C62.7614 35 65 37.2386 65 40Z" fill="white"/>
                             <path d="M45 40C45 42.7614 42.7614 45 40 45C37.2386 45 35 42.7614 35 40C35 37.2386 37.2386 35 40 35C42.7614 35 45 37.2386 45 40Z" fill="white"/>
                             <path d="M30 60C30 60 35 70 50 70C65 70 70 60 70 60" stroke="white" stroke-width="4" stroke-linecap="round"/>

@@ -23,7 +23,7 @@
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit" :disabled="form.processing" :class="{ 'opacity-25': form.processing}" :is-loading="form.processing">Guardar</PrimaryButton>
+                        <PrimaryButton type="submit" >Guardar</PrimaryButton>
                     </div>
                 </form>
             </div>
@@ -41,7 +41,7 @@ import Odontograph from '@/Components/Odontograph.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref, markRaw } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
 export default {
     components: {
@@ -51,7 +51,8 @@ export default {
         EditIcon,
         Odontograph,
         PrimaryButton,
-        SecondaryButton
+        SecondaryButton,
+        Head
     },
     props: {
         odontographs: Object,

@@ -59,7 +59,6 @@
                                     <select v-model="form.currency"
                                         class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
                                         <option value="DOP"> RD$ - Peso Dominicano</option>
-                                        <option value="USD"> USD$ - Dolar Americano</option>
                                     </select>
                                 </div>
 
@@ -73,7 +72,7 @@
                                         <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
                                     </div>
                                     <button @click="openProcedureModal()"
-                                        class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                                        class="flex items-center space-x-1 rounded-lg bg-pink-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200">
                                         <AddIcon class="h-4 w-4" />
                                         <span>Agregar</span>
                                     </button>
@@ -104,8 +103,8 @@
                                                     proc.name }}</h4>
                                             </div>
                                             <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
@@ -342,7 +341,7 @@
                                     </div>
 
                                     <!-- Address -->
-                                    <div class="md:col-span-2">
+                                    <div >
                                         <label for="address"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Dirección
@@ -357,6 +356,24 @@
                                                 placeholder="Ingrese dirección completa" />
                                         </div>
                                         <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}
+                                        </p>
+                                    </div>
+                                     <!-- Address -->
+                                    <div >
+                                        <label for="address"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Número de Afiliado
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.ars_id" id="ars_id" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese el Número de Afiliado completo" />
+                                        </div>
+                                        <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}
                                         </p>
                                     </div>
 
@@ -520,7 +537,7 @@
                                         </label>
                                         <vue-signature-pad ref="affiliatePad"
                                             :options="{ penColor: 'black', backgroundColor: 'white' }"
-                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
+                                            class="border border-gray-300 dark:border-gray-600  rounded-lg"
                                             style="width: 100%; height: 120px;" />
                                         <div class="flex space-x-2 mt-2">
                                             <SecondaryButton type="button" @click="clearAffiliateSignature"
@@ -680,7 +697,8 @@ import CardIcon from '@/Components/Icons/CardIcon.vue';
 // @ts-ignore
 import { VueSignaturePad } from "vue-signature-pad"
 import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3'
+
 
 
 export default {
@@ -745,7 +763,7 @@ export default {
                 affiliate_signature: null,
                 reclaimer_signature: null,
                 ars: "",
-
+                ars_id: "",
             }),
             form_detail: useForm({
                 procedure_id: '',
@@ -800,6 +818,7 @@ export default {
             this.insurance_form.address = patient.address || '';
             this.insurance_form.ars = patient.ars || '';
             this.insurance_form.diagnosis = patient.motive || '';
+            this.insurance_form.ars_id = patient.ars_id || '';
 
             this.showPatientModal = false;
         },
@@ -940,13 +959,12 @@ export default {
                 reclaimer_signature: this.insurance_form.reclaimer_signature,
             };
 
-            Inertia.post(route('budgets.store'), payload, {
+            router.post(route('budgets.store'), payload, {
                 onSuccess: (page) => {
-                    console.log('Budget and insurance saved successfully');
-                    this.errors = errors;
+
                 },
                 onError: (errors) => {
-                    console.log('Validation errors:', errors);
+                   this.errors = errors;
                 },
                 onFinish: () => {
                     this.form.processing = false;

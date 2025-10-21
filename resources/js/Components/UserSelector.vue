@@ -57,7 +57,7 @@ watch(searchTerm, () => {
 
             <AccessGate role="admin">
                 <Link :href="route('users.create')" as="button"
-                    class="flex justify-center mb-3 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
+                    class="flex justify-center mb-3 rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
                     <AddIcon class="size-6" />
                 </Link>
             </AccessGate>

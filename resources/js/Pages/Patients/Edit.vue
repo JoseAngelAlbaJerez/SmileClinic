@@ -109,12 +109,27 @@
                                     <select v-model="form.ars"
                                         class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
                                         <option value="">Seleccione una opción</option>
-                                        <option value="ARS Humano">ARS Humano</option>
-                                        <option value="ARS Universal">ARS Universal</option>
-                                        <option value="ARS Monumental">ARS Monumental</option>
-                                        <option value="ARS Senasa">ARS Senasa</option>
+                                        <option value="Humano">ARS Humano</option>
+                                        <option value="Universal">ARS Universal</option>
+                                        <option value="Monumental">ARS Monumental</option>
+                                        <option value="Senasa">ARS Senasa</option>
                                     </select>
                                     <p v-if="errors.ars" class="mt-1 text-sm text-red-600">{{ errors.ars }}</p>
+                                </div>
+                                <div v-if="form.ars != '' ">
+                                    <label for="ARS_id"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Número de Afiliado
+                                    </label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                        </div>
+                                        <input v-model="form.ars_id"  placeholder="21333326432231"
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
+                                    </div>
+                                    <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}</p>
                                 </div>
 
                                 <!-- Date of Birth -->
@@ -316,22 +331,7 @@ export default {
     data() {
         return {
             error: '',
-            form: useForm({
-                first_name: this.patient.first_name || '',
-                last_name: this.patient.last_name || '',
-                DNI: this.patient.DNI || '',
-                phone_number: this.patient.phone_number || '',
-                ars: this.patient.ars || '',
-                date_of_birth: this.patient.date_of_birth || '',
-                complications: this.patient.complications ? 1 : 0,
-                complications_detail: this.patient.complications_detail || '',
-                drugs: this.patient.drugs ? 1 : 0,
-                drugs_detail: this.patient.drugs_detail || '',
-                alergies: this.patient.alergies ? 1 : 0,
-                alergies_detail: this.patient.alergies_detail || '',
-                address: this.patient.address || '',
-                motive: this.patient.motive || '',
-            }),
+            form: useForm({...this.patient}),
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
                 { label: this.patient.first_name + ' ' + this.patient.last_name, to: route('patients.show', this.patient) }
@@ -340,8 +340,6 @@ export default {
     },
     methods: {
         submit() {
-
-
             if (!this.form.first_name) {
                 this.error = 'Por favor, ingrese el nombre.';
                 return;
@@ -354,7 +352,6 @@ export default {
                 this.error = 'Por favor, ingrese el DNI.';
                 return;
             }
-
 
             if (!this.form.date_of_birth) {
                 this.error = 'Por favor, seleccione la fecha de nacimiento.';

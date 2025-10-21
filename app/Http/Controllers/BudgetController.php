@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
-use App\Models\CXC;
-use App\Models\CXCDetail;
 use App\Models\Procedure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -172,20 +170,21 @@ class BudgetController extends Controller
             return $detail;
         })->toArray();
         $budget->budgetdetail()->createMany($details);
+        if ($budget->patient->ars) {
+            Insurance::create([
+                'budget_id' => $budget->id,
+                'patient_id' => $budget->patient_id,
+                'branch_id' => $budget->branch_id,
+                'ars' => $validated['ars'],
+                'affiliate_signature' => $validated['affiliate_signature'] ?? null,
+                'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
+            ]);
+        }
 
-        Insurance::create([
-            'budget_id' => $budget->id,
-            'patient_id' => $budget->patient_id,
-            'branch_id' => $budget->branch_id,
-            'ars' => $validated['ars'],
-            'affiliate_signature' => $validated['affiliate_signature'] ?? null,
-            'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
-        ]);
 
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-     return back()->with('toast', 'Presupuesto y seguro guardados correctamente');
-
+        return redirect()->route('bills.create')->with('toast', 'Presupuesto y seguro guardados correctamente');
     }
 
 
@@ -197,7 +196,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,
@@ -213,11 +212,13 @@ class BudgetController extends Controller
     {
         $patient = Patient::paginate(10);
         $procedure = Procedure::paginate(10);
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail.payment');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail', 'Insurance');
+        $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render('Budgets/Edit', [
             'patient' => $patient,
             'budget' => $budget,
             'procedure' => $procedure,
+            'insurance' => $insurance,
         ]);
     }
 
@@ -230,6 +231,69 @@ class BudgetController extends Controller
             $this->restore($budget);
             return redirect()->back()->with('toast', 'Presupuesto restaurado correctamente');
         }
+
+        $validated = $request->validate([
+            'form.patient_id' => 'required|exists:patients,id',
+            'form.type' => 'required|string',
+            'form.currency' => 'required|string',
+            'form.emission_date' => 'required|date',
+            'form.expiration_date' => 'nullable|date',
+            'form.total' => 'required|numeric',
+            'form.amount_of_payments' => 'nullable|numeric',
+
+            'details' => 'required|array|min:1',
+            'details.*.treatment' => 'required|string|max:100',
+            'details.*.amount' => 'required|numeric',
+            'details.*.total' => 'required|numeric',
+            'details.*.discount' => 'required|integer',
+            'details.*.quantity' => 'required|integer',
+            'details.*.procedure_id' => 'required|integer',
+            'details.*.amount_of_payments' => 'nullable|integer',
+            'details.*.initial' => 'nullable|integer',
+
+            'ars' => 'required|string|max:255',
+            'affiliate_signature' => 'nullable|string',
+            'reclaimer_signature' => 'nullable|string',
+        ]);
+        $budgetData = $validated['form'];
+        $budgetData['branch_id'] = Auth::user()->branch_id;
+        $budgetData['doctor_id'] = Auth::id();
+        $budgetData['emission_date'] = Carbon::parse($budgetData['emission_date'] ?? now());
+        $budgetData['expiration_date'] = $budgetData['expiration_date']
+            ? Carbon::parse($budgetData['expiration_date'])
+            : null;
+
+        $budget->update($budgetData);
+
+        $budget->budgetdetail()->delete();
+        $details = collect($validated['details'])->map(function ($detail) use ($budget) {
+            $detail['branch_id'] = $budget->branch_id;
+            return $detail;
+        })->toArray();
+        $budget->budgetdetail()->createMany($details);
+
+        if ($budget->patient->ars) {
+            $insuranceData = [
+                'budget_id' => $budget->id,
+                'patient_id' => $budget->patient_id,
+                'branch_id' => $budget->branch_id,
+                'ars' => $validated['ars'],
+                'affiliate_signature' => $validated['affiliate_signature'] ?? null,
+                'reclaimer_signature' => $validated['reclaimer_signature'] ?? null,
+            ];
+
+            $insurance = Insurance::where('budget_id', $budget->id)->first();
+
+            if ($insurance) {
+                $insurance->update($insuranceData);
+            } else {
+                Insurance::create($insuranceData);
+            }
+        }
+
+        $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
+
+        return redirect()->route('budgets.show',$budget)->with('toast', 'Presupuesto actualizado correctamente');
     }
 
     /**

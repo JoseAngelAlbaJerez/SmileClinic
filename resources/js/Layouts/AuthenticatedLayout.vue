@@ -29,18 +29,38 @@ const checkBillDate = () => {
     const day = today.getDate()
     notifications.value = []
 
-    const daysBefore = 15 - day
-    if (daysBefore > 0 && daysBefore <= 5) {
-        notifications.value.push(`⚡ Luz pendiente: faltan ${daysBefore} día(s)`)
-        notifications.value.push(`💧 Agua pendiente: faltan ${daysBefore} día(s)`)
-    } else if (day === 15) {
-        notifications.value.push("⚡ Apaga la luz")
-        notifications.value.push("💧 Paga el agua")
+    const branch = page.props.auth.user.branch.name
+    const isAdmin = page.props.auth.user.roles[0] === 'admin'
+    const dueDates = {
+        "Cutupu": {
+            "⚡ Luz": 7,
+            "💧 Agua": 20,
+            "🏢 Local": 20,
+            "📞 Teléfono": 1,
+        },
+        "Principal": {
+            "⚡ Luz": 20,
+            "💧 Agua": 10,
+            "📞 Teléfono": 7,
+            "🏢 Local": 8,
+        }
     }
+    const branchesToCheck = isAdmin ? Object.keys(dueDates) : [branch]
+    branchesToCheck.forEach(b => {
+        Object.entries(dueDates[b]).forEach(([label, dueDay]) => {
+            const daysBefore = dueDay - day
+
+            if (daysBefore > 0 && daysBefore <= 5) {
+                notifications.value.push(`${label} (${b}): faltan ${daysBefore} día(s)`)
+            } else if (day === dueDay) {
+                notifications.value.push(`${label} (${b}): ¡HOY debes pagar!`)
+            }
+        })
+    })
 }
- const markAsRead = () => {
-        read.value = true
-    }
+const markAsRead = () => {
+    read.value = true
+}
 onMounted(() => {
     checkBillDate()
     setInterval(checkBillDate, 1000 * 60 * 60)
@@ -89,7 +109,7 @@ watchEffect(() => {
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z"
-                                            fill="#3B82F6" />
+                                            fill="#ec4899 " />
                                         <path
                                             d="M65 40C65 42.7614 62.7614 45 60 45C57.2386 45 55 42.7614 55 40C55 37.2386 57.2386 35 60 35C62.7614 35 65 37.2386 65 40Z"
                                             fill="white" />
@@ -107,7 +127,7 @@ watchEffect(() => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden lg:flex space-x-8 lg:ms-10 lg:-my-px ">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
@@ -116,17 +136,14 @@ watchEffect(() => {
                                     Pacientes
                                 </NavLink>
                                 <NavLink v-if="can('event.view')" :href="route('events.index')"
-                                    :active="route().current('events.index')  || route().current('events.create') || route().current('events.show') || route().current('events.edit')">
+                                    :active="route().current('events.index') || route().current('events.create') || route().current('events.show') || route().current('events.edit')">
                                     Citas
                                 </NavLink>
                                 <NavLink v-if="can('budget.view')" :href="route('budgets.index')"
                                     :active="route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.show') || route().current('budgets.edit')">
                                     Presupuestos
                                 </NavLink>
-                                <NavLink v-if="can('CXC.view')" :href="route('CXC.index')"
-                                    :active="route().current('CXC.index') || route().current('CXC.create') || route().current('CXC.show') || route().current('CXC.edit')">
-                                    Pagos
-                                </NavLink>
+                                
                                 <NavLink v-if="can('expense.view')" :href="route('expenses.index')"
                                     :active="route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit')">
                                     Egresos
@@ -147,9 +164,9 @@ watchEffect(() => {
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden lg:ms-6 lg:flex lg:items-center">
                             <button @click="() => { switchTheme(); isDark = !isDark }"
-                                class="text-gray-500 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-500">
+                                class="text-gray-500 hover:text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-100 dark:hover:text-gray-500">
                                 <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5" />
                             </button>
                             <!-- Notification Dropdown -->
@@ -170,16 +187,17 @@ watchEffect(() => {
 
                                     <template #content>
                                         <div v-if="notifications.length">
-                                            <p v-for="(note, index) in notifications" :key="index"
+                                            <Link :href="route('expenses.index')" v-for="(note, index) in notifications"
+                                                :key="index"
                                                 class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
-                                                {{ note }}
-                                            </p>
+                                            {{ note }}
+                                            </Link>
                                         </div>
                                         <div v-else class="flex justify-center">
 
                                             <p
                                                 class="block w-full px-4 py-4 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 dark:focus:bg-gray-800">
-                                               <InfoCircle class="mx-auto mb-2 dark:text-white w-7 h-7"/>
+                                                <InfoCircle class="mx-auto mb-2 dark:text-white w-7 h-7" />
                                                 No tiene notificaciones pendientes.
                                             </p>
                                         </div>
@@ -218,7 +236,7 @@ watchEffect(() => {
                         </div>
 
                         <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
+                        <div class="-me-2 flex items-center lg:hidden">
                             <button @click="
                                 showingNavigationDropdown =
                                 !showingNavigationDropdown
@@ -284,8 +302,17 @@ watchEffect(() => {
                             :active="route().current('bills.index')">
                             Recibos
                         </ResponsiveNavLink>
-
+                        <div class="flex items-center">
+                            <button @click="() => { switchTheme(); isDark = !isDark }" class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition
+                   text-gray-600 hover:bg-gray-100 hover:text-gray-900
+                   dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+                                <component :is="isDark ? DarkIcon : LightIcon" class="w-5 h-5 mr-2" />
+                                <span>{{ isDark ? 'Modo Oscuro' : 'Modo Claro' }}</span>
+                            </button>
+                        </div>
                     </div>
+
+
 
                     <!-- Responsive Settings Options -->
                     <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">

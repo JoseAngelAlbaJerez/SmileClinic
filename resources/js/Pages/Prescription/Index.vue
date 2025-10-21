@@ -232,7 +232,7 @@
                             <PrintIcon />
                         </button>
                         <Link v-if="selectedprescription.active"
-                            :href="route('odontographs.edit', selectedprescription)"
+                            :href="route('prescriptions.edit', selectedprescription)"
                             class="flex   mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                         <EditIcon />
                         </Link>
@@ -435,11 +435,13 @@ export default {
         },
         deleteprescription(id) {
             this.$inertia.delete(route('prescriptions.destroy', id),);
+              this.showModal = false;
         },
         restoreprescription(id) {
             this.$inertia.put(route('prescriptions.update', id), {
                 active: true
             },);
+            this.showModal = false;
         },
         toggleDetail(index) {
             const i = this.expandedIndexes.indexOf(index);

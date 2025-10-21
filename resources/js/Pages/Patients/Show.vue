@@ -43,7 +43,7 @@
                 <!-- Información personal -->
                 <!-- Información del Paciente - Diseño Mejorado -->
                 <div
-                    class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                     <!-- Encabezado principal -->
                     <div
                         class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -57,7 +57,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Columna 1: Información Personal -->
                         <div
-                            class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            class="bg-white dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                     <CardIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
@@ -76,12 +76,13 @@
                                 <div class="flex items-start">
                                     <span
                                         class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Cédula/DNI:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.DNI }}</span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{ formatDNI(patient.DNI) }}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
                                         class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Teléfono:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.phone_number }}</span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{
+                                        formatPhoneNumber(patient.phone_number)}}</span>
                                 </div>
                                 <div class="flex items-start">
                                     <span
@@ -110,7 +111,7 @@
 
                         <!-- Columna 2: Antecedentes Médicos -->
                         <div
-                            class="bg-white/50 dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            class="bg-white dark:bg-gray-700/50 p-5 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                     <MedicalHistoryIcon class="w-5 h-5 text-pink-600 dark:text-pink-300" />
@@ -181,7 +182,7 @@
                 <!-- Recetas Médicas - Diseño Mejorado -->
                 <AccessGate permission="prescription.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -192,13 +193,13 @@
                             <div class="ml-auto flex gap-2">
                                 <AccessGate permission="prescription.view">
                                     <Link :href="route('prescriptions.index', { patient_id: patient.id })"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                     <EyeIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
                                 <AccessGate permission="prescription.create">
                                     <Link :href="route('prescriptions.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -314,8 +315,8 @@
                                                 <RestoreIcon class="size-4" />
                                             </button>
                                             <button @click="printPrescription(prescription)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
-                                                <PrintIcon   class="size-4" />
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon class="size-4" />
                                             </button>
                                         </div>
                                     </div>
@@ -340,7 +341,7 @@
                 <AccessGate permission="event.view">
                     <!-- Citas Pendientes - Diseño Mejorado -->
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -350,12 +351,12 @@
                             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Citas</h2>
                             <div class="ml-auto flex gap-2">
                                 <Link v-if="events.length" :href="route('events.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="event.create">
                                     <Link :href="route('events.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -454,7 +455,7 @@
                 <!-- Presupuestos - Diseño Mejorado -->
                 <AccessGate permission="budget.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -465,12 +466,12 @@
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="budgets" :href="route('budgets.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="budget.create">
                                     <Link :href="route('budgets.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -589,9 +590,9 @@
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
-                                             <button @click="printBudget(budget)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
-                                                <PrintIcon   class="size-4" />
+                                            <button @click="printBudget(budget)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon class="size-4" />
                                             </button>
                                         </div>
                                     </div>
@@ -617,7 +618,7 @@
                 <!-- Recibos - Diseño Mejorado -->
                 <AccessGate permission="bill.view">
                     <div
-                        class="bg-gradient-to-br from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
                         <!-- Encabezado con efecto de vidrio -->
                         <div
                             class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
@@ -628,12 +629,12 @@
                             <div class="ml-auto flex gap-2">
 
                                 <Link v-if="bills.length" :href="route('bills.index', { patient_id: patient.id })"
-                                    class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
                                 <EyeIcon class="size-5" />
                                 </Link>
                                 <AccessGate permission="bill.create">
-                                    <Link :href="route('bills.create')" as="button"
-                                        class="flex items-center justify-center size-9 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105 shadow-md">
+                                    <Link :href="route('bills.create', { patient_id: patient.id })" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                     <AddIcon class="size-5" />
                                     </Link>
                                 </AccessGate>
@@ -761,18 +762,163 @@
                                                 class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
                                                 <RestoreIcon class="size-4" />
                                             </button>
-                                             <button @click="printBill(bill)"
-                                                class="flex items-center justify-center size-8 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-110 shadow-md">
-                                                <PrintIcon   class="size-4" />
+                                            <button @click="printBill(bill)"
+                                                class="flex items-center justify-center size-8 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-110 shadow-md">
+                                                <PrintIcon class="size-4" />
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Mensaje cuando no hay Recibos -->
                         <div v-if="!bills.length" class="text-center py-6">
+                            <div class="inline-flex flex-col items-center">
+                                <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
+                                </p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Crea un nuevo Recibo para
+                                    comenzar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </AccessGate>
+                <!-- Recibos - Diseño Mejorado -->
+                <AccessGate permission="CXC.view">
+                    <div
+                        class="bg-pink-50 dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+                        <!-- Encabezado con efecto de vidrio -->
+                        <div
+                            class="mb-6 flex items-center gap-3 backdrop-blur-sm bg-white/30 dark:bg-gray-700/50 p-3 rounded-xl border border-gray-200/50 dark:border-gray-600/50 shadow-sm">
+                            <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-300" />
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Pagos </h2>
+                            <div class="ml-auto flex gap-2">
+
+                                <Link v-if="bills.length" :href="route('CXC.index', { patient_id: patient.id })"
+                                    class="flex items-center justify-center size-9 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all transform hover:scale-105 shadow-md">
+                                <EyeIcon class="size-5" />
+                                </Link>
+                                <AccessGate permission="CXC.create">
+                                    <Link :href="route('bills.create', { patient_id: patient.id })" as="button"
+                                        class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
+                                    <AddIcon class="size-5" />
+                                    </Link>
+                                </AccessGate>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Recibos -->
+                        <div class="max-h-96 overflow-y-auto pr-2 space-y-3">
+                            <div v-for="CXC in CXCS" :key="CXC.id"
+                                class="group relative bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                <!-- Contenido del Recibo -->
+                                <div class="p-4">
+                                    <div class="flex items-start mb-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <h3
+                                                    class="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
+                                                    Cuenta #{{ CXC.id }}
+                                                </h3>
+                                                <span class="  text-sm font-medium px-2 text-white py-1 rounded-full"
+                                                    :class="{
+                                                        'bg-green-500  ': CXC.balance === 0,
+                                                        'bg-red-500': CXC.balance > 0
+                                                    }">
+                                                    {{ CXC.balance === 0 ? 'PAGADO' : 'PENDIENTE' }}
+                                                </span>
+
+                                            </div>
+
+
+                                            <!-- Info básica en columnas -->
+                                            <div class="mt-2 grid grid-cols-2 gap-2 text-sm">
+
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CalendarDaysIcon class="w-4 h-4 mr-1 text-pink-500" />
+                                                    <span>{{ formatDate(CXC.created_at) }}</span>
+                                                </div>
+
+                                                <div class="flex items-center text-gray-600 dark:text-gray-300">
+                                                    <CurrencyDolarIcon class="w-4 h-4 mr-1 text-pink-500" />
+                                                    <span class="font-bold">
+                                                        Balance: {{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(CXC.balance
+                                                            || 0) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Acordeón para detalles -->
+                                            <div class="mt-3">
+                                                <details class="border-t border-gray-100 dark:border-gray-600 pt-2">
+                                                    <summary
+                                                        class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
+                                                        <span>Ver pagos</span>
+                                                        <ChevronDownIcon
+                                                            class="w-4 h-4 ml-1 transition-transform duration-200 group-open:rotate-180" />
+                                                    </summary>
+                                                    <div class="mt-2 space-y-2">
+                                                        <div v-for="(detail, index) in CXC.payment" :key="detail.id"
+                                                            class="flex flex-col p-4 rounded-2xl shadow-sm
+           bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                                                            <div class="flex items-center justify-between mb-2">
+                                                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                                                    Pago #{{ index + 1 }}
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="flex items-center justify-between">
+                                                                <p
+                                                                    class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                                                    Monto pagado
+                                                                </p>
+                                                                <p
+                                                                    class="text-md font-semibold text-green-600 dark:text-green-400">
+                                                                    {{
+                                                                        new Intl.NumberFormat('es-DO', {
+                                                                            style: 'currency',
+                                                                            currency: 'DOP'
+                                                                        }).format(detail.amount_paid || 0)
+                                                                    }}
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="flex items-center justify-between mt-1">
+                                                                <p
+                                                                    class="text-base font-medium text-gray-900 dark:text-gray-100">
+                                                                    Restante
+                                                                </p>
+                                                                <p
+                                                                    class="text-md font-semibold text-pink-600 dark:text-pink-400">
+                                                                    {{
+                                                                        new Intl.NumberFormat('es-DO', {
+                                                                            style: 'currency',
+                                                                            currency: 'DOP'
+                                                                        }).format(detail.total - detail.amount_paid || 0)
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </details>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje cuando no hay Recibos -->
+                        <div v-if="!CXCS.length" class="text-center py-6">
                             <div class="inline-flex flex-col items-center">
                                 <DocumentTextIcon class="w-12 h-12 text-gray-400 dark:text-gray-500 mb-2" />
                                 <p class="text-gray-500 dark:text-gray-400 font-medium">No hay Recibos registrados
@@ -790,7 +936,7 @@
                 <div class="space-y-6">
                     <!-- Encabezado Mejorado -->
                     <div
-                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gradient-to-r from-pink-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        class="flex flex-col mt-4 md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-pink-50 dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-full">
                                 <TeethIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
@@ -820,7 +966,7 @@
                                 </AccessGate>
                                 <AccessGate permission="odontograph.create">
                                     <Link v-if="patient.active" :href="route('odontographs.create', patient)"
-                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 from-blue-500 to-indigo-500 text-white font-medium shadow-sm hover:from-blue-600 hover:to-indigo-600 transition-all">
+                                        class="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500  text-white font-medium shadow-sm transition-all">
                                     <AddIcon class="w-5 h-5" />
                                     <span class="lg:inline sm:hidden">Nuevo Odontograma</span>
                                     </Link>
@@ -857,21 +1003,15 @@
                                     </div>
 
                                     <div class="flex gap-2">
-                                        <Link v-if="item.active" :href="route('odontographs.edit', item)"
-                                            class="p-2 rounded-lg bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 hover:bg-pink-200 dark:hover:bg-pink-800/50 transition-colors"
-                                            title="Editar">
-                                        <EditIcon class="w-5 h-5" />
-                                        </Link>
+
 
                                         <DangerButton v-if="item.active" @click="deleteOdontograph(item)"
-                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
-                                            title="Eliminar">
+                                            class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors">
                                             <DeleteIcon class="w-5 h-5" />
                                         </DangerButton>
 
                                         <button v-else @click="restoreOdontograph(item)"
-                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
-                                            title="Restaurar">
+                                            class="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors">
                                             <RestoreIcon class="w-5 h-5" />
                                         </button>
                                     </div>
@@ -885,52 +1025,560 @@
                                 </h3>
 
                                 <!-- Odontograma Superior -->
-                                <div class="mb-6">
-                                    <div class="grid grid-cols-16 gap-1.5 mb-2">
-                                        <div v-for="tooth in upperTeeth" :key="tooth"
+                                <div class="mb-6 grid grid-cols-2">
+                                    <div
+                                        class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 mr-4">
+                                        <div v-for="tooth in upperLeftTeethTop" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="toothClass(item.data[tooth])">
+
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
 
                                             <div class="flex justify-center gap-1 mt-1">
-                                                <template v-if="item.data[tooth]">
-                                                    <span
-                                                        v-for="([proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                        class="inline-block w-3 h-3 rounded-full "
-                                                        :class="procedureStyles[proc]" :title="` ${proc}`">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
 
-                                                    </span>
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
                                                 </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 mr-4">
+                                        <div v-for="tooth in upperRightTeethTop" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4  mt-2 ml-auto gap-1.5">
+                                        <div v-for="tooth in upperLeftTeethBot" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
+                                        <div v-for="tooth in upperRightTeethBot" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+
                                                 <template v-else>
                                                     <span class="text-gray-400 text-xs">—</span>
                                                 </template>
                                             </div>
                                         </div>
 
+
                                     </div>
+
+
                                 </div>
 
                                 <!-- Odontograma Inferior -->
-                                <div>
-                                    <div class="grid grid-cols-16 gap-1.5">
-                                        <div v-for="tooth in lowerTeeth" :key="tooth"
+                                <div class=" grid grid-cols-2">
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4  mt-2 ml-auto gap-1.5">
+                                        <div v-for="tooth in LowerLeftTeethTop" :key="tooth"
                                             @click="selectToothInView(item, tooth)"
                                             class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
                                             :class="toothClass(item.data[tooth])">
+
                                             <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
                                             </div>
 
                                             <div class="flex justify-center gap-1 mt-1">
-                                                <template v-if="item.data[tooth]">
-                                                    <span
-                                                        v-for="([proc], index) in Object.entries(item.data[tooth]).slice(0, 3)"
-                                                        class="inline-block w-3 h-3  rounded-full"
-                                                        :class="procedureStyles[proc]" :title="` ${proc}`">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
 
-                                                    </span>
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
                                                 </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div
+                                        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
+                                        <div v-for="tooth in LowerRightTeethTop" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div
+                                        class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 mt-2 lg:grid-cols-8 gap-1.5 mr-4">
+                                        <div v-for="tooth in LowerLeftTeethBot" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
+                                                <template v-else>
+                                                    <span class="text-gray-400 text-xs">—</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 mr-4">
+                                        <div v-for="tooth in LowerRightTeethBot" :key="tooth"
+                                            @click="selectToothInView(item, tooth)"
+                                            class="relative p-1 rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md"
+                                            :class="toothClass(item.data[tooth])">
+
+                                            <div class="font-bold text-gray-800 dark:text-white text-sm">{{ tooth }}
+                                            </div>
+
+                                            <div class="flex justify-center gap-1 mt-1">
+                                                <div v-if="item.data[tooth]"
+                                                    class="relative flex justify-center items-center w-8 sm:w-10 h-8 sm:h-10 rounded">
+                                                    <!-- Extracción (3 líneas) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Extracción')">
+                                                        <div
+                                                            class="absolute inset-0 flex justify-center items-center space-x-1">
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                            <div class="w-1/12 h-3/4 bg-red-600"></div>
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Ausencia (X) -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Ausencia')">
+                                                        <div
+                                                            class="absolute w-full h-full flex items-center justify-center text-red-600 text-sm sm:text-lg font-bold">
+                                                            X</div>
+                                                    </template>
+
+                                                    <!-- Implante -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Implante')">
+                                                        <ImplantIcon
+                                                            class="text-gray-800 dark:text-gray-200 w-5 sm:w-6 h-5 sm:h-6" />
+                                                    </template>
+
+                                                    <!-- Endodoncia -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Endodoncia')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full">
+                                                        </div>
+                                                    </template>
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('EndodonciaAplicada')">
+                                                        <div
+                                                            class="absolute w-1.5 sm:w-2 h-1.5 sm:h-2 bg-blue-500 rounded-full">
+                                                        </div>
+                                                    </template>
+
+                                                    <!-- Puente -->
+                                                    <template
+                                                        v-if="getStatusesForItem(item.data[tooth]).includes('Puente')">
+                                                        <div class="absolute bottom-0 w-full h-0.5 sm:h-1 bg-gray-600">
+                                                        </div>
+                                                    </template>
+                                                </div>
+
                                                 <template v-else>
                                                     <span class="text-gray-400 text-xs">—</span>
                                                 </template>
@@ -983,14 +1631,7 @@
                                     class="flex items-start gap-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                     <div class="flex-shrink-0">
                                         <span
-                                            class="flex items-center justify-center w-8 h-8 rounded-full text-white font-bold"
-                                            :class="{
-                                                'bg-gray-800': zone.charAt(0) === 'O',
-                                                'bg-red-500': zone.charAt(0) === 'D',
-                                                'bg-green-500': zone.charAt(0) === 'M',
-                                                'bg-yellow-500': zone.charAt(0) === 'L',
-                                                'bg-purple-500': zone.charAt(0) === 'V',
-                                            }">
+                                            class="flex items-center justify-center w-8 h-8 rounded-full text-white bg-gray-800  font-bold">
                                             {{ zone.charAt(0) }}
                                         </span>
                                     </div>
@@ -1050,12 +1691,14 @@ import CurrencyDolarIcon from '@/Components/Icons/CurrencyDolarIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
 import PillIcon from '@/Components/Icons/PillIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import ImplantIcon from '@/Components/Icons/ImplantIcon.vue';
 
 export default {
     props: {
         patient: Object,
         odontograph: Object,
         bills: Object,
+        CXCS: Object,
         filters: Object,
         events: Object,
         budgets: Object,
@@ -1095,7 +1738,8 @@ export default {
         CurrencyDolarIcon,
         CardIcon,
         AccessGate,
-        Head
+        Head,
+        ImplantIcon
     },
     data() {
         return {
@@ -1114,20 +1758,21 @@ export default {
                 { label: this.patient.first_name + ' ' + this.patient.last_name }
             ],
             activeIndex: null,
-            upperTeeth: [
-                18, 17, 16, 15, 14, 13, 12, 11,
-                21, 22, 23, 24, 25, 26, 27, 28
-            ],
-            lowerTeeth: [
-                48, 47, 46, 45, 44, 43, 42, 41,
-                31, 32, 33, 34, 35, 36, 37, 38
-            ],
-            upperTeethChild: [
-                55, 54, 53, 52, 51, 61, 62, 63, 64, 65
-            ],
-            lowerTeethChild: [
-                85, 84, 83, 82, 81, 71, 72, 73, 74, 75
-            ],
+            upperLeftTeethTop: [18, 17, 16, 15, 14, 13, 12, 11,],
+            upperLeftTeethBot: [55, 54, 53, 52, 51],
+
+            upperRightTeethTop: [21, 22, 23, 24, 25, 26, 27, 28,],
+            upperRightTeethBot: [61, 62, 63, 64, 65],
+
+            LowerLeftTeethTop: [85, 84, 83, 82, 81],
+            LowerLeftTeethBot: [48, 47, 46, 45, 44, 43, 42, 41],
+
+
+
+            LowerRightTeethBot: [31, 32, 33, 34, 35, 36, 37, 38,],
+            LowerRightTeethTop: [71, 72, 73, 74, 75],
+
+
             selectedOdontograph: null,
             selectedToothInfo: null,
             expandedIndexes: [],
@@ -1164,6 +1809,26 @@ export default {
                 36: "1er molar inferior izquierdo",
                 37: "2do molar inferior izquierdo",
                 38: "3er molar inferior izquierdo",
+                51: "Incisivo central superior derecho (temporal)",
+                52: "Incisivo lateral superior derecho (temporal)",
+                53: "Canino superior derecho (temporal)",
+                54: "1er molar superior derecho (temporal)",
+                55: "2do molar superior derecho (temporal)",
+                61: "Incisivo central superior izquierdo (temporal)",
+                62: "Incisivo lateral superior izquierdo (temporal)",
+                63: "Canino superior izquierdo (temporal)",
+                64: "1er molar superior izquierdo (temporal)",
+                65: "2do molar superior izquierdo (temporal)",
+                71: "Incisivo central inferior izquierdo (temporal)",
+                72: "Incisivo lateral inferior izquierdo (temporal)",
+                73: "Canino inferior izquierdo (temporal)",
+                74: "1er molar inferior izquierdo (temporal)",
+                75: "2do molar inferior izquierdo (temporal)",
+                81: "Incisivo central inferior derecho (temporal)",
+                82: "Incisivo lateral inferior derecho (temporal)",
+                83: "Canino inferior derecho (temporal)",
+                84: "1er molar inferior derecho (temporal)",
+                85: "2do molar inferior derecho (temporal)"
             },
             procedureStyles: {
                 Cariado: "bg-red-300",
@@ -1181,9 +1846,15 @@ export default {
         }
     },
 
-
-
     methods: {
+        formatPhoneNumber(number) {
+            if (!number) return "";
+            return number.slice(0, 3) + '-' + number.slice(3, 6) + '-' + number.slice(6,10)
+        },
+        formatDNI(number) {
+            if (!number) return "";
+            return number.slice(0, 3) + '-' + number.slice(3, 10) + '-' + number.slice(10);
+        },
         selectToothInView(item, tooth) {
             this.selectedOdontograph = item
             const zones = item.data[tooth] || null
@@ -1193,29 +1864,19 @@ export default {
                 this.selectedToothInfo = { tooth, zones }
             }
         },
+        getStatusesForItem(toothData) {
+            if (!toothData) return [];
+            return Object.values(toothData);
+        },
         toothClass(procedures) {
             if (!procedures) return "";
 
             const values = Object.values(procedures);
 
-            if (values.includes("Corona")) return "bg-yellow-300";
-            if (values.includes("Cariado")) return "bg-red-300";
-            if (values.includes("Restauración")) return "bg-blue-300";
-            if (values.includes("CoronaAplicada")) return "bg-blue-300";
-
-            if (values.includes("Ausencia"))
-                return "relative after:content-['X'] after:text-red-600 after:font-bold after:absolute after:inset-0 after:flex after:items-center after:justify-center";
-
-            if (values.includes("Endodoncia"))
-                return "relative after:content-['•'] after:text-red-600 after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2";
-
-            if (values.includes("EndodonciaAplicada"))
-                return "relative after:content-['•'] after:text-blue-600 after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2";
-
-            if (values.includes("Extracción"))
-                return "bg-gray-300";
-            if (values.includes("Puente"))
-                return "border-b-4 border-red-300";
+            if (values.includes("Corona")) return "bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700";
+            if (values.includes("Cariado")) return "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700";
+            if (values.includes("Restauración")) return "bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700";
+            if (values.includes("CoronaAplicada")) return "bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800";
 
             return "";
         },
@@ -1378,7 +2039,7 @@ p span:first-child {
 }
 
 .scroll-beauty::-webkit-scrollbar-thumb {
-    background-color: #3b82f6;
+    background-color: #ec4899;
     /* azul */
     border-radius: 6px;
 }

@@ -17,7 +17,6 @@ class Bill extends Model
     'patient_id',
     'c_x_c_id',
     'total',
-    'material_provider',
     'amount_doctor',
     'currency',
     'doctor_id',
@@ -45,6 +44,11 @@ class Bill extends Model
 {
     return $this->belongsTo(CXC::class, 'c_x_c_id');
 }
+   public function payments()
+{
+    return $this->hasMany(Payment::class);
+}
+
 
     public function patient()
     {

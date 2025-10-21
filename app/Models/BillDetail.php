@@ -15,7 +15,6 @@ class BillDetail extends Model
         "initial",
         'amount_doctor',
         'materials_amount',
-        'material_provider',
         "amount_of_payments",
         "total",
         "treatment",
@@ -48,10 +47,7 @@ class BillDetail extends Model
         return $this->belongsTo(User::class, 'doctor_id');
     }
 
-    public function Payment()
-    {
-        return $this->hasMany(Payment::class, 'budget_detail_id', 'id');
-    }
+
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');

@@ -93,7 +93,7 @@
 
                     <!-- Calendar View -->
                     <div
-                        class="col-span-12 xl:col-span-7 px-2.5 py-5 sm:p-8 bg-gradient-to-b from-white/25 to-white dark:from-gray-800/25 dark:to-gray-800 xl:bg-white dark:xl:bg-gray-800 rounded-2xl max-xl:row-start-1 shadow-sm dark:shadow-none">
+                        class="col-span-12 xl:col-span-7 px-2.5 py-5 sm:p-8 bg-white dark:bg-gray-800 xl:bg-white dark:xl:bg-gray-800 rounded-2xl max-xl:row-start-1 shadow-sm dark:shadow-none">
                         <div class="flex flex-col md:flex-row gap-4 items-center  mb-5">
                             <div class="flex items-center gap-4">
                                 <h5 class="text-xl leading-8 font-semibold text-gray-900 dark:text-white">{{

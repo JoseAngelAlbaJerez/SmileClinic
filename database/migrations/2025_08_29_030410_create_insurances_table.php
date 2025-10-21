@@ -17,6 +17,10 @@ return new class extends Migration
             $table->foreignId('patient_id');
             $table->foreignId('branch_id');
             $table->foreignId('budget_id');
+            $table->foreign('budget_id')->references('id')->on('budgets');
+            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('branch_id')->references('id')->on('branches');
+
             $table->longText('affiliate_signature')->nullable();
             $table->longText('reclaimer_signature')->nullable();
 

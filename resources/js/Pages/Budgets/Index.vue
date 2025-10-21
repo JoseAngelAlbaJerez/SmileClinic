@@ -127,7 +127,7 @@
                     <!-- Card Layout (Mobile) -->
                     <div class="lg:hidden grid gap-3 my-4 mx-2">
                         <div v-for="budget in budgets.data" :key="budget.id"
-                            class="border rounded-lg bg-white dark:bg-gray-200 p-4 shadow-sm dark:border-gray-700">
+                            class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">#{{ budget.id }}</h3>
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>

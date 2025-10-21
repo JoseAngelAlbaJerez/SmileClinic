@@ -1,5 +1,6 @@
 <template>
-     <Head title="Presupuestos" />
+
+    <Head title="Presupuestos" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -12,14 +13,14 @@
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
                         <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
-                            <h2 class="text-xl font-bold text-white">Editar Presupuesto </h2>
+                            <h2 class="text-xl font-bold text-white">Nuevo Presupuesto</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -39,6 +40,7 @@
                                 </div>
 
 
+
                                 <!-- Emission Date -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -49,21 +51,17 @@
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
-
-                                <!-- Expiration Date (Conditional) -->
-                                <div class="space-y-1" v-if="form.type == 'Crédito'">
+                                <!-- Currency -->
+                                <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Fecha Vencimiento <span class="text-red-500">*</span>
+                                        Moneda <span class="text-red-500">*</span>
                                     </label>
-                                    <VueDatePicker
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
-                                        placeholder="Seleccione fecha" v-model="form.expiration_date"
-                                        :enable-time-picker="false" />
-                                    <p v-if="errors.expiration_date"
-                                        class="mt-1 text-xs text-red-600 dark:text-red-400">
-                                        {{ errors.expiration_date }}
-                                    </p>
+                                    <select v-model="form.currency"
+                                        class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
+                                        <option value="DOP"> RD$ - Peso Dominicano</option>
+                                    </select>
                                 </div>
+
                             </div>
 
                             <!-- Procedures Section -->
@@ -71,10 +69,10 @@
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="flex items-center space-x-2">
                                         <DocumentIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                                        <h3 class="text-lg font-semibold dark:text-white">Procedimientos</h3>
+                                        <h3 class="text-lg font-semibold dark:text-white">Procedimientos </h3>
                                     </div>
                                     <button @click="openProcedureModal()"
-                                        class="flex items-center space-x-1 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                                        class="flex items-center space-x-1 rounded-lg bg-pink-500 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200">
                                         <AddIcon class="h-4 w-4" />
                                         <span>Agregar</span>
                                     </button>
@@ -105,8 +103,8 @@
                                                     proc.name }}</h4>
                                             </div>
                                             <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coberture ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coberture ? 'Asegurado' : 'No Asegurado' }}
+                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
+                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
                                             </span>
                                         </div>
 
@@ -153,8 +151,9 @@
                                                     class="block text-xs font-medium text-gray-700 dark:text-gray-300">
                                                     Descuento
                                                 </label>
-                                                <DiscountInput v-model="form_details[index].discount"
-                                                    @input="calcTotal(index)" />
+                                                <input
+                                                    class="block w-full  pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
+                                                    v-model="form_details[index].discount" @input="calcTotal(index)" />
                                                 <p v-if="form.errors[`details.${index}.discount`]"
                                                     class="text-xs text-red-600 dark:text-red-400">
                                                     {{ form.errors[`details.${index}.discount`] }}
@@ -221,7 +220,12 @@
                                         <div
                                             class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-500">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Subtotal: {{ formatNumber(form_details[index].total) }}
+                                                <p>SubTotal: {{ new Intl.NumberFormat('es-DO',
+                                                    {
+                                                        style:
+                                                            'currency', currency: form.currency
+                                                    }).format(form_details[index].total
+                                                        || 0) }}</p>
                                             </span>
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
@@ -232,7 +236,353 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="p-6 md:p-8 rounded shadow-lg" v-if="insurance_form.ars != ''">
+                                <form @submit.prevent="" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Personal Information Section -->
+                                    <div class="md:col-span-2">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex flex-col items-center gap-2">
+                                            <img v-if="insurance_form.ars === 'Humano'" src="/img/Humano.svg"
+                                                alt="ARS Humano" class="h-20" />
+                                            <img v-else-if="insurance_form.ars === 'Universal'" src="/img/Universal.svg"
+                                                alt="ARS Universal" class="h-20" />
+                                            <img v-else-if="insurance_form.ars === 'Monumental'"
+                                                src="/img/Monumental.jpg" alt="ARS Monumental" class="h-20" />
+                                            <img v-else-if="insurance_form.ars === 'Senasa'" src="/img/SENASA.webp"
+                                                alt="ARS Senasa" class="h-20" />
+                                            <img v-else src="/img/default-insurance-logo.png" alt="Seguro"
+                                                class="h-20" />
+                                            <span>Reclamación por servicios dentales</span>
+                                        </h3>
+                                    </div>
 
+
+                                    <!-- Personal Data Section -->
+                                    <div class="md:col-span-2  mb-4">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-500"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            Datos Personales
+                                        </h3>
+                                    </div>
+
+                                    <!-- First Name -->
+                                    <div>
+                                        <label for="first_name"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Nombre del Afiliado <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.first_name" id="first_name" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese el nombre" />
+                                        </div>
+                                        <p v-if="errors.first_name" class="mt-1 text-sm text-red-600">{{
+                                            errors.first_name }}</p>
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div>
+                                        <label for="last_name"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Apellido del Afiliado <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.last_name" id="last_name" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese el apellido" />
+                                        <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name
+                                            }}</p>
+                                    </div>
+
+                                    <!-- DNI -->
+                                    <div>
+                                        <label for="DNI"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            No. de Identificación
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <DNIInput v-model="insurance_form.DNI"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese número de identificación" />
+                                        </div>
+                                        <p v-if="errors.DNI" class="mt-1 text-sm text-red-600">{{ errors.DNI }}</p>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div>
+                                        <label for="phone_number"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Teléfono
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <PhoneIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <PhoneInput v-model="insurance_form.phone_number"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese número de teléfono" />
+                                        </div>
+                                        <p v-if="errors.phone_number" class="mt-1 text-sm text-red-600">{{
+                                            errors.phone_number }}</p>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div>
+                                        <label for="address"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Dirección
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <LocationIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.address" id="address" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese dirección completa" />
+                                        </div>
+                                        <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}
+                                        </p>
+                                    </div>
+                                    <!-- Address -->
+                                    <div>
+                                        <label for="address"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Número de Afiliado
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.ars_id" id="ars_id" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese el Número de Afiliado completo" />
+                                        </div>
+                                        <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Claimant Data Section -->
+                                    <div class="md:col-span-2 mt-6 mb-4">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                                            <BuildingIcon class="text-pink-600 mr-2" />
+                                            Datos del Reclamante
+                                        </h3>
+                                    </div>
+
+                                    <!-- Business Name -->
+                                    <div>
+                                        <label for="bussiness_name"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Nombre del Establecimiento <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.bussiness_name" id="bussiness_name"
+                                                type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese nombre del establecimiento" />
+                                        </div>
+                                        <p v-if="errors.bussiness_name" class="mt-1 text-sm text-red-600">{{
+                                            errors.bussiness_name }}</p>
+                                    </div>
+
+                                    <!-- Code -->
+                                    <div>
+                                        <label for="claimant_code"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Código <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.claimant_code" id="claimant_code" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese código" />
+                                        <p v-if="errors.claimant_code" class="mt-1 text-sm text-red-600">{{
+                                            errors.claimant_code }}</p>
+                                    </div>
+
+                                    <!-- Phone Number -->
+                                    <div>
+                                        <label for="phone_number"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Teléfono
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <PhoneIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <PhoneInput v-model="insurance_form.phone_number"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese número de teléfono" />
+                                        </div>
+                                        <p v-if="errors.phone_number" class="mt-1 text-sm text-red-600">{{
+                                            errors.phone_number }}</p>
+                                    </div>
+
+                                    <!-- Diagnosis -->
+                                    <div>
+                                        <label for="diagnosis"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Diagnóstico <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.diagnosis" id="diagnosis" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese diagnóstico" />
+                                        <p v-if="errors.diagnosis" class="mt-1 text-sm text-red-600">{{ errors.diagnosis
+                                        }}</p>
+                                    </div>
+
+                                    <!-- Doctor Name -->
+                                    <div>
+                                        <label for="doctor_name"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Médico Tratante <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                            </div>
+                                            <input v-model="insurance_form.doctor_name" id="doctor_name" type="text"
+                                                class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                                placeholder="Ingrese nombre del médico" />
+                                        </div>
+                                        <p v-if="errors.doctor_name" class="mt-1 text-sm text-red-600">{{
+                                            errors.doctor_name }}</p>
+                                    </div>
+
+                                    <!-- Doctor Code -->
+                                    <div>
+                                        <label for="doctor_id"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Código del Médico <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.doctor_id" id="doctor_id" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese código del médico" />
+                                        <p v-if="errors.doctor_id" class="mt-1 text-sm text-red-600">{{ errors.doctor_id
+                                        }}</p>
+                                    </div>
+
+                                    <!-- Procedure -->
+                                    <div>
+                                        <label for="procedure"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Procedimiento Realizado <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.procedure" id="procedure" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese procedimiento realizado" />
+                                        <p v-if="errors.procedure" class="mt-1 text-sm text-red-600">{{ errors.procedure
+                                        }}</p>
+                                    </div>
+
+                                    <!-- Amount Claimed -->
+                                    <div>
+                                        <label for="amount"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Reclamado $RD <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.amount" id="amount" type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese monto reclamado" />
+                                        <p v-if="errors.amount" class="mt-1 text-sm text-red-600">{{ errors.amount }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Authorized Amount -->
+                                    <div class="md:col-span-2">
+                                        <label for="autorized_amount"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Autorizado $RD <span class="text-red-500">*</span>
+                                        </label>
+                                        <input v-model="insurance_form.autorized_amount" id="autorized_amount"
+                                            type="text"
+                                            class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
+                                            placeholder="Ingrese monto autorizado" />
+                                        <p v-if="errors.autorized_amount" class="mt-1 text-sm text-red-600">{{
+                                            errors.autorized_amount }}</p>
+                                    </div>
+
+
+                                    <!-- Signatures Section -->
+                                    <div class="md:col-span-2">
+                                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                            Firmas
+                                        </h3>
+                                    </div>
+                                    <!-- Affiliate Signature -->
+                                    <div class="md:col-span-1 mb-10">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Firma del Afiliado
+                                        </label>
+                                        <vue-signature-pad ref="affiliatePad"
+                                            :options="{ penColor: 'black', backgroundColor: 'white' }"
+                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
+                                            style="width: 100%; height: 120px;" />
+                                        <div class="flex space-x-2 mt-2">
+                                            <SecondaryButton type="button" @click="clearAffiliateSignature"
+                                                class="px-3 py-1 bg-gray-200 rounded">
+                                                Limpiar
+                                            </SecondaryButton>
+                                        </div>
+                                    </div>
+
+                                    <!-- Reclaimer Signature -->
+                                    <div class="md:col-span-1 mb-10">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Firma del Reclamante
+                                        </label>
+                                        <vue-signature-pad ref="reclaimerPad"
+                                            :options="{ penColor: 'black', backgroundColor: 'white' }"
+                                            class="border border-gray-300 dark:border-gray-600 rounded-lg"
+                                            style="width: 100%; height: 120px;" />
+                                        <div class="flex space-x-2 mt-2">
+                                            <SecondaryButton type="button" @click="clearReclaimerSignature"
+                                                class="px-3 py-1 bg-gray-200 rounded">
+                                                Limpiar
+                                            </SecondaryButton>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <!-- Error Message -->
+                                    <div v-if="error" class="md:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                        <div class="flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="text-red-700 dark:text-red-300 font-medium">{{ error }}</span>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
                             <!-- Summary and Actions -->
                             <div
                                 class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6">
@@ -249,25 +599,28 @@
 
                                 <!-- Total -->
                                 <div v-if="form.total" class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Total: <span class="text-pink-600 dark:text-pink-400">{{ formatNumber(form.total)
-                                    }}</span>
+                                    <p class="text-pink-600 dark:text-pink-400">Total: {{ new Intl.NumberFormat('es-DO',
+                                        {
+                                            style:
+                                                'currency', currency: form.currency
+                                        }).format(form.total
+                                            || 0) }}</p>
                                 </div>
 
                                 <!-- Form Actions -->
                                 <div class="flex space-x-3">
                                     <SecondaryButton type="button"
-                                        @click="form.reset(); form_detail.reset(); selectedProcedures = []"
+                                        @click="form.reset(); form_detail.reset(); form_details = []; selectedProcedures = []"
                                         class="hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200">
 
                                         Limpiar
                                     </SecondaryButton>
-                                    <PrimaryButton @click="submit()"
-                                        :disabled="form.processing || form_detail.processing"
-                                        :class="{ 'opacity-75': form.processing || form_detail.processing }"
+                                    <PrimaryButton @click="submit()" :disabled="form.processing"
+                                        :class="{ 'opacity-75': form.processing }"
                                         class="hover:bg-pink-600 transition duration-200">
 
-                                        <span v-if="form.processing || form_detail.processing">Guardando...</span>
-                                        <span v-else>Guardar Documento</span>
+                                        <span v-if="form.processing">Guardando...</span>
+                                        <span v-else>Guardar </span>
                                     </PrimaryButton>
                                 </div>
                             </div>
@@ -307,7 +660,7 @@
                             </button>
                         </div>
                         <PatientSelector :patients="patient"
-                            @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
+                            @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false, onPatientSelected($event)" />
                     </div>
                 </Modal>
             </div>
@@ -327,7 +680,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import Modal from '@/Components/Modal.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import DangerButton from '@/Components/DangerButton.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DiscountInput from '@/Components/DiscountInput.vue';
@@ -336,12 +689,24 @@ import ProcedureSelector from '@/Components/ProcedureSelector.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
 import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
+import DNIInput from '@/Components/DNIInput.vue';
+import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
+import PhoneInput from '@/Components/PhoneInput.vue';
+import LocationIcon from '@/Components/Icons/LocationIcon.vue';
+import CardIcon from '@/Components/Icons/CardIcon.vue';
+// @ts-ignore
+import { VueSignaturePad } from "vue-signature-pad"
+import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
+import { router } from '@inertiajs/vue3'
+
+
 
 export default {
     props: {
         patient: Object,
         procedure: Object,
         budget: Object,
+        insurance: Object,
         errors: [Array, Object],
     },
     components: {
@@ -361,32 +726,78 @@ export default {
         XIcon,
         DocumentIcon,
         SearchIcon,
-        DeleteIcon
+        DeleteIcon,
+        Head,
+        DNIInput,
+        PhoneIcon,
+        PhoneInput,
+        LocationIcon,
+        CardIcon,
+        VueSignaturePad,
+        BuildingIcon
 
     },
     mounted() {
         if (this.budget && this.budget.budgetdetail) {
             this.selectedProcedures = this.budget.budgetdetail.map(d => d.procedure)
+            console.log(this.selectedProcedures)
         }
     },
+    watch: {
+        budget: {
+            handler(newVal) {
+                if (newVal && newVal.budgetdetail) {
+                    this.selectedProcedures = newVal.budgetdetail
+                        .filter(d => d.procedure)
+                        .map(d => d.procedure)
+                    this.form_details = newVal.budgetdetail.map(detail => useForm({
+                        procedure_id: detail.procedure?.id || '',
+                        amount: detail?.amount || '',
+                        total: detail?.total || '',
+                        treatment: detail?.treatment || '',
+                        discount: detail?.discount || 0,
+                        quantity: detail?.quantity || 1
+                    }))
+                }
 
+            },
+            immediate: true,
+            deep: true
+        }
+    },
     data() {
         return {
             form: useForm({
                 patient_id: this.budget.patient.id,
+                currency: 'DOP',
                 type: 'Contado',
                 emission_date: new Date(),
-                expiration_date: this.budget.expiration_date,
+                expiration_date: '',
                 total: this.budget.total,
+                processing: false,
             }),
-            form_details: this.budget.budgetdetail.map(detail => useForm({
-                procedure_id: detail.procedure?.id || '',
-                amount: detail?.amount || '',
-                total: detail?.total || '',
-                treatment: detail.treatment,
-                discount: detail.discoun,
-                quantity: 1
-            })),
+            insurance_form: useForm({
+                first_name: this.budget.patient.first_name,
+                last_name: this.budget.patient.last_name,
+                DNI: this.budget.patient.DNI,
+                phone_number: this.budget.patient.phone_number,
+                address: this.budget.patient.address,
+                bussiness_name: "Smile Clinic",
+                claimant_code: "123456",
+                diagnosis: this.budget.patient.motive,
+                doctor_name: "Crystal de León Espinal",
+                doctor_id: "12345678",
+                procedure: "",
+                amount: "",
+                autorized_amount: "",
+                affiliate_signature: null,
+                reclaimer_signature: null,
+                ars: this.budget.patient.ars,
+                ars_id: this.budget.patient.ars_id,
+            }),
+
+
+
 
             budget_id: this.budget.id,
             form_details: [],
@@ -401,12 +812,15 @@ export default {
             showPatientModal: ref(false),
             error: '',
             selectedProcedureId: '',
-            selectedProcedures: this.budget.budgetdetail.map(detail => detail.procedure)
-
+            selectedProcedures: [],
+            affiliatePad: ref(null),
+            reclaimerPad: ref(null),
 
         };
 
     },
+
+
 
     methods: {
         formatDate(date) {
@@ -418,6 +832,40 @@ export default {
                 day: 'numeric',
             });
         },
+
+
+        onPatientSelected(patient) {
+            this.insurance_form.first_name = patient.first_name || '';
+            this.insurance_form.last_name = patient.last_name || '';
+            this.insurance_form.DNI = patient.DNI || '';
+            this.insurance_form.phone_number = patient.phone_number || '';
+            this.insurance_form.address = patient.address || '';
+            this.insurance_form.ars = patient.ars || '';
+            this.insurance_form.diagnosis = patient.motive || '';
+            this.insurance_form.ars_id = patient.ars_id || '';
+
+            this.showPatientModal = false;
+        },
+
+        clearAffiliateSignature() {
+            this.$refs.affiliatePad.clearSignature();
+            this.insurance_form.affiliate_signature = null;
+        },
+        clearReclaimerSignature() {
+            this.$refs.reclaimerPad.clearSignature();
+            this.insurance_form.reclaimer_signature = null;
+        },
+        saveSignatures() {
+            if (this.$refs.affiliatePad) {
+                this.insurance_form.affiliate_signature = this.$refs.affiliatePad.saveSignature().data;
+            }
+            if (this.$refs.affiliatePad) {
+                this.insurance_form.reclaimer_signature = this.$refs.reclaimerPad.saveSignature().data;
+            }
+        },
+
+
+
 
         addProcedure() {
 
@@ -438,6 +886,8 @@ export default {
             }
             this.calcTotal(this.form_details.length - 1);
             this.selectedProcedureId = '';
+            this.insurance_form.procedure = this.form_details[0].treatment;
+            this.insurance_form.procedure = this.form_details[0].treatment;
 
         },
         calcTotal(index) {
@@ -448,9 +898,7 @@ export default {
             const initial = parseFloat(detail.initial) || 0;
             detail.total = (amount * quantity);
             detail.total -= initial;
-            const discounted = (detail.total * discount) / 100;
-            detail.total -= discounted;
-
+            detail.total -= discount;
             this.form.total = this.form_details.reduce((sum, detail) => {
                 const total = parseFloat(detail.total) || 0;
                 return sum + total;
@@ -459,14 +907,17 @@ export default {
 
         removeProcedure(index) {
             const detail = this.form_details[index];
-            const amount = parseFloat(detail.amount) || 0;
-            const discount = parseFloat(detail.discount) || 0;
-            const quantity = parseInt(detail.quantity) || 1;
-            const initial = parseFloat(detail.initial) || 0;
-            detail.total -= initial;
-            detail.total = (amount * quantity) - discount;
-            this.form.total = this.form.total - detail.total;
-            this.selectedProcedures.splice(index, 1);
+
+            this.form_details.splice(index, 1);
+
+            this.selectedProcedures = this.selectedProcedures.filter(
+                p => p.id !== detail.procedure_id
+            );
+
+            this.form.total = this.form_details.reduce((sum, detail) => {
+                return sum + (parseFloat(detail.total) || 0);
+            }, 0);
+
         },
 
         openProcedureModal() {
@@ -485,6 +936,7 @@ export default {
         },
 
         submit() {
+            this.form.processing = true;
             if (!this.form.patient_id) {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';
                 return;
@@ -501,36 +953,46 @@ export default {
             }
 
 
+
             this.error = null;
 
-            const data = {
+
+            this.saveSignatures();
+            const payload = {
                 form: {
                     patient_id: this.form.patient_id,
                     type: this.form.type,
+                    currency: this.form.currency,
                     emission_date: this.form.emission_date,
                     expiration_date: this.form.expiration_date,
                     total: this.form.total,
+                    amount_of_payments: this.form.amount_of_payments || null,
                 },
-                details: this.form_details,
+                details: this.form_details.map(d => ({
+                    procedure_id: d.procedure_id,
+                    amount: d.amount,
+                    total: d.total,
+                    treatment: d.treatment,
+                    discount: d.discount,
+                    quantity: d.quantity,
+                    amount_of_payments: d.amount_of_payments || null,
+                    initial: d.initial || null,
+                })),
+                ars: this.insurance_form.ars,
+                affiliate_signature: this.insurance_form.affiliate_signature,
+                reclaimer_signature: this.insurance_form.reclaimer_signature,
             };
 
-            axios.post(route('budgets.update'), data)
-                .then(response => {
-                    const budgetId = response.data.budget_id;
+            router.put(route('budgets.update',this.budget), payload, {
 
-                    if (budgetId) {
-                        window.open(route('report.budget', { budget: budgetId }), '_blank');
-                    }
-                    window.location.href = route('budgets.show', { budget: budgetId });
-                })
-                .catch(error => {
-                    if (error.response?.status === 422) {
-                        this.form.errors = error.response.data.errors;
-                        this.form_detail.errors = error.response.data.errors;
-                    } else {
-                        console.error('Error al guardar el presupuesto:', error);
-                    }
-                });
+                onError: (errors) => {
+                    this.errors = errors;
+                },
+                onFinish: () => {
+                    this.form.processing = false;
+                }
+            });
+
         },
 
 

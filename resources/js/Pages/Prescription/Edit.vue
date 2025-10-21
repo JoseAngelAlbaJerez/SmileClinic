@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Receta" />
     <AuthenticatedLayout>
         <template #header>
@@ -11,7 +12,7 @@
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                         <!-- Form Header -->
                         <div class="bg-pink-500 px-6 py-4">
-                            <h2 class="text-xl font-bold text-white">Nueva Receta Médica</h2>
+                            <h2 class="text-xl font-bold text-white">Editar Receta Médica</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles de la prescripción</p>
                         </div>
 
@@ -75,7 +76,7 @@
                                             <button @click="removePrescriptionDetail(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />
-                                                Eliminar
+
                                             </button>
                                         </div>
 
@@ -259,7 +260,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import Modal from '@/Components/Modal.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import DangerButton from '@/Components/DangerButton.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DiscountInput from '@/Components/DiscountInput.vue';
@@ -270,11 +271,13 @@ import RXIcon from '@/Components/Icons/RXIcon.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
+import EditIcon from '@/Components/Icons/EditIcon.vue';
 
 export default {
     props: {
         drugs: Object,
         patient: Object,
+        prescription: Object,
         errors: [Array, Object],
     },
     components: {
@@ -297,7 +300,8 @@ export default {
         RXIcon,
         SearchIcon,
         XIcon,
-        AccessGate
+        AccessGate,
+        Head
 
     },
     data() {
@@ -306,11 +310,11 @@ export default {
 
             budget_id: '',
             form_details: [],
-            selected_patient: '',
+            selected_patient: this.prescription.patient,
             timeout: 3000,
             crumbs: [
                 { icon: markRaw(RXIcon), label: 'Recetas', to: route('prescriptions.index') },
-                { icon: markRaw(AddIcon), label: 'Crear' },
+                { icon: markRaw(EditIcon), label: 'Editar' },
 
             ],
             showDrugModal: ref(false),
@@ -318,17 +322,14 @@ export default {
             showPatientModal: ref(false),
             error: '',
             selectedDrugId: '',
-            selectedDrugs: [],
+            selectedDrugs: this.prescription.prescriptions_details.map(d => d.drug) || [],
             drugsList: this.drugs.data || [],
             form: useForm({
-                patient_id: '',
-                details: [
-                    {
-                        description: '',
-
-                        drug_id: null,
-                    }
-                ],
+                patient_id: this.prescription.patient.id,
+                details: this.prescription.prescriptions_details.map(d => ({
+                    description: d.description || '',
+                    drug_id: d.drug_id || null,
+                })),
             }),
             form_modal: useForm({
                 description: '',
@@ -392,7 +393,7 @@ export default {
                 return;
             }
             for (const detail of this.form.details) {
-                if (!detail.description ||  !detail.drug_id) {
+                if (!detail.description || !detail.drug_id) {
                     this.error = 'Complete todos los campos en los detalles de la receta.';
                     return;
                 }
@@ -412,7 +413,7 @@ export default {
                 prescription: this.form,
             };
 
-            this.$inertia.post(route('prescriptions.store'), this.form, {
+            this.$inertia.put(route('prescriptions.update',this.prescription), this.form, {
                 onError: (errors) => {
                     this.form.errors = errors;
                 }

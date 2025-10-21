@@ -44,10 +44,7 @@ class Branch extends Model
         return $this->hasMany(CXC::class, 'branch_id');
     }
 
-    public function cxcDetails()
-    {
-        return $this->hasMany(CXCDetail::class, 'branch_id');
-    }
+
 
     public function drugs()
     {
@@ -74,10 +71,7 @@ class Branch extends Model
         return $this->hasMany(Odontograph::class, 'branch_id');
     }
 
-    public function patients()
-    {
-        return $this->hasMany(Patient::class, 'branch_id');
-    }
+  
 
     public function payments()
     {

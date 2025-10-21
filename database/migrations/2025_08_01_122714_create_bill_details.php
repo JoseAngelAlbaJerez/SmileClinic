@@ -26,7 +26,6 @@ return new class extends Migration
             $table->foreignId('doctor_id');
             $table->foreignId('bill_id');
             $table->boolean('active')->default(true);
-            $table->boolean('material_provider');
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

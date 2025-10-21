@@ -176,7 +176,15 @@ class PrescriptionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $drugs = Drug::orderByDesc('created_at')->paginate(10);
+        $patient = Patient::orderByDesc('created_at')->paginate(10);
+        $prescription = Prescription::with(['patient', 'doctor', 'budget', 'prescriptionsDetails.drugs'])
+            ->findOrFail($id);
+        return Inertia::render('Prescription/Edit', [
+            'drugs' => $drugs,
+            'patient' => $patient,
+            'prescription' => $prescription
+        ]);
     }
 
     /**
@@ -184,14 +192,69 @@ class PrescriptionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($request->has('active')) {
+            $this->restore($id);
+        }
+        $validated = $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'details' => 'required|array|min:1',
+            'details.*.description' => 'required|string',
+            'details.*.drug_id' => 'required|exists:drugs,id',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $prescription = Prescription::findOrFail($id);
+
+            $prescription->update([
+                'patient_id' => $validated['patient_id'],
+                'branch_id' => Auth::user()->branch_id,
+                'doctor_id' => Auth::id(),
+            ]);
+
+            $prescription->prescriptionsDetails()->delete();
+
+            foreach ($validated['details'] as $detail) {
+                $prescription->prescriptionsDetails()->create([
+                    'description' => $detail['description'],
+                    'drug_id' => $detail['drug_id'],
+                    'branch_id' => Auth::user()->branch_id,
+                    'active' => true,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('prescriptions.index')
+                ->with('toast', 'Receta actualizada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
+                ->with('toastStyle', 'danger');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $prescription = Prescription::findOrFail($id);
+        $prescription->update(['active' => 0]);
+        $prescription->prescriptionsDetails()->update(['active' => 0]);
+        return redirect()->route('prescriptions.index')
+            ->with('toast', 'Receta eliminada correctamente.')
+            ->with('toastStyle', 'success');
+    }
+    private function restore(string $id){
+        $prescription = Prescription::findOrFail($id);
+        $prescription->update(['active' => 1]);
+        $prescription->prescriptionsDetails()->update(['active' => 1]);
+        return redirect()->route('prescriptions.index')
+            ->with('toast', 'Receta restaurada correctamente.')
+            ->with('toastStyle', 'success');
     }
 }

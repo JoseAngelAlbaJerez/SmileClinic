@@ -12,11 +12,11 @@ class ProcedureSeeder extends Seeder
      */
     public function run(): void
     {
-         foreach (range(1, 15) as $i) {
+         foreach (range(1, 100) as $i) {
             $cost = fake()->numberBetween(1000,50000);
             DB::table('procedures')->insert([
                 'name' => fake()->randomElement(['Bicuspid root canal (premolar)', 'Composite resin dental fillings (per filling)','Movile Protesis','Deep cleaning - Scaling and root planing (per quadrant)','Dental fillings - Porcelain inlay/onlay (per filling)','Dental sedation','Metallic dental crown','Molar root canal', 'Mouth guard', 'Porcelain and metal dental crown', 'Resin-base or temporary crown', 'Tooth extraction','Wisdom teeth removal' ] ),
-                'coberture' => fake()->boolean(),
+                'coverage' => fake()->boolean(),
                 'cost' => $cost,
                 'insuranced_amount' => $cost * 0.8,
                 'active' => true,

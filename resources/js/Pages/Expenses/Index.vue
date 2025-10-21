@@ -13,27 +13,42 @@
                 <div class="container mx-auto w-full px-2">
 
                     <!-- Search & Exports -->
-                    <div class="my-2 flex flex-col lg:flex-row lg:mx-10 gap-2 items-stretch lg:items-center">
-                        <div class="flex gap-2">
-                            <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-                            <button @click="showReport = true"
-                                class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                                <PrintIcon />
+                    <div class="my-1 flex flex-col lg:flex-row lg:mx-10 gap-2 items-stretch lg:items-center">
+                        <div class="flex flex-col md:flex-row md:items-center gap-2 w-full mt-5">
+                            <!-- Filter -->
+                            <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()"
+                                class="w-full md:w-auto" />
 
+                            <!-- Custom Report (admin only) -->
+                            <AccessGate :role="['admin']">
+                                <button @click="showReport = true"
+                                    class="w-full md:w-auto flex items-center justify-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                    <PrintIcon class="mr-2" />
+                                    Cuadre de Caja Personalizado
+                                </button>
+                            </AccessGate>
+
+                            <!-- Report Modal -->
+                            <ReportModal :open="showReport" @close="showReport = false" table="expenses"
+                                :default-selected="['id', 'amount', 'description', 'created_at']" />
+
+                            <!-- Daily Report -->
+                            <button @click="print"
+                                class="w-full md:w-auto flex items-center justify-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                <PrintIcon class="mr-2" />
+                                Cuadre de Caja Diario
                             </button>
-                             <ReportModal :open="showReport" @close="showReport = false" table="expenses"  :default-selected="['id', 'amount', 'description','created_at']"  />
-
                         </div>
 
                         <!-- Espacio flexible para separar en responsive -->
                         <div
                             class="flex flex-col sm:flex-row ml-auto gap-2 items-stretch sm:items-center w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
-                                class="rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400
+                                class="rounded-lg mt-5 border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400
                    focus:outline-none focus:ring-2 focus:ring-pink-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600 w-full" />
 
                             <button @click="showModal = true;"
-                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                 <AddIcon class="size-5" />
                                 <span class="hidden sm:inline">Nuevo Egreso</span>
                             </button>
@@ -75,7 +90,7 @@
                                             <span v-if="form.sortField === 'created_at'">{{ form.sortDirection === 'asc'
                                                 ? '↑' : '↓' }}</span>
                                         </th>
-                                         <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
                                             class="cursor-pointer " @click="sort('branch_id')">
                                             Sucursal
                                             <span v-if="form.sortField === 'branch_id'">
@@ -104,7 +119,7 @@
                                             }).format(expense.amount || 0) }}
                                         </td>
                                         <td class="p-4">{{ formatDate(expense.created_at) }}</td>
-                                         <AccessGate role="admin">
+                                        <AccessGate role="admin">
                                             <td class="p-4">{{ expense.branch.name }}</td>
                                         </AccessGate>
                                         <td class="p-4">
@@ -153,31 +168,29 @@
                                 <UserIcon class="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500"
                                     style="pointer-events: none;" />
 
-                            <select
-                            v-model="form_modal.description"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white"
-                        >
-                            <option disabled value="">Seleccione un tipo de egreso</option>
-                            <option value="Luz">Luz</option>
-                            <option value="Local">Local</option>
-                            <option value="Envíos">Envíos</option>
-                            <option value="Depósito">Depósito</option>
-                            <option value="TSS">TSS</option>
-                            <option value="Contabilidad">Contabilidad</option>
-                            <option value="Laboratorio">Laboratorio</option>
-                            <option value="Empleado">Empleado</option>
-                            <option value="Publicidad">Publicidad</option>
-                            <option value="Teléfono">Teléfono</option>
-                            <option value="Gastos ">Gastos </option>
-                            <option value="Dra. Castro">Dra. Castro</option>
-                            <option value="Dra. Madelin">Dra. Madelin</option>
-                            <option value="Dra. Odalisa">Dra. Odalisa</option>
-                            <option value="Dra. Orquídea ">Dra. Orquídea </option>
-                            <option value="Dra. Paloma">Dra. Paloma</option>
-                            <option value="Dr. Francisco">Dr. Francisco</option>
+                                <select v-model="form_modal.description"
+                                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
+                                    <option disabled value="">Seleccione un tipo de egreso</option>
+                                    <option value="Luz">Luz</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Envíos">Envíos</option>
+                                    <option value="Depósito">Depósito</option>
+                                    <option value="TSS">TSS</option>
+                                    <option value="Contabilidad">Contabilidad</option>
+                                    <option value="Laboratorio">Laboratorio</option>
+                                    <option value="Empleado">Empleado</option>
+                                    <option value="Publicidad">Publicidad</option>
+                                    <option value="Teléfono">Teléfono</option>
+                                    <option value="Gastos ">Gastos </option>
+                                    <option value="Dra. Castro">Dra. Castro</option>
+                                    <option value="Dra. Madelin">Dra. Madelin</option>
+                                    <option value="Dra. Odalisa">Dra. Odalisa</option>
+                                    <option value="Dra. Orquídea ">Dra. Orquídea </option>
+                                    <option value="Dra. Paloma">Dra. Paloma</option>
+                                    <option value="Dr. Francisco">Dr. Francisco</option>
 
 
-                        </select>
+                                </select>
                             </div>
                             <p v-if="errors.description" class="mt-1 text-xs text-red-600">{{ errors.description }}</p>
                         </div>
@@ -223,8 +236,9 @@
                     <div v-if="selectedExpense" class="space-y-3 p-4">
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
-                            <Link :href="route('users.show',selectedExpense.user)" class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.name }} {{
-                                selectedExpense.user.last_name }}</Link>
+                            <Link :href="route('users.show', selectedExpense.user)"
+                                class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.name }} {{
+                                    selectedExpense.user.last_name }}</Link>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Descripción: </span>
@@ -233,7 +247,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
 
@@ -286,7 +300,7 @@ import CartIcon from '@/Components/Icons/CartIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import DocumentMoney from '@/Components/Icons/DocumentMoney.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { useToast } from 'vue-toastification';
+import { router } from '@inertiajs/vue3'
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
@@ -294,6 +308,7 @@ import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
+import { Inertia } from '@inertiajs/inertia';
 export default {
 
     props: {
@@ -443,10 +458,8 @@ export default {
                 { active: true },
             );
         },
-        async print() {
-            window.open(route('report.expenses', {
-                Days: this.filters.lastDays
-            }), '_blank');
+        print() {
+            router.visit(route("report.dailycashbalance"))
         }
 
     }

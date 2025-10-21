@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\Budget;
+use App\Models\CXC;
 use App\Models\Odontograph;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -54,7 +55,7 @@ class PatientController extends Controller implements HasMiddleware
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%']);
+                   ;
             });
         }
 
@@ -81,7 +82,7 @@ class PatientController extends Controller implements HasMiddleware
             }
         }
 
-        $patients = $query->with('branch')->orderByDesc('created_at')->paginate(10);
+        $patients = $query->orderByDesc('created_at')->paginate(10);
         return Inertia::render('Patients/Index', [
             'patients' => $patients,
             'filters' => [
@@ -96,28 +97,36 @@ class PatientController extends Controller implements HasMiddleware
         ]);
     }
     public function filter(Request $request)
-{
-    $filters = $request->input('filters', []);
+    {
+        $filters = $request->input('filters', []);
 
-    $query = Patient::query()
-        ->when(!empty($filters['name']), function ($q) use ($filters) {
-            $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
-        });
+        $query = Patient::with([
+            'CXC',
+            'bill.billdetail',
+            'budget' => function ($q) {
+                $q->where('active', 1)
+                    ->with([
+                        'budgetdetail' => fn($d) => $d->where('active', 1)->with('procedure'),
+                        'patient'
+                    ]);
+            }
+        ])
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+            });
 
-    $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        $patients = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        if ($request->wantsJson()) {
+            return response()->json([
+                'patients' => $patients
+            ]);
+        }
 
-    if ($request->wantsJson()) {
-        return response()->json([
-            'patients' => $patients
+        return Inertia::render('Patients/Index', [
+            'patients' => $patients,
+            'filters'  => $filters,
         ]);
     }
-
-    // si entras normal (con Inertia, no por axios)
-    return Inertia::render('Patients/Index', [
-        'patients' => $patients,
-        'filters'  => $filters,
-    ]);
-}
 
 
 
@@ -153,11 +162,13 @@ class PatientController extends Controller implements HasMiddleware
         $events = Event::where('patient_id', $patient->id)->with('doctor')->get();
         $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure')->get();
         $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure')->get();
+        $CXC = CXC::where('patient_id', $patient->id)->with('Payment')->get();
         $odontograph = $query->orderByDesc('created_at')->get();
         $prescription = Prescription::where('patient_id', $patient->id)->with('patient', 'doctor', 'prescriptionsDetails.drugs')->orderByDesc('created_at')->get();
         $patient->age =  Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Patients/Show', [
             'patient' => $patient,
+            'CXCS' => $CXC,
             'budgets' => $budgets,
             'bills' => $bills,
             'events' => $events,
@@ -189,6 +200,7 @@ class PatientController extends Controller implements HasMiddleware
             'DNI' => 'required|string|max:255',
             'phone_number' => 'nullable|string|max:255',
             'ars' => 'nullable|string|max:255',
+            'ars_id' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string|max:255',
             'motive' => 'nullable|string|max:255',
@@ -219,6 +231,7 @@ class PatientController extends Controller implements HasMiddleware
                 'first_name'           => 'required|string|max:100',
                 'last_name'            => 'required|string|max:100',
                 'ars'            => 'nullable|string|max:100',
+                'ars_id' => 'nullable|string|max:255',
                 'DNI'                  => 'nullable|string|max:20|unique:patients,DNI',
                 'phone_number'         => 'nullable|string|max:20',
                 'date_of_birth'        => 'nullable|date|before:today',
@@ -233,7 +246,6 @@ class PatientController extends Controller implements HasMiddleware
             ]);
 
             $validated['active'] = true;
-            $validated['branch_id'] = Auth::user()->branch_id;
             $patient = Patient::create($validated);
 
             return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');

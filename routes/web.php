@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\BudgetDetailController;
 use App\Http\Controllers\CXCController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrugController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpensesController;
@@ -16,15 +18,6 @@ use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
-use App\Models\Bill;
-use App\Models\Branch;
-use App\Models\BudgetDetail;
-use App\Models\Expenses;
-use App\Models\Patient;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,54 +25,11 @@ Route::get('/', function () {
     return Inertia::render('Auth/Login');
 });
 
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::get('/dashboard', function () {
-    $patients = Patient::all();
-    $users = User::all();
-    $branches = Branch::all();
-    $now = Carbon::now();
-    $startOfThisWeek = $now->copy()->startOfWeek();
-    $endOfThisWeek = $now->copy()->endOfWeek();
-
-    $startOfLastWeek = $now->copy()->subWeek()->startOfWeek();
-    $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
-
-
-    $incomeThisWeek = Bill::where('type', 'Contado')
-        ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
-        ->sum('total');
-
-    $incomeLastWeek = Bill::where('type', 'Contado')
-        ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
-        ->sum('total');
-
-
-    $percentageChange = $incomeLastWeek > 0
-        ? (($incomeThisWeek - $incomeLastWeek) / $incomeLastWeek) * 100
-        : 100;
-
-
-    $income = Bill::where('type', '=', 'Contado')->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
-    $income_sum = $income->sum('total');
-
-
-    $expense = Expenses::orderByDesc('created_at')->get();
-    $expense_sum = $expense->sum('amount');
-
-    return Inertia::render('Dashboard', [
-        'patients' => $patients,
-        'branches' => $branches,
-        'users' => $users,
-        'income_sum' => $income_sum,
-        'expense_sum' => $expense_sum,
-        'income' => $income,
-        'expense' => $expense,
-        'incomeThisWeek' => $incomeThisWeek,
-        'incomeLastWeek' => $incomeLastWeek,
-        'percentageChange' => round($percentageChange, 2),
-        'user' => Auth::user()->load('branch'),
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class,'dashboard'])->middleware(['auth'])->name('dashboard');
+Route::get('/report/dailycashbalance', [ReportController::class, 'dailycashbalance'])->name('report.dailycashbalance');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
