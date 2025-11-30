@@ -2,27 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Procedure extends Model
 {
-    protected $fillable = ["name", "coverage",'branch_id', "cost", "active","insuranced_amount"];
+    protected $fillable = ["name", "coverage", "cost", "active", "insuranced_amount"];
 
-      protected static function booted()
+
+    public function BudgetDetail()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('procedures.branch_id', $user->branch_id);
-                }
-            }
-        });
+        return $this->belongsTo(BudgetDetail::class,'procedure_id');
     }
-    public function BudgetDetail(){
-        return $this->hasMany( BudgetDetail::class);
-    }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

@@ -20,33 +20,52 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
         'last_name',
         'DNI',
-        'branch_id',
         'specialty',
         'phone_number',
         'date_of_birth',
-        'position',
+        'address',
         'email',
         'avatar',
         'password',
-        'active'
+        'active',
+        'active_branch_id'
     ];
-    protected $casts = [
-        'address' => 'array',
-    ];
-    public function address()
+
+
+    public function medicalHistories()
     {
-        return $this->hasOne(Address::class);
+        return $this->hasOne(MedicalHistory::class);
     }
-    public function notes()
+  public function branches()
+{
+    return $this->belongsToMany(Branch::class, 'users_branches', 'user_id', 'branch_id');
+}
+
+  public function odontographs()
     {
-        return $this->hasOne(Note::class);
+        return $this->hasMany(Odontograph::class, 'patient_id');
     }
-    public function branch()
+    public function Event()
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->hasMany(Event::class, "patient_id", "id");
+    }
+    public function bill(){
+         return $this->hasMany(Bill::class, "patient_id", "id");
+    }
+    public function Prescriptions()
+    {
+        return $this->hasMany(Prescription::class, "patient_id", "id");
+    }
+    public function CXC()
+    {
+        return $this->hasOne(CXC::class, "patient_id", "id");
+    }
+    public function Budget()
+    {
+        return $this->hasMany(Budget::class, "patient_id", "id");
     }
 
 

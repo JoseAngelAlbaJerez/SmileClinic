@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,17 +17,7 @@ class CXC extends Model
     ];
     protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('c_x_c_s.branch_id', $user->branch_id);
-                }
-            }
-        });
-    }
-    public function Budget()
-    {
-        return $this->hasMany(Budget::class, 'c_x_c_id', 'id');
+        static::addGlobalScope(new BranchScope);
     }
     public function bills()
     {
@@ -34,9 +25,9 @@ class CXC extends Model
     }
 
 
-    public function Patient()
+    public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(User::class,'patient_id','id');
     }
     public function Payment()
     {

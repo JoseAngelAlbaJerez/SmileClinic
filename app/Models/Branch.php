@@ -9,8 +9,7 @@ class Branch extends Model
     protected $fillable = [
         'name',
         'address',
-        'phone',
-        'city',
+        'phone_number',
         'active',
     ];
 
@@ -71,7 +70,7 @@ class Branch extends Model
         return $this->hasMany(Odontograph::class, 'branch_id');
     }
 
-  
+
 
     public function payments()
     {
@@ -95,6 +94,6 @@ class Branch extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'branch_id');
+        return $this->belongsToMany(User::class, 'users_branches', 'branch_id', 'user_id');
     }
 }

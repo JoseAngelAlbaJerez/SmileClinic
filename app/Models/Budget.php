@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,15 +20,9 @@ class Budget extends Model
         "currency",
         "c_x_c_id",
     ];
-      protected static function booted()
+    protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('budgets.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
     public function budgetdetail()
     {
@@ -35,21 +30,18 @@ class Budget extends Model
     }
     public function doctor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'doctor_id','id');
     }
-    public function CXC()
+
+    public function Insurance()
     {
-        return $this->hasOne(CXC::class,'id','c_x_c_id' );
-    }
-     public function Insurance()
-    {
-        return $this->hasOne(Insurance::class,'id' );
+        return $this->hasOne(Insurance::class, 'id');
     }
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(User::class, 'patient_id', 'id');
     }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
