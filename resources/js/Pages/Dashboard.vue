@@ -2,11 +2,13 @@
 
     <Head title="Dashboard" />
     <AuthenticatedLayout>
+        <template #header>
+            <Breadcrumb :crumbs="crumbs" />
+
+        </template>
 
         <div class="py-8">
             <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 p-5 rounded-xl">
-
-
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -62,34 +64,17 @@
                         class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-900/20 rounded-2xl shadow-md p-6 border border-green-100 dark:border-green-900/50">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-green-600 dark:text-green-300">Ingresos Esta Semana
+                                <p class="text-sm font-medium text-green-600 dark:text-green-300">Citas No-show
                                 </p>
-                                <h3 class="text-2xl font-bold text-green-800 dark:text-white mt-1">${{
-                                    formatNumber(incomeThisWeek) }}</h3>
+                                <h3 class="text-2xl font-bold text-green-800 dark:text-white mt-1">{{ no_show?.length || 0 }}</h3>
                                 <div class="flex items-center mt-2">
-                                    <span
-                                        :class="`text-sm flex items-center ${percentageChange >= 0 ? 'text-green-500' : 'text-red-500'}`">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path v-if="percentageChange >= 0" fill-rule="evenodd"
-                                                d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                                                clip-rule="evenodd" />
-                                            <path v-else fill-rule="evenodd"
-                                                d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        {{ Math.abs(percentageChange) }}%
-                                    </span>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">vs semana pasada</span>
+
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">Citas no atendidas de la semana</span>
                                 </div>
                             </div>
                             <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/50">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+
+                                <CalendarIcon class="h-8 w-8 text-green-600 dark:text-green-400" />
                             </div>
                         </div>
                     </div>
@@ -124,128 +109,53 @@
                 </div>
 
                 <!-- Recent Transactions -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Income -->
+                <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos Recientes</h3>
-                            <Link :href="route('bills.index')"
-                                class="text-sm text-pink-600 dark:text-pink-400 hover:underline">Ver todos</Link>
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full">
+                        <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos por Sucursal</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto">Ranking
+                                Sucursales</h3>
                         </div>
-                        <div class="space-y-3">
-                            <div v-for="item in income.slice(0, 5)" :key="item.id"
-                                class="flex items-center justify-between p-3 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                                <Link :href="route('bills.show', item.id)" class="flex items-center">
-                                <DocumentMoney class="w-8 h-8 text-pink-500 mr-3" />
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{
-                                        item.patient.first_name }} {{ item.patient.last_name }}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ formatDate(item.created_at)
-                                        }}</p>
-                                </div>
-                                </Link>
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-emerald-600">+${{ new Intl.NumberFormat('es-DO',
-                                        {
-                                            style:
-                                                'currency', currency: 'DOP'
-                                        }).format(item.total
-                                            || 0) }}</p>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.type }}</span>
-                                </div>
-                            </div>
-                            <div v-if="!income.length"
-                                class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
-                                <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
-                                <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron
-                                    recibos
-                                </h3>
-                                <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
-                                    No hay registros de recibos. Crea una nueva para comenzar.
-                                </p>
-                                <AccessGate permission="bill.create">
-                                    <Link :href="route('bills.create')"
-                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
-                                    <AddIcon class="w-5 h-5" />
-                                    <span>Crear primera Recibo</span>
-                                    </Link>
-                                </AccessGate>
-                            </div>
+
+
+                        <div class="flex flex-col lg:flex-row items-center justify-between gap-6 w-full">
+                            <VueApexCharts type="bar" height="300" width="230%" :options="optionsIngresos"
+                                :series="seriesIngresos" />
+                            <VueApexCharts type="line" height="300" width="230%" :options="optionsTendencia"
+                                :series="seriesTendencia" />
                         </div>
                     </div>
 
-                    <!-- Expenses -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Gastos Recientes</h3>
-                            <Link :href="route('expenses.index')"
-                                class="text-sm text-pink-600 dark:text-pink-400 hover:underline">Ver todos</Link>
-                        </div>
-                        <div class="space-y-3">
-                            <div v-for="item in expense.slice(0, 5)" :key="item.id"
-                                class="flex items-center justify-between p-3 hover:bg-pink-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                                <div class="flex items-center">
-                                    <CartIcon class="w-8 h-8 text-amber-500 mr-3" />
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ item.description
-                                            }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{
-                                            formatDate(item.created_at) }}</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-red-600">-${{ new Intl.NumberFormat('es-DO', {
-                                        style:
-                                            'currency', currency: 'DOP'
-                                    }).format(item.amount
-                                        || 0) }}</p>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.category || 'General'
-                                        }}</span>
-                                </div>
-                            </div>
-                            <div v-if="!expense.length"
-                                class="flex flex-col items-center justify-center p-12  bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 text-center">
-                                <SearchIcon class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" />
-                                <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">No se encontraron
-                                    egresos
-                                </h3>
-                                <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-md">
-                                    No hay registros de egresos. Crea uno nuevo para comenzar.
-                                </p>
-                                <AccessGate permission="expense.create">
-                                    <Link :href="route('expenses.index')"
-                                        class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 from-pink-500 to-indigo-500 text-white font-medium shadow-sm hover:from-pink-600 hover:to-indigo-600 transition-all">
-                                    <AddIcon class="w-5 h-5" />
-                                    <span>Crear primer egreso</span>
-                                    </Link>
-                                </AccessGate>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Appointments Calendar -->
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Agenda de Citas</h3>
-                        <Link :href="route('events.create')" as="button"
-                            class="flex items-center gap-2 rounded-lg bg-pink-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 transition-colors">
-                        <AddIcon class="size-4" />
-                        Nueva Cita
-                        </Link>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full mt-6">
+                        <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Citas Atendidas
+                            </h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto">Agenda de hoy
+                            </h3>
+                        </div>
+
+
+                        <div class="flex flex-col lg:flex-row items-center justify-between gap-6 w-full">
+                            <VueApexCharts type="donut" height="300" width="250%" :options="optionsServicios"
+                                :series="seriesServicios" />
+
+
+                            <iframe id="open-web-calendar"
+                                src="https://calendar.google.com/calendar/embed?height=400&wkst=2&ctz=America%2FSanto_Domingo&showPrint=0&mode=AGENDA&title=Citas%20Smile%20Clinic&src=am9zZWFuZ2VsYWxiYTI0QGdtYWlsLmNvbQ&src=NGVlY2JhYzU3ZWNlOGNkODEyZDZiYmNiNzY4ODEyZjYxMWM5M2NlN2VmYTdlYTU4ZjMyYmNkYWIzZmQyMWI4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZXMtNDE5LmRvI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%237986CB&color=%230B8043"
+                                class="rounded w-full h-[350px] border-0"
+                                sandbox="allow-scripts allow-same-origin allow-top-navigation"
+                                allowtransparency="true"></iframe>
+                        </div>
                     </div>
-                    <div class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                        <iframe id="open-web-calendar"
-                            src="https://calendar.google.com/calendar/embed?height=400&wkst=2&ctz=America%2FSanto_Domingo&showPrint=0&mode=AGENDA&title=Citas%20Smile%20Clinic&src=am9zZWFuZ2VsYWxiYTI0QGdtYWlsLmNvbQ&src=NGVlY2JhYzU3ZWNlOGNkODEyZDZiYmNiNzY4ODEyZjYxMWM5M2NlN2VmYTdlYTU4ZjMyYmNkYWIzZmQyMWI4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZXMtNDE5LmRvI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%237986CB&color=%230B8043"
-                            width="100%" height="400" frameborder="0" class="rounded"
-                            sandbox="allow-scripts allow-same-origin allow-top-navigation" allowtransparency="true">
-                        </iframe>
-                    </div>
+
+
                 </div>
             </div>
+
+
         </div>
     </AuthenticatedLayout>
 </template>
@@ -258,9 +168,13 @@ import AddIcon from '@/Components/Icons/AddIcon.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
-import { ref } from 'vue';
+import { markRaw } from 'vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import { router } from "@inertiajs/vue3"
+import DashboardIcon from '@/Components/Icons/DashboardIcon.vue';
+import Breadcrumb from '@/Components/BreadCrumb.vue';
+import VueApexCharts from 'vue3-apexcharts';
+import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 
 export default {
     props: {
@@ -276,7 +190,9 @@ export default {
         percentageChange: Number,
         total: Number,
         user: Object,
-        branch: Object
+        branch: Object,
+        chart: Object,
+        no_show: Object
     },
     components: {
         Head,
@@ -287,7 +203,10 @@ export default {
         AccessGate,
         AuthenticatedLayout,
         AddIcon,
-        PrintIcon
+        PrintIcon,
+        Breadcrumb,
+        VueApexCharts,
+        CalendarIcon
 
     },
     methods: {
@@ -303,19 +222,112 @@ export default {
         },
         print() {
             router.visit(route("report.dailycashbalance"));
-        }
-
+        },
 
     },
     data() {
         return {
-            form: useForm({
-                branch: this.user.branch.id
-            })
+            crumbs: [
+                { icon: markRaw(DashboardIcon), label: 'Dashboard', to: route('dashboard') },
+            ],
+            optionsIngresos: {
+                colors: ["#3b82f6", "#10b981", "#f59e0b"],
+                chart: { foreColor: '#1f2937' },
+            },
+            optionsTendencia: {
+                colors: ["#6366f1"],
+                chart: { foreColor: '#1f2937' },
+            },
+            optionsServicios: {
+                colors: ["#ef4444", "#3b82f6", "#22c55e", "#eab308"],
+                chart: { foreColor: '#1f2937' },
+            },
+            seriesIngresos: [],
+            seriesTendencia: [],
+            seriesServicios: [],
 
 
         }
-    }
+
+    },
+    mounted() {
+        const ingresosSeries = this.chart?.ingresos?.series ?? [];
+        const ingresosLabels = this.chart?.ingresos?.labels ?? [];
+
+        const tendenciaSeries = this.chart?.tendencia?.series ?? [];
+        const tendenciaCats = this.chart?.tendencia?.categories ?? [];
+
+        const serviciosSeries = this.chart?.procedimientos?.series ?? [];
+        const serviciosLabels = this.chart?.procedimientos?.labels ?? [];
+
+        this.seriesIngresos = [{ name: 'Ingresos', data: ingresosSeries }];
+        this.optionsIngresos.xaxis = { categories: ingresosLabels };
+
+        this.seriesTendencia = [{ name: 'Tendencia', data: tendenciaSeries }];
+        this.optionsTendencia.xaxis = { categories: tendenciaCats };
+
+        this.seriesServicios = serviciosSeries;
+        this.optionsServicios.labels = serviciosLabels;
+        this.optionsServicios = { ...this.optionsServicios };
+
+        const applyTheme = (isDark) => {
+            const textColor = isDark ? '#f9fafb' : '#1f2937';
+            const paletteLight = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6366f1'];
+            const paletteDark = ['#60a5fa', '#34d399', '#fbbf24', '#f87171', '#818cf8'];
+            const palette = isDark ? paletteDark : paletteLight;
+            const themeMode = isDark ? 'dark' : 'light';
+
+            this.optionsIngresos.colors = [palette[0], palette[1], palette[2]];
+            this.optionsIngresos.chart.foreColor = textColor;
+            this.optionsIngresos.theme = { mode: themeMode };
+
+            this.optionsTendencia.colors = [palette[4]];
+            this.optionsTendencia.chart.foreColor = textColor;
+            this.optionsTendencia.theme = { mode: themeMode };
+
+            this.optionsServicios.colors = [palette[3], palette[0], palette[1], palette[2]];
+            this.optionsServicios.chart.foreColor = textColor;
+            this.optionsServicios.theme = { mode: themeMode };
+
+            if (this.$refs.ingresosChart?.updateOptions) {
+                this.$refs.ingresosChart.updateOptions(this.optionsIngresos, false, true);
+            }
+            if (this.$refs.tendenciaChart?.updateOptions) {
+                this.$refs.tendenciaChart.updateOptions(this.optionsTendencia, false, true);
+            }
+            if (this.$refs.serviciosChart?.updateOptions) {
+                this.$refs.serviciosChart.updateOptions(this.optionsServicios, false, true);
+            }
+        };
+
+        applyTheme(document.documentElement.classList.contains('dark'));
+
+        this._darkObserver = new MutationObserver(() => {
+            applyTheme(document.documentElement.classList.contains('dark'));
+        });
+        this._darkObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    },
+
+    beforeUnmount() {
+        if (this._darkObserver) {
+            this._darkObserver.disconnect();
+            this._darkObserver = null;
+        }
+    },
+    watch: {
+        branches: {
+            handler(newBranches) {
+                this.updateBranchesChart(newBranches);
+            },
+            deep: true
+        },
+        income: {
+            handler(newIncome) {
+                this.updateIncomeChart(newIncome);
+            },
+            deep: true
+        }
+    },
 
 }
 
