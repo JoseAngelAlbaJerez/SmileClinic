@@ -60,15 +60,12 @@
                                             Fecha de Nacimiento <span v-if="form.sortField === 'date_of_birth'">{{
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="cursor-pointer" @click="sort('ars')">
-                                            ARS <span v-if="form.sortField === 'ars'">{{ form.sortDirection === 'asc' ?
-                                                '↑' : '↓' }}</span>
-                                        </th>
+
                                         <th scope="col" class="cursor-pointer" @click="sort('created_at')">
                                             Fecha de Creación <span v-if="form.sortField === 'created_at'">{{
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                       
+
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -85,10 +82,9 @@
                                     <tr v-for="patient in patients.data" :key="patient.id">
                                         <td class="p-4">{{ patient.id }}</td>
                                         <td class="p-4">{{ patient.first_name }} {{ patient.last_name }}</td>
-                                        <td class="p-4">{{ patient.date_of_birth }}</td>
-                                        <td class="p-4">{{ patient.ars }}</td>
+                                        <td class="p-4">{{formatDate(patient.date_of_birth) }}</td>
                                         <td class="p-4">{{ formatDate(patient.created_at) }}</td>
-                                       
+
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(patient.active)" />
@@ -131,7 +127,7 @@
                                 <p><span class="font-medium">Nacimiento:</span> {{ patient.date_of_birth }}</p>
                                 <p><span class="font-medium">ARS:</span> {{ patient.ars }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
-                               
+
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
                                     <span :class="statusBadgeClasses(patient.active)">
@@ -233,7 +229,7 @@ export default {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'patients.updated_at',
+                sortField: this.filters?.sortField || 'users.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '',
@@ -260,8 +256,8 @@ export default {
         },
         statusBadgeClasses(status) {
             return {
-                1: "bg-green-200 text-green-700 px-2 py-1 rounded",
-                0: "bg-red-200 text-red-700 px-2 py-1 rounded",
+                true: "bg-green-200 text-green-700 px-2 py-1 rounded",
+                false: "bg-red-200 text-red-700 px-2 py-1 rounded",
             }[status] || "bg-gray-200 text-gray-700 px-2 py-1 rounded";
         },
 

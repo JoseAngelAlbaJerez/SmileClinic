@@ -53,16 +53,13 @@
                                             Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="cursor-pointer" @click="sort('type')">
-                                            Tipo <span v-if="form.sortField === 'type'">{{ form.sortDirection === 'asc'
-                                                ? '↑' : '↓' }}</span>
-                                        </th>
+
                                         <th scope="col" class="cursor-pointer" @click="sort('total')">
                                             Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
                                                 'asc' ? '↑' : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="cursor-pointer" @click="sort('created_at')">
-                                            Creación <span v-if="form.sortField === 'created_at'">{{ form.sortDirection
+                                            Fecha de Creación <span v-if="form.sortField === 'created_at'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
                                         <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
@@ -89,11 +86,10 @@
                                         <td class="p-4">{{ budget.id }}</td>
                                         <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
                                         </td>
-                                        <td class="p-4">{{ budget.type }}</td>
                                         <td class="p-4">{{ new
                                             Intl.NumberFormat('es-DO', {
                                                 style:
-                                                    'currency', currency: budget.currency
+                                                    'currency', currency: 'DOP'
                                             }).format(budget.total
                                             || 0) }}</td>
                                         <td class="p-4">{{ formatDate(budget.created_at) }}</td>
@@ -285,7 +281,6 @@ export default {
                 search: this.filters?.search || '',
                 sortField: this.filters?.sortField || 'budgets.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
-
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,
             },
@@ -360,7 +355,6 @@ export default {
             }
 
             this.timeout = setTimeout(() => {
-
                 this.form.lastDays = this.filters.lastDays || '1',
                     this.form.search = this.filters.search || '',
                     this.$inertia.get(route('budgets.index'), this.form, {

@@ -20,7 +20,7 @@
                         <!-- Main Form Content -->
                         <div class="p-6 space-y-6">
                             <!-- Client and Document Info -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Patient Selection -->
                                 <div class="space-y-1">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -51,16 +51,7 @@
                                         placeholder="Seleccione fecha" v-model="form.emission_date"
                                         :enable-time-picker="false" />
                                 </div>
-                                <!-- Currency -->
-                                <div class="space-y-1">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Moneda <span class="text-red-500">*</span>
-                                    </label>
-                                    <select v-model="form.currency"
-                                        class="px-4  w-full py-2 border mb-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-800 dark:text-white">
-                                        <option value="DOP"> RD$ - Peso Dominicano</option>
-                                    </select>
-                                </div>
+
 
                             </div>
 
@@ -102,10 +93,7 @@
                                                 <h4 class="text-md font-semibold text-gray-800 dark:text-gray-100">{{
                                                     proc.name }}</h4>
                                             </div>
-                                            <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
-                                            </span>
+
                                         </div>
 
                                         <!-- Procedure Details -->
@@ -237,7 +225,7 @@
                                 </div>
                             </div>
                             <div class="p-6 md:p-8 rounded shadow-lg" v-if="insurance_form.ars != ''">
-                                <form @submit.prevent="" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Personal Information Section -->
                                     <div class="md:col-span-2">
                                         <h3

@@ -42,16 +42,16 @@
 
                         <!-- Espacio flexible para separar en responsive -->
                         <div
-                            class="flex flex-col sm:flex-row ml-auto gap-2 items-stretch sm:items-center w-full sm:w-auto">
+                            class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
-                                class="rounded-lg mt-5 border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400
-                   focus:outline-none focus:ring-2 focus:ring-pink-500 lg:w-96 dark:bg-gray-800 dark:ring-slate-600 w-full" />
-
-                            <button @click="showModal = true;"
-                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                                <AddIcon class="size-5" />
-                                <span class="hidden sm:inline">Nuevo Egreso</span>
-                            </button>
+                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
+                            <AccessGate permission="patient.create">
+                                <button @click="showModal = true;"
+                                    class="flex justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                    <AddIcon class="size-5" />
+                                    <span class="hidden sm:inline">Nuevo Egreso</span>
+                                </button>
+                            </AccessGate>
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                                         class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                         <td class="p-4">{{ expense.id }}</td>
                                         <td class="p-4">{{ expense.description }}</td>
-                                        <td class="p-4">{{ expense.user.name }} {{ expense.user.last_name }}</td>
+                                        <td class="p-4">{{ expense.user.first_name }} {{ expense.user.last_name }}</td>
                                         <td class="p-4">
                                             {{ new Intl.NumberFormat('es-DO', {
                                                 style: 'currency', currency: 'DOP'
@@ -120,7 +120,7 @@
                                         </td>
                                         <td class="p-4">{{ formatDate(expense.created_at) }}</td>
                                         <AccessGate role="admin">
-                                            <td class="p-4">{{ expense.branch.name }}</td>
+                                            <td class="p-4">{{ expense.branch.first_name }}</td>
                                         </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
@@ -237,7 +237,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
                             <Link :href="route('users.show', selectedExpense.user)"
-                                class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.name }} {{
+                                class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.first_name }} {{
                                     selectedExpense.user.last_name }}</Link>
                         </div>
                         <div class="flex items-center gap-2">
@@ -247,7 +247,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
 
@@ -308,7 +308,6 @@ import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
-import { Inertia } from '@inertiajs/inertia';
 export default {
 
     props: {

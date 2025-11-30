@@ -23,7 +23,7 @@
                             <div class="space-y-1">
                                 <label for="title"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Título <span class="text-red-500">*</span>
+                                    Motivo de Consulta <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -49,7 +49,7 @@
                                         class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <p v-if="form.doctor_id" class="truncate">
-                                            {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                            {{ selected_doctor.first_name }} {{ selected_doctor.last_name }}
                                         </p>
                                         <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Doctor</p>
                                     </div>
@@ -94,9 +94,10 @@
                                         Horario <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
-                                        :time-picker="true" :format="timeFormat" :is-24="true" format="HH:mm"
-                                        :enable-time-picker="true" placeholder="Seleccione horario"
-                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200" />
+                                        :time-picker="true" :is-24="true" format="HH:mm" :enable-time-picker="true"
+                                        :disabled-range="blockedRanges" placeholder="Seleccione horario"
+                                          class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200" />
+
                                 </div>
                             </div>
 
@@ -132,10 +133,14 @@
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center space-x-2">
                             <CalendarIcon class="h-5 w-5 text-pink-500" />
                             <span>
-                                Citas del {{ form.date ? new Date(form.date).toLocaleDateString() : 'día seleccionado'
+                                Citas del Dr(a).
+                                {{ selected_doctor
+                                    ? selected_doctor.first_name + ' ' + selected_doctor.last_name
+                                    : 'seleccionado'
                                 }}
                             </span>
                         </h3>
+
 
                         <!-- No date selected -->
                         <div v-if="!form.date" class="text-gray-500 dark:text-gray-400 mb-4">
@@ -145,7 +150,7 @@
                         <!-- No appointments -->
                         <div v-else-if="filteredAppointments.length === 0"
                             class="text-gray-500 dark:text-gray-400 mb-4">
-                            No hay citas para esta fecha.
+                            Seleccione un doctor para ver su horario.
                         </div>
 
                         <!-- Scrollable appointment list -->
@@ -163,14 +168,18 @@
                                     </div>
                                     <!-- Doctor and Patient info -->
                                     <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
-                                        <strong>Doctor:</strong> Dra. {{ appt.doctor.name }} {{ appt.doctor.last_name }}
-                                        — <strong>Paciente:</strong> {{ appt.patient.first_name }} {{
-                                        appt.patient.last_name }}
+                                        <strong>Doctor:</strong> {{ appt.doctor.first_name }} {{
+                                            appt.doctor.last_name }}
+
+                                    </p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
+                                        <strong>Paciente:</strong> {{ appt.patient.first_name }} {{
+                                            appt.patient.last_name }}
                                     </p>
                                     <!-- Time info -->
                                     <p class="text-xs text-gray-600 dark:text-gray-300">
                                         <strong>Horario:</strong> {{ formatTime(appt.starttime) }} - {{
-                                        formatTime(appt.endtime) }}
+                                            formatTime(appt.endtime) }}
                                     </p>
                                 </li>
                             </ul>
@@ -243,6 +252,7 @@ import { markRaw } from 'vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
+import { useToast } from 'vue-toastification';
 export default {
     props: {
         errors: [Array, Object],
@@ -274,10 +284,29 @@ export default {
     },
     computed: {
         filteredAppointments() {
-            if (!this.form.date) return []
-            const selectedDate = new Date(this.form.date).toISOString().split("T")[0]
-            return this.events.filter(appt => appt.date === selectedDate)
+            return this.events.filter(appt => {
+                const matchesDoctor = this.selected_doctor && this.selected_doctor.id
+                    ? appt.doctor_id === this.selected_doctor.id
+                    : true;
+                const matchesDate = this.form.date
+                    ? appt.date === new Date(this.form.date).toISOString().split('T')[0]
+                    : true;
+                return matchesDoctor && matchesDate;
+            });
+        },
+
+        blockedRanges() {
+            if (!this.form.date) return [];
+
+            const baseDate = new Date(this.form.date); // usa la fecha seleccionada
+            return this.filteredAppointments.map(appt => {
+                return {
+                    start: this.toDateFromTimeOnDate(appt.starttime, baseDate),
+                    end: this.toDateFromTimeOnDate(appt.endtime, baseDate)
+                };
+            });
         }
+
     },
     data() {
         return {
@@ -307,14 +336,46 @@ export default {
         };
     },
     methods: {
+        toDateFromTimeOnDate(time, baseDate) {
+            if (!time) return null;
+            const [h, m] = time.split(':').map(Number);
+            const d = new Date(baseDate);
+            d.setHours(h, m, 0, 0);
+            return d;
+        },
+        rangesOverlap(aStart, aEnd, bStart, bEnd) {
+            return aStart < bEnd && bStart < aEnd;
+        },
+
         onTimeRangeChange(range) {
-            if (Array.isArray(range) && range.length === 2) {
-                this.form.starttime = range[0];
-                this.form.endtime = range[1];
-            } else {
+            if (!Array.isArray(range) || range.length !== 2 || !range[0] || !range[1]) {
                 this.form.starttime = null;
                 this.form.endtime = null;
+                this.timeRange = null;
+                return;
             }
+
+            const [selStart, selEnd] = range;
+
+            const conflict = this.blockedRanges.some(br => {
+                if (!br.start || !br.end) return false;
+                return this.rangesOverlap(selStart, selEnd, br.start, br.end);
+            });
+
+            if (conflict) {
+                this.timeRange = null;
+                this.form.starttime = null;
+                this.form.endtime = null;
+                useToast.error('El horario seleccionado se solapa con una cita ya existente.');
+                return;
+            }
+
+            this.form.starttime = selStart.toTimeString().slice(0, 5);
+            this.form.endtime = selEnd.toTimeString().slice(0, 5);
+            this.timeRange = range;
+        },
+        isTimeBlocked(timeDate) {
+            return this.blockedRanges.some(br => this.rangesOverlap(timeDate, new Date(timeDate.getTime() + 1), br.start, br.end));
         },
         openUserModal() {
             this.showUserModal = true;

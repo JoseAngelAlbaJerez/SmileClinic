@@ -12,7 +12,7 @@
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg ">
                         <!-- Form Header -->
                         <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4 rounded-t-xl">
-                            <h2 class="text-xl font-bold text-white">Nueva Cita Médica</h2>
+                            <h2 class="text-xl font-bold text-white">Editar Cita Médica</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles de la cita</p>
                         </div>
 
@@ -22,7 +22,7 @@
                             <div class="space-y-1">
                                 <label for="title"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Título <span class="text-red-500">*</span>
+                                    Motivo de consulta <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -48,7 +48,7 @@
                                         class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <p v-if="form.doctor_id" class="truncate">
-                                            {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                            {{ selected_doctor.first_name }} {{ selected_doctor.last_name }}
                                         </p>
                                         <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar Doctor</p>
                                     </div>
