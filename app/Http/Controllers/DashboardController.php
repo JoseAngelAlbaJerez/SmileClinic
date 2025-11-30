@@ -24,17 +24,18 @@ class DashboardController extends Controller
         $startOfThisWeek = $now->copy()->startOfWeek();
         $endOfThisWeek = $now->copy()->endOfWeek();
 
-        $patients = User::whereHas('roles', function ($q) {
+        $patients = User::withoutGlobalScopes()->whereHas('roles', function ($q) {
             $q->where('name', 'patient');
         })->get();
-        $users = User::query()->select('users.*')->with('roles', 'branches')
+        $users = User::query()->select('users.*')->withoutGlobalScopes()->with('roles', 'branches')
             ->whereDoesntHave('roles', function ($q) {
                 $q->whereIn('name', ['admin']);
             })->get();
         $branches = Branch::all();
         $now = Carbon::now();
 
-        $incomeByBranch = Bill::where('type', 'Contado')
+        $incomeByBranch = Bill::withoutGlobalScopes()
+            ->where('type', 'Contado')
             ->select('branch_id', DB::raw('SUM(total) as total'))
             ->groupBy('branch_id')
             ->get();
@@ -70,7 +71,7 @@ class DashboardController extends Controller
             $days[] = $d->format('Y-m-d');
             $dayTotals[$d->format('Y-m-d')] = 0.0;
         }
-        $tendencyQueries = Bill::where('type', 'Contado')
+        $tendencyQueries = Bill::withoutGlobalScopes()->where('type', 'Contado')
             ->whereBetween(DB::raw('DATE(created_at)'), [$now->copy()->subDays(6)->toDateString(), $now->toDateString()])
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total) as total'))
             ->groupBy(DB::raw('DATE(created_at)'))
@@ -95,7 +96,7 @@ class DashboardController extends Controller
 
         $agendaToday = [];
         if (class_exists(Event::class)) {
-            $agendaToday = Event::whereDate('date', Carbon::today())
+            $agendaToday = Event::withoutGlobalScopes()->whereDate('date', Carbon::today())
                 ->with(['patient', 'doctor', 'branch'])
                 ->orderBy('date')
                 ->get();
@@ -103,7 +104,7 @@ class DashboardController extends Controller
 
         $no_show = [];
         if (class_exists(Event::class)) {
-            $no_show = Event::where('attended','=',false)
+            $no_show = Event::withoutGlobalScopes()->where('attended','=',false)
             ->where('date', '<',$now)
             ->whereBetween('created_at',[$startOfThisWeek, $endOfThisWeek])->get();
         }
@@ -112,11 +113,11 @@ class DashboardController extends Controller
         $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
 
 
-        $incomeThisWeek = Bill::where('type', 'Contado')
+        $incomeThisWeek = Bill::withoutGlobalScopes()->where('type', 'Contado')
             ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
             ->sum('total');
 
-        $incomeLastWeek = Bill::where('type', 'Contado')
+        $incomeLastWeek = Bill::withoutGlobalScopes()->where('type', 'Contado')
             ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
             ->sum('total');
 
@@ -126,11 +127,11 @@ class DashboardController extends Controller
             : 100;
 
 
-        $income = Bill::where('type', '=', 'Contado')->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
+        $income = Bill::withoutGlobalScopes()->where('type', '=', 'Contado')->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
         $income_sum = $income->sum('total');
 
 
-        $expense = Expenses::orderByDesc('created_at')->get();
+        $expense = Expenses::withoutGlobalScopes()->orderByDesc('created_at')->get();
         $expense_sum = $expense->sum('amount');
         $role = Auth::user()->getRoleNames()[0] ?? null;
         switch ($role) {
