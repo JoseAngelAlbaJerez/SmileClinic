@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,25 +15,19 @@ class PrescriptionDetail extends Model
         'branch_id',
         "active"
     ];
-      protected static function booted()
+    protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('prescription_details.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
     public function drugs()
     {
-        return $this->belongsTo(Drug::class, 'drug_id');
+        return $this->hasOne(Drug::class, 'id','drug_id');
     }
     public function prescription()
     {
         return $this->belongsTo(Prescription::class);
     }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

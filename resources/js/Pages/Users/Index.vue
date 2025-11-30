@@ -76,7 +76,7 @@
                                         </th>
                                         <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
                                             class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursal
+                                            Sucursales Disponibles
                                             <span v-if="form.sortField === 'branch_id'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
@@ -94,8 +94,8 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="user in users.data" :key="user.id">
-                                        <td class="p-4 hidden md:table-cell">{{ user.id }}</td>
-                                        <td class="p-4">{{ user.name }} {{ user.last_name }}</td>
+                                        <td class="p-4 hidden md:table-cell">{{ user.id }} </td>
+                                        <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
                                         <td class="p-4 hidden sm:table-cell">{{ formatDate(user.date_of_birth) }}</td>
                                         <td class="p-4">
                                             <span
@@ -105,14 +105,16 @@
                                             </span>
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
-                                        <AccessGate role="admin">
-                                            <td class="p-4">{{ user.branch.name }}</td>
-                                        </AccessGate>
+                                        <td class="p-4">
+                                            <div v-for="branch in user.branches" :key="branch.id">
+                                                <p>{{ branch.name }}</p>
+                                            </div>
+                                        </td>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(user.active)" />
                                                 <p :class="statusBadgeClasses(user.active)">
-                                                    <HandThumbDown v-if="user.active == 0" />
+                                                    <HandThumbDown v-if="user.active == false" />
                                                     <HandThumbUp v-else />
                                                 </p>
                                             </div>
@@ -244,8 +246,8 @@ export default {
 
         statusBadgeClasses(status) {
             return {
-                1: "bg-green-200 text-green-700 px-2 py-1 rounded",
-                0: "bg-red-200 text-red-700 px-2 py-1 rounded",
+                true: "bg-green-200 text-green-700 px-2 py-1 rounded",
+                false: "bg-red-200 text-red-700 px-2 py-1 rounded",
             }[status] || "bg-gray-200 text-gray-700 px-2 py-1 rounded";
         },
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('odontographs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
+            $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
             $table->json('data');
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('doctor_id')->nullable();

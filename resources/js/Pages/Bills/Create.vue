@@ -213,7 +213,7 @@
                                         class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
                                         <p v-if="form.doctor_id" class="truncate">
-                                            {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                            {{ selected_doctor.first_name }} {{ selected_doctor.last_name }}
                                         </p>
                                         <p v-else class="text-gray-400 dark:text-gray-400">Seleccionar </p>
                                     </div>
@@ -283,10 +283,7 @@
                                                 <h4 class="text-md font-semibold text-gray-800 dark:text-gray-100">{{
                                                     proc.name }}</h4>
                                             </div>
-                                            <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                :class="proc.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                {{ proc.coverage ? 'Asegurado' : 'No Asegurado' }}
-                                            </span>
+
                                         </div>
 
                                         <!-- Procedure Details -->
@@ -329,7 +326,7 @@
                                             <div class="space-y-1">
                                                 <label
                                                     class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                                                    Monto de {{ selected_doctor.name }} {{ selected_doctor.last_name }}
+                                                    Monto de {{ selected_doctor.first_name }} {{ selected_doctor.last_name }}
                                                     <span class="text-red-500">*</span>
                                                 </label>
                                                 <div class="relative">
@@ -440,7 +437,7 @@
                                                     }).format(form_details[index].total
                                                         || 0) }}</p>
                                             </span>
-                                           
+
                                             <button @click="removeProcedure(index)" type="button"
                                                 class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-600 dark:text-red-300 ring-1 ring-inset ring-red-500/10 hover:bg-red-100 dark:hover:bg-red-800 transition duration-150">
                                                 <DeleteIcon class="h-4 w-4 mr-1" />

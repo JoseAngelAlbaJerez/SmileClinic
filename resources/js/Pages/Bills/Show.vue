@@ -8,33 +8,29 @@
         <template #default>
             <div
                 class="container mx-auto px-6 py-4  dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
-                <div class="my-2 mt-5 flex  gap-2 items-center p-1">
 
-
-                </div>
 
 
                 <!-- Presupuestos Section -->
                 <div class="container mx-auto px-4 py-6">
                     <!-- Header Section -->
                     <div
-                        class="bg-pink-50 dark:bg-gray-900  p-6 rounded-xl shadow-md  border border-gray-200 dark:border-gray-700 mb-2">
+                        class="bg-pink-50 dark:bg-gray-800  p-6 rounded-xl shadow-md  border border-gray-200 dark:border-gray-700 mb-2">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between  gap-4">
                             <div>
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Cuenta de {{
-                                    CXC.patient.first_name }} {{ CXC.patient.last_name }} <div
-                                        class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                                <h1 class="text-lg font-bold text-gray-800 dark:text-white/90">
+                                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                             fill="currentColor">
                                             <path fill-rule="evenodd"
                                                 d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                        <p><span class="font-semibold">Fecha: </span>{{ formatDate(CXC.created_at) }}
+                                        <p><span class="font-semibold">Fecha de Creación: </span>{{ formatDate(CXC.created_at) }}
                                         </p>
                                     </div>
                                     <div class="flex items-center gap-2 text-green-600 dark:text-green-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 " viewBox="0 0 20 20"
                                             fill="currentColor">
                                             <path
                                                 d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
@@ -42,12 +38,14 @@
                                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                        <p><span class="font-semibold">Balance:</span> {{ new Intl.NumberFormat('es-DO',
-                                            {
-                                                style:
-                                                    'currency', currency: 'DOP'
-                                            }).format(CXC.balance
-                                                || 0) }}</p>
+                                        <p><span
+                                                class="font-semibold text-green-600 dark:text-green-400">Balance:</span>
+                                            {{ new Intl.NumberFormat('es-DO',
+                                                {
+                                                    style:
+                                                        'currency', currency: 'DOP'
+                                                }).format(CXC.balance
+                                                    || 0) }}</p>
                                     </div>
                                 </h1>
 
@@ -89,9 +87,18 @@
                     <!-- Bills Section -->
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+
                         <div
-                            class="bg-gradient-to-r from-pink-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Recibos</h3>
+                            class="bg-pink-50 dark:bg-gray-800 px-6 py-3 border-b justify-between border-pink-100 dark:border-gray-600 flex items-center gap-3">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-pink-600 dark:text-pink-400"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recibos</h3>
+                            </div>
+
                             <span
                                 class="px-3 py-1 bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 rounded-full text-sm font-medium">
                                 {{ CXC.bills.length }} Recibo(s)
@@ -99,12 +106,12 @@
                         </div>
                         <div class="p-6">
                             <div class="space-y-6">
+
                                 <div v-for="(bill, index) in CXC.bills" :key="bill.id" class="group">
-                                    <!-- Bill Header (Clickable) -->
                                     <div @click="openAccordion(index)"
-                                        class="flex flex-col md:flex-row md:items-center gap-4 p-5 bg-gray-50 dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-pink-300 dark:hover:border-pink-500"
+                                        class="flex flex-col md:flex-row md:items-center gap-4 p-5 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-pink-300 dark:hover:border-pink-500"
                                         :class="{
-                                            'opacity-70 border-pink-200 dark:border-pink-200': isExpired(bill.emission_date) || !bill.active
+                                            ' border-red-200 dark:border-red-200':  !bill.active
                                         }">
                                         <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                                             <div class="flex items-center gap-2">
@@ -162,62 +169,68 @@
 
                                     <!-- Bill Details (Accordion Content) -->
                                     <transition name="accordion">
-                                        <div v-if="activeIndex === index" class="mt-4 space-y-4">
+                                        <div v-if="activeIndex === index"
+                                            class=" mt-4 dark:bg-gray-800 transition-all duration-200 ">
+                                            <div
+                                                class="bg-pink-50 dark:bg-gray-700  px-6 rounded-lg rounded-b-none  py-3 border-b  border-pink-100 dark:border-gray-600 flex items-center gap-3">
+                                                <DocumentIcon class="text-pink-500 " />
+                                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                                                    Procedimientos</h3>
+                                            </div>
                                             <div v-for="details in bill.billdetail" :key="details.id"
-                                                class="bg-white dark:bg-gray-700 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 transition-all duration-200 hover:shadow-md"
-                                                :class="{
+                                                class="grid border dark:border-gray-600 rounded-b border-t-0 p-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4" :class="{
                                                     'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700': !details.active || !CXC.active
                                                 }">
                                                 <div
-                                                    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
+                                                    class="flex mt-3 flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
                                                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
                                                         {{ details.procedure.name }}
                                                     </h4>
-                                                    <span
-                                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                                                        :class="details.procedure.coverage ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                                        {{ details.procedure.coverage ? 'Asegurado' : 'No Asegurado' }}
-                                                    </span>
+
                                                 </div>
 
                                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                                                    <div class="bg-pink-50   dark:bg-gray-800 p-3 rounded-lg">
+                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Monto</p>
                                                         <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
                                                             style: 'currency', currency:
                                                                 'DOP'
                                                         }).format(details.amount || 0) }} </p>
                                                     </div>
-                                                    <div class="bg-pink-50  dark:bg-gray-800 p-3 rounded-lg">
+                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Descuento
                                                         </p>
                                                         <p class="font-medium">{{ details.discount }}%</p>
                                                     </div>
-                                                    <div class="bg-pink-50  dark:bg-gray-800 p-3 rounded-lg">
+                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Cantidad</p>
                                                         <p class="font-medium">{{ details.quantity }}</p>
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-2 mb-4">
+                                                    class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-2 my-4">
                                                     <p class="font-semibold text-lg">Subtotal: ${{
                                                         formatNumber(details.total)
                                                     }}</p>
 
 
                                                 </div>
-                                                <!-- Payment Details -->
-                                                <div class="bg-white dark:bg-gray-800 pb-5 rounded-lg">
-                                                    <h4
-                                                        class="text-lg p-3 font-semibold text-gray-800 dark:text-gray-100 mt-4 ">
-                                                        Pagos
-                                                    </h4>
-                                                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 "
+
+                                            </div>
+                                            <!-- Payment Details -->
+                                                <div class="bg-white  border dark:border-gray-600 rounded-b dark:bg-gray-800 pb-5 rounded-lg mt-4">
+                                                    <div
+                                                        class="bg-pink-50 dark:bg-gray-700  px-6 rounded-lg rounded-b-none  py-3   border-pink-100 dark:border-gray-600 flex items-center gap-3">
+                                                        <CashIcon class="text-pink-500 " />
+                                                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                                                            Pagos</h3>
+                                                    </div>
+                                                    <div class="grid  grid-cols-1 md:grid-cols-1 border-t  dark:border-gray-600 lg:grid-cols-1 gap-4 "
                                                         v-for="payments in CXC.payment">
                                                         <div v-if="bill.id == payments.bill_id"
-                                                            class="bg-white dark:bg-gray-800 px-3 rounded-lg">
+                                                            class="bg-white mt-3 dark:bg-gray-800 px-3 ">
                                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                                                                <div class="bg-pink-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                                     <p class="text-sm text-gray-500 dark:text-gray-400">
                                                                         Monto Pagado</p>
                                                                     <p class="font-medium">{{ new
@@ -225,9 +238,9 @@
                                                                             {
                                                                                 style: 'currency', currency:
                                                                                     'DOP'
-                                                                        }).format(payments.amount_paid || 0) }} </p>
+                                                                            }).format(payments.amount_paid || 0) }} </p>
                                                                 </div>
-                                                                <div class="bg-pink-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                                     <p class="text-sm text-gray-500 dark:text-gray-400">
                                                                         Monto Restante
                                                                     </p>
@@ -237,10 +250,10 @@
                                                                                 style: 'currency', currency:
                                                                                     'DOP'
                                                                             }).format(payments.total - payments.amount_paid
-                                                                        ||
-                                                                        0) }} </p>
+                                                                                ||
+                                                                                0) }} </p>
                                                                 </div>
-                                                                <div class="bg-pink-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                                                                     <p class="text-sm text-gray-500 dark:text-gray-400">
                                                                         Creado el :</p>
                                                                     <p class="font-medium">{{
@@ -253,7 +266,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </transition>
                                 </div>
@@ -348,7 +360,8 @@ export default {
         CashIcon,
         EyeIcon,
         Head,
-        AddIcon
+        AddIcon,
+        DocumentIcon
     },
 
 

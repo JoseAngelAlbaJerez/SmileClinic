@@ -72,6 +72,12 @@ class PermissionSeeder extends Seeder
             'user.update',
             'user.view',
             'user.delete',
+            //branches
+            'branch.*',
+            'branch.create',
+            'branch.update',
+            'branch.view',
+            'branch.delete',
         ];
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Branch;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -77,32 +78,81 @@ class RoleSeeder extends Seeder
             'prescription.delete',
         ]);
 
-        $user = User::where('name', 'Test User')->first();
+        $allBranches = Branch::pluck('id')->toArray();
+
+        $user = User::where('first_name', 'Test User')->first();
         $user->syncRoles('admin');
+        $user->branches()->sync($allBranches);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
-        $user = User::where('name', 'Cayetano Germosen')->first();
+        $user = User::where('first_name', 'Cayetano Germosen')->first();
         $user->syncRoles('staff');
+        $user->branches()->sync([1]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
-        $user = User::where('name', 'Cutupu')->first();
+        $user = User::where('first_name', 'Cutupu')->first();
         $user->syncRoles('staff');
+        $user->branches()->sync([2]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
-        $user = User::where('name', 'Jose Angel')->first();
+        $user = User::where('first_name', 'Jose Angel')->first();
         $user->syncRoles('admin');
+        $user->branches()->sync($allBranches);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
-         $user = User::where('name', 'Dra. Castro')->first();
+        $user = User::where('first_name', 'Dra. Castro')->first();
         $user->syncRoles('doctor');
-         $user = User::where('name', 'Dra. Madelin')->first();
-        $user->syncRoles('doctor');
-         $user = User::where('name', 'Dra. Odalisa')->first();
-        $user->syncRoles('doctor');
-         $user = User::where('name', 'Dra. Paloma')->first();
-        $user->syncRoles('doctor');
-         $user = User::where('name', 'Dr. Francisco')->first();
-        $user->syncRoles('doctor');
+        $user->branches()->sync([1]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
+        $user = User::where('first_name', 'Dra. Madelin')->first();
+        $user->syncRoles('doctor');
+        $user->branches()->sync([2]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
-        $users = User::where('name', '!=', 'Test User')->get();
-        $roles = Role::all()->pluck('name')->toArray();
+        $user = User::where('first_name', 'Dra. Odalisa')->first();
+        $user->syncRoles('doctor');
+        $user->branches()->sync([3]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
 
+        $user = User::where('first_name', 'Dra. Paloma')->first();
+        $user->syncRoles('doctor');
+        $user->branches()->sync([1]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
+
+        $user = User::where('first_name', 'Dr. Francisco')->first();
+        $user->syncRoles('doctor');
+        $user->branches()->sync([1]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
+
+        $user = User::where('first_name', 'Paloma')->first();
+        $user->syncRoles('patient');
+        $user->branches()->sync([2]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
+
+        $user = User::where('first_name', 'Francisco')->first();
+        $user->syncRoles('patient');
+        $user->branches()->sync([2]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
+
+        $user = User::where('first_name', 'Juan')->first();
+        $user->syncRoles('patient');
+        $user->branches()->sync([1]);
+        $user->active_branch_id = $user->branches()->first()->id;
+        $user->save();
+
+        $users = User::where('first_name', '!=', 'Test User')->get();
+        $roles = Role::all()->pluck('first_name')->toArray();
     }
 }

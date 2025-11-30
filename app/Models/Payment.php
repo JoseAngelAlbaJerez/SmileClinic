@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,23 +16,19 @@ class Payment extends Model
         "active",
         'branch_id',
     ];
-      protected static function booted()
+    protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('payments.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
-    public function bills(){
-        return $this->belongsTo(Bill::class,'bill_id','id');
+    public function bills()
+    {
+        return $this->belongsTo(Bill::class, 'bill_id', 'id');
     }
-    public function CXC(){
-        return $this->belongsTo(CXC::class,"c_x_c_id","id");
+    public function CXC()
+    {
+        return $this->belongsTo(CXC::class, "c_x_c_id", "id");
     }
-     public function branch()
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

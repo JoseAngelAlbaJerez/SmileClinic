@@ -28,7 +28,7 @@ Route::get('/', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::get('/dashboard', [DashboardController::class,'dashboard'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 Route::get('/report/dailycashbalance', [ReportController::class, 'dailycashbalance'])->name('report.dailycashbalance');
 
 Route::middleware('auth')->group(function () {
@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('bills', BillController::class);
     Route::resource('branches', BranchController::class);
     Route::resource('insurances', InsuranceController::class);
+    Route::post('/switch-branch', [BranchController::class, 'switch'])
+        ->name('branches.switch');
 
 
 

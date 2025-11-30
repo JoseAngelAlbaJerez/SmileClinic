@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -14,11 +17,21 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
 
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:user.view', only: ['index', 'show']),
+            new Middleware('permission:user.create', only: ['create', 'store']),
+            new Middleware('permission:user.update', only: ['edit', 'update']),
+            new Middleware('permission:user.delete', only: ['destroy']),
+        ];
+    }
     public function index(Request $request)
     {
-
+        $this->authorize('view', User::class);
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
@@ -27,7 +40,11 @@ class UserController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles', 'branch');
+        $query = User::query()->select('users.*')->with('roles','branches')
+            ->whereDoesntHave('roles', function ($q) {
+                $q->whereIn('name', ['patient', 'admin']);
+            });
+
         if ($showDeleted == true) {
             $query->where('active', 1);
         } else {
@@ -36,7 +53,7 @@ class UserController extends Controller
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('name LIKE ?', ['%' . $search . '%'])
+                $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
                 ;
@@ -102,10 +119,12 @@ class UserController extends Controller
 
     public function create()
     {
+        $this->authorize('create', User::class);
         return Inertia::render("Users/Create");
     }
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -121,7 +140,7 @@ class UserController extends Controller
             ]);
 
             $validated['active'] = true;
-            $validated['branch_id'] = Auth::user()->branch_id;
+            $validated['branch_id'] = Auth::user()->active_branch_id;
 
             $user = User::create($validated);
             $user->assignRole($validated['role']);
@@ -134,11 +153,13 @@ class UserController extends Controller
     }
     public function update(User $user, Request $request)
     {
+        $this->authorize('update', User::class);
+
         if ($request->has('description')) {
             $user->notes()->updateOrCreate(
                 [
                     'user_id'   => $user->id,
-                    'branch_id' => Auth::user()->branch_id,
+                    'branch_id' => Auth::user()->active_branch_id,
                 ],
                 [
                     'description' => $request->description,
@@ -164,7 +185,6 @@ class UserController extends Controller
                 $request->input('address')
             );
         }
-        // Validación de datos
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -193,6 +213,7 @@ class UserController extends Controller
     }
     public function destroy($id)
     {
+        $this->authorize('delete', User::class);
         $user = User::findOrFail($id);
         $user->active = false;
         $user->save();
@@ -201,7 +222,8 @@ class UserController extends Controller
     }
     public function show(User $user)
     {
-        $user = User::with(['roles.permissions', 'notes', 'address'])->findOrFail($user->id);
+        $this->authorize('view', User::class);
+        $user = User::with(['roles.permissions'])->findOrFail($user->id);
         return Inertia::render('Users/Show', [
             'user' => $user
         ]);

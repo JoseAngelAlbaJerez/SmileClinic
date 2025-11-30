@@ -18,106 +18,60 @@ class DatabaseSeeder extends Seeder
         $this->call(BranchSeeder::class);
 
         User::factory()->create([
-            'name' => 'Test User',
+            'first_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Jose Angel',
+            'first_name' => 'Jose Angel',
             'email' => 'joseangelalba24@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Cayetano Germosen',
+            'first_name' => 'Cayetano Germosen',
             'email' => 'cayetanogermosen@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Cutupu',
+            'first_name' => 'Cutupu',
             'email' => 'cutupu@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 2,
         ]);
         User::factory()->create([
-            'name' => 'Dra. Castro',
+            'first_name' => 'Dra. Castro',
             'email' => 'Castro@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Dra. Madelin',
+            'first_name' => 'Dra. Madelin',
             'email' => 'Madelin@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Dra. Odalisa',
+            'first_name' => 'Dra. Odalisa',
             'email' => 'Odalisa@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 1,
         ]);
         User::factory()->create([
-            'name' => 'Dra. Paloma',
+            'first_name' => 'Dra. Paloma',
             'email' => 'Paloma@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 2,
         ]);
         User::factory()->create([
-            'name' => 'Dr. Francisco',
+            'first_name' => 'Dr. Francisco',
             'email' => 'Francisco@gmail.com',
             'password' => Hash::make('12345678'),
-            'branch_id' => 2,
+        ]);
+         User::factory()->create([
+            'first_name' => 'Juan',
+        ]);
+         User::factory()->create([
+            'first_name' => 'Francisco',
+        ]);
+         User::factory()->create([
+            'first_name' => 'Paloma',
         ]);
 
-        $user = User::where('name', 'Dra. Castro')->first();
-        $user->address()->create([
-            'country'     => 'República Dominicana',
-            'city'        => 'Santo Domingo',
-            'state'       => 'Distrito Nacional',
-            'street'      => 'Av. Independencia #123',
-            'postal_code' => '10101',
-            'branch_id'   => $user->branch_id,
-        ]);
-
-        $user = User::where('name', 'Dra. Madelin')->first();
-        $user->address()->create([
-            'country'     => 'República Dominicana',
-            'city'        => 'Santo Domingo',
-            'state'       => 'Distrito Nacional',
-            'street'      => 'Calle 27 de Febrero #456',
-            'postal_code' => '10102',
-            'branch_id'   => $user->branch_id,
-        ]);
-        $user = User::where('name', 'Dra. Odalisa')->first();
-        $user->address()->create([
-            'country'     => 'República Dominicana',
-            'city'        => 'Santo Domingo',
-            'state'       => 'Distrito Nacional',
-            'street'      => 'Av. Independencia #123',
-            'postal_code' => '10101',
-            'branch_id'   => $user->branch_id,
-        ]);
-        $user = User::where('name', 'Dra. Paloma')->first();
-        $user->address()->create([
-            'country'     => 'República Dominicana',
-            'city'        => 'Santo Domingo',
-            'state'       => 'Distrito Nacional',
-            'street'      => 'Av. Independencia #123',
-            'postal_code' => '10101',
-            'branch_id'   => $user->branch_id,
-        ]);
-        $user = User::where('name', 'Dr. Francisco')->first();
-          $user->address()->create([
-            'country'     => 'República Dominicana',
-            'city'        => 'Santo Domingo',
-            'state'       => 'Distrito Nacional',
-            'street'      => 'Calle 27 de Febrero #456',
-            'postal_code' => '10102',
-            'branch_id'   => $user->branch_id,
-        ]);
 
 
         $this->call(PermissionSeeder::class);

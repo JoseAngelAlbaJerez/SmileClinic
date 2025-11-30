@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,17 +26,11 @@ class BillDetail extends Model
     ];
     protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('bill_details.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
     public function procedure()
     {
-        return $this->belongsTo(Procedure::class, "procedure_id", 'id');
+        return $this->hasOne(Procedure::class, "id", 'procedure_id');
     }
 
     public function bill()

@@ -31,7 +31,7 @@ class BillController extends Controller
         $patient_id = $request->input('patient_id');
 
         $query = Bill::query()->select('bills.*')
-            ->join('patients', 'patient_id', '=', 'patients.id');
+            ->join('users', 'patient_id', '=', 'users.id');
         if ($showDeleted == true) {
             $query->where('bills.active', 1);
         } else {
@@ -39,7 +39,7 @@ class BillController extends Controller
         }
 
         if ($patient_id) {
-            $patient = Patient::find($patient_id);
+            $patient = User::find($patient_id);
             $createdAtDates = $patient->bill()->pluck('created_at');
 
             if ($createdAtDates->isNotEmpty()) {
@@ -51,8 +51,8 @@ class BillController extends Controller
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%']);
+                $q->WhereRaw('users.first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('users.last_name LIKE ?', ['%' . $search . '%']);
             });
         }
 
@@ -96,7 +96,7 @@ class BillController extends Controller
     {
         $patient_id = $request->input('patient_id');
         if ($patient_id) {
-            $patients = Patient::where('id', $patient_id)
+            $patients = User::where('id', $patient_id)
                 ->with([
                     'CXC',
                     'bill.billdetail',
@@ -116,7 +116,7 @@ class BillController extends Controller
             $patients = null;
         }
 
-        $patient = Patient::with([
+        $patient = User::role('patient')->with([
             'CXC',
             'bill.billdetail',
             'budget' => function ($q) {
@@ -173,7 +173,7 @@ class BillController extends Controller
         ]);
 
         $billData = $validated['form'];
-        $billData['branch_id'] = Auth::user()->branch_id;
+        $billData['branch_id'] = Auth::user()->active_branch_id;
         $billData['emission_date'] = Carbon::parse($billData['emission_date'] ?? now());
         $billData['expiration_date'] = $billData['expiration_date'] ? Carbon::parse($billData['expiration_date']) : null;
         $bill = Bill::create($billData);
@@ -191,7 +191,7 @@ class BillController extends Controller
 
             if ($detail->doctor->specialty) {
                 Expenses::create([
-                    'description' => $detail->doctor->name,
+                    'description' => $detail->doctor->first_name,
                     'amount'      => $expense_amount,
                     'active'      => true,
                     'user_id'     => Auth::id(),
@@ -200,7 +200,7 @@ class BillController extends Controller
                 ]);
             } else {
                 PendingExpense::create([
-                    'description' => $detail->doctor->name,
+                    'description' => $detail->doctor->first_name,
                     'amount'      => $expense_amount,
                     'user_id'     => Auth::id(),
                     'branch_id'   => $detail->branch_id,
@@ -214,7 +214,6 @@ class BillController extends Controller
 
         if ($bill->total > $initialSum) {
             $patient = $bill->patient;
-
             if (!$patient->cxc) {
                 $CXC = CXC::create([
                     'balance' => $bill->total,
@@ -242,15 +241,13 @@ class BillController extends Controller
 
 
         return Inertia::render('Bills/Show', [
-            'CXC' => $bill->CXC,
+            'CXC' => $bill->CXC(),
 
         ]);
     }
     public function show(Bill $bill)
     {
-
         $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'Payment')->find($bill->c_x_c_id);
-
         return Inertia::render('Bills/Show', [
             'CXC' => $CXC,
 

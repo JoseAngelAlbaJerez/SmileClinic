@@ -100,41 +100,10 @@
                                         errors.phone_number }}</p>
                                 </div>
 
-                                <!-- ARS -->
-                                <div>
-                                    <label for="ars"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        ARS
-                                    </label>
-                                    <select v-model="form.ars"
-                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
-                                        <option value="">Seleccione una opción</option>
-                                        <option value="ARS Humano">ARS Humano</option>
-                                        <option value="ARS Universal">ARS Universal</option>
-                                        <option value="ARS Monumental">ARS Monumental</option>
-                                        <option value="ARS Senasa">ARS Senasa</option>
-                                    </select>
-                                    <p v-if="errors.ars" class="mt-1 text-sm text-red-600">{{ errors.ars }}</p>
-                                </div>
-                                 <!-- ARS_id -->
-                                <div v-if="form.ars != '' ">
-                                    <label for="ARS_id"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Número de Afiliado
-                                    </label>
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                                        </div>
-                                        <input type="number"v-model="form.ars_id"  placeholder="21333326432231"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
-                                    </div>
-                                    <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}</p>
-                                </div>
+
 
                                 <!-- Date of Birth -->
-                                <div :class=" form.ars != '' ?'md:col-span-2' : ''">
+                                <div class='md:col-span-2'>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Fecha de Nacimiento
                                     </label>
@@ -235,17 +204,6 @@
                                         placeholder="Describa las alergias"></textarea>
                                 </div>
 
-                                <!-- Consultation Motive -->
-                                <div class="md:col-span-2">
-                                    <label for="motive"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Motivo de consulta
-                                    </label>
-                                    <textarea id="motive" v-model="form.motive" rows="4"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
-                                        placeholder="Describa el motivo de la consulta"></textarea>
-                                    <p v-if="errors.motive" class="mt-1 text-sm text-red-600">{{ errors.motive }}</p>
-                                </div>
 
                                 <!-- Error Message -->
                                 <div v-if="error" class="md:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">

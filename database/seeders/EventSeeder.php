@@ -16,13 +16,13 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 100) as $i) {
+        foreach (range(1, 5) as $i) {
 
              $branchId = fake()->numberBetween(1, 2);
 
-            $patient = Patient::inRandomOrder()
+            $patient = User::role('patient')->inRandomOrder()
                 ->first();
-           $doctor = User::role('doctor')->where('branch_id', $branchId)
+           $doctor = User::role('doctor')
                 ->inRandomOrder()
                 ->first();
             DB::table('events')->insert([

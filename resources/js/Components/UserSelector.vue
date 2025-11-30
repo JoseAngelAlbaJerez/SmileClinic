@@ -81,7 +81,7 @@ watch(searchTerm, () => {
                         'hover:bg-gray-200 dark:hover:bg-gray-700': selectedUserId !== user.id
                     }" @click="selectUser(user)">
                         <td class="p-4 hidden sm:table-cell">{{ user.id }}</td>
-                        <td class="p-4">{{ user.name }} {{ user.last_name }}</td>
+                        <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
                         <td class="p-4">
                             <span class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-1 rounded-xl">
                                 <UserIcon class="w-4 h-4" />

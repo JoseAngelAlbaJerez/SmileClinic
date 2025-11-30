@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +23,7 @@ class Address extends Model
     ];
     protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('addresses.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
     public function user(): BelongsTo
     {

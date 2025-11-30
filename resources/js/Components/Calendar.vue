@@ -12,12 +12,12 @@
                         <div class="flex justify-between mb-2">
                             <p class="text-lg font-normal text-gray-600 dark:text-gray-300 ">No faltes al horario
                             </p>
-                             <!-- Print -->
-                        <button @click="showReport = true"
-                            class="flex justify-center ml-auto mr-2 gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            <PrintIcon />
-                        </button>
-                          <ReportModal :open="showReport" @close="showReport = false" table="events" />
+                            <!-- Print -->
+                            <button @click="showReport = true"
+                                class="flex justify-center ml-auto mr-2 gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <PrintIcon />
+                            </button>
+                            <ReportModal :open="showReport" @close="showReport = false" table="events" />
 
                             <AccessGate permission="event.delete">
                                 <button @click="toggleShowDeleted()"
@@ -74,9 +74,13 @@
                                 <p class="text-base font-normal text-gray-600 dark:text-gray-300">
                                     <span v-if="event.patient">Paciente: {{ event.patient.first_name }} {{
                                         event.patient.last_name }}</span>
-                                    <span v-if="event.doctor"> | Doctor: {{ event.doctor.name }}</span>
-                                    <AccessGate role="admin" class="contents">
-                                    <span v-if="event.branch" > |  {{ event.branch.name }}</span></AccessGate>
+                                    <span v-if="event.doctor"> | Doctor: {{ event.doctor.first_name }} </span>
+                                    <AccessGate :role="['admin']">
+                                    <span v-if="event.branch" class="inline-flex items-center ml-1 gap-1">
+                                         | <BuildingIcon class="w-4 h-4 inline-block" />
+                                        {{ event.branch.name }}
+                                    </span>
+                                    </AccessGate>
                                 </p>
                                 <p v-if="event.description"
                                     class="text-base font-normal text-gray-600 dark:text-gray-300 mt-2">{{
@@ -86,7 +90,7 @@
                             <!-- Empty State -->
                             <div v-if="filteredEvents.length === 0"
                                 class="p-6 rounded-xl bg-white dark:bg-gray-800 text-center text-gray-500 dark:text-gray-400">
-                                No eventos encontrados
+                                No hay citas registradas.
                             </div>
                         </div>
                     </div>
@@ -161,7 +165,7 @@
                                 <div v-for="day in previousMonthDays" :key="'prev-' + day"
                                     class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 dark:bg-gray-700 border-r border-b border-pink-200 dark:border-gray-600 transition-all duration-300 hover:bg-pink-50 dark:hover:bg-gray-600">
                                     <span class="text-xs font-semibold text-gray-400 dark:text-gray-500">{{ day
-                                    }}</span>
+                                        }}</span>
                                 </div>
 
                                 <!-- Current month days -->
@@ -216,7 +220,7 @@
                                         'rounded-br-xl': index === nextMonthDays.length - 1
                                     }">
                                     <span class="text-xs font-semibold text-gray-400 dark:text-gray-500">{{ day
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +256,7 @@
                     <div class="flex items-center gap-2">
                         <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
                         <Link :href="route('users.show', eventForm.doctor.id)" class="text-pink-500">{{
-                            eventForm.doctor.name }} {{
+                            eventForm.doctor.first_name }} {{
                             eventForm.doctor.last_name }}
                         </Link>
                     </div>
@@ -318,6 +322,9 @@ import AddIcon from './Icons/AddIcon.vue';
 import AccessGate from './AccessGate.vue';
 import ReportModal from './ReportModal.vue';
 import PrintIcon from './Icons/PrintIcon.vue';
+import BuildingIcon from './Icons/BuildingIcon.vue';
+import UserIcon from './Icons/UserIcon.vue';
+
 export default {
     props: {
         initialEvents: {
@@ -347,7 +354,9 @@ export default {
         AddIcon,
         AccessGate,
         ReportModal,
-        PrintIcon
+        PrintIcon,
+        UserIcon,
+        BuildingIcon
 
     },
 
@@ -452,7 +461,7 @@ export default {
                             event.patient.last_name.toLowerCase().includes(query) ||
                             `${event.patient.first_name} ${event.patient.last_name}`.toLowerCase().includes(query)
                         ) ||
-                            (event.doctor && event.doctor.name.toLowerCase().includes(query))
+                            (event.doctor && event.doctor.first_name.toLowerCase().includes(query))
                         )
                     )
                 });
@@ -542,7 +551,6 @@ export default {
 
         const selectDate = (date) => {
             selectedDate.value = date;
-            // You could add logic here to filter events for the selected date
         };
 
         const previousMonth = () => {

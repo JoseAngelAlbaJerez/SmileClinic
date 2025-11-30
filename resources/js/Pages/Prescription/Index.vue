@@ -58,9 +58,9 @@
                                             </span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer hidden sm:table-cell"
-                                            @click="sort('patients.motive')">
-                                            Diagnosis
-                                            <span v-if="form.sortField === 'patient.motive'">
+                                            @click="sort('prescription_detail.drug_id')">
+                                            Medicamentos recetados
+                                            <span v-if="form.sortField === 'prescription_detail.drug_id'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
@@ -103,13 +103,18 @@
                                         <td class="p-4 hidden md:table-cell">{{ prescription.id }}</td>
                                         <td class="p-4">{{ prescription.patient.first_name }} {{
                                             prescription.patient.last_name }}</td>
-                                        <td class="p-4 hidden sm:table-cell">{{ prescription.patient.motive }}</td>
-                                        <td class="p-4 hidden sm:table-cell">{{ prescription.doctor.name }} {{
+                                        <td class="p-4 hidden sm:table-cell">
+                                            <li v-for="detail in prescription.prescriptions_details">
+                                                {{ detail.drugs.name }}
+                                                <br></br>
+                                            </li>
+                                        </td>
+                                        <td class="p-4 hidden sm:table-cell">{{ prescription.doctor.first_name }} {{
                                             prescription.doctor.last_name }}</td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(prescription.created_at) }}
                                         </td>
                                         <AccessGate role="admin">
-                                            <td class="p-4">{{ prescription.branch.name }}</td>
+                                            <td class="p-4 hidden lg:table-cell mt-2">{{ prescription.branch.name }}</td>
                                         </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
@@ -164,7 +169,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Doctor:</span>
                             <Link :href="route('users.show', selectedprescription.doctor.id)" class="text-pink-500">
-                            {{ selectedprescription.doctor.name }} {{
+                            {{ selectedprescription.doctor.first_name }} {{
                                 selectedprescription.doctor.last_name }}</Link>
                         </div>
                         <div class="max-h-[70vh] overflow-y-auto space-y-4 px-2">

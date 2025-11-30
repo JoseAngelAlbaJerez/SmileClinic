@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,30 +21,21 @@ class BudgetDetail extends Model
         "budget_id",
         "active"
     ];
-      protected static function booted()
+    protected static function booted()
     {
-        static::addGlobalScope('branches', function ($query) {
-            if ($user = Auth::user()) {
-                if (!$user->hasRole('admin')) {
-                    $query->where('budget_details.branch_id', $user->branch_id);
-                }
-            }
-        });
+        static::addGlobalScope(new BranchScope);
     }
     public function procedure()
     {
-        return $this->belongsTo(Procedure::class, "procedure_id", 'id');
+        return $this->hasOne(Procedure::class, "id", 'procedure_id');
     }
 
     public function budget()
     {
         return $this->belongsTo(Budget::class, 'budget_id', 'id');
     }
-    public function Payment()
-    {
-        return $this->hasMany(Payment::class, 'budget_detail_id', 'id');
-    }
-     public function branch()
+
+    public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

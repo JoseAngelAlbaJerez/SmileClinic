@@ -84,11 +84,7 @@
                                     <span class="text-gray-800 dark:text-gray-100">{{
                                         formatPhoneNumber(patient.phone_number)}}</span>
                                 </div>
-                                <div class="flex items-start">
-                                    <span
-                                        class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">ARS:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.ars }}</span>
-                                </div>
+
                                 <div class="flex items-start">
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Fecha
                                         Nacimiento:</span>
@@ -102,9 +98,9 @@
                                 </div>
                                 <div class="flex items-start">
                                     <span class="font-medium w-32 text-gray-600 dark:text-gray-300 flex-shrink-0">Motivo
-                                        de
+                                        de última
                                         visita:</span>
-                                    <span class="text-gray-800 dark:text-gray-100">{{ patient.motive }}</span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{ latest_event?.title || "El paciente no a agendado citas." }}</span>
                                 </div>
                             </div>
                         </div>
@@ -127,14 +123,14 @@
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Complicaciones
                                             médicas:</span>
                                         <span
-                                            :class="patient.complications ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
+                                            :class="medicalHistory.complications ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
                                             class="text-xs px-2 py-1 rounded-full">
-                                            {{ patient.complications ? 'Sí' : 'No' }}
+                                            {{ medicalHistory.complications ? 'Sí' : 'No' }}
                                         </span>
                                     </div>
-                                    <p v-if="patient.complications_detail"
+                                    <p v-if="medicalHistory.complications_detail"
                                         class="text-gray-700 dark:text-gray-300 mt-1 pl-5 text-xs">
-                                        <span class="font-medium">Detalle:</span> {{ patient.complications_detail }}
+                                        <span class="font-medium">Detalle:</span> {{ medicalHistory.complications_detail }}
                                     </p>
                                 </div>
 
@@ -144,14 +140,14 @@
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Uso de
                                             medicamentos:</span>
                                         <span
-                                            :class="patient.drugs ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
+                                            :class="medicalHistory.drugs ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
                                             class="text-xs px-2 py-1 rounded-full">
-                                            {{ patient.drugs ? 'Sí' : 'No' }}
+                                            {{ medicalHistory.drugs ? 'Sí' : 'No' }}
                                         </span>
                                     </div>
-                                    <p v-if="patient.drugs_detail"
+                                    <p v-if="medicalHistory.drugs_detail"
                                         class="text-gray-700 dark:text-gray-300 mt-1 pl-5 text-xs">
-                                        <span class="font-medium">Detalle:</span> {{ patient.drugs_detail }}
+                                        <span class="font-medium">Detalle:</span> {{ medicalHistory.drugs_detail }}
                                     </p>
                                 </div>
 
@@ -161,14 +157,14 @@
                                         <span class="font-medium text-gray-800 dark:text-gray-100">Alergias
                                             conocidas:</span>
                                         <span
-                                            :class="patient.alergies ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
+                                            :class="medicalHistory.alergies ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'"
                                             class="text-xs px-2 py-1 rounded-full">
-                                            {{ patient.alergies ? 'Sí' : 'No' }}
+                                            {{ medicalHistory.alergies ? 'Sí' : 'No' }}
                                         </span>
                                     </div>
-                                    <p v-if="patient.alergies_detail"
+                                    <p v-if="medicalHistory.alergies_detail"
                                         class="text-gray-700 dark:text-gray-300 mt-1 pl-5 text-xs">
-                                        <span class="font-medium">Detalle:</span> {{ patient.alergies_detail }}
+                                        <span class="font-medium">Detalle:</span> {{ medicalHistory.alergies_detail }}
                                     </p>
                                 </div>
                             </div>
@@ -239,7 +235,7 @@
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
-                                                    <span>Dr. {{ prescription.doctor.name }} {{
+                                                    <span>Dr. {{ prescription.doctor.first_name }} {{
                                                         prescription.doctor.last_name
                                                         }}</span>
                                                 </div>
@@ -269,10 +265,10 @@
                                                                     <h4
                                                                         class="font-bold text-gray-800 dark:text-gray-100">
                                                                         {{
-                                                                            detail.drugs.name }}</h4>
+                                                                            detail.drugs?.name }}</h4>
                                                                     <p class="text-sm text-gray-600 dark:text-gray-300">
                                                                         {{
-                                                                            detail.drugs.description }}</p>
+                                                                            detail.drugs?.description }}</p>
                                                                     <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
 
 
@@ -399,7 +395,7 @@
                                                 <div
                                                     class="col-span-2 flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
-                                                    <span>Dr. {{ event.doctor.name }} {{ event.doctor.last_name
+                                                    <span>Dr. {{ event.doctor.first_name }} {{ event.doctor.last_name
                                                         }}</span>
                                                 </div>
                                             </div>
@@ -508,7 +504,7 @@
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
-                                                    <span>Dr. {{ budget.doctor.name }} {{ budget.doctor.last_name
+                                                    <span>Dr. {{ budget.doctor.first_name }} {{ budget.doctor.last_name
                                                     }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
@@ -682,7 +678,7 @@
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
                                                     <UserIcon class="w-4 h-4 mr-1 text-pink-500" />
-                                                    <span>Dr. {{ bill.doctor.name }} {{ bill.doctor.last_name
+                                                    <span>Dr. {{ bill.doctor.first_name }} {{ bill.doctor.last_name
                                                     }}</span>
                                                 </div>
                                                 <div class="flex items-center text-gray-600 dark:text-gray-300">
@@ -993,8 +989,10 @@
                                             }}</h2>
                                             <div
                                                 class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <BuildingIcon class="w-4 h-4" />
+                                                <span> {{ item.branch.name }}</span>
                                                 <UserIcon class="w-4 h-4" />
-                                                <span>Dr. {{ item.doctor.name }} {{ item.doctor.last_name }}</span>
+                                                <span>Dr. {{ item.doctor.first_name }} {{ item.doctor.last_name }}</span>
                                                 <span class="mx-1">•</span>
                                                 <CalendarIcon class="w-4 h-4" />
                                                 <span>{{ formatDate(item.created_at) }}</span>
@@ -1692,6 +1690,7 @@ import CardIcon from '@/Components/Icons/CardIcon.vue';
 import PillIcon from '@/Components/Icons/PillIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ImplantIcon from '@/Components/Icons/ImplantIcon.vue';
+import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
 
 export default {
     props: {
@@ -1702,7 +1701,9 @@ export default {
         filters: Object,
         events: Object,
         budgets: Object,
-        prescription: Object
+        prescription: Object,
+        medicalHistory: Object,
+        latest_event: Object
     },
     components: {
         AuthenticatedLayout,
@@ -1739,7 +1740,8 @@ export default {
         CardIcon,
         AccessGate,
         Head,
-        ImplantIcon
+        ImplantIcon,
+        BuildingIcon
     },
     data() {
         return {

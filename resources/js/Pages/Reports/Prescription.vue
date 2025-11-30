@@ -31,8 +31,8 @@
         </div>
         <div>
           <h3 class="text-pink-400 dark:text-pink-400 font-semibold text-lg mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">DOCTOR/A</h3>
-          <p class="mb-1"><span class="font-medium">Nombre:</span> Dr. {{ prescription.doctor.name }}</p>
-          <p><span class="font-medium">Fecha:</span> {{ formattedDate }}</p>
+          <p class="mb-1"><span class="font-medium">Nombre:</span> Dr. {{ prescription.doctor.first_name }}</p>
+          <p><span class="font-medium">Fecha de Creación:</span> {{ formattedDate }}</p>
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
       <div class="text-center">
         <div class="mb-1 border-b border-gray-400 dark:border-gray-500 w-48 mx-auto"></div>
         <p class="text-sm text-gray-600 dark:text-gray-400">Firma del doctor</p>
-        <p class="font-semibold mt-1">Dr. {{ prescription.doctor.name }}</p>
+        <p class="font-semibold mt-1">Dr. {{ prescription.doctor.first_name }}</p>
       </div>
     </div>
 

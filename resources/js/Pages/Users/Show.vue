@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="flex-1 text-center md:text-left">
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white/90 mb-2">{{ user.name }} {{
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white/90 mb-2">{{ user.first_name }} {{
                                 user.last_name }}</h2>
 
                             <div class="flex flex-col items-center gap-2 md:flex-row md:gap-4">
@@ -120,7 +120,7 @@
             </div>
 
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
                 <!-- Personal Information Card -->
                 <div
                     class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
@@ -145,7 +145,7 @@
                                     <p
                                         class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                         Nombre</p>
-                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.name }}
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.first_name }}
                                     </p>
                                 </div>
 
@@ -181,9 +181,9 @@
                                 <div>
                                     <p
                                         class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                        Puesto</p>
+                                        Dirección</p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{
-                                        user.position || 'No especificado' }}</p>
+                                        user.address || 'No especificado' }}</p>
                                 </div>
                             </div>
 
@@ -192,110 +192,15 @@
                                     class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Especialidad</p>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{ user.specialty
-                                    || 'Noespecificada' }}</p>
+                                    || 'No especificada' }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Address Information Card -->
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <div
-                        class="bg-pink-50   dark:bg-gray-900  px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Dirección</h3>
-                        <button @click="openEditModal('address')"
-                            class="p-1.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
-                        </button>
-                    </div>
 
-                    <div class="p-6">
-                        <div class="space-y-4">
-                            <div>
-                                <p
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    País
-                                </p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{
-                                    user.address?.country ||
-                                    'No especificado' }}</p>
-                            </div>
-
-                            <div>
-                                <p
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Ciudad/Estado</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">
-                                    {{ user.address?.city || 'No especificado' }}{{ user.address?.state ? ', ' +
-                                        user.address.state : '' }}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Código
-                                    Postal</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{
-                                    user.address?.postal_code || 'No especificado' }}</p>
-                            </div>
-
-                            <div>
-                                <p
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    Dirección</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{
-                                    user.address?.street ||
-                                    'No especificada' }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <AccessGate :role="['admin']">
-            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mt-6" >
-                <!-- Notes Card -->
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 mt-6">
-                    <div
-                        class="bg-pink-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notas del Usuario</h3>
-                    </div>
 
-                    <div class="p-6">
-                        <form @submit.prevent="submitNotes">
-                            <label for="notes"
-                                class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Escribe una nota
-                            </label>
-                            <textarea id="notes" v-model="form_notes.description" rows="4"
-                                class="mt-2 w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white/90 text-sm shadow-sm focus:ring-pink-500 focus:border-pink-500"
-                                placeholder="Agrega notas sobre el usuario aquí..."></textarea>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" v-if="!form_notes.updated_at">
-                                Creado el: {{ formatDate(form_notes.created_at) }}
-                            </p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" v-else>
-                                Actualizado el: {{ formatDate(form_notes.updated_at) }}
-                            </p>
-                            <div class="mt-4 flex justify-end gap-2">
-                                <SecondaryButton type="button" @click="form_notes.description = ''">
-                                    Limpiar
-                                </SecondaryButton>
-                                <PrimaryButton type="submit">
-                                    Guardar
-                                </PrimaryButton>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            </AccessGate>
             <!-- Password Update Card -->
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 mt-6">
@@ -354,7 +259,7 @@
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                                             Nombre
                                         </label>
-                                        <input v-model="form.name" type="text"
+                                        <input v-model="form.first_name" type="text"
                                             class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
                                     </div>
 
@@ -383,7 +288,7 @@
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                                             Nombre
                                         </label>
-                                        <input v-model="form.name" type="text"
+                                        <input v-model="form.first_name" type="text"
                                             class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-pink-400">
                                     </div>
 
@@ -508,7 +413,7 @@ const props = defineProps({
 });
 const crumbs = [
     { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
-    { label: props.user.name + ' ' + props.user.last_name }
+    { label: props.user.first_name + ' ' + props.user.first_name }
 ];
 const showModal = ref(false);
 const activeModal = ref('');
@@ -516,7 +421,7 @@ const isLoading = ref(false);
 const avatarFile = ref(null);
 
 const form = ref({
-    name: props.user.name,
+    name: props.user.first_name,
     last_name: props.user.last_name,
     email: props.user.email,
     phone_number: props.user.phone_number,
@@ -587,7 +492,7 @@ const closeModal = () => {
     showModal.value = false;
     // Reset form to original values when closing
     form.value = {
-        name: props.user.name,
+        name: props.user.first_name,
         last_name: props.user.last_name,
         email: props.user.email,
         phone_number: props.user.phone_number,

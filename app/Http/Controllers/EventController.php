@@ -61,7 +61,7 @@ class EventController extends Controller
                     ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
+                    ->orWhereRaw('CONCAT(users.first_name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
             });
         }
 
@@ -123,8 +123,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        $doctors = User::role('doctor')->with('roles')->paginate(10);
-        $patients = Patient::paginate(10);
+        $doctors = User::role('doctor')->with('roles', 'Event')->paginate(10);
+        $patients = User::role('patient')->with('roles')->paginate(10);
         $events = Event::all()->load('doctor', 'patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
@@ -172,7 +172,7 @@ class EventController extends Controller
         }
         $validated['attended'] = false;
         $validated['active'] = true;
-        $validated['branch_id'] = Auth::user()->branch_id;
+        $validated['branch_id'] = Auth::user()->active_branch_id;
         $event =  Event::create($validated);
         try {
             $googleEvent = GoogleCalendarEvent::create([
@@ -186,7 +186,7 @@ class EventController extends Controller
         } catch (\Exception $e) {
 
             $event->delete();
-
+            Log::error($e);
             return back()
                 ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
                 ->with('toastStyle', 'danger');
@@ -251,7 +251,7 @@ class EventController extends Controller
         $starttime = $event->starttime = Carbon::parse($event->starttime)->format('H:i');
         $endtime = $event->endtime = Carbon::parse($event->endtime)->format('H:i');
         $doctors = User::role('doctor')->with('roles')->paginate(10);
-        $patients = Patient::paginate(10);
+        $patients = User::role('patient')->with('roles')->paginate(10);
         $event->timeRange = [$starttime, $endtime];
         return Inertia::render('Events/Edit', [
             'event' => $event,

@@ -7,8 +7,8 @@ import axios from "axios";
 
 const props = defineProps({
     message: String,
-    patients: Object, // listado inicial desde backend
-    filters: Object,  // filtros actuales
+    patients: Object,
+    filters: Object,
 });
 
 const emit = defineEmits(['selected']);

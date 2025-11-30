@@ -30,88 +30,69 @@ const submit = () => {
 </script>
 
 <template>
+    <div>
+        <div class="flex ">
+            <div class="min-h-screen flex-1">
+                <div class="flex h-full items-center py-10 px-5">
+                    <div class="mx-auto flex w-full max-w-lg flex-col">
 
-    <Head title="Iniciar Sesión - Smile Clinic" />
+                        <h1 class="mt-8 text-3xl font-bold text-gray-700 lg:mt-0">
+                            Bienvenido
+                        </h1>
 
-    <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="flex justify-center">
-                <svg class="h-16 w-auto text-pink-500" viewBox="0 0 100 100" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100Z"
-                        fill="#ec4899 " />
-                    <path
-                        d="M65 40C65 42.7614 62.7614 45 60 45C57.2386 45 55 42.7614 55 40C55 37.2386 57.2386 35 60 35C62.7614 35 65 37.2386 65 40Z"
-                        fill="white" />
-                    <path
-                        d="M45 40C45 42.7614 42.7614 45 40 45C37.2386 45 35 42.7614 35 40C35 37.2386 37.2386 35 40 35C42.7614 35 45 37.2386 45 40Z"
-                        fill="white" />
-                    <path d="M30 60C30 60 35 70 50 70C65 70 70 60 70 60" stroke="white" stroke-width="4"
-                        stroke-linecap="round" />
-                </svg>
-            </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Smile Clinic
-            </h2>
+                        <p class="mt-2 text-md text-gray-500">Por favor inicie sesión debajo</p>
 
-        </div>
+                        <form @submit.prevent="submit" class="mt-6">
 
-        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                <div v-if="status" class="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">
-                    {{ status }}
-                </div>
-
-                <form class="space-y-6" @submit.prevent="submit">
-                    <div>
-                        <InputLabel for="email" value="Correo electrónico" />
-                        <div class="mt-1">
-                            <TextInput id="email" type="email"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"
-                                v-model="form.email" required autofocus autocomplete="email" />
+                            <p class="text-sm font-semibold text-gray-600">Correo Electrónico</p>
+                            <TextInput class="mt-1 rounded border py-3 px-4 text-base shadow w-full"
+                                v-model="form.email" required autofocus />
                             <InputError class="mt-2" :message="form.errors.email" />
-                        </div>
-                    </div>
 
-                    <div>
-                        <InputLabel for="password" value="Contraseña" />
-                        <div class="mt-1">
-                            <TextInput id="password" type="password"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500"
-                                v-model="form.password" required autocomplete="current-password" />
+                            <p class="mt-6 text-sm font-semibold text-gray-600">Contraseña</p>
+                            <TextInput type="password" class="mt-1 rounded border py-3 px-4 text-base shadow w-full"
+                                v-model="form.password" required />
                             <InputError class="mt-2" :message="form.errors.password" />
-                        </div>
+
+                            <div class="mt-5 flex items-center">
+                                <Checkbox class="mr-2" v-model:checked="form.remember" />
+                                <p class="text-sm font-semibold text-gray-600">Recuérdame</p>
+                                <span class="flex-1"></span>
+                                <Link v-if="canResetPassword" :href="route('password.request')"
+                                    class="text-sm font-semibold text-pink-500 hover:text-pink-600">Forgot password?
+                                </Link>
+                            </div>
+
+                            <button
+                                class="mt-6 w-full rounded-lg bg-pink-500 py-3 text-base font-semibold text-white shadow hover:bg-pink-600"
+                                :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                Iniciar Sesión
+                            </button>
+
+                            <div class="mt-8 flex items-center space-x-1 justify-center">
+                                <p class="text-sm font-semibold text-gray-600">¿No tienes una cuenta?</p>
+                                <a href="#" class="text-sm font-semibold text-pink-500 hover:text-pink-600">
+                                    Regístrate
+                                </a>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <Checkbox name="remember" v-model:checked="form.remember" />
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                                Recordar sesión
-                            </label>
-                        </div>
-
-                        <div class="text-sm">
-                            <Link v-if="canResetPassword" :href="route('password.request')"
-                                class="font-medium text-pink-500 hover:text-pink-400">
-                            ¿Olvidaste tu contraseña?
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div>
-                        <PrimaryButton
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                            :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                            Iniciar Sesión
-                        </PrimaryButton>
-                    </div>
-                </form>
-
-
+                </div>
             </div>
+            <div class="hidden min-h-screen flex-1 bg-pink-500 px-5 py-5 lg:flex">
+                <div class="mx-auto flex h-full flex-col items-center justify-center">
+
+                    <img src="/img/LOGO.PNG" class="h-100 w-auto drop-shadow-xl" />
+
+                    <h1 class=" text-5xl font-extrabold text-white tracking-wide drop-shadow-lg mb-20">
+                        Smile Clinic
+                    </h1>
+
+                </div>
+            </div>
+
+
         </div>
     </div>
-
 </template>

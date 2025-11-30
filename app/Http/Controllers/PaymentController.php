@@ -105,7 +105,7 @@ class PaymentController extends Controller
             'total'    => $request->patient['c_x_c']['balance'],
             'amount_paid' => $request->paymentAmount,
             'active' => 1,
-            'branch_id' => Auth::user()->branch_id,
+            'branch_id' => Auth::user()->active_branch_id,
         ]);
         $CXC = CXC::find($request->patient['c_x_c']['id']);
         $CXC->balance = $request->balance;

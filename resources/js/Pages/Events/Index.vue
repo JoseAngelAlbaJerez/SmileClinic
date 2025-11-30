@@ -8,6 +8,7 @@
         </template>
 
         <template #default>
+
             <div
                 class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
