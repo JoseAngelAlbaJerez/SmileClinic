@@ -172,7 +172,7 @@ watchEffect(() => {
                         <div class="px-3">
                             <Tooltip class="w-full" text="Sucursales" position="right">
                                 <Link :href="route('branches.index')" :class="[
-                                    route().current('branches.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('branches.index') || route().current('branches.create') || route().current('branches.edit')  || route().current('branches.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -187,7 +187,7 @@ watchEffect(() => {
                         <div class="px-3">
                             <Tooltip class="w-full" text="Pacientes" position="right">
                                 <Link :href="route('patients.index')" :class="[
-                                    route().current('patients.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('patients.index') || route().current('patients.create') || route().current('patients.edit')  || route().current('patients.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -203,7 +203,7 @@ watchEffect(() => {
                         <AccessGate :permission="['event.view']">
                             <Tooltip class="w-full" text="Citas" position="right">
                                 <Link :href="route('events.index')" :class="[
-                                    route().current('events.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('events.index') || route().current('events.create') || route().current('events.edit')  || route().current('events.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -219,7 +219,7 @@ watchEffect(() => {
                         <AccessGate :permission="['budget.view']">
                             <Tooltip class="w-full" text="Presupuestos" position="right">
                                 <Link :href="route('budgets.index')" :class="[
-                                    route().current('budgets.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.edit')  || route().current('budgets.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -234,7 +234,7 @@ watchEffect(() => {
                     <AccessGate :permission="['bill.view']" class="px-3">
                         <Tooltip class="w-full" text="Recibos" position="right">
                             <Link :href="route('bills.index')" :class="[
-                                route().current('bills.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('bills.index') || route().current('bills.create') || route().current('bills.edit')  || route().current('bills.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
@@ -248,7 +248,7 @@ watchEffect(() => {
                     <AccessGate :permission="['expense.view']" class="px-3">
                         <Tooltip class="w-full" text="Egresos" position="right">
                             <Link :href="route('expenses.index')" :class="[
-                                route().current('expenses.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit')  || route().current('expenses.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
@@ -263,7 +263,7 @@ watchEffect(() => {
                         <AccessGate :permission="['prescription.view']">
                             <Tooltip class="w-full" text="Recetas" position="right">
                                 <Link :href="route('prescriptions.index')" :class="[
-                                    route().current('prescriptions.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('prescriptions.index') || route().current('prescription.create') || route().current('prescription.edit')  || route().current('prescription.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -280,7 +280,7 @@ watchEffect(() => {
                     <AccessGate :permission="['user.view']" class="px-3">
                         <Tooltip class="w-full" text="Usuarios" position="right">
                             <Link :href="route('users.index')" :class="[
-                                route().current('users.index') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('users.index') || route().current('users.create') || route().current('users.edit')  || route().current('users.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
