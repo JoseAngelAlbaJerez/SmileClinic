@@ -94,12 +94,12 @@ class ExpensesController extends Controller
             'amount' => 'required|numeric|min:0',
 
         ]);
-        $doctor = User::where('name', '=',$validated['description'])->first();
+        $doctor = User::where('first_name', '=',$validated['description'])->first();
        if ($doctor) {
           Expenses::create([
             ...$validated,
             'user_id' => Auth::id(),
-            'branch_id'=> Auth::user()->branch_id,
+            'branch_id'=> Auth::user()->active_branch_id,
             'active' => true,
             'doctor_id'=> $doctor->id
         ]);
@@ -107,7 +107,7 @@ class ExpensesController extends Controller
           Expenses::create([
             ...$validated,
             'user_id' => Auth::id(),
-            'branch_id'=> Auth::user()->branch_id,
+            'branch_id'=> Auth::user()->active_branch_id,
             'active' => true,
             'doctor_id'=> null
         ]);

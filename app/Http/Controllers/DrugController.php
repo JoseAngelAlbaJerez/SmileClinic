@@ -34,7 +34,7 @@ class DrugController extends Controller
             'description' => 'required|string|max:255',
             'active' => 'boolean'
         ]);
-        $validated['branch_id'] = Auth::user()->branch_id;
+        $validated['branch_id'] = Auth::user()->active_branch_id;
         Drug::create($validated);
         return redirect()->back()->with('toast', 'Medicamento registrado correctamente.');
 

@@ -20,7 +20,7 @@ class InsuranceController extends Controller
             'affiliate_signature' => 'nullable|string',
             'reclaimer_signature' => 'nullable|string',
         ]);
-        $validated['branch_id'] = Auth::user()->branch_id;
+        $validated['branch_id'] = Auth::user()->active_branch_id;
         $insurance = Insurance::create($validated);
 
         return response()->json([
