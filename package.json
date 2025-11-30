@@ -31,9 +31,11 @@
         "@inertiajs/vue3": "^2.0.14",
         "@selemondev/vue3-signature-pad": "^1.4.0",
         "@vuepic/vue-datepicker": "^11.0.2",
+        "apexcharts": "^5.3.6",
         "dayjs": "^1.11.13",
         "vue-signature-pad": "^3.0.2",
         "vue-simple-calendar": "^7.2.1",
-        "vue-toastification": "^2.0.0-rc.5"
+        "vue-toastification": "^2.0.0-rc.5",
+        "vue3-apexcharts": "^1.10.0"
     }
 }
