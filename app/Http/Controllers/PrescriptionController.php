@@ -6,6 +6,7 @@ use App\Models\Budget;
 use App\Models\Drug;
 use App\Models\Patient;
 use App\Models\Prescription;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -33,8 +34,7 @@ class PrescriptionController extends Controller
 
         $query = Prescription::query()
             ->select('prescriptions.*')
-            ->join('patients', 'prescriptions.patient_id', '=', 'patients.id')
-            ->join('users', 'prescriptions.doctor_id', '=', 'users.id');
+            ->join('users', 'prescriptions.patient_id', '=', 'users.id');
 
         if ($showDeleted == true) {
             $query->where('prescriptions.active', 1);
@@ -45,16 +45,15 @@ class PrescriptionController extends Controller
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
-                $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.motive LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
+                $q->whereRaw('users.first_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('users.motive LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('users.last_name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('users.date_of_birth LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('CONCAT(users.first_name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
             });
         }
         if ($patient_id) {
-            $patient = Patient::find($patient_id);
+            $patient = User::find($patient_id);
 
             $prescriptionDates = $patient->prescriptions()->pluck('created_at');
 
@@ -113,7 +112,7 @@ class PrescriptionController extends Controller
     public function create()
     {
         $drugs = Drug::orderByDesc('created_at')->paginate(10);
-        $patient = Patient::orderByDesc('created_at')->paginate(10);
+        $patient = User::role('patient')->orderByDesc('created_at')->paginate(10);
         return Inertia::render('Prescription/Create', [
             'drugs' => $drugs,
             'patient' => $patient,
@@ -137,7 +136,7 @@ class PrescriptionController extends Controller
         try {
             $prescription = Prescription::create([
                 'patient_id' => $validated['patient_id'],
-                'branch_id' => Auth::user()->branch_id,
+                'branch_id' => Auth::user()->active_branch_id,
                 'doctor_id' => Auth::id(),
                 'active' => true,
             ]);
@@ -146,7 +145,7 @@ class PrescriptionController extends Controller
                 $prescriptionDetail = $prescription->prescriptionsDetails()->create([
                     'description' => $detail['description'],
                     'drug_id' => $detail['drug_id'],
-                    'branch_id' => Auth::user()->branch_id,
+                    'branch_id' => Auth::user()->active_branch_id,
                     'active' => true,
                 ]);
                 $prescriptionDetail->save();
@@ -209,7 +208,7 @@ class PrescriptionController extends Controller
 
             $prescription->update([
                 'patient_id' => $validated['patient_id'],
-                'branch_id' => Auth::user()->branch_id,
+                'branch_id' => Auth::user()->active_branch_id,
                 'doctor_id' => Auth::id(),
             ]);
 
@@ -219,7 +218,7 @@ class PrescriptionController extends Controller
                 $prescription->prescriptionsDetails()->create([
                     'description' => $detail['description'],
                     'drug_id' => $detail['drug_id'],
-                    'branch_id' => Auth::user()->branch_id,
+                    'branch_id' => Auth::user()->active_branch_id,
                     'active' => true,
                 ]);
             }

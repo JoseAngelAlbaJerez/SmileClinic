@@ -28,7 +28,6 @@ class CXCController extends Controller
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-
         $query = CXC::query()->select('c_x_c_s.*')
             ->join('bills', 'c_x_c_s.patient_id', '=', 'bills.id');
         if ($showDeleted == true) {
@@ -115,7 +114,7 @@ class CXCController extends Controller
     /**
      * Display the specified resource.
      */
-   
+
 
     /**
      * Show the form for editing the specified resource.

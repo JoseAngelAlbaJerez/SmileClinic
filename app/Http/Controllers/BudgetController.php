@@ -11,6 +11,7 @@ use App\Models\Event;
 use App\Models\Insurance;
 use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
@@ -53,7 +54,7 @@ class BudgetController extends Controller
         $patient_id = $request->input('patient_id');
 
         $query = Budget::query()->select('budgets.*')
-            ->join('patients', 'budgets.patient_id', '=', 'patients.id');
+            ->join('users', 'budgets.patient_id', '=', 'users.id');
 
         $query->where('budgets.active', $showDeleted ? 1 : 0);
 
@@ -71,11 +72,11 @@ class BudgetController extends Controller
 
 
         if ($search) {
-            $query->whereHas('patient', function (Builder $q) use ($search) {
+            $query->whereHas('users', function (Builder $q) use ($search) {
                 $q->where('first_name', 'LIKE', "%{$search}%")
                     ->orWhere('last_name', 'LIKE', "%{$search}%")
                     ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
-                    ->orWhere('ars', 'LIKE', "%{$search}%");
+                   ;
             });
         }
 
@@ -121,7 +122,7 @@ class BudgetController extends Controller
      */
     public function create()
     {
-        $patient = Patient::paginate(10);
+        $patient = User::role('patient')->paginate(10);
         $procedure = Procedure::paginate(10);
         return Inertia::render('Budgets/Create', [
             'patient' => $patient,
@@ -153,12 +154,10 @@ class BudgetController extends Controller
             'details.*.amount_of_payments' => 'nullable|integer',
             'details.*.initial' => 'nullable|integer',
 
-            'ars' => 'required|string|max:255',
-            'affiliate_signature' => 'nullable|string',
-            'reclaimer_signature' => 'nullable|string',
+
         ]);
         $budgetData = $validated['form'];
-        $budgetData['branch_id'] = Auth::user()->branch_id;
+        $budgetData['branch_id'] = Auth::user()->active_branch_id;
         $budgetData['doctor_id'] = Auth::id();
         $budgetData['emission_date'] = Carbon::parse($budgetData['emission_date'] ?? now());
         $budgetData['expiration_date'] = $budgetData['expiration_date'] ? Carbon::parse($budgetData['expiration_date']) : null;
@@ -182,9 +181,9 @@ class BudgetController extends Controller
         }
 
 
-        $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
+        $budget->load(['budgetdetail', 'doctor', 'patient']);
 
-        return redirect()->route('bills.create')->with('toast', 'Presupuesto y seguro guardados correctamente');
+        return redirect()->route('budgets.show',$budget)->with('toast', 'Presupuesto guardado correctamente');
     }
 
 
@@ -196,7 +195,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure',  'budgetdetail');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,
@@ -256,7 +255,7 @@ class BudgetController extends Controller
             'reclaimer_signature' => 'nullable|string',
         ]);
         $budgetData = $validated['form'];
-        $budgetData['branch_id'] = Auth::user()->branch_id;
+        $budgetData['branch_id'] = Auth::user()->active_branch_id;
         $budgetData['doctor_id'] = Auth::id();
         $budgetData['emission_date'] = Carbon::parse($budgetData['emission_date'] ?? now());
         $budgetData['expiration_date'] = $budgetData['expiration_date']
