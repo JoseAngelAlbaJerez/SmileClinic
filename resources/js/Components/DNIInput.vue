@@ -24,7 +24,7 @@ watch(() => props.modelValue, (newVal) => {
 }, { immediate: true });
 
 function onInput(e) {
-  let digits = e.target.value.replace(/\D/g, '').substring(0, 11); // max 11 digits
+  let digits = e.target.value.replace(/\D/g, '').substring(0, 11);
   let formatted = '';
 
   if (digits.length > 10) {
