@@ -16,12 +16,11 @@ class PrescriptionSeeder extends Seeder
     {
          foreach (range(1, 100) as $i) {
 
-             $branchId = fake()->numberBetween(1, 2);
 
             $patient = Patient::
                 inRandomOrder()
                 ->first();
-             $doctor = User::role('doctor')->where('branch_id', $branchId)
+             $doctor = User::role('doctor')
                 ->inRandomOrder()
                 ->first();
 

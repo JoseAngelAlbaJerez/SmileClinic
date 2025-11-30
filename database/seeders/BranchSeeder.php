@@ -16,15 +16,25 @@ class BranchSeeder extends Seeder
         Branch::create([
             'name' => 'Principal',
             'address' => 'Cayetano Germosen',
-            'phone' => '809-555-1234',
-            'city' => 'Cayetano Germosen',
+            'phone_number' => '809-555-1234',
+
         ]);
 
         Branch::create([
             'name' => 'Cutupu',
             'address' => 'Calle Norte 45',
-            'phone' => '809-555-5678',
-            'city' => 'Cutupu',
+            'phone_number' => '809-523-6587',
         ]);
+         Branch::create([
+            'name' => 'Santiago',
+            'address' => 'Cerca de el museo',
+            'phone_number' => '809-786-6531',
+        ]);
+         Branch::create([
+            'name' => 'Moca',
+            'address' => 'Frente al Antonio de la Maza',
+            'phone_number' => '809-675-1237',
+        ]);
+
     }
 }

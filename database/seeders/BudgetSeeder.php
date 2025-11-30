@@ -25,7 +25,7 @@ class BudgetSeeder extends Seeder
 
             DB::table('budgets')->insert([
                 'type' => fake()->randomElement(['Credito', 'Contado']),
-                'doctor_id' => User::role('doctor')->where('branch_id', $branchId)->inRandomOrder()->first()->id,
+                'doctor_id' => User::role('doctor')->inRandomOrder()->first()->id,
                 'patient_id' => $patient?->id,
                 'total' => fake()->numberBetween(1000, 50000),
                 'emission_date' => now(),
