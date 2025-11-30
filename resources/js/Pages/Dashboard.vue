@@ -262,10 +262,28 @@ export default {
 
         this.seriesIngresos = [{ name: 'Ingresos', data: ingresosSeries }];
         this.optionsIngresos.xaxis = { categories: ingresosLabels };
-
+        this.optionsIngresos.yaxis = {
+            labels: {
+                formatter: (value) => `$${value.toLocaleString()}`
+            }
+        };
+         this.optionsIngresos.tooltip = {
+            labels: {
+                formatter: (value) => `$${value.toLocaleString()}`
+            }
+        };
         this.seriesTendencia = [{ name: 'Tendencia', data: tendenciaSeries }];
         this.optionsTendencia.xaxis = { categories: tendenciaCats };
-
+        this.optionsTendencia.yaxis = {
+            labels: {
+                formatter: (value) => `$${value.toLocaleString()}`
+            }
+        }
+        this.optionsTendencia.tooltip = {
+            y: {
+                formatter: (value) => `$${value.toLocaleString()}`
+            }
+        }
         this.seriesServicios = serviciosSeries;
         this.optionsServicios.labels = serviciosLabels;
         this.optionsServicios = { ...this.optionsServicios };
