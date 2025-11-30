@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('insuranced_amount');
             $table->decimal('cost');
             $table->boolean('active');
-            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
