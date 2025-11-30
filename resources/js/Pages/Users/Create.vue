@@ -29,11 +29,11 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
-                                    <input v-model="form.name" id="name" type="text"
+                                    <input v-model="form.first_name" id="first_name" type="text"
                                         class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Nombre" />
                                 </div>
-                                <p v-if="errors.name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.name
+                                <p v-if="errors.first_name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.name
                                     }}</p>
                             </div>
 
@@ -302,7 +302,7 @@ export default {
         return {
             isVisible: false,
             form: useForm({
-                name: '',
+                first_name: '',
                 last_name: '',
                 date_of_birth: '',
                 email: '',
@@ -323,7 +323,7 @@ export default {
     },
     methods: {
         submit() {
-            if (!this.form.name) {
+            if (!this.form.first_name) {
                 this.error = 'Por favor, ingrese el nombre.';
                 return;
             }

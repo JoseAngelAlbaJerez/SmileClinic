@@ -2,72 +2,175 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bill;
+
 use App\Models\Branch;
-use App\Models\Expenses;
-use App\Models\Patient;
-use App\Models\User;
+use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+
 use Inertia\Inertia;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class BranchController extends Controller
 {
     public function index(Request $request)
     {
-        Log::info($request);
-        if ($request->has('branch')) {
-            $branch = Branch::where('id', '=', $request->branch)->pluck('id');
-            $patients = Patient::all();
-            $users = User::all();
-            $branches = Branch::all();
-            $now = Carbon::now();
-            $startOfThisWeek = $now->copy()->startOfWeek();
-            $endOfThisWeek = $now->copy()->endOfWeek();
-            $startOfLastWeek = $now->copy()->subWeek()->startOfWeek();
-            $endOfLastWeek = $now->copy()->subWeek()->endOfWeek();
-
-            $incomeThisWeek = Bill::where('type', 'Contado')
-                ->where('branch_id', '=', $branch->pluck('id'))
-                ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
-                ->sum('total');
-
-            $incomeLastWeek = Bill::where('type', 'Contado')
-                ->where('branch_id', '=', $branch->pluck('id'))
-                ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
-                ->sum('total');
+        $search = $request->input('search');
+        $sortField = $request->input('sortField');
+        $sortDirection = $request->input('sortDirection', 'asc');
+        $activeStates = $request->input('activeStates', []);
+        $lastDays = $request->input('lastDays', '30');
+        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-            $percentageChange = $incomeLastWeek > 0
-                ? (($incomeThisWeek - $incomeLastWeek) / $incomeLastWeek) * 100
-                : 100;
-
-
-            $income = Bill::where('type', '=', 'Contado')->where('branch_id', '=', $branch->pluck('id'))->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
-            $income_sum = $income->sum('total');
-            $user =Auth::user();
-            $user->branch_id = $request->branch;
-            $user->save();
-
-            $expense = Expenses::orderByDesc('created_at')->where('branch_id', '=', $branch->pluck('id'))->get();
-            $expense_sum = $expense->sum('amount');
-
-            return Inertia::render('Dashboard', [
-                'patients' => $patients,
-                'branches' => $branches,
-                'branch' => $branch,
-                'users' => $users,
-                'income_sum' => $income_sum,
-                'expense_sum' => $expense_sum,
-                'income' => $income,
-                'expense' => $expense,
-                'incomeThisWeek' => $incomeThisWeek,
-                'incomeLastWeek' => $incomeLastWeek,
-                'percentageChange' => round($percentageChange, 2),
-                'user' => $user->load('branch'),
-            ]);
+        $query = Branch::query()->select('branches.*');
+        if ($showDeleted == true) {
+            $query->where('active', 1);
+        } else {
+            $query->where('active', 0);
         }
+
+        if ($search) {
+            $query->where(function (Builder $q) use ($search) {
+                $q->WhereRaw('name LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('address LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('phone_number LIKE ?', ['%' . $search . '%'])
+                ;
+            });
+        }
+
+        if ($sortField) {
+            $query->orderBy($sortField, $sortDirection);
+        } else {
+            $query->latest('branches.updated_at')
+                ->latest('branches.created_at');
+        }
+        if ($lastDays) {
+            if (is_numeric($lastDays)) {
+
+                $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
+                $query->where('created_at', '>=', $dateFrom);
+            } else {
+
+                if ($lastDays === 'month') {
+                    $dateFrom = Carbon::now()->startOfMonth();
+                    $query->where('created_at', '>=', $dateFrom);
+                } elseif ($lastDays === 'year') {
+                    $dateFrom = Carbon::now()->startOfYear();
+                    $query->where('created_at', '>=', $dateFrom);
+                }
+            }
+        }
+
+        $branches = $query->orderByDesc('created_at')->paginate(10);
+        return Inertia::render('Branches/Index', [
+            'branches' => $branches,
+            'filters' => [
+                'search' => $search,
+                'sortField' => $sortField,
+                'sortDirection' => $sortDirection,
+                'activeStates' => $activeStates,
+                'lastDays' => $lastDays,
+                'showdeleted' => $showDeleted,
+
+            ],
+        ]);
+    }
+
+    public function switch(Request $request)
+    {
+        $request->validate([
+            'branch_id' => 'required|exists:branches,id'
+        ]);
+        $user = $request->user();
+        if (!$user->branches()->where('branch_id', $request->branch_id)->exists()) {
+            abort(403, "No tienes acceso a esta sucursal.");
+        }
+
+        $user->update([
+            'active_branch_id' => $request->branch_id,
+        ]);
+        Log::info($user->active_branch_id);
+
+        return back()->with('toast', 'Sucursal cambiada correctamente')->with('refresh', true);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Branches/Create');
+    }
+
+    public function store(Request $request)
+    {
+
+        $validated = $request->validate([
+            'name' => 'required|unique:branches,name|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+        ]);
+        Branch::create($validated);
+
+        return redirect()->route('branches.index')->with('toast', 'Sucursal registrada correctamente.');
+    }
+    public function edit(Branch $branch)
+    {
+
+        return Inertia::render('Branches/Edit', [
+            'branch' => $branch
+        ]);
+    }
+    public function Update(Request $request, Branch $branch)
+    {
+
+        if ($request->has('active')) {
+            $this->restore($branch);
+        }
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+        ]);
+        $branch->update($validated);
+
+        return redirect()->route('branches.index')->with('toast', 'Sucursal registrada correctamente.');
+    }
+
+    public function destroy(Branch $branch)
+    {
+
+        //  $this->authorize('delete',Branch::class);
+
+        $branch->active = false;
+        $branch->save();
+
+        return redirect()->back()->with('toast', 'Sucursal desactivada correctamente.');
+    }
+
+    private function restore(Branch $branch)
+    {
+        //  $this->authorize('update',Branch::class);
+
+        $branch->active = true;
+        $branch->save();
+
+        return redirect()->back()->with('toast', 'Sucursal restaurada correctamente.');
+    }
+
+    public function show(Branch $branch)
+    {
+        $events = Event::where('branch_id',$branch->id)->get();
+        $income = Event::where('branch_id',$branch->id)->get();
+        $expenses = Event::where('branch_id',$branch->id)->get();
+
+
+        return Inertia::render('Branches/Show', [
+            'branch' => $branch,
+            'events' => $events,
+            'income' => $income,
+            'expenses' => $expenses,
+
+
+        ]);
     }
 }
