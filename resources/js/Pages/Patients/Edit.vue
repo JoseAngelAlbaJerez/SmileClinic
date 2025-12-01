@@ -11,7 +11,7 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
+                        <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Registro de Paciente</h2>
                             <p class="text-pink-100 mt-1">Complete todos los campos requeridos</p>
                         </div>
@@ -100,40 +100,9 @@
                                         errors.phone_number }}</p>
                                 </div>
 
-                                <!-- ARS -->
-                                <div>
-                                    <label for="ars"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        ARS <span class="text-red-500">*</span>
-                                    </label>
-                                    <select v-model="form.ars"
-                                        class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white">
-                                        <option value="">Seleccione una opción</option>
-                                        <option value="Humano">ARS Humano</option>
-                                        <option value="Universal">ARS Universal</option>
-                                        <option value="Monumental">ARS Monumental</option>
-                                        <option value="Senasa">ARS Senasa</option>
-                                    </select>
-                                    <p v-if="errors.ars" class="mt-1 text-sm text-red-600">{{ errors.ars }}</p>
-                                </div>
-                                <div v-if="form.ars != '' ">
-                                    <label for="ARS_id"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Número de Afiliado
-                                    </label>
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <CardIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                                        </div>
-                                        <input v-model="form.ars_id"  placeholder="21333326432231"
-                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white" />
-                                    </div>
-                                    <p v-if="errors.ars_id" class="mt-1 text-sm text-red-600">{{ errors.ars_id }}</p>
-                                </div>
 
                                 <!-- Date of Birth -->
-                                <div>
+                                <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Fecha de Nacimiento <span class="text-red-500">*</span>
                                     </label>

@@ -34,7 +34,7 @@
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
                         <div class="overflow-x-auto w-full">
                             <table class="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
@@ -89,8 +89,8 @@
                                     <tr v-for="branch in branches.data" :key="branch.id">
                                         <td class="p-4 hidden md:table-cell">{{ branch.id }}</td>
                                         <td class="p-4">{{ branch.name }} </td>
-                                        <td class="p-4 ">{{ branch.address}}</td>
-                                        <td class="p-4 ">{{ branch.phone_number}}</td>
+                                        <td class="p-4 ">{{ branch.address }}</td>
+                                        <td class="p-4 ">{{ branch.phone_number }}</td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(branch.created_at) }}</td>
 
                                         <td class="p-4">
@@ -114,6 +114,40 @@
                                 No hay registros disponibles.
                             </div>
                         </div>
+                        <Pagination :pagination="branches" :filters="form" />
+                    </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="branch in branches.data" :key="branch.id"
+                            class="border rounded-lg bg-white  p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                    {{ branch.first_name }} {{ branch.last_name }}
+                                </h3>
+                                <Link :href="route('branches.show', branch.id)" class="text-pink-500 text-sm">Abrir
+                                </Link>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#{{ branch.id }}</p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <p><span class="font-medium">Nacimiento:</span> {{ branch.date_of_birth }}</p>
+                                <p><span class="font-medium">ARS:</span> {{ branch.ars }}</p>
+                                <p><span class="font-medium">Creado:</span> {{ formatDate(branch.created_at) }}</p>
+
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(branch.active)">
+                                        <HandThumbDown v-if="branch.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!branches.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+
                         <Pagination :pagination="branches" :filters="form" />
                     </div>
                 </div>

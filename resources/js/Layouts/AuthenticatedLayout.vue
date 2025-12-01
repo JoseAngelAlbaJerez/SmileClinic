@@ -132,7 +132,7 @@ watchEffect(() => {
                 class="hidden sm:flex flex-col h-screen fixed left-0 top-0 bottom-0 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 shadow-md transition-all duration-300 ease-in-out z-20"
                 :class="{ 'w-64': sidebarExpanded, 'w-20': !sidebarExpanded }">
 
-                <div class="bg-pink-500" :class="[
+                <div class="bg-pink-500 dark:bg-pink-600 " :class="[
                     'flex items-center h-16 border-b border-gray-100 dark:border-gray-700',
                     { 'justify-between': sidebarExpanded, 'justify-center': !sidebarExpanded }
                 ]">
@@ -352,7 +352,7 @@ watchEffect(() => {
                             </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="can('branch.view')" :href="route('branches.index')"
                                 :active="route().current('branches.index')">
-                                Pacientes
+                                Sucursales
                             </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="can('event.view')" :href="route('events.index')"
                                 :active="route().current('events.index')">
@@ -415,7 +415,7 @@ watchEffect(() => {
                 </nav>
 
                 <nav
-                    class="border-b flex h-16 justify-between px-5 border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
+                    class="border-b hidden md:flex h-16 justify-between px-5 border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
 
 
                     <!-- IZQUIERDA -->

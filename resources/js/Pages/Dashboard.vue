@@ -66,10 +66,13 @@
                             <div>
                                 <p class="text-sm font-medium text-green-600 dark:text-green-300">Citas No-show
                                 </p>
-                                <h3 class="text-2xl font-bold text-green-800 dark:text-white mt-1">{{ no_show?.length || 0 }}</h3>
+                                <h3 class="text-2xl font-bold text-green-800 dark:text-white mt-1">{{ no_show?.length ||
+                                    0 }}
+                                </h3>
                                 <div class="flex items-center mt-2">
 
-                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">Citas no atendidas de la semana</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">Citas no atendidas de la
+                                        semana</span>
                                 </div>
                             </div>
                             <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/50">
@@ -109,50 +112,64 @@
                 </div>
 
                 <!-- Recent Transactions -->
-                <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+                <!-- Recent Transactions -->
+                <div class="grid grid-cols-1 gap-6 mb-6">
+
+                    <!-- INGRESOS POR SUCURSAL -->
                     <div
                         class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full">
+
                         <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos por Sucursal</h3>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto pr-2">Tendencias
-                                </h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto pr-2">
+                                Tendencias
+                            </h3>
                         </div>
 
-
                         <div class="flex flex-col lg:flex-row items-center justify-between gap-6 w-full">
-                            <VueApexCharts type="bar" height="300" width="230%" :options="optionsIngresos"
-                                :series="seriesIngresos" />
-                            <VueApexCharts type="line" height="300" width="230%" :options="optionsTendencia"
-                                :series="seriesTendencia" />
+
+                            <div class="w-full lg:w-1/2">
+                                <VueApexCharts type="bar" height="300" width="100%" :options="optionsIngresos"
+                                    :series="seriesIngresos" />
+                            </div>
+
+                            <div class="w-full lg:w-1/2">
+                                <VueApexCharts type="line" height="300" width="100%" :options="optionsTendencia"
+                                    :series="seriesTendencia" />
+                            </div>
+
                         </div>
                     </div>
 
 
+                    <!-- CITAS ATENDIDAS -->
                     <div
                         class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full mt-6">
+
                         <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Citas Atendidas
-                            </h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Citas Atendidas</h3>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto">Agenda de hoy
                             </h3>
                         </div>
 
-
                         <div class="flex flex-col lg:flex-row items-center justify-between gap-6 w-full">
-                            <VueApexCharts type="donut" height="300" width="250%" :options="optionsServicios"
-                                :series="seriesServicios" />
 
+                            <div class="w-full lg:w-1/2">
+                                <VueApexCharts type="donut" height="300" width="100%" :options="optionsServicios"
+                                    :series="seriesServicios" />
+                            </div>
 
                             <iframe id="open-web-calendar"
                                 src="https://calendar.google.com/calendar/embed?height=400&wkst=2&ctz=America%2FSanto_Domingo&showPrint=0&mode=AGENDA&title=Citas%20Smile%20Clinic&src=am9zZWFuZ2VsYWxiYTI0QGdtYWlsLmNvbQ&src=NGVlY2JhYzU3ZWNlOGNkODEyZDZiYmNiNzY4ODEyZjYxMWM5M2NlN2VmYTdlYTU4ZjMyYmNkYWIzZmQyMWI4OUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZXMtNDE5LmRvI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%237986CB&color=%230B8043"
-                                class="rounded w-full h-[350px] border-0"
-                                sandbox="allow-scripts allow-same-origin allow-top-navigation"
-                                allowtransparency="true"></iframe>
+                                class="rounded w-full lg:w-1/2 h-[350px] border-0"
+                                sandbox="allow-scripts allow-same-origin allow-top-navigation" allowtransparency="true">
+                            </iframe>
+
                         </div>
                     </div>
 
-
                 </div>
+
             </div>
 
 
@@ -267,7 +284,7 @@ export default {
                 formatter: (value) => `$${value.toLocaleString()}`
             }
         };
-         this.optionsIngresos.tooltip = {
+        this.optionsIngresos.tooltip = {
             labels: {
                 formatter: (value) => `$${value.toLocaleString()}`
             }

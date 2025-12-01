@@ -11,7 +11,7 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg ">
                         <!-- Form Header -->
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4 rounded-t-xl">
+                        <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4 rounded-t-xl">
                             <h2 class="text-xl font-bold text-white">Editar Cita Médica</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles de la cita</p>
                         </div>

@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Odontograma" />
     <AuthenticatedLayout>
         <template #header>
@@ -11,21 +12,23 @@
 
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
-                    <div >
+                    <div>
                         <Odontograph v-model="odontogramData" />
                     </div>
 
                     <!-- Error general -->
-                    <div v-if="error" class="mb-6 text-red-600 font-medium">
-                        {{ error }}
-                    </div>
+
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
+                         <div v-if="error" class="mb-6 text-red-600 font-medium mr-auto">
+                        {{ error }}
+                    </div>
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit" >Guardar</PrimaryButton>
+                        <PrimaryButton type="submit">Guardar</PrimaryButton>
                     </div>
+
                 </form>
             </div>
         </template>
