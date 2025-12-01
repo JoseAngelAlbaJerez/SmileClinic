@@ -59,7 +59,7 @@ class BudgetController extends Controller
         $query->where('budgets.active', $showDeleted ? 1 : 0);
 
         if ($patient_id) {
-            $patient = Patient::find($patient_id);
+            $patient = User::find($patient_id);
             $createdAtDates = $patient->budget()->pluck('created_at');
 
             if ($createdAtDates->isNotEmpty()) {
@@ -136,7 +136,7 @@ class BudgetController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'form.patient_id' => 'required|exists:patients,id',
+            'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
             'form.emission_date' => 'required|date',
@@ -209,7 +209,7 @@ class BudgetController extends Controller
      */
     public function edit(Budget $budget)
     {
-        $patient = Patient::paginate(10);
+        $patient = User::paginate(10);
         $procedure = Procedure::paginate(10);
         $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail', 'Insurance');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
@@ -232,7 +232,7 @@ class BudgetController extends Controller
         }
 
         $validated = $request->validate([
-            'form.patient_id' => 'required|exists:patients,id',
+            'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
             'form.emission_date' => 'required|date',

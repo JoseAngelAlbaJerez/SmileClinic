@@ -125,7 +125,7 @@ class PrescriptionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id',
             'details' => 'required|array|min:1',
             'details.*.description' => 'required|string',
             'details.*.drug_id' => 'required|exists:drugs,id',
@@ -195,7 +195,7 @@ class PrescriptionController extends Controller
             $this->restore($id);
         }
         $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id',
             'details' => 'required|array|min:1',
             'details.*.description' => 'required|string',
             'details.*.drug_id' => 'required|exists:drugs,id',

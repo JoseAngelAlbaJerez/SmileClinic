@@ -142,7 +142,7 @@ class BillController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'form.patient_id' => 'required|exists:patients,id',
+            'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
             'form.emission_date' => 'required|date',
             'form.expiration_date' => 'nullable|date',

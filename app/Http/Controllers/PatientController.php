@@ -250,7 +250,7 @@ class PatientController extends Controller implements HasMiddleware
             $validated = $request->validate([
                 'first_name'           => 'required|string|max:100',
                 'last_name'            => 'required|string|max:100',
-                'DNI'                  => 'nullable|string|max:20|unique:patients,DNI',
+                'DNI'                  => 'nullable|string|max:20|unique:users,DNI',
                 'phone_number'         => 'nullable|string|max:20',
                 'date_of_birth'        => 'nullable|date|before:today',
                 'complications'        => 'required|boolean',
