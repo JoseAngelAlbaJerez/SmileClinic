@@ -62,20 +62,31 @@ class DatabaseSeeder extends Seeder
             'email' => 'Francisco@gmail.com',
             'password' => Hash::make('12345678'),
         ]);
-         User::factory()->create([
+
+
+
+
+        $patient = User::factory()->create([
             'first_name' => 'Juan',
         ]);
-         User::factory()->create([
+
+
+
+        $patient =  User::factory()->create([
             'first_name' => 'Francisco',
         ]);
-         User::factory()->create([
+
+
+        $patient =  User::factory()->create([
             'first_name' => 'Paloma',
         ]);
 
 
 
+
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(medicalHistorySeeder::class);
         $this->call(PatientSeeder::class);
         $this->call(OdontographSeeder::class);
         $this->call(ProcedureSeeder::class);
