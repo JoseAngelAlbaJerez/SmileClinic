@@ -198,14 +198,14 @@ class PatientController extends Controller implements HasMiddleware
             ],
         ]);
     }
-    public function edit(Patient $patient)
+    public function edit(User $patient)
     {
         return Inertia::render('Patients/Edit', [
             'patient' => $patient
         ]);
     }
 
-    public function update(Request $request, Patient $patient)
+    public function update(Request $request, User $patient)
     {
         if ($request->has('active')) {
             $this->restore($patient);
@@ -293,9 +293,9 @@ class PatientController extends Controller implements HasMiddleware
     }
     public function destroy($id)
     {
-        $this->authorize('delete', Patient::class);
+        $this->authorize('delete', User::class);
 
-        $patient = Patient::findOrFail($id);
+        $patient = User::findOrFail($id);
         $patient->active = false;
         $patient->save();
 
