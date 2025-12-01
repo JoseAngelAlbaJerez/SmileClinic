@@ -121,14 +121,36 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patient = User::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patient = null;
+        }
         $doctors = User::role('doctor')->with('roles', 'Event')->paginate(10);
         $patients = User::role('patient')->with('roles')->paginate(10);
         $events = Event::all()->load('doctor', 'patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
+            'patient' => $patient,
             'events' => $events,
         ]);
     }

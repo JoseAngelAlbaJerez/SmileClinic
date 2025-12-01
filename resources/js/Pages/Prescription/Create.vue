@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Receta" />
     <AuthenticatedLayout>
         <template #header>
@@ -275,6 +276,7 @@ export default {
     props: {
         drugs: Object,
         patient: Object,
+        patients: Object,
         errors: [Array, Object],
     },
     components: {
@@ -306,7 +308,7 @@ export default {
 
             budget_id: '',
             form_details: [],
-            selected_patient: '',
+            selected_patient: this.patients || '',
             timeout: 3000,
             crumbs: [
                 { icon: markRaw(RXIcon), label: 'Recetas', to: route('prescriptions.index') },
@@ -321,7 +323,7 @@ export default {
             selectedDrugs: [],
             drugsList: this.drugs.data || [],
             form: useForm({
-                patient_id: '',
+                patient_id: this.patients?.id || '',
                 details: [
                     {
                         description: '',
@@ -392,7 +394,7 @@ export default {
                 return;
             }
             for (const detail of this.form.details) {
-                if (!detail.description ||  !detail.drug_id) {
+                if (!detail.description || !detail.drug_id) {
                     this.error = 'Complete todos los campos en los detalles de la receta.';
                     return;
                 }

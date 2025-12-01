@@ -12,7 +12,7 @@
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
+                        <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Nuevo Presupuesto</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
@@ -288,7 +288,7 @@
                                             class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Ingrese el apellido" />
                                         <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name
-                                            }}</p>
+                                        }}</p>
                                     </div>
 
                                     <!-- DNI -->
@@ -329,7 +329,7 @@
                                     </div>
 
                                     <!-- Address -->
-                                    <div >
+                                    <div>
                                         <label for="address"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Dirección
@@ -346,8 +346,8 @@
                                         <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}
                                         </p>
                                     </div>
-                                     <!-- Address -->
-                                    <div >
+                                    <!-- Address -->
+                                    <div>
                                         <label for="address"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Número de Afiliado
@@ -436,7 +436,7 @@
                                             class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Ingrese diagnóstico" />
                                         <p v-if="errors.diagnosis" class="mt-1 text-sm text-red-600">{{ errors.diagnosis
-                                        }}</p>
+                                            }}</p>
                                     </div>
 
                                     <!-- Doctor Name -->
@@ -468,7 +468,7 @@
                                             class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Ingrese código del médico" />
                                         <p v-if="errors.doctor_id" class="mt-1 text-sm text-red-600">{{ errors.doctor_id
-                                        }}</p>
+                                            }}</p>
                                     </div>
 
                                     <!-- Procedure -->
@@ -481,7 +481,7 @@
                                             class="block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
                                             placeholder="Ingrese procedimiento realizado" />
                                         <p v-if="errors.procedure" class="mt-1 text-sm text-red-600">{{ errors.procedure
-                                        }}</p>
+                                            }}</p>
                                     </div>
 
                                     <!-- Amount Claimed -->
@@ -691,6 +691,7 @@ import { router } from '@inertiajs/vue3'
 
 export default {
     props: {
+        patients: Object,
         patient: Object,
         procedure: Object,
         errors: [Array, Object],
@@ -726,7 +727,7 @@ export default {
     data() {
         return {
             form: useForm({
-                patient_id: '',
+                patient_id: this.patients?.id || '',
                 currency: 'DOP',
                 type: 'Contado',
                 emission_date: new Date(),
@@ -765,7 +766,8 @@ export default {
             }),
             budget_id: '',
             form_details: [],
-            selected_patient: {},
+            selected_patient: this.patients || '',
+
             timeout: 3000,
             crumbs: [
                 { icon: markRaw(DocumentMoney), label: 'Presupuestos', to: route('budgets.index') },
@@ -921,7 +923,7 @@ export default {
             this.error = null;
 
 
-             this.saveSignatures();
+            this.saveSignatures();
             const payload = {
                 form: {
                     patient_id: this.form.patient_id,
@@ -952,7 +954,7 @@ export default {
 
                 },
                 onError: (errors) => {
-                   this.errors = errors;
+                    this.errors = errors;
                 },
                 onFinish: () => {
                     this.form.processing = false;

@@ -109,13 +109,36 @@ class PrescriptionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patients = User::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patients = null;
+        }
         $drugs = Drug::orderByDesc('created_at')->paginate(10);
         $patient = User::role('patient')->orderByDesc('created_at')->paginate(10);
         return Inertia::render('Prescription/Create', [
             'drugs' => $drugs,
             'patient' => $patient,
+            'patients' => $patients,
+
         ]);
     }
 
@@ -248,7 +271,8 @@ class PrescriptionController extends Controller
             ->with('toast', 'Receta eliminada correctamente.')
             ->with('toastStyle', 'success');
     }
-    private function restore(string $id){
+    private function restore(string $id)
+    {
         $prescription = Prescription::findOrFail($id);
         $prescription->update(['active' => 1]);
         $prescription->prescriptionsDetails()->update(['active' => 1]);
