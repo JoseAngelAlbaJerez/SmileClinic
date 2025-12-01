@@ -138,7 +138,7 @@ watchEffect(() => {
                 ]">
                     <Link :href="route('dashboard')" class="flex items-center">
                     <img src="/img/LOGO.PNG" class="drop-shadow-xl"
-                        :class="{ 'h-14 ml-4': sidebarExpanded, 'h-12 w-full': !sidebarExpanded }" />
+                        :class="{ 'h-14 ml-5': sidebarExpanded, 'h-12 ml-2 w-full': !sidebarExpanded }" />
 
 
                     <h1 class="mt-1 text-white font-bold ml-2 whitespace-nowrap overflow-hidden

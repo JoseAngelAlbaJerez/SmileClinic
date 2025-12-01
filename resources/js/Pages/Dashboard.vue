@@ -114,8 +114,8 @@
                         class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full">
                         <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos por Sucursal</h3>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto">Ranking
-                                Sucursales</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto pr-2">Tendencias
+                                </h3>
                         </div>
 
 
@@ -290,8 +290,8 @@ export default {
 
         const applyTheme = (isDark) => {
             const textColor = isDark ? '#f9fafb' : '#1f2937';
-            const paletteLight = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6366f1'];
-            const paletteDark = ['#60a5fa', '#34d399', '#fbbf24', '#f87171', '#818cf8'];
+            const paletteLight = ['#EC4899', '#10b981', '#f59e0b', '#ef4444', '#6366f1'];
+            const paletteDark = ['#EC4899', '#34d399', '#fbbf24', '#f87171', '#818cf8'];
             const palette = isDark ? paletteDark : paletteLight;
             const themeMode = isDark ? 'dark' : 'light';
 
