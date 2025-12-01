@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Odontograph;
 use App\Models\Patient;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class OdontographController extends Controller
 
     public function create(Request $request)
     {
-        $patient = Patient::where('id', $request->id)->first();
+        $patient = User::where('id', $request->id)->first();
         $patient->age = Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Odontograph/Create', compact('patient'));
     }
@@ -24,7 +25,7 @@ class OdontographController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id',
             'data' => 'required|array',
         ]);
         $validated['branch_id'] = Auth::user()->active_branch_id;
@@ -59,7 +60,7 @@ class OdontographController extends Controller
             return redirect()->back()->with('toast', 'Odontograma restaurado correctamente');
         }
         $data = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'required|exists:users,id',
             'data' => 'required|array',
         ]);
 
