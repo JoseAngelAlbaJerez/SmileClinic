@@ -15,6 +15,7 @@ class MedicalHistory extends Model
         'alergies_detail',
         'drugs',
         'drugs_detail',
+        'branch_id'
     ];
 
     public function patient(){

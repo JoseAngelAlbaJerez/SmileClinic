@@ -111,7 +111,7 @@ class RoleSeeder extends Seeder
         $user->save();
 
         $user = User::where('first_name', 'Dra. Madelin')->first();
-        $user->syncRoles('doctor');
+        $user->syncRoles('doctor','patient');
         $user->branches()->sync([2,1]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();

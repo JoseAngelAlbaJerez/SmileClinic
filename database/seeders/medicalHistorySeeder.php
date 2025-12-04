@@ -15,16 +15,16 @@ class medicalHistorySeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 3) as $i) {
+        $users = User::role('patient')->get();
+        foreach ($users as $i) {
 
-            $branchId = Branch::inRandomOrder();
+            $branchId = Branch::inRandomOrder()->first()->id;
             $complications = fake()->boolean();
             $alergies = fake()->boolean();
             $drugs = fake()->boolean();
-            $patient = User::role('patient')->inRandomOrder()
-                ->first();
+
             MedicalHistory::create([
-                'patient_id' => $patient->id,
+                'patient_id' => $i->id,
                 'doctor_id' => User::role('doctor')->inRandomOrder()->first()->id,
                 'complications' => $complications,
                 'complications_detail' => $complications ? fake()->sentence() : '',
@@ -32,6 +32,7 @@ class medicalHistorySeeder extends Seeder
                 'alergies_detail' => $alergies ? fake()->word() : '',
                 'drugs' => $drugs,
                 'drugs_detail' => $drugs ? fake()->word() : '',
+                'branch_id' => $branchId
             ]);
         }
     }
