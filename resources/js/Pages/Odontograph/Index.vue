@@ -57,7 +57,7 @@
                                             </span>
                                         </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
-                                            Dirección
+                                            Doctor
                                             <span v-if="form.sortField === 'first_name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
