@@ -11,15 +11,104 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Database\Eloquent\Builder;
 
-class OdontographController extends Controller
+class OdontographController extends Controller implements HasMiddleware
 {
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:patient.view', only: ['index', 'show']),
+            new Middleware('permission:patient.create', only: ['create', 'store']),
+            new Middleware('permission:patient.update', only: ['edit', 'update']),
+            new Middleware('permission:patient.delete', only: ['destroy']),
+        ];
+    }
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $sortField = $request->input('sortField');
+        $sortDirection = $request->input('sortDirection', 'asc');
+        $activeStates = $request->input('activeStates', []);
+        $lastDays = $request->input('lastDays', '30');
+        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
+
+        $query = Odontograph::query()->select('odontographs.*')
+            ->join('users', 'odontographs.patient_id', '=', 'users.id');
+
+        $query->where('odontographs.active', $showDeleted ? 1 : 0);
+
+
+        if ($search) {
+            $query->whereHas('users', function (Builder $q) use ($search) {
+                $q->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
+                ;
+            });
+        }
+
+        if ($sortField) {
+            $query->orderBy($sortField, $sortDirection);
+        } else {
+            $query->latest('odontographs.updated_at')
+                ->latest('odontographs.created_at');
+        }
+        if ($lastDays) {
+            if (is_numeric($lastDays)) {
+
+                $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
+                $query->where('odontographs.created_at', '>=', $dateFrom);
+            } else {
+
+                if ($lastDays === 'month') {
+                    $dateFrom = Carbon::now()->startOfMonth();
+                    $query->where('odontographs.created_at', '>=', $dateFrom);
+                } elseif ($lastDays === 'year') {
+                    $dateFrom = Carbon::now()->startOfYear();
+                    $query->where('odontographs.created_at', '>=', $dateFrom);
+                }
+            }
+        }
+
+        $odontographs = $query->orderByDesc('odontographs.created_at')->with('patient', 'doctor')->paginate(10);
+
+        return Inertia::render('Odontograph/Index', [
+            'odontographs' => $odontographs,
+            'filters' => [
+                'search' => $search,
+                'sortField' => $sortField,
+                'sortDirection' => $sortDirection,
+                'activeStates' => $activeStates,
+                'lastDays' => $lastDays,
+                'showdeleted' => $showDeleted,
+
+            ],
+        ]);
+    }
     public function create(Request $request)
     {
-        $patient = User::where('id', $request->id)->first();
-        $patient->age = Carbon::parse($patient->date_of_birth)->age;
-        return Inertia::render('Odontograph/Create', compact('patient'));
+        $this->authorize('create', Odontograph::class);
+
+        $patient_id = $request->input('patient_id');
+
+        if ($patient_id) {
+
+            $patient = User::where('id', $patient_id)->first();
+        } else {
+            $patient = null;
+        }
+        $patients = User::role('patient')->paginate(10);
+
+        return Inertia::render('Odontograph/Create', [
+            'patients' => $patients,
+            'patient' => $patient,
+        ]);
     }
 
     public function store(Request $request)
@@ -42,7 +131,8 @@ class OdontographController extends Controller
 
     public function show(Odontograph $odontograph)
     {
-        return Inertia::render('odontograph/Show', [
+        $odontograph->load(['patient','doctor','branch']);
+        return Inertia::render('Odontograph/Show', [
             'odontograph' => $odontograph,
         ]);
     }
@@ -66,7 +156,7 @@ class OdontographController extends Controller
 
         $odontograph->update($data);
 
-        return redirect()->route('patients.show',$odontograph->patient()->first())->with('toast', 'Odontograma actualizado correctamente.');
+        return redirect()->route('patients.show', $odontograph->patient()->first())->with('toast', 'Odontograma actualizado correctamente.');
     }
     private function restore(Odontograph $odontograph)
     {

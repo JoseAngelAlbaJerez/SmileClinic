@@ -7,7 +7,20 @@
             </div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Creador de Odontograma</h2>
         </div>
+        <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Paciente <span class="text-red-500">*</span>
+            </label>
+            <button type="button" @click="openPatientModal()"
+                class="flex items-center w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                <span v-if="selected_patient" class="truncate">
+                    {{ selected_patient.first_name }} {{ selected_patient.last_name }}
+                </span>
+                <span v-else class="text-gray-400 dark:text-gray-400">Seleccionar</span>
+            </button>
 
+        </div>
         <!-- Odontograma Superior -->
         <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">ARCADA SUPERIOR</h3>
         <div
@@ -15,7 +28,7 @@
             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 mr-4">
                 <div v-for="tooth in upperLeftTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -78,7 +91,7 @@
             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-1.5 ">
                 <div v-for="tooth in upperRightTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -141,7 +154,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4 mt-2 ml-auto gap-1.5">
                 <div v-for="tooth in upperLeftTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -204,7 +217,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
                 <div v-for="tooth in upperRightTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -273,7 +286,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 mr-4 mt-2 ml-auto gap-1.5">
                 <div v-for="tooth in LowerLeftTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -334,7 +347,7 @@
             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5  mt-2 mr-auto gap-1.5">
                 <div v-for="tooth in LowerRightTeethTop" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -392,10 +405,10 @@
                 </div>
             </div>
 
-              <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 mr-4">
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 mr-4">
                 <div v-for="tooth in LowerLeftTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -453,10 +466,10 @@
                 </div>
             </div>
 
-             <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 ">
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 mt-2 gap-1.5 ">
                 <div v-for="tooth in LowerRightTeethBot" :key="tooth" @click="selectTooth(tooth)"
                     class="relative group rounded-md border border-gray-200 dark:border-gray-700 text-center cursor-pointer transition-all hover:shadow-md p-2 sm:p-3"
-                      :class="getToothClass(tooth)">
+                    :class="getToothClass(tooth)">
                     <div class="font-bold text-gray-800 dark:text-white text-xs sm:text-sm">{{ tooth }}</div>
 
                     <!-- Indicadores de zonas -->
@@ -627,6 +640,22 @@
             </div>
         </div>
     </div>
+    <!-- Patient Selection Modal -->
+    <Modal :show="showPatientModal" @close="showPatientModal = false" maxWidth="2xl">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                    <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                    Seleccionar Paciente
+                </h3>
+                <button @click="showPatientModal = false"
+                    class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                    <XIcon class="h-6 w-6" />
+                </button>
+            </div>
+            <PatientSelector :patients="patients" @selected="selectPatient" />
+        </div>
+    </Modal>
 </template>
 
 <script setup>
@@ -635,17 +664,35 @@ import PrimaryButton from './PrimaryButton.vue'
 import SecondaryButton from './SecondaryButton.vue'
 import TeethIcon from './Icons/TeethIcon.vue'
 import ImplantIcon from './Icons/ImplantIcon.vue'
+import UserIcon from './Icons/UserIcon.vue'
+import PatientSelector from './PatientSelector.vue'
+import XIcon from './Icons/XIcon.vue'
+import Modal from './Modal.vue'
+
+
+
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: () => ({})
-    }
-})
-const emit = defineEmits(['update:modelValue'])
+    modelValue: { type: Object, default: () => ({}) },
+    patients: { type: Object, default: () => [] },
+    patient: { type: Object, default: () => [] }
+
+});
+const emit = defineEmits(['update:patient', 'update:modelValue']);
+
 
 const upperLeftTeethTop = [18, 17, 16, 15, 14, 13, 12, 11,]
 const upperLeftTeethBot = [55, 54, 53, 52, 51]
+const showPatientModal = ref(false);
+const selected_patient = ref(props.patient || null);
+
+
+const selectPatient = (p) => {
+    selected_patient.value = p;
+    showPatientModal.value = false;
+    emit('update:patient', p);
+};
+
 
 const upperRightTeethTop = [21, 22, 23, 24, 25, 26, 27, 28,]
 const upperRightTeethBot = [61, 62, 63, 64, 65]
@@ -713,6 +760,9 @@ const toothNames = {
     85: "2do molar inferior derecho (temporal)"
 };
 
+const openPatientModal = () => {
+    showPatientModal.value = true;
+};
 
 function selectTooth(tooth) {
     selectedTooth.value = tooth
@@ -732,40 +782,40 @@ function zoneClass(zone) {
     }
 }
 const getStatuses = (tooth) => {
-  const value = odontogram.value[tooth];
-  if (!value) return [];
+    const value = odontogram.value[tooth];
+    if (!value) return [];
 
-  if (Array.isArray(value)) {
-    return [...value];
-  }
+    if (Array.isArray(value)) {
+        return [...value];
+    }
 
-  return Object.values({ ...value });
+    return Object.values({ ...value });
 };
 
 const getToothClass = (tooth) => {
-  const statuses = getStatuses(tooth);
+    const statuses = getStatuses(tooth);
 
-  if (statuses.includes("Cariado")) {
-    return "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700";
-  }
+    if (statuses.includes("Cariado")) {
+        return "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700";
+    }
 
-  if (statuses.includes("Restauración")) {
-    return "bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700";
-  }
+    if (statuses.includes("Restauración")) {
+        return "bg-blue-100 dark:bg-blue-800/30 border-blue-300 dark:border-blue-700";
+    }
 
-  if (statuses.includes("Corona")) {
-    return "bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700";
-  }
+    if (statuses.includes("Corona")) {
+        return "bg-yellow-100 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700";
+    }
 
-  if (statuses.includes("CoronaAplicada")) {
-    return "bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800";
-  }
+    if (statuses.includes("CoronaAplicada")) {
+        return "bg-blue-200 dark:bg-blue-900/30 border-blue-500 dark:border-blue-800";
+    }
 
-  if (statuses.length > 0) {
-    return "bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700";
-  }
+    if (statuses.length > 0) {
+        return "bg-pink-100 dark:bg-pink-900/30 border-pink-300 dark:border-pink-700";
+    }
 
-  return "hover:bg-gray-50 dark:hover:bg-gray-700";
+    return "hover:bg-gray-50 dark:hover:bg-gray-700";
 };
 
 
@@ -812,7 +862,16 @@ function cancel() {
 watch(() => props.modelValue, (val) => {
     odontogram.value = JSON.parse(JSON.stringify(val || {}))
 })
+watch(
+    () => props.modelValue,
+    (val) => (odontogram.value = val)
+);
 
+watch(
+    () => odontogram.value,
+    (val) => emit("update:modelValue", val),
+    { deep: true }
+);
 
 </script>
 
