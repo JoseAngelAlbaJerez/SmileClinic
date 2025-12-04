@@ -11,7 +11,7 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
                         <!-- Card Header -->
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4">
+                        <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4">
                             <h2 class="text-xl font-bold text-white">Registro de Paciente</h2>
                             <p class="text-pink-100 mt-1">Complete todos los campos requeridos</p>
                         </div>

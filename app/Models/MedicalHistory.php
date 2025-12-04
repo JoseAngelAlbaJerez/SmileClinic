@@ -15,6 +15,7 @@ class MedicalHistory extends Model
         'alergies_detail',
         'drugs',
         'drugs_detail',
+        'branch_id'
     ];
 
     public function patient(){
@@ -22,6 +23,10 @@ class MedicalHistory extends Model
     }
      public function doctor(){
         return $this->belongsTo(User::class,'doctor_id','id');
+    }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
 }

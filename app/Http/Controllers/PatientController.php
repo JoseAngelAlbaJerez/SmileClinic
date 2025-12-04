@@ -57,7 +57,7 @@ class PatientController extends Controller implements HasMiddleware
 
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('name LIKE ?', ['%' . $search . '%'])
+                $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
@@ -198,14 +198,14 @@ class PatientController extends Controller implements HasMiddleware
             ],
         ]);
     }
-    public function edit(Patient $patient)
+    public function edit(User $patient)
     {
         return Inertia::render('Patients/Edit', [
             'patient' => $patient
         ]);
     }
 
-    public function update(Request $request, Patient $patient)
+    public function update(Request $request, User $patient)
     {
         if ($request->has('active')) {
             $this->restore($patient);
@@ -233,9 +233,9 @@ class PatientController extends Controller implements HasMiddleware
 
         return redirect()->back()->with('toast', 'Paciente actualizado correctamente.');
     }
-    private function restore(Patient $patient)
+    private function restore(User $patient)
     {
-        $this->authorize('restore', Patient::class);
+        $this->authorize('restore', User::class);
 
         $patient->active = 1;
         $patient->save();
@@ -245,12 +245,12 @@ class PatientController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
-        $this->authorize('create', Patient::class);
+        $this->authorize('create', User::class);
         try {
             $validated = $request->validate([
                 'first_name'           => 'required|string|max:100',
                 'last_name'            => 'required|string|max:100',
-                'DNI'                  => 'nullable|string|max:20|unique:patients,DNI',
+                'DNI'                  => 'nullable|string|max:20|unique:users,DNI',
                 'phone_number'         => 'nullable|string|max:20',
                 'date_of_birth'        => 'nullable|date|before:today',
                 'complications'        => 'required|boolean',
@@ -282,6 +282,7 @@ class PatientController extends Controller implements HasMiddleware
                 'drugs_detail'          => $validated['drugs_detail'],
                 'alergies'              => $validated['alergies'],
                 'alergies_detail'       => $validated['alergies_detail'],
+                'branch_id' => Auth::user()->active_branch_id
             ]);
 
             return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');
@@ -293,9 +294,9 @@ class PatientController extends Controller implements HasMiddleware
     }
     public function destroy($id)
     {
-        $this->authorize('delete', Patient::class);
+        $this->authorize('delete', User::class);
 
-        $patient = Patient::findOrFail($id);
+        $patient = User::findOrFail($id);
         $patient->active = false;
         $patient->save();
 

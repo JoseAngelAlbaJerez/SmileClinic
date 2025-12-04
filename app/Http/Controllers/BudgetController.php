@@ -59,7 +59,7 @@ class BudgetController extends Controller
         $query->where('budgets.active', $showDeleted ? 1 : 0);
 
         if ($patient_id) {
-            $patient = Patient::find($patient_id);
+            $patient = User::find($patient_id);
             $createdAtDates = $patient->budget()->pluck('created_at');
 
             if ($createdAtDates->isNotEmpty()) {
@@ -101,7 +101,7 @@ class BudgetController extends Controller
             $query->latest('updated_at')->latest('created_at');
         }
 
-        $budgets = $query->with('patient', 'branch')->paginate(10);
+        $budgets = $query->with('patient', 'branch','budgetdetail.procedure')->paginate(10);
         return Inertia::render('Budgets/Index', [
             'budgets' => $budgets,
             'filters' => [
@@ -120,11 +120,45 @@ class BudgetController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+         $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patients = User::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patients = null;
+        }
+
+        $patient = User::role('patient')->with([
+            'CXC',
+            'bill.billdetail',
+            'budget' => function ($q) {
+                $q->where('active', 1)
+                    ->with(['budgetdetail' => function ($d) {
+                        $d->where('active', 1)
+                            ->with('procedure');
+                    }, 'patient']);
+            },
+        ])->paginate(10);
         $patient = User::role('patient')->paginate(10);
         $procedure = Procedure::paginate(10);
         return Inertia::render('Budgets/Create', [
+            'patients' => $patients,
             'patient' => $patient,
             'procedure' => $procedure,
         ]);
@@ -136,7 +170,7 @@ class BudgetController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'form.patient_id' => 'required|exists:patients,id',
+            'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
             'form.emission_date' => 'required|date',
@@ -209,7 +243,7 @@ class BudgetController extends Controller
      */
     public function edit(Budget $budget)
     {
-        $patient = Patient::paginate(10);
+        $patient = User::paginate(10);
         $procedure = Procedure::paginate(10);
         $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail', 'Insurance');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
@@ -232,7 +266,7 @@ class BudgetController extends Controller
         }
 
         $validated = $request->validate([
-            'form.patient_id' => 'required|exists:patients,id',
+            'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
             'form.currency' => 'required|string',
             'form.emission_date' => 'required|date',

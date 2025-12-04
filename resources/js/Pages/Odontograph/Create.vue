@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Odontograma" />
     <AuthenticatedLayout>
         <template #header>
@@ -10,24 +11,30 @@
 
 
 
-                <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
-                    <div >
-                        <Odontograph v-model="odontogramData" />
+                <form @submit.prevent="submit" class="grid grid-cols-1  gap-y-6">
+                    <div>
+                        <Odontograph v-model="odontogramData" :patients="patients" :patient="selected_patient"
+                            @update:patient="selected_patient = $event" />
+
                     </div>
 
                     <!-- Error general -->
-                    <div v-if="error" class="mb-6 text-red-600 font-medium">
-                        {{ error }}
-                    </div>
+
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
+                        <div v-if="error" class="mb-6 text-red-600 font-medium mr-auto">
+                            {{ error }}
+                        </div>
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit" >Guardar</PrimaryButton>
+                        <PrimaryButton type="submit">Guardar</PrimaryButton>
                     </div>
+
                 </form>
+
             </div>
+
         </template>
     </AuthenticatedLayout>
 </template>
@@ -44,6 +51,10 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref, markRaw } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import OdontographChild from '@/Components/OdontographChild.vue';
+import PatientSelector from '@/Components/PatientSelector.vue';
+import Modal from '@/Components/Modal.vue';
+import XIcon from '@/Components/Icons/XIcon.vue';
+
 
 export default {
     components: {
@@ -55,15 +66,21 @@ export default {
         PrimaryButton,
         SecondaryButton,
         OdontographChild,
-        Head
+        Head,
+        PatientSelector,
+        Modal,
+        XIcon
     },
     props: {
         patient: Object,
+        patients: Object,
     },
     setup(props) {
         const error = ref(null);
         const odontogramData = ref({});
         const odontographKey = ref(Date.now());
+        const selected_patient = ref(props.patient || null);
+        const showPatientModal = ref(false);
 
         const resetForm = () => {
             odontogramData.value = {};
@@ -71,15 +88,14 @@ export default {
             error.value = null;
         };
         const crumbs = [
-            { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-            { icon: markRaw(UserIcon), label: `${props.patient.first_name} ${props.patient.last_name}`, to: route('patients.show', props.patient) },
+            { icon: markRaw(UserIcon), label: 'Odontogramas', to: route('odontographs.index') },
             { icon: markRaw(AddIcon), label: 'Crear Odontograma' }
         ];
 
         const submit = () => {
 
             router.post(route('odontographs.store'), {
-                patient_id: props.patient.id,
+                patient_id: selected_patient.value.id,
                 data: odontogramData.value,
             }, {
                 onError: (e) => {
@@ -88,7 +104,10 @@ export default {
             });
         };
 
+
         return {
+            showPatientModal,
+            selected_patient,
             error,
             odontogramData,
             odontographKey,

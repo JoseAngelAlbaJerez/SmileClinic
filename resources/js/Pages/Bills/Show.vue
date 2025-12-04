@@ -96,12 +96,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recibos</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Facturas</h3>
                             </div>
 
                             <span
                                 class="px-3 py-1 bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 rounded-full text-sm font-medium">
-                                {{ CXC.bills.length }} Recibo(s)
+                                {{ CXC.bills.length }} Factura(s)
                             </span>
                         </div>
                         <div class="p-6">
@@ -115,7 +115,7 @@
                                         }">
                                         <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
                                             <div class="flex items-center gap-2">
-                                                <span class="font-medium text-gray-500 dark:text-gray-400">Recibo
+                                                <span class="font-medium text-gray-500 dark:text-gray-400">Factura
                                                     #:</span>
                                                 <span class="font-semibold">{{ bill.id }}</span>
                                             </div>
@@ -290,7 +290,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                <p class="mt-4 text-gray-500 dark:text-gray-400">No hay Recibos registradas para este
+                                <p class="mt-4 text-gray-500 dark:text-gray-400">No hay Facturas registradas para este
                                     paciente.</p>
                             </div>
                         </div>
@@ -368,7 +368,7 @@ export default {
     data() {
         return {
             crumbs: [
-                { icon: markRaw(CashIcon), label: 'Recibos', to: route('bills.index') },
+                { icon: markRaw(CashIcon), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(UserIcon), label: this.CXC.patient.first_name + ' ' + this.CXC.patient.last_name, to: route('patients.show', this.CXC.patient) },
                 { icon: markRaw(DocumentIcon), label: this.CXC.id },
 

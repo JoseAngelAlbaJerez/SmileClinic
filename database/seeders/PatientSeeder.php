@@ -14,31 +14,6 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 100) as $i) {
-            $complications = fake()->boolean();
-            $alergies = fake()->boolean();
-            $drugs = fake()->boolean();
 
-            DB::table('patients')->insert([
-                'first_name' => fake()->firstName(),
-                'last_name' => fake()->lastName(),
-                'ars' => fake()->randomElement(['Humano', 'Monumental', 'Universal', 'Senasa']),
-                'ars_id' => fake()->unique()->numerify('########'),
-                'complications' => $complications,
-                'complications_detail' => $complications ? fake()->sentence() : '',
-                'alergies' => $alergies,
-                'alergies_detail' => $alergies ? fake()->word() : '',
-                'drugs' => $drugs,
-                'drugs_detail' => $drugs ? fake()->word() : '',
-                'motive' => fake()->sentence(3),
-                'address' => fake()->address(),
-                'DNI' => fake()->unique()->numerify('###########'),
-                'phone_number' => fake()->numerify('809#######'),
-                'date_of_birth' => fake()->date('Y-m-d', '2008-01-01'),
-                'active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
     }
 }

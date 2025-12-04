@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+
 class PrescriptionSeeder extends Seeder
 {
     /**
@@ -14,13 +15,12 @@ class PrescriptionSeeder extends Seeder
      */
     public function run(): void
     {
-         foreach (range(1, 100) as $i) {
+        foreach (range(1, 100) as $i) {
 
 
-            $patient = Patient::
-                inRandomOrder()
+            $patient = User::role('patient')->inRandomOrder()
                 ->first();
-             $doctor = User::role('doctor')
+            $doctor = User::role('doctor')
                 ->inRandomOrder()
                 ->first();
 

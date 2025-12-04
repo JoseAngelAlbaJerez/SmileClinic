@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="users" />
+    <Head title="Odontogramas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -18,23 +18,25 @@
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
                             <PrintIcon />
                         </button>
-                        <ReportModal :open="showReport" @close="showReport = false" table="users" />
+                        <ReportModal :open="showReport" @close="showReport = false" table="odontographs" />
 
                         <!-- Search + Button -->
                         <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
                                 class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
-                            <Link :href="route('users.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500">
-                            <AddIcon class="size-5 sm:size-6" />
-                            <span class="hidden sm:inline">Nuevo Usuario</span>
-                            </Link>
+                            <AccessGate :permission="'odontograph.create'">
+                                <Link :href="route('odontographs.create')" as="button"
+                                    class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500">
+                                <AddIcon class="size-5 sm:size-6" />
+                                <span class="hidden sm:inline">Nuevo Odontograma</span>
+                                </Link>
+                            </AccessGate>
                         </div>
                     </div>
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
                         <div class="overflow-x-auto w-full">
                             <table class="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
@@ -49,38 +51,31 @@
                                             </span>
                                         </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
-                                            Nombre
+                                            Paciente
+                                            <span v-if="form.sortField === 'first_name'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                            Doctor
+                                            <span v-if="form.sortField === 'first_name'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                            Diagnóstico
                                             <span v-if="form.sortField === 'first_name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer hidden sm:table-cell"
                                             @click="sort('date_of_birth')">
-                                            Fecha Nac.
+                                            Fecha de Creación
                                             <span v-if="form.sortField === 'date_of_birth'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer">
-                                            Rol
-                                            <span v-if="form.sortField === 'ars'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer hidden lg:table-cell"
-                                            @click="sort('created_at')">
-                                            Creación
-                                            <span v-if="form.sortField === 'created_at'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
-                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
-                                            class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursales Disponibles
-                                            <span v-if="form.sortField === 'branch_id'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
+
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -93,45 +88,109 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="user in users.data" :key="user.id">
-                                        <td class="p-4 hidden md:table-cell">{{ user.id }} </td>
-                                        <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
-                                        <td class="p-4 hidden sm:table-cell">{{ formatDate(user.date_of_birth) }}</td>
+                                    <tr v-for="odontograph in odontographs.data" :key="odontograph.id">
+                                        <td class="p-4 hidden md:table-cell">{{ odontograph.id }}</td>
+                                        <td class="p-4">{{ odontograph.patient.first_name }} {{
+                                            odontograph.patient.last_name }}</td>
+                                        <td class="p-4 ">{{ odontograph.doctor.first_name }} {{
+                                            odontograph.doctor.last_name }}</td>
                                         <td class="p-4">
-                                            <span
-                                                class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-2 rounded-xl">
-                                                <UserIcon class="w-4 h-4" />
-                                                {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
-                                            </span>
+                                            <ul class="list-disc ">
+
+                                                <template v-for="(surfaces, tooth) in odontograph.data" :key="tooth">
+                                                    <li v-if="surfaces && Object.keys(surfaces).length > 0">
+                                                        <span v-for="(procedure, surface) in surfaces" :key="surface">
+                                                            Pieza {{ tooth }} — {{ surface }}: {{ procedure }}
+                                                        </span>
+
+                                                    </li>
+
+                                                </template>
+
+                                            </ul>
                                         </td>
-                                        <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
-                                        <td class="p-4">
-                                            <l v-for="branch in user.branches" :key="branch.id">
-                                                <li>{{ branch.name }}</li>
-                                            </l>
+
+
+
+
+                                        <td class="p-4 hidden lg:table-cell">{{ formatDate(odontograph.created_at) }}
                                         </td>
+
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
-                                                <span :class="statusIndicatorClasses(user.active)" />
-                                                <p :class="statusBadgeClasses(user.active)">
-                                                    <HandThumbDown v-if="user.active == false" />
+                                                <span :class="statusIndicatorClasses(odontograph.active)" />
+                                                <p :class="statusBadgeClasses(odontograph.active)">
+                                                    <HandThumbDown v-if="odontograph.active == 0" />
                                                     <HandThumbUp v-else />
                                                 </p>
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <Link :href="route('users.show', user.id)" class="text-pink-500">Abrir
+                                            <Link :href="route('odontographs.show', odontograph.id)"
+                                                class="text-pink-500">Abrir
                                             </Link>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div v-if="!users.data.length"
+                            <div v-if="!odontographs.data.length"
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
                         </div>
-                        <Pagination :pagination="users" :filters="form" />
+                        <Pagination :pagination="odontographs" :filters="form" />
+                    </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="odontograph in odontographs.data" :key="odontograph.id"
+                            class="border rounded-lg bg-white  p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                    {{ odontograph.patient.first_name }} {{ odontograph.patient.last_name }}
+                                </h3>
+                                <Link :href="route('odontographs.show', odontograph.id)" class="text-pink-500 text-sm">
+                                Abrir
+                                </Link>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#{{ odontograph.id }}</p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+
+                                <p><span class="font-medium">Diagnóstico:</span>
+                                <ul class="list-disc ml-4">
+
+                                    <template v-for="(surfaces, tooth) in odontograph.data" :key="tooth">
+                                        <li v-if="surfaces && Object.keys(surfaces).length > 0">
+                                            <span v-for="(procedure, surface) in surfaces" :key="surface">
+                                                Pieza {{ tooth }} — {{ surface }}: {{ procedure }}
+                                            </span>
+
+                                        </li>
+
+                                    </template>
+
+                                </ul>
+                                </p>
+                                  <p><span class="font-medium">Doctor:</span> {{ odontograph.doctor.first_name }} {{
+                                    odontograph.doctor.last_name }}</p>
+                                <p><span class="font-medium">Creado el:</span> {{ formatDate(odontograph.created_at) }}
+                                </p>
+
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(odontograph.active)">
+                                        <HandThumbDown v-if="odontograph.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!odontographs.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+
+                        <Pagination :pagination="odontographs" :filters="form" />
                     </div>
                 </div>
             </div>
@@ -173,11 +232,13 @@ import AccessGate from '@/Components/AccessGate.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import ReportModal from '@/Components/ReportModal.vue';
 import { ref } from 'vue';
+import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
+import TeethIcon from '@/Components/Icons/TeethIcon.vue';
 export default {
 
 
     props: {
-        users: Object,
+        odontographs: Object,
         filters: Object
     },
     components: {
@@ -204,12 +265,13 @@ export default {
         TableIcon,
         AccessGate,
         PrintIcon,
-        ReportModal
+        ReportModal,
+        TeethIcon
 
     },
     watch: {
         selectedOptions() {
-            this.fetchFilteredusers();
+            this.fetchFilteredbranches();
         },
 
     },
@@ -217,7 +279,7 @@ export default {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'users.updated_at',
+                sortField: this.filters?.sortField || 'odontographs.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '',
@@ -225,7 +287,7 @@ export default {
             },
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
+                { icon: markRaw(TeethIcon), label: 'Odontogramas', to: route('odontographs.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showReport: ref(false)
@@ -246,8 +308,8 @@ export default {
 
         statusBadgeClasses(status) {
             return {
-                true: "bg-green-200 text-green-700 px-2 py-1 rounded",
-                false: "bg-red-200 text-red-700 px-2 py-1 rounded",
+                1: "bg-green-200 text-green-700 px-2 py-1 rounded",
+                0: "bg-red-200 text-red-700 px-2 py-1 rounded",
             }[status] || "bg-gray-200 text-gray-700 px-2 py-1 rounded";
         },
 
@@ -269,7 +331,7 @@ export default {
 
 
 
-                    this.$inertia.get(route('users.index'), this.form, {
+                    this.$inertia.get(route('branches.index'), this.form, {
                         preserveState: true,
                         preserveScroll: true,
                         replace: true

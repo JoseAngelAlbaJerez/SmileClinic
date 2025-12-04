@@ -75,7 +75,7 @@
                                     <span v-if="event.patient">Paciente: {{ event.patient.first_name }} {{
                                         event.patient.last_name }}</span>
                                     <span v-if="event.doctor"> | Doctor: {{ event.doctor.first_name }} </span>
-                                    <AccessGate :role="['admin']">
+                                    <AccessGate :role="['admin']" class="inline-flex">
                                     <span v-if="event.branch" class="inline-flex items-center ml-1 gap-1">
                                          | <BuildingIcon class="w-4 h-4 inline-block" />
                                         {{ event.branch.name }}

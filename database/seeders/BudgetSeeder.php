@@ -20,7 +20,7 @@ class BudgetSeeder extends Seeder
 
             $branchId = fake()->numberBetween(1, 2);
 
-            $patient = Patient::inRandomOrder()
+            $patient = User::role('patient')->inRandomOrder()
                 ->first();
 
             DB::table('budgets')->insert([

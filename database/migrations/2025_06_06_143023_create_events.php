@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
             $table->string('google_event_id')->nullable();
-            $table->boolean('attended');
+            $table->boolean('attended')->nullable()->default(null);
             $table->timestamp('attended_at')->nullable();
             $table->date('date');
             $table->time('starttime');

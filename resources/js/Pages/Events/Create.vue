@@ -12,7 +12,7 @@
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg ">
                         <!-- Form Header -->
-                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 px-6 py-4 rounded-t-xl">
+                        <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4 rounded-t-xl">
                             <h2 class="text-xl font-bold text-white">Nueva Cita Médica</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles de la cita</p>
                         </div>
@@ -35,7 +35,7 @@
                                 </div>
                                 <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                     errors.title
-                                }}</p>
+                                    }}</p>
                             </div>
 
                             <!-- Doctor & Patient Row -->
@@ -96,7 +96,7 @@
                                     <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
                                         :time-picker="true" :is-24="true" format="HH:mm" :enable-time-picker="true"
                                         :disabled-range="blockedRanges" placeholder="Seleccione horario"
-                                          class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200" />
+                                        class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200" />
 
                                 </div>
                             </div>
@@ -258,6 +258,7 @@ export default {
         errors: [Array, Object],
         doctors: Object,
         patients: Object,
+        patient: Object,
         events: Object
     },
     components: {
@@ -314,7 +315,7 @@ export default {
             form: useForm({
                 title: '',
                 doctor_id: '',
-                patient_id: '',
+                patient_id: this.patient?.id || '',
                 attended: false,
                 starttime: '',
                 endtime: '',
@@ -326,7 +327,7 @@ export default {
             error: '',
             showUserModal: ref(false),
             showPatientModal: ref(false),
-            selected_patient: '',
+            selected_patient:  this.patient || '',
             selected_doctor: '',
             crumbs: [
                 { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
@@ -369,9 +370,15 @@ export default {
                 useToast.error('El horario seleccionado se solapa con una cita ya existente.');
                 return;
             }
+            const formatTime = (obj)  =>{
+                if (!obj) return null;
+                const h = String(obj.hours).padStart(2, '0');
+                const m = String(obj.minutes).padStart(2, '0');
+                return `${h}:${m}`;
+            }
 
-            this.form.starttime = selStart.toTimeString().slice(0, 5);
-            this.form.endtime = selEnd.toTimeString().slice(0, 5);
+            this.form.starttime = formatTime(selStart);
+            this.form.endtime = formatTime(selEnd);
             this.timeRange = range;
         },
         isTimeBlocked(timeDate) {
@@ -407,13 +414,7 @@ export default {
                 return;
             }
 
-            const formatTime = (time) => {
-                const h = time.hours.toString().padStart(2, '0');
-                const m = time.minutes.toString().padStart(2, '0');
-                return `${h}:${m}`;
-            };
-            this.form.starttime = formatTime(this.form.starttime);
-            this.form.endtime = formatTime(this.form.endtime);
+
 
             if (this.form.starttime > this.form.endtime) {
                 this.error = 'La hora de finalización debe ser después de la hora de inicio';

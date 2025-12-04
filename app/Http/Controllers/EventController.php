@@ -32,8 +32,9 @@ class EventController extends Controller
 
         $query = Event::query()
             ->select('events.*')
-            ->join('patients', 'events.patient_id', '=', 'patients.id')
-            ->join('users', 'events.doctor_id', '=', 'users.id');
+            ->join('users as patients', 'events.patient_id', '=', 'patients.id')
+            ->join('users as doctors', 'events.doctor_id', '=', 'doctors.id');
+
 
         if ($showDeleted == true) {
             $query->where('events.active', 1);
@@ -57,13 +58,14 @@ class EventController extends Controller
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('events.title LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(users.first_name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%']);
+                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('events.title LIKE ?', ['%' . $search . '%']);
             });
         }
+
+
 
         if ($sortField) {
             $query->orderBy($sortField, $sortDirection);
@@ -121,14 +123,36 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $patient_id = $request->input('patient_id');
+        if ($patient_id) {
+            $patient = User::where('id', $patient_id)
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'budget' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'budgetdetail' => function ($d) {
+                                    $d->where('active', 1)
+                                        ->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patient = null;
+        }
         $doctors = User::role('doctor')->with('roles', 'Event')->paginate(10);
         $patients = User::role('patient')->with('roles')->paginate(10);
         $events = Event::all()->load('doctor', 'patient');
         return Inertia::render("Events/Create", [
             'doctors' => $doctors,
             'patients' => $patients,
+            'patient' => $patient,
             'events' => $events,
         ]);
     }
@@ -153,7 +177,7 @@ class EventController extends Controller
 
         $endDateTime = Carbon::parse($request->input('date') . ' ' . $request->input('endtime'))->setTimezone($timezone);
 
-
+        //put constraint to take into consideration branches
         $constraint = Event::where('doctor_id', $validated['doctor_id'])
             ->where('date', $validated['date'])
             ->where(function ($query) use ($request) {
@@ -174,23 +198,23 @@ class EventController extends Controller
         $validated['active'] = true;
         $validated['branch_id'] = Auth::user()->active_branch_id;
         $event =  Event::create($validated);
-        try {
-            $googleEvent = GoogleCalendarEvent::create([
-                'name' => $request->input('title'),
-                'startDateTime' => $startDateTime,
-                'endDateTime' => $endDateTime,
-            ]);
+        // try {
+        //     $googleEvent = GoogleCalendarEvent::create([
+        //         'name' => $request->input('title'),
+        //         'startDateTime' => $startDateTime,
+        //         'endDateTime' => $endDateTime,
+        //     ]);
 
-            $event->google_event_id = $googleEvent->id;
-            $event->save();
-        } catch (\Exception $e) {
+        //     $event->google_event_id = $googleEvent->id;
+        //     $event->save();
+        // } catch (\Exception $e) {
 
-            $event->delete();
-            Log::error($e);
-            return back()
-                ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
-                ->with('toastStyle', 'danger');
-        }
+        //     $event->delete();
+        //     Log::error($e);
+        //     return back()
+        //         ->with('toast', 'Ocurrió un error. ' . $e->getMessage())
+        //         ->with('toastStyle', 'danger');
+        // }
 
 
         return redirect()->route('events.index')->with('toast', 'Cita registrada correctamente');

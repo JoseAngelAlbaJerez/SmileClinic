@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Bill;
 use App\Models\Branch;
 use App\Models\Event;
+use App\Models\Expenses;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -159,18 +160,28 @@ class BranchController extends Controller
 
     public function show(Branch $branch)
     {
-        $events = Event::where('branch_id',$branch->id)->get();
-        $income = Event::where('branch_id',$branch->id)->get();
-        $expenses = Event::where('branch_id',$branch->id)->get();
+        $events = Event::withoutGlobalScopes()
+            ->where('branch_id', $branch->id)
+            ->with('doctor')
+            ->get();
 
+        $income = Bill::withoutGlobalScopes()
+            ->where('branch_id', $branch->id)
+            ->whereDate('emission_date', today())
+            ->with(['doctor', 'patient'])
+            ->get();
+
+        $expenses = Expenses::withoutGlobalScopes()
+            ->where('branch_id', $branch->id)
+            ->whereDate('created_at', today())
+            ->with('doctor')
+            ->get();
 
         return Inertia::render('Branches/Show', [
-            'branch' => $branch,
-            'events' => $events,
-            'income' => $income,
+            'branch'   => $branch,
+            'events'   => $events,
+            'income'   => $income,
             'expenses' => $expenses,
-
-
         ]);
     }
 }
