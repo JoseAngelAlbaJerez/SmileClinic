@@ -233,9 +233,9 @@ class PatientController extends Controller implements HasMiddleware
 
         return redirect()->back()->with('toast', 'Paciente actualizado correctamente.');
     }
-    private function restore(Patient $patient)
+    private function restore(User $patient)
     {
-        $this->authorize('restore', Patient::class);
+        $this->authorize('restore', User::class);
 
         $patient->active = 1;
         $patient->save();
@@ -245,7 +245,7 @@ class PatientController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
-        $this->authorize('create', Patient::class);
+        $this->authorize('create', User::class);
         try {
             $validated = $request->validate([
                 'first_name'           => 'required|string|max:100',
@@ -282,6 +282,7 @@ class PatientController extends Controller implements HasMiddleware
                 'drugs_detail'          => $validated['drugs_detail'],
                 'alergies'              => $validated['alergies'],
                 'alergies_detail'       => $validated['alergies_detail'],
+                'branch_id' => Auth::user()->active_branch_id
             ]);
 
             return redirect()->route('patients.index')->with('toast', 'Paciente registrado correctamente.');
