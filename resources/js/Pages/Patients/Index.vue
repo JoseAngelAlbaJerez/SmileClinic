@@ -124,8 +124,7 @@
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">#{{ patient.id }}</p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
-                                <p><span class="font-medium">Nacimiento:</span> {{ patient.date_of_birth }}</p>
-                                <p><span class="font-medium">ARS:</span> {{ patient.ars }}</p>
+                                <p><span class="font-medium">Fecha de Nacimiento:</span> {{formatDate(patient.date_of_birth) }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
