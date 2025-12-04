@@ -106,9 +106,9 @@
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
                                         <td class="p-4">
-                                            <div v-for="branch in user.branches" :key="branch.id">
-                                                <p>{{ branch.name }}</p>
-                                            </div>
+                                            <l v-for="branch in user.branches" :key="branch.id">
+                                                <li>{{ branch.name }}</li>
+                                            </l>
                                         </td>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
