@@ -79,24 +79,24 @@
                                     <div class="flex">
                                         <span class=" font-medium text-gray-600 dark:text-gray-300">Nombre
                                             :</span>
-                                        <span class="text-gray-800 dark:text-gray-100">{{ branch.name }} </span>
+                                        <span class="text-gray-800 dark:text-gray-100 ml-2">{{ branch.name }} </span>
                                     </div>
 
                                     <div class="flex">
                                         <span class=" font-medium text-gray-600 dark:text-gray-300">Dirección:</span>
-                                        <span class="text-gray-800 dark:text-gray-100">{{ branch.address }}</span>
+                                        <span class="text-gray-800 dark:text-gray-100 ml-2">{{ branch.address }}</span>
                                     </div>
 
                                     <div class="flex">
                                         <span class=" font-medium text-gray-600 dark:text-gray-300">Teléfono:</span>
-                                        <span class="text-gray-800 dark:text-gray-100">{{ branch.phone_number }}</span>
+                                        <span class="text-gray-800 dark:text-gray-100 ml-2">{{ branch.phone_number }}</span>
                                     </div>
 
 
                                     <div class="flex">
                                         <span class=" font-medium text-gray-600 dark:text-gray-300">Fecha de
                                             Creación:</span>
-                                        <span class="text-gray-800 dark:text-gray-100">{{ formatDate(branch.created_at
+                                        <span class="text-gray-800 dark:text-gray-100 ml-2">{{ formatDate(branch.created_at
                                         ) }}</span>
                                     </div>
 

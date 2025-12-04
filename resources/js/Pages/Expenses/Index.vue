@@ -13,28 +13,27 @@
                 <div class="container mx-auto w-full px-2">
 
                     <!-- Search & Exports -->
-                   <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
-                            <!-- Filter -->
-                            <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()"
-                               />
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
+                        <!-- Filter -->
+                        <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
-                            <AccessGate :role="['admin']">
-                                <button @click="showReport = true"
-                                    class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <PrintIcon  />
-                                </button>
-                            </AccessGate>
+                        <AccessGate :role="['admin']">
+                            <button @click="showReport = true"
+                                class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <PrintIcon />
+                            </button>
+                        </AccessGate>
 
-                            <ReportModal :open="showReport" @close="showReport = false" table="expenses"
-                                :default-selected="['id', 'amount', 'description', 'created_at']" />
+                        <ReportModal :open="showReport" @close="showReport = false" table="expenses"
+                            :default-selected="['id', 'amount', 'description', 'created_at']" />
 
-                            <AccessGate :role="['staff']">
-                                <!-- Daily Report -->
-                                <button @click="print"
-                                    class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <PrintIcon  />
-                                </button>
-                            </AccessGate>
+                        <AccessGate :role="['staff']">
+                            <!-- Daily Report -->
+                            <button @click="print"
+                                class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <PrintIcon />
+                            </button>
+                        </AccessGate>
 
                         <!-- Espacio flexible para separar en responsive -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
@@ -144,7 +143,8 @@
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">{{ expense.description }}
                                 </h3>
-                                <Link :href="route('expenses.show', expense)" class="text-pink-500 text-sm">Abrir</Link>
+                                <p @click="openModal(expense)" class="text-pink-500 cursor-pointer">Abrir
+                                </p>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
                                 #{{ expense.id }}
@@ -277,7 +277,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
 

@@ -23,7 +23,7 @@
                     <!-- Botones -->
                     <div class="md:col-span-2 flex justify-end space-x-4 mt-6">
                         <div v-if="error" class="mb-6 text-red-600 font-medium mr-auto">
-                            {{ error }}
+                            {{ error.data }}
                         </div>
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
@@ -93,7 +93,10 @@ export default {
         ];
 
         const submit = () => {
-
+            if (!selected_patient.value) {
+                error.value = "Debe seleccionar un paciente";
+                return;
+            }
             router.post(route('odontographs.store'), {
                 patient_id: selected_patient.value.id,
                 data: odontogramData.value,

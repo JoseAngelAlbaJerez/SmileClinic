@@ -251,6 +251,7 @@
 <script>
 
 import {
+    Head,
     Link, useForm
 } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -289,7 +290,8 @@ export default {
         LocationIcon,
         AddIcon,
         PhoneInput,
-        DNIInput
+        DNIInput,
+        Head
     },
     data() {
         return {

@@ -35,7 +35,7 @@
                                 </div>
                                 <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                     errors.title
-                                    }}</p>
+                                }}</p>
                             </div>
 
                             <!-- Doctor & Patient Row -->
@@ -133,10 +133,10 @@
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center space-x-2">
                             <CalendarIcon class="h-5 w-5 text-pink-500" />
                             <span>
-                                Citas del Dr(a).
+                                Citas de
                                 {{ selected_doctor
                                     ? selected_doctor.first_name + ' ' + selected_doctor.last_name
-                                    : 'seleccionado'
+                                    : 'día'
                                 }}
                             </span>
                         </h3>
@@ -158,15 +158,12 @@
                             <ul class="space-y-4">
                                 <li v-for="appt in filteredAppointments" :key="appt.id"
                                     class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
-                                    <!-- Appointment Header -->
                                     <div class="flex items-center justify-between mb-2">
                                         <h4 class="text-md font-semibold text-gray-800 dark:text-white">
                                             {{ appt.title }}
                                         </h4>
-                                        <!-- Optional badge or icon -->
                                         <!-- <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">Confirmada</span> -->
                                     </div>
-                                    <!-- Doctor and Patient info -->
                                     <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
                                         <strong>Doctor:</strong> {{ appt.doctor.first_name }} {{
                                             appt.doctor.last_name }}
@@ -286,20 +283,26 @@ export default {
     computed: {
         filteredAppointments() {
             return this.events.filter(appt => {
-                const matchesDoctor = this.selected_doctor && this.selected_doctor.id
-                    ? appt.doctor_id === this.selected_doctor.id
-                    : true;
-                const matchesDate = this.form.date
-                    ? appt.date === new Date(this.form.date).toISOString().split('T')[0]
-                    : true;
+                let matchesDoctor = true;
+                let matchesDate = true;
+                if (this.selected_doctor?.id) {
+                    matchesDoctor = appt.doctor_id === this.selected_doctor.id;
+                }
+
+                if (this.form.date) {
+                    const selectedDate = new Date(this.form.date).toISOString().split('T')[0];
+                    matchesDate = appt.date === selectedDate;
+                }
+
                 return matchesDoctor && matchesDate;
             });
         },
 
+
         blockedRanges() {
             if (!this.form.date) return [];
 
-            const baseDate = new Date(this.form.date); // usa la fecha seleccionada
+            const baseDate = new Date(this.form.date);
             return this.filteredAppointments.map(appt => {
                 return {
                     start: this.toDateFromTimeOnDate(appt.starttime, baseDate),
@@ -327,7 +330,7 @@ export default {
             error: '',
             showUserModal: ref(false),
             showPatientModal: ref(false),
-            selected_patient:  this.patient || '',
+            selected_patient: this.patient || '',
             selected_doctor: '',
             crumbs: [
                 { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
@@ -370,7 +373,7 @@ export default {
                 useToast.error('El horario seleccionado se solapa con una cita ya existente.');
                 return;
             }
-            const formatTime = (obj)  =>{
+            const formatTime = (obj) => {
                 if (!obj) return null;
                 const h = String(obj.hours).padStart(2, '0');
                 const m = String(obj.minutes).padStart(2, '0');
