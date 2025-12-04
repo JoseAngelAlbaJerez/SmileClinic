@@ -77,7 +77,7 @@ class BillController extends Controller
             }
         }
 
-        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient', 'branch')->paginate(10);
+        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient', 'branch','billdetail.procedure')->paginate(10);
         return Inertia::render('Bills/Index', [
             'bills' => $bills,
             'filters' => [

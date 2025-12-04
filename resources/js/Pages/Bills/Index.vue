@@ -9,50 +9,32 @@
 
         <template #default>
             <div
-                class="flex items-center justify-center rounded-lg bg-white-500 py-6 sm:py-12 dark:bg-gray-900 dark:text-white">
+                class="flex items-center justify-center rounded-lg bg-white-500 py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
-                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
+                    <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
                         <button @click="showReport = true"
-                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
+                            class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                             <PrintIcon />
                         </button>
                         <ReportModal :open="showReport" @close="showReport = false" table="bills" />
 
-                        <div class="flex flex-col sm:flex-row sm:ml-auto gap-2 w-full sm:w-auto">
+                        <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
-                                class="rounded-lg border-0 w-full sm:w-72 lg:w-96 p-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
+                                class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <Link :href="route('bills.create')" as="button"
-                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
-                            <AddIcon class="size-5 sm:size-6" />
+                                class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <AddIcon class="size-5 " />
                             <span class="hidden sm:inline">Nueva Factura</span>
                             </Link>
                         </div>
                     </div>
 
-                    <!-- Mobile Cards (only on xs) -->
-                    <div class="sm:hidden space-y-4 mt-4">
-                        <div v-for="bill in bills.data" :key="bill.id"
-                            class="border rounded-lg p-4 bg-white dark:bg-gray-800 shadow">
-                            <p><strong>#:</strong> {{ bill.id }}</p>
-                            <p><strong>Paciente:</strong> {{ bill.patient.first_name }} {{ bill.patient.last_name }}</p>
-                            <p><strong>Total:</strong> {{ new Intl.NumberFormat('es-DO', {
-                                style: 'currency', currency:
-                                    'DOP' }).format(bill.total || 0) }}</p>
-                            <p><strong>Creación:</strong> {{ formatDate(bill.created_at) }}</p>
-                            <p><strong>Estado:</strong>
-                                <span :class="statusBadgeClasses(bill.active)">
-                                    {{ bill.active ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </p>
-                            <Link :href="route('bills.show', bill)" class="text-pink-500 mt-2 inline-block">Abrir</Link>
-                        </div>
-                    </div>
 
-                    <!-- Desktop Table (unchanged, hidden on xs) -->
+                    <!-- Desktop Table  -->
                     <div
-                        class="hidden sm:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
@@ -68,6 +50,18 @@
                                             Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
+                                        <th scope="col " class="cursor-pointer " @click="sort('procedure.name')">
+                                            Procedimientos
+                                            <span v-if="form.sortField === 'procedure.name'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
+                                        <th scope="col " class="cursor-pointer " @click="sort('doctor_id')">
+                                            Doctor
+                                            <span v-if="form.sortField === 'doctor_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
 
                                         <th scope="col" class="cursor-pointer" @click="sort('total')">
                                             Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
@@ -77,13 +71,7 @@
                                             Fecha Creación <span v-if="form.sortField === 'created_at'">{{
                                                 form.sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
-                                            class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursal
-                                            <span v-if="form.sortField === 'branch_id'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
+
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center">
@@ -100,13 +88,21 @@
                                         <td class="p-4 items-center">{{ bill.id }}</td>
                                         <td class="p-4 items-center">{{ bill.patient.first_name }} {{
                                             bill.patient.last_name }}</td>
+                                        <td class="p-4">
+                                            <div v-for="detail in bill.billdetail" :key="detail.id">
+                                                <li>
+                                                    {{ detail.procedure.name }}
+                                                </li>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 items-center">{{ bill.doctor.first_name }} {{
+                                            bill.doctor.last_name }}</td>
                                         <td class="p-4 items-center">{{ new Intl.NumberFormat('es-DO', {
                                             style:
-                                                'currency', currency: 'DOP' }).format(bill.total || 0) }}</td>
+                                                'currency', currency: 'DOP'
+                                        }).format(bill.total || 0) }}</td>
                                         <td class="p-4 items-center">{{ formatDate(bill.created_at) }}</td>
-                                          <AccessGate role="admin">
-                                            <td class="p-4">{{ bill.branch.name }}</td>
-                                        </AccessGate>
+
                                         <td class="p-4 items-center">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(bill.active)" />
@@ -127,6 +123,54 @@
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
+                        </div>
+                        <Pagination :pagination="bills" :filters="form" />
+                    </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="bill in bills.data" :key="bill.id"
+                            class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">#{{ bill.id }}</h3>
+                                <Link :href="route('bills.show', bill)" class="text-pink-500 text-sm">Abrir</Link>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
+                                {{ bill.patient.first_name }} {{ bill.patient.last_name }}
+                            </p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <p><span class="font-medium">Procedimientos:</span>
+                                <ul class="list-disc ml-4 ">
+
+                                    <template v-for="detail in bill.billdetail">
+                                        <li>
+                                            {{ detail.procedure.name }}
+                                        </li>
+                                    </template>
+
+                                </ul>
+                                </p>
+                                <p><span class="font-medium">Total:</span> {{ new
+                                    Intl.NumberFormat('es-DO', {
+                                        style: 'currency', currency: 'DOP'
+                                    }).format(bill.total
+                                        ||
+                                        0) }}</p>
+                                        <p><span class="font-medium">Doctor:</span> {{ bill.doctor.first_name }} {{
+                                    bill.doctor.last_name }}</p>
+                                <p><span class="font-medium">Creado:</span> {{ formatDate(bill.created_at) }}</p>
+
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(bill.active)">
+                                        <HandThumbDown v-if="bill.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!bills.data.length" class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
                         </div>
                         <Pagination :pagination="bills" :filters="form" />
                     </div>

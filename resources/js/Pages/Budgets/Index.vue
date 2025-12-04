@@ -21,7 +21,7 @@
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                             <PrintIcon />
                         </button>
-                          <ReportModal :open="showReport" @close="showReport = false" table="budgets" />
+                        <ReportModal :open="showReport" @close="showReport = false" table="budgets" />
 
                         <!-- Spacer pushes actions right -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
@@ -53,22 +53,22 @@
                                             Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-
+                                        <th scope="col " class="cursor-pointer " @click="sort('branch_id')">
+                                            Procedimientos
+                                            <span v-if="form.sortField === 'branch_id'">
+                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
+                                            </span>
+                                        </th>
                                         <th scope="col" class="cursor-pointer" @click="sort('total')">
                                             Total <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
                                                 'asc' ? '↑' : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="cursor-pointer" @click="sort('created_at')">
-                                            Fecha de Creación <span v-if="form.sortField === 'created_at'">{{ form.sortDirection
-                                                === 'asc' ? '↑' : '↓' }}</span>
+                                            Fecha de Creación <span v-if="form.sortField === 'created_at'">{{
+                                                form.sortDirection
+                                                    === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
-                                            class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursal
-                                            <span v-if="form.sortField === 'branch_id'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
+
                                         <th class="cursor-pointer text-nowrap p-4">
                                             <div class="flex items-center justify-between" @click="toggleShowDeleted()">
                                                 <div class="flex items-center gap-1">
@@ -86,16 +86,21 @@
                                         <td class="p-4">{{ budget.id }}</td>
                                         <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
                                         </td>
+                                        <td class="p-4">
+                                            <div v-for="detail in budget.budgetdetail" :key="detail.id">
+                                                <li>
+                                                    {{ detail.procedure.name }}
+                                                </li>
+                                            </div>
+                                        </td>
                                         <td class="p-4">{{ new
                                             Intl.NumberFormat('es-DO', {
                                                 style:
                                                     'currency', currency: 'DOP'
                                             }).format(budget.total
-                                            || 0) }}</td>
+                                                || 0) }}</td>
                                         <td class="p-4">{{ formatDate(budget.created_at) }}</td>
-                                        <AccessGate role="admin">
-                                            <td class="p-4">{{ budget.branch.name }}</td>
-                                        </AccessGate>
+
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(budget.active)" />
@@ -125,22 +130,32 @@
                         <div v-for="budget in budgets.data" :key="budget.id"
                             class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">#{{ budget.id }}</h3>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">{{ budget.patient.first_name }} {{ budget.patient.last_name }}</h3>
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
-                                {{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                                #{{ budget.id }}
                             </p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
-                                <p><span class="font-medium">Tipo:</span> {{ budget.type }}</p>
+                                <p><span class="font-medium">Procedimientos:</span>
+                                <ul class="list-disc ml-4 ">
+
+                                    <template v-for="detail in budget.budgetdetail">
+                                        <li>
+                                           {{ detail.procedure.name }}
+                                        </li>
+                                    </template>
+
+                                </ul>
+                                </p>
                                 <p><span class="font-medium">Total:</span> {{ new
-                                    Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(budget.total
+                                    Intl.NumberFormat('es-DO', {
+                                        style: 'currency', currency: 'DOP'
+                                    }).format(budget.total
                                         ||
-                                    0) }}</p>
+                                        0) }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(budget.created_at) }}</p>
-                                <AccessGate role="admin">
-                                    <p><span class="font-medium">Sucursal:</span> {{ budget.branch.name }}</p>
-                                </AccessGate>
+
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
                                     <span :class="statusBadgeClasses(budget.active)">
