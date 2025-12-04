@@ -154,10 +154,9 @@
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">#{{ odontograph.id }}</p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
-                                <p><span class="font-medium">Doctor:</span> {{ odontograph.doctor.first_name }} {{
-                                    odontograph.doctor.last_name }}</p>
+
                                 <p><span class="font-medium">Diagnóstico:</span>
-                                <ul class="list-disc ">
+                                <ul class="list-disc ml-4">
 
                                     <template v-for="(surfaces, tooth) in odontograph.data" :key="tooth">
                                         <li v-if="surfaces && Object.keys(surfaces).length > 0">
@@ -171,6 +170,8 @@
 
                                 </ul>
                                 </p>
+                                  <p><span class="font-medium">Doctor:</span> {{ odontograph.doctor.first_name }} {{
+                                    odontograph.doctor.last_name }}</p>
                                 <p><span class="font-medium">Creado el:</span> {{ formatDate(odontograph.created_at) }}
                                 </p>
 
