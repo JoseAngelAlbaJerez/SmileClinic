@@ -24,5 +24,9 @@ class MedicalHistory extends Model
      public function doctor(){
         return $this->belongsTo(User::class,'doctor_id','id');
     }
+     public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 
 }
