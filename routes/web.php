@@ -17,6 +17,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,11 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('drugs', DrugController::class);
     Route::resource('bills', BillController::class);
+    Route::get('/branches/filter', [BranchController::class, 'filter'])->name('branches.filter');
+
     Route::resource('branches', BranchController::class);
     Route::resource('insurances', InsuranceController::class);
     Route::post('/switch-branch', [BranchController::class, 'switch'])
         ->name('branches.switch');
 
+    Route::get('/roles/filter', [RoleController::class, 'filter'])->name('roles.filter');
 
 
     // Report Modal

@@ -79,6 +79,25 @@ class BranchController extends Controller
         ]);
     }
 
+    public function filter(Request $request)
+    {
+        $filters = $request->input('filters', []);
+
+        $query = Branch::query()
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->where('name', 'like', '%' . $filters['name'] . '%');
+            });
+
+        $branches = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'branches' => $branches,
+            'filters' => $filters,
+        ]);
+    }
+
     public function switch(Request $request)
     {
         $request->validate([

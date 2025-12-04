@@ -8,13 +8,12 @@ import axios from "axios";
 
 const props = defineProps({
     message: String,
-    users: Object,   // listado inicial desde backend
-    filters: Object, // filtros actuales
+    users: Object,
+    filters: Object,
 });
 
 const emit = defineEmits(['selected']);
 
-// Estado local
 const users = ref(props.users);
 const searchTerm = ref(props.filters?.name ?? '');
 const selectedUserId = ref(null);
@@ -29,7 +28,6 @@ const selectUser = (user) => {
     }
 };
 
-// Llamada al backend
 const fetchUsers = async (pageUrl = null) => {
     try {
         const url = pageUrl || route('users.filter');

@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Usuarios" />
     <AuthenticatedLayout>
         <template #header>
@@ -33,7 +34,8 @@
                                         class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Nombre" />
                                 </div>
-                                <p v-if="errors.first_name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.name
+                                <p v-if="errors.first_name" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.name
                                     }}</p>
                             </div>
 
@@ -118,22 +120,21 @@
                                     errors.phone_number }}</p>
 
                             </div>
-                            <!-- Position -->
+                            <!-- address -->
                             <div class="space-y-1">
-                                <label for="position"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Posición <span class="text-red-500">*</span>
+                                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Dirección <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <BuildingIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                        <LocationIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
                                     </div>
-                                    <input v-model="form.position" id="position" type="text"
+                                    <input v-model="form.address" id="address" type="text"
                                         class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200"
                                         placeholder="Posición" />
                                 </div>
-                                <p v-if="errors.position" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
-                                    errors.position }}</p>
+                                <p v-if="errors.address" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.address }}</p>
                             </div>
                             <!-- Specialty -->
                             <div class="space-y-1">
@@ -190,27 +191,63 @@
                                     }}</p>
                             </div>
 
-                            <!-- Role Selection -->
-                            <div class="md:col-span-2 space-y-1">
-                                <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Rol <span class="text-red-500">*</span>
+                            <!-- Branch Selection -->
+                            <div class="space-y-1">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Roles  <span class="text-red-500">*</span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <UserIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                                    </div>
-                                    <select v-model="form.role" id="role"
-                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200 appearance-none">
-                                        <option value="">Seleccione un rol</option>
-                                        <option value="admin">Administrador</option>
-                                        <option value="doctor">Doctor</option>
-                                        <option value="staff">Personal</option>
-                                        <option value="patient">Paciente</option>
-                                    </select>
+                                <div @click="openRoleModal()"
+                                    class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                    <BuildingIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                    <p v-if="Array.isArray(form.roles)
+                                        && form.roles.length === 1
+                                        && selectedRoleObjects.length === 1" class="truncate">
+                                        {{ selectedRoleObjects[0].name }}
+                                    </p>
+
+                                    <p v-else-if="Array.isArray(form.roles)
+                                        && form.roles.length > 1" class="truncate">
+                                        {{ form.roles.length }} roles seleccionadas
+                                    </p>
+
+                                    <p v-else class="text-gray-400 dark:text-gray-400">
+                                        Seleccionar roles
+                                    </p>
+
+
                                 </div>
-                                <p v-if="errors.role" class="mt-1 text-xs text-red-600 dark:text-red-400">{{ errors.role
-                                    }}</p>
+                                <p v-if="errors.roles" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.roles }}</p>
                             </div>
+                            <!-- Branch Selection -->
+                            <div class="space-y-1">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Sucursales disponibles <span class="text-red-500">*</span>
+                                </label>
+                                <div @click="openBranchModal()"
+                                    class="flex items-center cursor-pointer w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200">
+                                    <BuildingIcon class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-2" />
+                                    <p v-if="Array.isArray(form.available_branches)
+                                        && form.available_branches.length === 1
+                                        && selectedBranchObjects.length === 1" class="truncate">
+                                        {{ selectedBranchObjects[0].name }}
+                                    </p>
+
+                                    <p v-else-if="Array.isArray(form.available_branches)
+                                        && form.available_branches.length > 1" class="truncate">
+                                        {{ form.available_branches.length }} sucursales seleccionadas
+                                    </p>
+
+                                    <p v-else class="text-gray-400 dark:text-gray-400">
+                                        Seleccionar sucursales
+                                    </p>
+
+
+                                </div>
+                                <p v-if="errors.branch" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
+                                    errors.branch }}</p>
+                            </div>
+
 
                             <!-- Error Message -->
                             <div v-if="error"
@@ -240,6 +277,35 @@
                         </form>
                     </div>
                 </div>
+                <Modal :show="showBranchModal" @close="showBranchModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                                Seleccionar Sucursales
+                            </h3>
+                            <button @click="showBranchModal = false" class="text-gray-400 hover:text-gray-500">
+                                <XIcon class="h-6 w-6" />
+                            </button>
+                        </div>
+                        <BranchSelector :branches="branches" @selected="setBranches"
+                            @confirm="showBranchModal = false" />
+                    </div>
+                </Modal>
+                <Modal :show="showRoleModal" @close="showRoleModal = false" maxWidth="2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                                Seleccionar Roles
+                            </h3>
+                            <button @click="showRoleModal = false" class="text-gray-400 hover:text-gray-500">
+                                <XIcon class="h-6 w-6" />
+                            </button>
+                        </div>
+                        <RoleSelector :roles='roles'@selected="setRoles" @confirm="showRoleModal = false" />
+                    </div>
+                </Modal>
             </div>
         </template>
     </AuthenticatedLayout>
@@ -247,6 +313,7 @@
 <script>
 
 import {
+    Head,
     Link, useForm
 } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -261,7 +328,7 @@ import PhoneIcon from '@/Components/Icons/PhoneIcon.vue';
 import CardIcon from '@/Components/Icons/CardIcon.vue';
 import UserIcon from '@/Components/Icons/UserIcon.vue';
 import LocationIcon from '@/Components/Icons/LocationIcon.vue';
-
+import { ref } from 'vue';
 import { markRaw } from 'vue';
 import AddIcon from '@/Components/Icons/AddIcon.vue';
 import MailIcon from '@/Components/Icons/MailIcon.vue';
@@ -271,9 +338,15 @@ import DNIInput from '@/Components/DNIInput.vue';
 import PhoneInput from '@/Components/PhoneInput.vue';
 import AcademicCapIcon from '@/Components/Icons/AcademicCapIcon.vue';
 import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
+import BranchSelector from '@/Components/BranchSelector.vue';
+import XIcon from '@/Components/Icons/XIcon.vue';
+import Modal from '@/Components/Modal.vue';
+import RoleSelector from '@/Components/RoleSelector.vue';
 
 export default {
     props: {
+        branches: Object,
+        roles: Object,
         errors: [Array, Object],
     },
     components: {
@@ -296,7 +369,12 @@ export default {
         DNIInput,
         PhoneInput,
         AcademicCapIcon,
-        BuildingIcon
+        BuildingIcon,
+        BranchSelector,
+        Head,
+        XIcon,
+        Modal,
+        RoleSelector
     },
     data() {
         return {
@@ -308,12 +386,17 @@ export default {
                 email: '',
                 password: '',
                 password_confirmation: '',
-                role: '',
+                roles: [],
                 DNI: '',
                 specialty: '',
-                position: '',
+                address: '',
                 phone_number: '',
+                available_branches: []
             }),
+            selectedBranchObjects: [],
+            selectedRoleObjects: [],
+            showBranchModal: ref(false),
+            showRoleModal: ref(false),
             error: '',
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
@@ -322,15 +405,27 @@ export default {
         };
     },
     methods: {
+        setBranches(data) {
+            this.form.available_branches = data.ids;
+            this.selectedBranchObjects = data.objects;
+        },
+        openBranchModal() {
+            this.showBranchModal = true;
+        },
+        setRoles(roleData) {
+            this.form.roles = roleData.ids
+            this.selectedRoleObjects = roleData.objects
+        },
+        openRoleModal() {
+            this.showRoleModal = true;
+        },
         submit() {
+
             if (!this.form.first_name) {
                 this.error = 'Por favor, ingrese el nombre.';
                 return;
             }
-            if (!this.form.role) {
-                this.error = 'Por favor, seleccione el rol.';
-                return;
-            }
+
             if (!this.form.last_name) {
                 this.error = 'Por favor, ingrese el apellido.';
                 return;
@@ -350,6 +445,15 @@ export default {
             }
             if (!this.form.password_confirmation) {
                 this.error = 'Por favor, confirme la contraseña.';
+                return;
+            }
+            if (!this.form.roles) {
+                this.error = 'Por favor, seleccione el rol.';
+                return;
+            }
+
+            if (!this.form.available_branches) {
+                this.error = 'Por favor, seleccione una sucursal.';
                 return;
             }
             this.form.date_of_birth = this.formatDate(this.form.date_of_birth);

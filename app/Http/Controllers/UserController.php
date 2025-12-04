@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Note;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
+use Spatie\Permission\Models\Role;
 
 
 class UserController extends Controller implements HasMiddleware
@@ -40,7 +42,7 @@ class UserController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles','branches')
+        $query = User::query()->select('users.*')->with('roles', 'branches')
             ->whereDoesntHave('roles', function ($q) {
                 $q->whereIn('name', ['patient', 'admin']);
             });
@@ -103,7 +105,7 @@ class UserController extends Controller implements HasMiddleware
 
         $query = User::with('roles')
             ->when(!empty($filters['name']), function ($q) use ($filters) {
-                $q->whereRaw("CONCAT(name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $filters['name'] . '%']);
             });
 
         $users = $query->orderBy('created_at', 'desc')
@@ -120,30 +122,37 @@ class UserController extends Controller implements HasMiddleware
     public function create()
     {
         $this->authorize('create', User::class);
-        return Inertia::render("Users/Create");
+        $branches = Branch::withoutGlobalScopes()->paginate(10);
+        $roles = Role::withoutGlobalScopes()->paginate(10);
+        return Inertia::render("Users/Create", compact('branches', 'roles'));
     }
     public function store(Request $request)
     {
         $this->authorize('create', User::class);
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
                 'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'last_name' => 'required|string|max:100',
                 'specialty' => 'required|string|max:100',
                 'phone_number' => 'required|string|max:100',
-                'position' => 'required|string|max:100',
-                'DNI' => 'required|string|max:255',
+                'DNI' => 'required|string|unique:users,DNI|max:255',
+                'address' => 'required|string|max:255',
                 'date_of_birth'        => 'required|date|before:today',
-                'role' => 'required|string|in:admin,doctor,patient,staff',
             ]);
 
             $validated['active'] = true;
             $validated['branch_id'] = Auth::user()->active_branch_id;
 
             $user = User::create($validated);
-            $user->assignRole($validated['role']);
+            $user->syncRoles($request->roles);
+            $branches = is_array($request->available_branches)
+                ? $request->available_branches
+                : [$request->available_branches];
+
+            $user->branches()->sync($branches);
+
             return redirect()->route('users.index')->with('toast', 'Usuario registrado correctamente.');
         } catch (ValidationException $e) {
             return back()
