@@ -41,8 +41,7 @@
                         </div>
 
                         <!-- Espacio flexible para separar en responsive -->
-                        <div
-                            class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
+                        <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
                                 class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <AccessGate permission="patient.create">
@@ -57,7 +56,7 @@
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
@@ -90,13 +89,7 @@
                                             <span v-if="form.sortField === 'created_at'">{{ form.sortDirection === 'asc'
                                                 ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
-                                            class="cursor-pointer " @click="sort('branch_id')">
-                                            Sucursal
-                                            <span v-if="form.sortField === 'branch_id'">
-                                                {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
-                                            </span>
-                                        </th>
+
                                         <th class="px-6 py-3 cursor-pointer text-nowrap" @click="toggleShowDeleted()">
                                             <div class="flex items-center justify-between">
                                                 Estado
@@ -119,9 +112,7 @@
                                             }).format(expense.amount || 0) }}
                                         </td>
                                         <td class="p-4">{{ formatDate(expense.created_at) }}</td>
-                                        <AccessGate role="admin">
-                                            <td class="p-4">{{ expense.branch.first_name }}</td>
-                                        </AccessGate>
+
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <span :class="statusIndicatorClasses(expense.active)" />
@@ -149,7 +140,48 @@
                         <!-- Pagination -->
                         <Pagination :pagination="expenses" :filters="form" />
                     </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="expense in expenses.data" :key="expense.id"
+                            class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">{{ expense.description }}
+                                    </h3>
+                                <Link :href="route('expenses.show', expense)" class="text-pink-500 text-sm">Abrir</Link>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
+                                #{{ expense.id }}
+                            </p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <AccessGate :role="'admin'">
+                                <p><span class="font-medium">Creado Por:</span>
+                                    {{ expense.user.first_name }} {{ expense.user.last_name }}
+                                </p>
+                                </AccessGate>
+                                <p><span class="font-medium">Total:</span> {{ new
+                                    Intl.NumberFormat('es-DO', {
+                                        style: 'currency', currency: 'DOP'
+                                    }).format(expense.amount
+                                        ||
+                                        0) }}</p>
+                                <p><span class="font-medium">Creado el:</span> {{ formatDate(expense.created_at) }}</p>
 
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(expense.active)">
+                                        <HandThumbDown v-if="expense.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!expenses.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+                        <Pagination :pagination="expenses" :filters="form" />
+                    </div>
                 </div>
             </div>
 
@@ -237,8 +269,9 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Creado Por: </span>
                             <Link :href="route('users.show', selectedExpense.user)"
-                                class="text-pink-500 dark:text-pink-300">{{ selectedExpense.user.first_name }} {{
-                                    selectedExpense.user.last_name }}</Link>
+                                class="text-pink-500 dark:text-pink-300">{{
+                            selectedExpense.user.first_name }} {{
+                                selectedExpense.user.last_name }}</Link>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Descripción: </span>
