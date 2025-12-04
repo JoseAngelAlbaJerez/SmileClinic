@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Recibos" />
+    <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -13,7 +13,7 @@
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
                         <!-- Form Header with Gradient -->
                         <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4">
-                            <h2 class="text-xl font-bold text-white">Nuevo Recibo</h2>
+                            <h2 class="text-xl font-bold text-white">Nueva Factura</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles del documento</p>
                         </div>
 
@@ -65,7 +65,7 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <h3 class="text-xl font-bold dark:text-white">Realizar Pago</h3>
+                                        <h3 class="text-xl font-bold dark:text-white">Realizar Recibo</h3>
                                     </div>
                                 </div>
 
@@ -80,9 +80,9 @@
                                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
                                     </div>
-                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No hay pagos
+                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No hay recibos
                                         pendientes</h3>
-                                    <p class="text-gray-500 dark:text-gray-400 mb-4">Agregue recibos para continuar</p>
+                                    <p class="text-gray-500 dark:text-gray-400 mb-4">Agregue Facturas para continuar</p>
                                     <p v-if="errors.procedures"
                                         class="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
                                         {{ errors.procedures }}
@@ -132,9 +132,9 @@
 
                                         <button type="submit"
                                             :disabled="!payment_form.paymentAmount || payment_form.paymentAmount <= 0"
-                                            class="mt-2 w-full bg-gradient-to-r from-pink-600 to-pink-700 text-white font-medium rounded-lg px-4 py-3 hover:from-pink-700 hover:to-pink-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg">
+                                            class="mt-2 w-full bg-pink-500 text-white font-medium rounded-lg px-4 py-3 hover:from-pink-700 hover:to-pink-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg">
                                             <span class="flex items-center justify-center">
-                                                Registrar Pago
+                                                Registrar Recibo
                                             </span>
                                         </button>
                                     </form>
@@ -585,6 +585,7 @@ import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
 import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import BudgetSelector from '@/Pages/Budgets/BudgetSelector.vue';
 import UserSelector from '@/Components/UserSelector.vue';
+import CashIcon from '@/Components/Icons/CashIcon.vue';
 
 export default {
     props: {
@@ -649,7 +650,7 @@ export default {
             selected_doctor: '',
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Recibos', to: route('bills.index') },
+                { icon: markRaw(CashIcon), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(AddIcon), label: 'Crear' },
 
             ],

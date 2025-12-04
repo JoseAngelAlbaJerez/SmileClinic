@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Recibos" />
+    <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -26,7 +26,7 @@
                             <Link :href="route('bills.create')" as="button"
                                 class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
                             <AddIcon class="size-5 sm:size-6" />
-                            <span class="hidden sm:inline">Nuevo Recibo</span>
+                            <span class="hidden sm:inline">Nueva Factura</span>
                             </Link>
                         </div>
                     </div>
@@ -166,6 +166,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
+import CashIcon from '@/Components/Icons/CashIcon.vue';
 export default {
 
     props: {
@@ -210,7 +211,7 @@ export default {
             },
             timeout: 3000,
             crumbs: [
-                { icon: markRaw(DocumentMoney), label: 'Recibos', to: route('bills.index') },
+                { icon: markRaw(CashIcon), label: 'Facturas', to: route('bills.index') },
                 { icon: markRaw(TableIcon), label: 'Listado' }
             ],
             showModal: ref(false),
