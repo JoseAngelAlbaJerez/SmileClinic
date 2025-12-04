@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Branches" />
+    <Head title="Sucursales" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -122,16 +122,16 @@
                             class="border rounded-lg bg-white  p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                                    {{ branch.first_name }} {{ branch.last_name }}
+                                    {{ branch.name }}
                                 </h3>
                                 <Link :href="route('branches.show', branch.id)" class="text-pink-500 text-sm">Abrir
                                 </Link>
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">#{{ branch.id }}</p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
-                                <p><span class="font-medium">Nacimiento:</span> {{ branch.date_of_birth }}</p>
-                                <p><span class="font-medium">ARS:</span> {{ branch.ars }}</p>
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(branch.created_at) }}</p>
+                                <p><span class="font-medium">Dirección:</span> {{ branch.address }}</p>
+                                <p><span class="font-medium">Número de Teléfono:</span> {{ branch.phone_number }}</p>
+                                <p><span class="font-medium">Creado el:</span> {{ formatDate(branch.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
