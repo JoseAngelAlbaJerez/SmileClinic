@@ -17,10 +17,17 @@ class BillSeeder extends Seeder
     {
         foreach (range(1, 100) as $i) {
 
+            $startOfYear = now()->startOfYear();
+            $endOfYear = now();
+            $randomDate = fake()->dateTimeBetween($startOfYear, $endOfYear);
+
+            $expiration = (clone $randomDate)->modify('+' . rand(1, 60) . ' days');
+
             $branch = Branch::inRandomOrder()->first();
             $patient = User::role('patient')->inRandomOrder()->first();
             $doctor = User::role('doctor')->inRandomOrder()->first()->id;
             $procedure = Procedure::inRandomOrder()->first()->id;
+
             if ($patient->CXC()->exists()) {
                 $CXC = $patient->CXC()->first();
             } else {
@@ -32,21 +39,21 @@ class BillSeeder extends Seeder
                 ]);
             }
 
-
             $bill = \App\Models\Bill::create([
                 'type' => fake()->randomElement(['Credito', 'Contado']),
                 'doctor_id' => $doctor,
                 'patient_id' => $patient?->id,
                 'c_x_c_id' => $CXC->id,
                 'total' => fake()->numberBetween(1000, 50000),
-                'emission_date' => now(),
-                'currency' => fake()->randomElement(['DOP']),
-                'expiration_date' => now()->addMonth(),
+                'emission_date' => $randomDate,
+                'currency' => 'DOP',
+                'expiration_date' => $expiration,
                 'active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $randomDate,
+                'updated_at' => $randomDate,
                 'branch_id' => $branch->id,
             ]);
+
             $CXC->balance = $bill->total;
             $CXC->save();
 
@@ -55,10 +62,10 @@ class BillSeeder extends Seeder
                 "doctor_id" => $doctor,
                 'branch_id' => $bill->branch_id,
                 "amount" => fake()->numberBetween(1000, 10000),
-                "initial" =>fake()->numberBetween(1000, 10000) ,
+                "initial" => fake()->numberBetween(1000, 10000),
                 'amount_doctor' => fake()->numberBetween(1000, 10000),
                 'materials_amount' => fake()->numberBetween(1000, 10000),
-                "amount_of_payments" => fake()->numberBetween(1,4),
+                "amount_of_payments" => fake()->numberBetween(1, 4),
                 "total" => $bill->total,
                 "treatment" => fake()->text(),
                 "discount" => fake()->numberBetween(1, 50),
