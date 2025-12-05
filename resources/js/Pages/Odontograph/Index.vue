@@ -90,9 +90,9 @@
                                 <tbody>
                                     <tr v-for="odontograph in odontographs.data" :key="odontograph.id">
                                         <td class="p-4 hidden md:table-cell">{{ odontograph.id }}</td>
-                                        <td class="p-4">{{ odontograph.patient.first_name }} {{
-                                            odontograph.patient.last_name }}</td>
-                                        <td class="p-4 ">{{ odontograph.doctor.first_name }} {{
+                                        <td class="p-4 text-pink-600"><Link :href="route('patients.show',odontograph.patient)"> {{ odontograph.patient.first_name }} {{
+                                            odontograph.patient.last_name }}</Link></td>
+                                        <td class="p-4">{{ odontograph.doctor.first_name }} {{
                                             odontograph.doctor.last_name }}</td>
                                         <td class="p-4">
                                             <ul class="list-disc ">
@@ -145,9 +145,11 @@
                         <div v-for="odontograph in odontographs.data" :key="odontograph.id"
                             class="border rounded-lg bg-white  p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">
-                                    {{ odontograph.patient.first_name }} {{ odontograph.patient.last_name }}
-                                </h3>
+                                <h3 class="font-semibold text-pink-600">
+                                <Link :href="route('patients.show',odontograph.patient)">
+                                        {{ odontograph.patient.first_name }} {{ odontograph.patient.last_name }}
+                                </Link>
+                                    </h3>
                                 <Link :href="route('odontographs.show', odontograph.id)" class="text-pink-500 text-sm">
                                 Abrir
                                 </Link>

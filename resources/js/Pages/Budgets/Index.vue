@@ -84,7 +84,9 @@
                                 <tbody>
                                     <tr v-for="budget in budgets.data" :key="budget.id">
                                         <td class="p-4">{{ budget.id }}</td>
-                                        <td class="p-4">{{ budget.patient.first_name }} {{ budget.patient.last_name }}
+                                        <td class="p-4 text-pink-600">
+                                            <Link :href="route('patients.show', budget.patient)">{{
+                                            budget.patient.first_name }} {{ budget.patient.last_name }}</Link>
                                         </td>
                                         <td class="p-4">
                                             <div v-for="detail in budget.budgetdetail" :key="detail.id">
@@ -130,7 +132,8 @@
                         <div v-for="budget in budgets.data" :key="budget.id"
                             class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">{{ budget.patient.first_name }} {{ budget.patient.last_name }}</h3>
+                                <h3 class="font-semibold text-pink-600"><Link :href="route('patients.show', budget.patient)">{{
+                                            budget.patient.first_name }} {{ budget.patient.last_name }}</Link></h3>
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
@@ -142,7 +145,7 @@
 
                                     <template v-for="detail in budget.budgetdetail">
                                         <li>
-                                           {{ detail.procedure.name }}
+                                            {{ detail.procedure.name }}
                                         </li>
                                     </template>
 

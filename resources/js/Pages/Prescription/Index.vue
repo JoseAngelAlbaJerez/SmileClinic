@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Citas" />
+    <Head title="Recetas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
@@ -101,8 +101,8 @@
                                     <tr v-for="prescription in prescriptions.data" :key="prescription.id"
                                         class=" dark:border-gray-700">
                                         <td class="p-4 hidden md:table-cell">{{ prescription.id }}</td>
-                                        <td class="p-4">{{ prescription.patient.first_name }} {{
-                                            prescription.patient.last_name }}</td>
+                                        <td class="p-4 text-pink-600"><Link :href="route('patients.show',prescription.patient)">{{ prescription.patient.first_name }} {{
+                                            prescription.patient.last_name }}</Link></td>
                                         <td class="p-4 hidden sm:table-cell">
                                             <li v-for="detail in prescription.prescriptions_details">
                                                 {{ detail.drugs.name }}

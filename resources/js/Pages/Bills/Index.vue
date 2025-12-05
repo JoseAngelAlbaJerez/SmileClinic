@@ -86,8 +86,8 @@
                                 <tbody>
                                     <tr v-for="bill in bills.data" :key="bill.id">
                                         <td class="p-4 items-center">{{ bill.id }}</td>
-                                        <td class="p-4 items-center">{{ bill.patient.first_name }} {{
-                                            bill.patient.last_name }}</td>
+                                        <td class="p-4 items-center text-pink-600"> <Link :href="route('patients.show', bill.patient)">{{ bill.patient.first_name }} {{
+                                            bill.patient.last_name }}</Link></td>
                                         <td class="p-4">
                                             <div v-for="detail in bill.billdetail" :key="detail.id">
                                                 <li>
@@ -134,8 +134,9 @@
                                 <h3 class="font-semibold text-gray-900 dark:text-white">#{{ bill.id }}</h3>
                                 <Link :href="route('bills.show', bill)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
-                            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
-                                {{ bill.patient.first_name }} {{ bill.patient.last_name }}
+                            <p class="text-sm text-pink-600 font-medium mt-1">
+                                <Link :href="route('patients.show', bill.patient)">{{ bill.patient.first_name }} {{
+                                            bill.patient.last_name }}</Link>
                             </p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Procedimientos:</span>

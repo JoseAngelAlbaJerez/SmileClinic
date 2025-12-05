@@ -101,7 +101,7 @@
                                         class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                         <td class="p-4">{{ expense.id }}</td>
                                         <td class="p-4">{{ expense.description }}</td>
-                                        <td class="p-4">{{ expense.user.first_name }} {{ expense.user.last_name }}</td>
+                                        <td class="p-4 text-pink-600"><Link :href="route('users.show',expense.user)">{{ expense.user.first_name }} {{ expense.user.last_name }}</Link></td>
                                         <td class="p-4">
                                             {{ new Intl.NumberFormat('es-DO', {
                                                 style: 'currency', currency: 'DOP'
@@ -152,7 +152,8 @@
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <AccessGate :role="'admin'">
                                     <p><span class="font-medium">Creado Por:</span>
-                                        {{ expense.user.first_name }} {{ expense.user.last_name }}
+                                        <Link class="text-pink-600 ml-1" :href="route('users.show',expense.user)">
+                                        {{ expense.user.first_name }} {{ expense.user.last_name }}</Link>
                                     </p>
                                 </AccessGate>
                                 <p><span class="font-medium">Total:</span> {{ new

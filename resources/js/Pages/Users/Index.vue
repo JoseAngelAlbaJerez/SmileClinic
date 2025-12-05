@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="users" />
+    <Head title="Usuarios" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
