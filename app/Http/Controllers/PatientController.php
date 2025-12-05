@@ -175,8 +175,8 @@ class PatientController extends Controller implements HasMiddleware
         $events = Event::where('patient_id', $patient->id)->with('doctor')->latest()->take(3)->get();
         $latest_event = Event::where('patient_id', $patient->id)->latest()->first();
         $medicalHistory = MedicalHistory::where('patient_id', $patient->id)->with('doctor')->latest()->first();
-        $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure')->latest()->take(3)->get();
-        $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure')->latest()->take(3)->get();
+        $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure','branch')->latest()->take(3)->get();
+        $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure','branch')->latest()->take(3)->get();
         $CXC = CXC::where('patient_id', $patient->id)->with('Payment')->latest()->take(3)->get();
         $odontograph = $query->orderByDesc('created_at')->with(  'branch')->latest()->take(3)->get();
         $prescription = Prescription::where('patient_id', $patient->id)->with('patient', 'doctor', 'prescriptionsDetails.drugs')->orderByDesc('created_at')->latest()->take(3)->get();
