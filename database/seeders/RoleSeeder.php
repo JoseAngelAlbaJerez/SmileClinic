@@ -19,7 +19,7 @@ class RoleSeeder extends Seeder
         Role::create(["name" => "admin"]);
         Role::create(["name" => "doctor"]);
         Role::create(["name" => "patient"]);
-        Role::create(["name" => "staff"]);
+        Role::create(["name" => "receptionist"]);
 
 
         $role = Role::findByName("admin");
@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
             'patient.view',
             'prescription.view',
         ]);
-        $role = Role::findByName("staff");
+        $role = Role::findByName("receptionist");
         $role->syncPermissions([
             'CXC.view',
             'CXC.create',
@@ -89,13 +89,13 @@ class RoleSeeder extends Seeder
         $user->save();
 
         $user = User::where('first_name', 'Cayetano Germosen')->first();
-        $user->syncRoles('staff');
+        $user->syncRoles('receptionist');
         $user->branches()->sync([1]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();
 
         $user = User::where('first_name', 'Cutupu')->first();
-        $user->syncRoles('staff');
+        $user->syncRoles('receptionist');
         $user->branches()->sync([2]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();

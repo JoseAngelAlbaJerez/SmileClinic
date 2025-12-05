@@ -210,7 +210,7 @@ class DashboardController extends Controller
                         'agendaHoy' => $agendaToday,
                     ],
                 ]);
-            case 'staff':
+            case 'receptionist':
 
                 $branchId = Auth::user()->active_branch_id;
 
@@ -244,7 +244,7 @@ class DashboardController extends Controller
 
                 $doctors = User::role('doctor')->with('branches')->get();
 
-                return Inertia::render('DashboardStaff', [
+                return Inertia::render('Dashboardreceptionist', [
                     'agendaToday' => $agendaToday,
                     'noShowToday' => $no_show_today,
                     'newPatientsToday' => $newPatientsToday,

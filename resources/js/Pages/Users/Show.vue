@@ -56,7 +56,7 @@
                                     <div class="relative">
                                         <div
                                             class="w-24 h-24 overflow-hidden border-4 border-white dark:border-gray-800 rounded-full shadow-lg">
-                                            <img :src="`/storage/${user.avatar}` || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                            <img :src="user.avatar ? `/storage/${user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
                                                 alt="user" class="w-full h-full object-cover">
                                         </div>
                                         <button @click="openEditModal('profile')"

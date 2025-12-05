@@ -27,7 +27,7 @@
                         <ReportModal :open="showReport" @close="showReport = false" table="expenses"
                             :default-selected="['id', 'amount', 'description', 'created_at']" />
 
-                        <AccessGate :role="['staff']">
+                        <AccessGate :role="['receptionist']">
                             <!-- Daily Report -->
                             <button @click="print"
                                 class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
