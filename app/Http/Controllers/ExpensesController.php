@@ -67,7 +67,7 @@ class ExpensesController extends Controller
             }
         }
 
-        $expenses = $query->orderByDesc('created_at')->with('user','branch')->paginate(10);
+        $expenses = $query->orderByDesc('created_at')->with('user', 'branch')->paginate(10);
 
         return Inertia::render('Expenses/Index', [
             'expenses' => $expenses,
@@ -89,32 +89,45 @@ class ExpensesController extends Controller
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'description' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
+        try {
+            $validated = $request->validate([
+                'description' => 'required|string|max:255',
+                'amount' => 'required|numeric|min:0',
+            ]);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('toast', 'Error al registrar el egreso: ' . $e->getMessage())
+                ->with('toastStyle', 'danger');
 
-        ]);
-        $doctor = User::where('first_name', '=',$validated['description'])->first();
-       if ($doctor) {
-          Expenses::create([
-            ...$validated,
-            'user_id' => Auth::id(),
-            'branch_id'=> Auth::user()->active_branch_id,
-            'active' => true,
-            'doctor_id'=> $doctor->id
-        ]);
-       }else{
-          Expenses::create([
-            ...$validated,
-            'user_id' => Auth::id(),
-            'branch_id'=> Auth::user()->active_branch_id,
-            'active' => true,
-            'doctor_id'=> null
-        ]);
-       }
+        }
+
+        $doctor = User::where('first_name', '=', $validated['description'])->first();
+        if ($doctor) {
+            Expenses::create([
+                ...$validated,
+                'user_id' => Auth::id(),
+                'branch_id' => Auth::user()->active_branch_id,
+                'active' => true,
+                'doctor_id' => $doctor->id
+            ]);
+        } else {
+            Expenses::create([
+                ...$validated,
+                'user_id' => Auth::id(),
+                'branch_id' => Auth::user()->active_branch_id,
+                'active' => true,
+                'doctor_id' => null
+            ]);
+        }
 
 
-        return redirect()->back()->with('toast', 'Egreso registrado correctamente.');
+        return redirect()->route('expenses.index')->with('toast', 'Egreso registrado correctamente.');
+    }
+
+    public function edit(Expenses $expense)
+    {
+        return Inertia::render("Expenses/Edit", [
+            'expense' => $expense,
+        ]);
     }
     public function update(Request $request, Expenses $expense)
     {

@@ -40,11 +40,11 @@
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
                                 class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <AccessGate permission="expense.create">
-                                <button @click="showModal = true;"
+                                <Link  :href="route('expenses.create')" as="button"
                                     class="flex justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                                     <AddIcon class="size-5" />
                                     <span class="hidden sm:inline">Nuevo Egreso</span>
-                                </button>
+                                </Link>
                             </AccessGate>
                         </div>
                     </div>
@@ -282,7 +282,7 @@
                     </div>
 
                     <div class=" flex  gap-2 ">
-                        <Link v-if="selectedExpense.active" :href="route('odontographs.edit', selectedExpense)"
+                        <Link v-if="selectedExpense.active" :href="route('expenses.edit', selectedExpense)"
                             class="flex  ml-auto mt-2  gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
                         <EditIcon />
                         </Link>
