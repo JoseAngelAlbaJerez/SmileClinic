@@ -22,6 +22,8 @@ return new class extends Migration
             $table->boolean('drugs')->default(false);
             $table->string('drugs_detail')->nullable();
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
+            $table->boolean('active')->default(true);
+
             $table->timestamps();
         });
     }
