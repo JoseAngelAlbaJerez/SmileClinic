@@ -52,12 +52,14 @@ class RoleSeeder extends Seeder
         ]);
         $role = Role::findByName("staff");
         $role->syncPermissions([
+            'CXC.view',
+            'CXC.create',
+            'CXC.delete',
             'patient.view',
             'patient.create',
             'patient.update',
             'patient.delete',
             'odontograph.view',
-            'odontograph.create',
             'budget.view',
             'budget.create',
             'budget.delete',
