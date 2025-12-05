@@ -39,12 +39,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(MedicalHistory::class);
     }
-  public function branches()
-{
-    return $this->belongsToMany(Branch::class, 'users_branches', 'user_id', 'branch_id');
-}
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'users_branches', 'user_id', 'branch_id');
+    }
 
-  public function odontographs()
+    public function odontographs()
     {
         return $this->hasMany(Odontograph::class, 'patient_id');
     }
@@ -52,8 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class, "patient_id", "id");
     }
-    public function bill(){
-         return $this->hasMany(Bill::class, "patient_id", "id");
+    public function bill()
+    {
+        return $this->hasMany(Bill::class, "patient_id", "id");
     }
     public function Prescriptions()
     {
