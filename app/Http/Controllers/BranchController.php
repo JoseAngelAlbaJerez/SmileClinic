@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\Branch;
 use App\Models\Event;
 use App\Models\Expenses;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -111,7 +112,6 @@ class BranchController extends Controller
         $user->update([
             'active_branch_id' => $request->branch_id,
         ]);
-        Log::info($user->active_branch_id);
 
         return back()->with('toast', 'Sucursal cambiada correctamente')->with('refresh', true);
     }
@@ -129,8 +129,12 @@ class BranchController extends Controller
             'address' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
         ]);
-        Branch::create($validated);
+        $branch = Branch::create($validated);
+        $admins = User::role('admin')->get();
 
+        foreach ($admins as $admin) {
+            $admin->branches()->syncWithoutDetaching([$branch->id]);
+        }
         return redirect()->route('branches.index')->with('toast', 'Sucursal registrada correctamente.');
     }
     public function edit(Branch $branch)
