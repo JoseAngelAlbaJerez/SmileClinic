@@ -77,7 +77,7 @@ class BillController extends Controller
             }
         }
 
-        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient', 'branch','billdetail.procedure')->paginate(10);
+        $bills = $query->orderByDesc('created_at')->with('doctor', 'patient', 'branch', 'billdetail.procedure')->paginate(10);
         return Inertia::render('Bills/Index', [
             'bills' => $bills,
             'filters' => [
@@ -230,8 +230,10 @@ class BillController extends Controller
                 $CXC->balance += $bill->total;
                 $CXC->save();
             }
-            return Inertia::render('Bills/Show', [
-                'CXC' => $CXC,
+              $bill->load(['billdetail', 'doctor', 'patient', 'cxc']);
+
+            return response()->json([
+                'redirect' => route('bills.show', $bill->id),
             ]);
         }
 
@@ -240,14 +242,13 @@ class BillController extends Controller
 
 
 
-        return Inertia::render('Bills/Show', [
-            'CXC' => $bill->CXC(),
-
+        return response()->json([
+            'redirect' => route('bills.show', $bill->id),
         ]);
     }
     public function show(Bill $bill)
     {
-        $bill->load('patient', 'billdetail.procedure','branch');
+        $bill->load('patient', 'billdetail.procedure', 'branch');
         return Inertia::render('Bills/Show', [
             'bill' => $bill,
 
