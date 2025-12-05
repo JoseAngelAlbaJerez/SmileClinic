@@ -122,7 +122,7 @@
                         <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Ingresos por Sucursal</h3>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto pr-2">
-                                Tendencias
+                                Tendencias de Ingresos
                             </h3>
                         </div>
 
@@ -147,7 +147,7 @@
                         class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 w-full mt-6">
 
                         <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Citas Atendidas</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Procedimientos más Rentables</h3>
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-white md:mx-auto">Agenda de hoy
                             </h3>
                         </div>
