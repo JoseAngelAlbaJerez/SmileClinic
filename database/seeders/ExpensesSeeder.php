@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Branch;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+
 class ExpensesSeeder extends Seeder
 {
     /**
@@ -13,22 +15,22 @@ class ExpensesSeeder extends Seeder
      */
     public function run(): void
     {
-          foreach (range(1, 10) as $i) {
+        foreach (range(1, 50) as $i) {
 
-            $branchId = fake()->numberBetween(1, 2);
+            $branch = Branch::inRandomOrder()->first();
 
 
-           $doctor = User::where('branch_id', $branchId)
-                ->inRandomOrder()
+
+            $user = User::inRandomOrder()
                 ->first();
             DB::table('expenses')->insert([
-                'description' => fake()->sentence(),
-                'amount' => fake()->numberBetween(1000,25000),
-                'user_id' => $doctor->id,
+                'description' => fake()->randomElement(['Luz','Local','Envíos','Depósito','TSS','Contabilidad','Laboratorio','Empleado','Publicidad','Teléfono','Gastos','Dra. Castro','Dra. Madelin','Dra. Odalisa','Dra. Orquídea','Dra. Paloma','Dr. Francisco']),
+                'amount' => fake()->numberBetween(1000, 25000),
+                'user_id' => $user->id,
                 'active' => fake()->boolean(),
                 'created_at' => now(),
                 'updated_at' => now(),
-                'branch_id' => $branchId,
+                'branch_id' => $branch->id,
             ]);
         }
     }
