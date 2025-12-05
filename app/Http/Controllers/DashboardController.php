@@ -42,6 +42,7 @@ class DashboardController extends Controller
 
                 $incomeByBranch = Bill::withoutGlobalScopes()
                     ->where('type', 'Contado')
+                    ->where('active', true)
                     ->select('branch_id', DB::raw('SUM(total) as total'))
                     ->groupBy('branch_id')
                     ->get();
@@ -87,6 +88,7 @@ class DashboardController extends Controller
 
                 $tendencyQueries = Bill::withoutGlobalScopes()
                     ->where('type', 'Contado')
+                    ->where('active', true)
                     ->whereBetween('created_at', [
                         $now->copy()->startOfYear(),
                         $now->copy()->endOfYear()
@@ -126,6 +128,7 @@ class DashboardController extends Controller
                     ->join('bills', 'bill_details.bill_id', 'bills.id')
                     ->join('procedures', 'bill_details.procedure_id', 'procedures.id')
                     ->where('bills.type', 'Contado')
+                    ->where('bills.active', true)
                     ->select('procedures.name as procedure_name', DB::raw('SUM(bill_details.amount * COALESCE(bill_details.quantity,1)) as total'))
                     ->groupBy('procedures.name')
                     ->orderByDesc('total')
@@ -146,6 +149,7 @@ class DashboardController extends Controller
                 $no_show = [];
                 if (class_exists(Event::class)) {
                     $no_show = Event::withoutGlobalScopes()->where('attended', '=', false)
+                        ->where('active', true)
                         ->where('date', '<', $now)
                         ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])->get();
                 }
@@ -155,10 +159,12 @@ class DashboardController extends Controller
 
 
                 $incomeThisWeek = Bill::withoutGlobalScopes()->where('type', 'Contado')
+                    ->where('active', true)
                     ->whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
                     ->sum('total');
 
                 $incomeLastWeek = Bill::withoutGlobalScopes()->where('type', 'Contado')
+                    ->where('active', true)
                     ->whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
                     ->sum('total');
 
@@ -168,11 +174,11 @@ class DashboardController extends Controller
                     : 100;
 
 
-                $income = Bill::withoutGlobalScopes()->where('type', '=', 'Contado')->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
+                $income = Bill::withoutGlobalScopes()->where('type', '=', 'Contado')->where('active',true)->orderByDesc('created_at')->with('billdetail.procedure', 'patient')->get();
                 $income_sum = $income->sum('total');
 
 
-                $expense = Expenses::withoutGlobalScopes()->orderByDesc('created_at')->get();
+                $expense = Expenses::withoutGlobalScopes()->where('active',true)->orderByDesc('created_at')->get();
                 $expense_sum = $expense->sum('amount');
                 return Inertia::render('Dashboard', [
                     'patients' => $patients,
