@@ -91,10 +91,7 @@ class Branch extends Model
         return $this->hasMany(PrescriptionDetail::class, 'branch_id');
     }
 
-    public function procedures()
-    {
-        return $this->hasMany(Procedure::class, 'branch_id');
-    }
+
 
     public function users()
     {

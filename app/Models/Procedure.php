@@ -15,8 +15,5 @@ class Procedure extends Model
     {
         return $this->belongsTo(BudgetDetail::class,'procedure_id');
     }
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class, 'branch_id');
-    }
+
 }
