@@ -247,9 +247,9 @@ class BillController extends Controller
     }
     public function show(Bill $bill)
     {
-        $CXC = CXC::with('patient', 'bills.billdetail.procedure', 'Payment')->find($bill->c_x_c_id);
+        $bill->load('patient', 'billdetail.procedure','branch');
         return Inertia::render('Bills/Show', [
-            'CXC' => $CXC,
+            'bill' => $bill,
 
 
         ]);

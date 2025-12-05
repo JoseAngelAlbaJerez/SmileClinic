@@ -1,301 +1,207 @@
 <template>
 
-    <Head title="Cuentas Por Cobrar" />
+    <Head title="Facturas" />
     <AuthenticatedLayout>
         <template #header>
             <BreadCrumb :crumbs="crumbs" />
         </template>
         <template #default>
-            <div
-                class="container mx-auto px-6 py-4  dark:text-white bg-white dark:bg-gray-700 mt-5  pb-8  rounded-2xl shadow-md">
-
-
-
-                <!-- Presupuestos Section -->
-                <div class="container mx-auto px-4 py-6">
-                    <!-- Header Section -->
+            <div class="container mx-auto  my-5 dark:text-white bg-white dark:bg-gray-700   rounded-2xl shadow-md">
+                <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
                     <div
-                        class="bg-pink-50 dark:bg-gray-800  p-6 rounded-xl shadow-md  border border-gray-200 dark:border-gray-700 mb-2">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between  gap-4">
-                            <div>
-                                <h1 class="text-lg font-bold text-gray-800 dark:text-white/90">
-                                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        <p><span class="font-semibold">Fecha de Creación: </span>{{ formatDate(CXC.created_at) }}
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-green-600 dark:text-green-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 " viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path
-                                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        <p><span
-                                                class="font-semibold text-green-600 dark:text-green-400">Balance:</span>
-                                            {{ new Intl.NumberFormat('es-DO',
-                                                {
-                                                    style:
-                                                        'currency', currency: 'DOP'
-                                                }).format(CXC.balance
-                                                    || 0) }}</p>
-                                    </div>
-                                </h1>
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
 
-                            </div>
-
-                            <div class="flex items-center gap-2" v-if="CXC.active">
-                                <button @click="print()"
-                                    class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                                    <PrintIcon />
-                                </button>
-                                <Link :href="route('CXC.edit', CXC.id)"
-                                    class="flex justify-center gap-2 rounded-lg bg-yellow-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 sm:px-4">
-                                <EditIcon />
-                                </Link>
-                                <DangerButton @click="deleteCXC(CXC.id)"
-                                    class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                    <DeleteIcon />
-                                </DangerButton>
-                            </div>
-                            <div class="flex ml-auto gap-2" v-else>
-                                <PrimaryButton @click="restoreCXC(CXC.id)"
-                                    class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                                    <RestoreIcon /> Restaurar
-                                </PrimaryButton>
-                                <span
-                                    class="px-3 py-1 bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 rounded-full text-sm font-medium">
-                                    Saldo: ${{ formatNumber(CXC.balance) }}
-                                </span>
-                                <span class="px-3 py-1 rounded-full text-sm font-medium"
-                                    :class="CXC.active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'">
-                                    {{ CXC.active ? 'Activa' : 'Inactiva' }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Bills Section -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-
+                        <!-- Header -->
                         <div
-                            class="bg-pink-50 dark:bg-gray-800 px-6 py-3 border-b justify-between border-pink-100 dark:border-gray-600 flex items-center gap-3">
-                            <div class="flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-pink-600 dark:text-pink-400"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Facturas</h3>
+                            class="p-6 bg-pink-500  dark:bg-pink-600 rounded-t-2xl text-white shadow-inner flex justify-between items-center gap-3">
+                            <div>
+                                <h2 class="text-2xl font-bold">Factura</h2>
+                                <p class="text-pink-100 text-sm mt-0.5">Detalles completos de la factura</p>
+                            </div>
+                            <!-- Botones -->
+                            <div class="flex justify-end gap-3  ">
+
+                                <template v-if="bill.active">
+
+                                    <button @click="print()"
+                                        class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
+                                        <PrintIcon />
+                                    </button>
+
+                                    <AccessGate permission="bill.update">
+                                        <Link :href="route('bills.edit', bill.id)"
+                                            class="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white shadow">
+                                        <EditIcon />
+                                        </Link>
+                                    </AccessGate>
+
+                                    <AccessGate permission="bill.delete">
+                                        <DangerButton @click="deleteBill(bill.id)"
+                                            class="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white shadow">
+                                            <DeleteIcon />
+                                        </DangerButton>
+                                    </AccessGate>
+
+                                </template>
+
+                                <template v-else>
+                                    <PrimaryButton @click="restoreBill(bill.id)"
+                                        class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
+                                        <RestoreIcon /> Restaurar
+                                    </PrimaryButton>
+                                </template>
+
                             </div>
 
-                            <span
-                                class="px-3 py-1 bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200 rounded-full text-sm font-medium">
-                                {{ CXC.bills.length }} Factura(s)
-                            </span>
                         </div>
-                        <div class="p-6">
-                            <div class="space-y-6">
 
-                                <div v-for="(bill, index) in CXC.bills" :key="bill.id" class="group">
-                                    <div @click="openAccordion(index)"
-                                        class="flex flex-col md:flex-row md:items-center gap-4 p-5 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-pink-300 dark:hover:border-pink-500"
-                                        :class="{
-                                            ' border-red-200 dark:border-red-200':  !bill.active
-                                        }">
-                                        <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
-                                            <div class="flex items-center gap-2">
-                                                <span class="font-medium text-gray-500 dark:text-gray-400">Factura
-                                                    #:</span>
-                                                <span class="font-semibold">{{ bill.id }}</span>
+
+                        <!-- Contenido en Grid -->
+                        <div class="grid grid-cols-1 gap-6 p-6">
+
+                            <div
+                                class="bg-white dark:bg-gray-700/40 rounded-xl shadow-sm border border-gray-100 dark:border-gray-600/40 ">
+
+                                <div @click="toggleSection"
+                                    class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer items-center">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                             </div>
-
-                                            <div class="flex items-center gap-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400"
-                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                <span>{{ bill.emission_date }}</span>
-                                            </div>
-
-                                            <div class="flex items-center gap-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400"
-                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                    <path
-                                                        d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="font-bold text-pink-600 dark:text-pink-400">${{
-                                                    formatNumber(bill.total) }}</span>
-                                            </div>
-
-                                            <div class="flex items-center gap-2">
-                                                <span class="text-xs font-medium px-2 py-1 rounded-full"
-                                                    :class="bill.type === 'Contado' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'">
-                                                    {{ bill.type }}
-                                                </span>
-                                                <span
-                                                    class="text-xs font-medium px-2 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200">
-                                                    {{ bill.currency }}
-                                                </span>
+                                            <div>
+                                                <h2 class="font-semibold text-gray-800 dark:text-white">
+                                                    Factura # {{ bill.id }}
+                                                </h2>
+                                                <div
+                                                    class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                    <BuildingIcon class="w-4 h-4" />
+                                                    <span>{{ bill.branch.name }}</span>
+                                                    <UserIcon class="w-4 h-4" />
+                                                    <span>{{ bill.patient.first_name }} {{ bill.patient.last_name
+                                                    }}</span>
+                                                    <span class="mx-1">•</span>
+                                                    <CalendarIcon class="w-4 h-4" />
+                                                    <span>{{ formatDate(bill.created_at) }}</span>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="flex items-center justify-end">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="h-5 w-5 text-gray-400 transition-transform duration-200"
-                                                :class="{ 'rotate-180': activeIndex === index }" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
+                                        <!-- Icono chevron que rota -->
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 transform transition-transform duration-300"
+                                            :class="openSection ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
                                     </div>
 
-                                    <!-- Bill Details (Accordion Content) -->
-                                    <transition name="accordion">
-                                        <div v-if="activeIndex === index"
-                                            class=" mt-4 dark:bg-gray-800 transition-all duration-200 ">
-                                            <div
-                                                class="bg-pink-50 dark:bg-gray-700  px-6 rounded-lg rounded-b-none  py-3 border-b  border-pink-100 dark:border-gray-600 flex items-center gap-3">
-                                                <DocumentIcon class="text-pink-500 " />
-                                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                                                    Procedimientos</h3>
-                                            </div>
+                                </div>
+                                <Transition
+                                    enter-active-class="transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                                    enter-from-class="max-h-0 opacity-0 -translate-y-3"
+                                    enter-to-class="max-h-[2000px] opacity-100 translate-y-0"
+                                    leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                                    leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
+                                    leave-to-class="max-h-0 opacity-0 -translate-y-2">
+                                    <div v-show="openSection" class="overflow-hidden">
+                                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
                                             <div v-for="details in bill.billdetail" :key="details.id"
-                                                class="grid border dark:border-gray-600 rounded-b border-t-0 p-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4" :class="{
-                                                    'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700': !details.active || !CXC.active
-                                                }">
+                                                class="p-5  dark:hover:bg-gray-900 transition-colors duration-200">
                                                 <div
-                                                    class="flex mt-3 flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
+                                                    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
                                                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
                                                         {{ details.procedure.name }}
                                                     </h4>
 
                                                 </div>
 
-                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Monto</p>
                                                         <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
-                                                            style: 'currency', currency:
-                                                                'DOP'
-                                                        }).format(details.amount || 0) }} </p>
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(details.amount
+                                                            || 0) }}</p>
                                                     </div>
-                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Descuento
                                                         </p>
                                                         <p class="font-medium">{{ details.discount }}%</p>
                                                     </div>
-                                                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                                         <p class="text-sm text-gray-500 dark:text-gray-400">Cantidad</p>
                                                         <p class="font-medium">{{ details.quantity }}</p>
                                                     </div>
                                                 </div>
+
+
+
                                                 <div
-                                                    class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-2 my-4">
-                                                    <p class="font-semibold text-lg">Subtotal: ${{
-                                                        formatNumber(details.total)
-                                                    }}</p>
+                                                    class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
+                                                    <p class="font-semibold text-lg">Subtotal: {{ new
+                                                        Intl.NumberFormat('es-DO',
+                                                            {
+                                                                style:
+                                                                    'currency', currency: 'DOP'
+                                                            }).format(details.total
+                                                                || 0) }}
+                                                    </p>
 
+                                                    <div v-if="bill.active && details.active">
 
+                                                        <DangerButton @click="deleteBudgetDetail(details.id)"
+                                                            class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                                            <DeleteIcon />
+                                                        </DangerButton>
+                                                    </div>
+                                                    <PrimaryButton v-else @click="restoreBudgetDetail(details.id)"
+                                                        class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                                                        <RestoreIcon />
+                                                    </PrimaryButton>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-6 border-t">
+                                            <div
+                                                class=" rounded-b bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-5">
+                                                <div class="flex items-center justify-between">
+
+                                                    <p class="text-xl font-bold text-gray-700 dark:text-gray-200">
+                                                        Total:
+                                                    </p>
+
+                                                    <p
+                                                        class="text-3xl font-extrabold text-green-600 dark:text-green-400">
+                                                        {{ new
+                                                            Intl.NumberFormat('es-DO',
+                                                                {
+                                                                    style:
+                                                                        'currency', currency: 'DOP'
+                                                                }).format(bill.total
+                                                                    || 0) }}
+                                                    </p>
+                                                </div>
+
 
                                             </div>
-                                            <!-- Payment Details -->
-                                                <div class="bg-white  border dark:border-gray-600 rounded-b dark:bg-gray-800 pb-5 rounded-lg mt-4">
-                                                    <div
-                                                        class="bg-pink-50 dark:bg-gray-700  px-6 rounded-lg rounded-b-none  py-3   border-pink-100 dark:border-gray-600 flex items-center gap-3">
-                                                        <CashIcon class="text-pink-500 " />
-                                                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                                                            Pagos</h3>
-                                                    </div>
-                                                    <div class="grid  grid-cols-1 md:grid-cols-1 border-t  dark:border-gray-600 lg:grid-cols-1 gap-4 "
-                                                        v-for="payments in CXC.payment">
-                                                        <div v-if="bill.id == payments.bill_id"
-                                                            class="bg-white mt-3 dark:bg-gray-800 px-3 ">
-                                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                                        Monto Pagado</p>
-                                                                    <p class="font-medium">{{ new
-                                                                        Intl.NumberFormat('es-DO',
-                                                                            {
-                                                                                style: 'currency', currency:
-                                                                                    'DOP'
-                                                                            }).format(payments.amount_paid || 0) }} </p>
-                                                                </div>
-                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                                        Monto Restante
-                                                                    </p>
-                                                                    <p class="font-medium">{{ new
-                                                                        Intl.NumberFormat('es-DO',
-                                                                            {
-                                                                                style: 'currency', currency:
-                                                                                    'DOP'
-                                                                            }).format(payments.total - payments.amount_paid
-                                                                                ||
-                                                                                0) }} </p>
-                                                                </div>
-                                                                <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                                                        Creado el :</p>
-                                                                    <p class="font-medium">{{
-                                                                        formatDate(payments.created_at) }}</p>
-                                                                </div>
-                                                            </div>
-
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
                                         </div>
-                                    </transition>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
 
-                                <div class="flex items-center gap-2 ml-auto">
 
-                                    <Link v-if="CXC.active"
-                                        :href="route('bills.create', { patient_id: CXC.patient.id })"
-                                        class="p-2 flex gap-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
-                                        title="Ver detalles">
-                                    Crear Pago <AddIcon class="w-4 h-4 mt-1"></AddIcon>
-                                    </Link>
-                                </div>
+
+                                    </div>
+                                </Transition>
                             </div>
 
-                            <!-- Empty State -->
-                            <div v-if="CXC.bills.length === 0" class="text-center py-8">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <p class="mt-4 text-gray-500 dark:text-gray-400">No hay Facturas registradas para este
-                                    paciente.</p>
-                            </div>
                         </div>
+
+
                     </div>
+
+
                 </div>
+
 
             </div>
 
@@ -331,11 +237,14 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import CashIcon from '@/Components/Icons/CashIcon.vue';
 import EyeIcon from '@/Components/Icons/EyeIcon.vue';
+import AccessGate from '@/Components/AccessGate.vue';
+import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
+import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 
 
 export default {
     props: {
-        CXC: Object
+        bill: Object
     },
     components: {
         AuthenticatedLayout,
@@ -361,7 +270,10 @@ export default {
         EyeIcon,
         Head,
         AddIcon,
-        DocumentIcon
+        DocumentIcon,
+        AccessGate,
+        BuildingIcon,
+        CalendarIcon,
     },
 
 
@@ -369,13 +281,14 @@ export default {
         return {
             crumbs: [
                 { icon: markRaw(CashIcon), label: 'Facturas', to: route('bills.index') },
-                { icon: markRaw(UserIcon), label: this.CXC.patient.first_name + ' ' + this.CXC.patient.last_name, to: route('patients.show', this.CXC.patient) },
-                { icon: markRaw(DocumentIcon), label: this.CXC.id },
+                { icon: markRaw(UserIcon), label: this.bill.patient.first_name + ' ' + this.bill.patient.last_name, to: route('patients.show', this.bill.patient) },
+                { icon: markRaw(DocumentIcon), label: this.bill.id },
 
             ],
             activeIndex: null,
             showModal: ref(false),
             selectedBudget: [],
+            openSection: ref(true),
 
             form_payments: [],
             previous_amount_paid: {}
@@ -383,6 +296,9 @@ export default {
         }
     },
     methods: {
+         toggleSection() {
+            this.openSection = !this.openSection;
+        },
         SumPayments(payments) {
             let sum;
             console.log(payments)
