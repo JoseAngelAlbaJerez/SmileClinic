@@ -357,7 +357,7 @@
                                                 <div class="relative">
                                                     <span
                                                         class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">$</span>
-                                                    <input v-model="form_details[index].materials_amount" type="number"
+                                                    <input v-model.number="form_details[index].materials_amount" type="number"
                                                         step="0.01" min="0" @input="calcTotal(index)" class="block w-full pl-8 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-500 rounded-md
              focus:outline-none focus:ring-1 focus:ring-pink-500 dark:bg-gray-700 dark:text-white"
                                                         placeholder="0.00" />
@@ -405,7 +405,7 @@
                                             <div class="space-y-1">
                                                 <label
                                                     class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                                                    Abonado
+                                                    Inicial
                                                     <span class="text-red-500">*</span>
                                                 </label>
                                                 <div class="relative">
@@ -712,7 +712,7 @@ export default {
                         quantity: detail.quantity,
                         initial: detail.initial,
                         amount_of_payments: detail.amount_of_payments,
-                        materials_amount: 0,
+                        materials_amount: detail.amount * 0.2,
 
                     });
                     this.selectedProcedures.push({ ...found });
@@ -737,6 +737,7 @@ export default {
                     quantity: 1,
                     initial: 0,
                     amount_of_payments: 0,
+                    materials_amount: parseFloat((found.cost * 0.2).toFixed(2)),
                 });
                 this.selectedProcedures.push({ ...found });
             }
@@ -848,7 +849,7 @@ export default {
                         this.form.errors = error.response.data.errors;
                         this.form_detail.errors = error.response.data.errors;
                     } else {
-                        console.error('Error al guardar el presupuesto:', error);
+                        console.error('Error al guardar la factura:', error);
                     }
                 }).finally(() => {
                     this.form.processing = false;
