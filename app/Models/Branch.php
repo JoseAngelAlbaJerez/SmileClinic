@@ -81,6 +81,10 @@ class Branch extends Model
     {
         return $this->hasMany(Prescription::class, 'branch_id');
     }
+      public function medicalHistories()
+    {
+        return $this->hasMany(MedicalHistory::class, 'branch_id');
+    }
 
     public function prescriptionDetails()
     {

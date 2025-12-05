@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Branch;
 use App\Models\Patient;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,20 +18,21 @@ class PrescriptionSeeder extends Seeder
     {
         foreach (range(1, 100) as $i) {
 
-
-            $patient = User::role('patient')->inRandomOrder()
-                ->first();
-            $doctor = User::role('doctor')
-                ->inRandomOrder()
-                ->first();
-
-            DB::table('prescriptions')->insert([
+            $patient = User::role('patient')->inRandomOrder()->first();
+            $doctor = User::role('doctor')->inRandomOrder()->first();
+            $branch = Branch::inRandomOrder()->first();
+            $prescription = \App\Models\Prescription::create([
                 'doctor_id' => $doctor->id,
                 'patient_id' => $patient->id,
-                'active' => fake()->boolean(),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'active' => $branch->id,
                 'branch_id' => fake()->numberBetween(1, 2),
+            ]);
+
+            $prescription->prescriptionsDetails()->create([
+                'description'   => fake()->sentence(6),
+                'drug_id'       => fake()->numberBetween(1, 50),
+                'branch_id'     => $prescription->branch_id,
+                'active'        => true,
             ]);
         }
     }

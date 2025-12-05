@@ -66,18 +66,18 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $patient = User::factory()->create([
+       User::factory()->create([
             'first_name' => 'Juan',
         ]);
 
 
 
-        $patient =  User::factory()->create([
+        User::factory()->create([
             'first_name' => 'Francisco',
         ]);
 
 
-        $patient =  User::factory()->create([
+        User::factory()->create([
             'first_name' => 'Paloma',
         ]);
 
@@ -91,9 +91,9 @@ class DatabaseSeeder extends Seeder
         $this->call(OdontographSeeder::class);
         $this->call(ProcedureSeeder::class);
         $this->call(PrescriptionSeeder::class);
-        $this->call(PrescriptionDetailSeeder::class);
         $this->call(DrugSeeder::class);
         $this->call(BudgetSeeder::class);
+        $this->call(BillSeeder::class);
         $this->call(EventSeeder::class);
     }
 }

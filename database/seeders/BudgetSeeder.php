@@ -7,6 +7,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Branch;
+use App\Models\Procedure;
 
 class BudgetSeeder extends Seeder
 {
@@ -18,14 +20,15 @@ class BudgetSeeder extends Seeder
 
         foreach (range(1, 100) as $i) {
 
-            $branchId = fake()->numberBetween(1, 2);
-
+            $branch = Branch::inRandomOrder()->first();
             $patient = User::role('patient')->inRandomOrder()
                 ->first();
+            $procedure = Procedure::inRandomOrder()->first()->id;
+            $doctor = User::role('doctor')->inRandomOrder()->first()->id;
 
-            DB::table('budgets')->insert([
+            $budget = \App\Models\Budget::create([
                 'type' => fake()->randomElement(['Credito', 'Contado']),
-                'doctor_id' => User::role('doctor')->inRandomOrder()->first()->id,
+                'doctor_id' => $doctor,
                 'patient_id' => $patient?->id,
                 'total' => fake()->numberBetween(1000, 50000),
                 'emission_date' => now(),
@@ -34,7 +37,19 @@ class BudgetSeeder extends Seeder
                 'active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'branch_id' => $branchId,
+                'branch_id' => $branch->id,
+            ]);
+            $budget->budgetdetail()->create([
+                "procedure_id" => $procedure,
+                "amount" => fake()->numberBetween(1000, 50000),
+                "initial" => fake()->numberBetween(1000, 10000),
+                "amount_of_payments" => fake()->numberBetween(1, 5),
+                "total" => $budget->total,
+                "treatment" => fake()->text(),
+                'branch_id' => $budget->branch_id,
+                "discount" => fake()->numberBetween(1, 50),
+                "quantity" =>fake()->numberBetween(1, 3),
+                "active" => true
             ]);
         }
     }

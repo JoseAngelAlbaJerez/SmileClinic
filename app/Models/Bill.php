@@ -18,9 +18,7 @@ class Bill extends Model
         'patient_id',
         'c_x_c_id',
         'total',
-        'amount_doctor',
         'currency',
-        'materials_amount'
     ];
     protected static function booted()
     {

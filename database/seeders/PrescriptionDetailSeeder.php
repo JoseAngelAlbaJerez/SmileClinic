@@ -12,17 +12,6 @@ class PrescriptionDetailSeeder extends Seeder
      */
     public function run(): void
     {
-          foreach (range(1, 100) as $i) {
 
-            DB::table('prescription_details')->insert([
-                'description' => fake()->sentence(),
-                'prescription_id' => fake()->numberBetween(1, 10),
-                'drug_id' => fake()->numberBetween(1, 100),
-                'active' => fake()->boolean(),
-                'created_at' => now(),
-                'updated_at' => now(),
-                'branch_id' => fake()->numberBetween(1, 2),
-            ]);
-        }
     }
 }
