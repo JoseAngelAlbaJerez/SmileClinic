@@ -48,12 +48,17 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
+                                        <th scope="col" class="px-4 py-3 ">
+                                            Avatar
+
+                                        </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
                                             Nombre
                                             <span v-if="form.sortField === 'first_name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
+
                                         <th scope="col" class="px-4 py-3 cursor-pointer hidden sm:table-cell"
                                             @click="sort('date_of_birth')">
                                             Fecha Nac.
@@ -95,14 +100,29 @@
                                 <tbody>
                                     <tr v-for="user in users.data" :key="user.id">
                                         <td class="p-4 hidden md:table-cell">{{ user.id }} </td>
+                                        <td class="p-4">
+                                            <img :src="user.avatar ? `/storage/${user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                                alt="user" class="w-16 h-16 object-cover rounded-full">
+                                        </td>
+
                                         <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
                                         <td class="p-4 hidden sm:table-cell">{{ formatDate(user.date_of_birth) }}</td>
                                         <td class="p-4">
-                                            <span
-                                                class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-2 rounded-xl">
-                                                <UserIcon class="w-4 h-4" />
-                                                {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
-                                            </span>
+                                            <div class="flex flex-wrap gap-1">
+                                                <span v-for="role in user.roles" :key="role.id"
+                                                    class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-2 rounded-xl">
+                                                    <UserIcon class="w-4 h-4" />
+                                                    {{ role.name }}
+                                                </span>
+
+                                                <span v-if="user.roles.length === 0"
+                                                    class="inline-flex items-center gap-1 bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded-xl">
+                                                    <UserIcon class="w-4 h-4" />
+                                                    Sin rol
+                                                </span>
+                                            </div>
+
+
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
                                         <td class="p-4">

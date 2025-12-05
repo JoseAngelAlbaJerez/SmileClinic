@@ -42,10 +42,17 @@ class UserController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = User::query()->select('users.*')->with('roles', 'branches')
-            ->whereDoesntHave('roles', function ($q) {
-                $q->whereIn('name', ['patient', 'admin']);
+        $query = User::whereHas('roles')
+            ->with('roles', 'branches')
+            ->where(function ($q) {
+                $q->whereHas('roles', function ($q2) {
+                    $q2->whereNotIn('name', ['patient', 'admin']);
+                })
+                    ->orWhereHas('roles', function ($q2) {
+                        $q2->whereIn('name', ['patient', 'admin']);
+                    }, '>', 1);
             });
+
 
         if ($showDeleted == true) {
             $query->where('active', 1);
@@ -164,55 +171,34 @@ class UserController extends Controller implements HasMiddleware
     {
         $this->authorize('update', User::class);
 
-        if ($request->has('description')) {
-            $user->notes()->updateOrCreate(
-                [
-                    'user_id'   => $user->id,
-                    'branch_id' => Auth::user()->active_branch_id,
-                ],
-                [
-                    'description' => $request->description,
-                ]
-            );
 
-            return redirect()->back()->with('toast', 'Nota registrada correctamente.');
-        }
 
         if ($request->has('active')) {
             $this->restore($user);
-            return redirect()->back()->with('toast', 'Usuario restaurado correctamente.');
+            return back()->with('toast', 'Usuario restaurado correctamente.');
         }
+
+        $validated = $request->validate([
+            'first_name'     => 'required|string|max:255',
+            'last_name'      => 'required|string|max:255',
+            'email'          => 'required|email|unique:users,email,' . $user->id,
+            'phone_number'   => 'nullable|string|max:20',
+            'position'       => 'nullable|string|max:255',
+            'specialty'      => 'nullable|string|max:255',
+            'address'        => 'nullable|string|max:255',
+            'avatar'         => 'nullable|image|max:2048',
+        ]);
+
+        $user->update($validated);
 
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
-            $user->save();
+            $user->update(['avatar' => $path]);
         }
-        if ($request->has('address')) {
-            $user->address()->updateOrCreate(
-                ['user_id' => $user->id],
-                $request->input('address')
-            );
-        }
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone_number' => 'nullable|string|max:20',
-            'position' => 'nullable|string|max:255',
-            'specialty' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|max:2048',
-            'address.country' => 'nullable|string|max:255',
-            'address.city' => 'nullable|string|max:255',
-            'address.state' => 'nullable|string|max:255',
-            'address.street' => 'nullable|string|max:255',
-            'address.postal_code' => 'nullable|string|max:20',
-        ]);
 
-        $user->update($request->except('avatar', 'address'));
-
-        return redirect()->back()->with('success', 'Usuario actualizado correctamente');
+        return back()->with('success', 'Usuario actualizado correctamente');
     }
+
     private function restore(User $user)
     {
         $user->active = 1;
