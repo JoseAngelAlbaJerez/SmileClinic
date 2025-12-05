@@ -170,13 +170,24 @@ class UserController extends Controller implements HasMiddleware
     public function update(User $user, Request $request)
     {
         $this->authorize('update', User::class);
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->update(['avatar' => $path]);
+            return back()->with('toast', 'Avatar actualizado correctamente.');
 
-
+        }
+        if ($request->filled('branches')) {
+            $branches = explode(',', $request->branches);
+            $user->branches()->sync($branches);
+            return back()->with('toast', 'Sucursales actualizadas correctamente.');
+        }
 
         if ($request->has('active')) {
             $this->restore($user);
             return back()->with('toast', 'Usuario restaurado correctamente.');
         }
+
+
 
         $validated = $request->validate([
             'first_name'     => 'required|string|max:255',
@@ -186,15 +197,10 @@ class UserController extends Controller implements HasMiddleware
             'position'       => 'nullable|string|max:255',
             'specialty'      => 'nullable|string|max:255',
             'address'        => 'nullable|string|max:255',
-            'avatar'         => 'nullable|image|max:2048',
         ]);
 
         $user->update($validated);
 
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->update(['avatar' => $path]);
-        }
 
         return back()->with('success', 'Usuario actualizado correctamente');
     }
@@ -218,9 +224,13 @@ class UserController extends Controller implements HasMiddleware
     public function show(User $user)
     {
         $this->authorize('view', User::class);
-        $user = User::with(['roles.permissions'])->findOrFail($user->id);
+        $branches = Branch::withoutGlobalScopes()->paginate(10);
+        $roles = Role::withoutGlobalScopes()->paginate(10);
+        $user = User::with(['roles.permissions', 'branches'])->findOrFail($user->id);
         return Inertia::render('Users/Show', [
-            'user' => $user
+            'user' => $user,
+            'branches' => $branches,
+            'roles' => $roles,
         ]);
     }
 }
