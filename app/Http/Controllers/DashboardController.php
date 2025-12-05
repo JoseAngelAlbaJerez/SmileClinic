@@ -70,22 +70,57 @@ class DashboardController extends Controller
                     ->values()
                     ->take(5);
 
-                $days = [];
-                $dayTotals = [];
-                for ($i = 6; $i >= 0; $i--) {
-                    $d = $now->copy()->subDays($i);
-                    $days[] = $d->format('Y-m-d');
-                    $dayTotals[$d->format('Y-m-d')] = 0.0;
-                }
-                $tendencyQueries = Bill::withoutGlobalScopes()->where('type', 'Contado')
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$now->copy()->subDays(6)->toDateString(), $now->toDateString()])
-                    ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total) as total'))
-                    ->groupBy(DB::raw('DATE(created_at)'))
+                $tendencyMonthNames = [
+                    "01" => "Enero",
+                    "02" => "Febrero",
+                    "03" => "Marzo",
+                    "04" => "Abril",
+                    "05" => "Mayo",
+                    "06" => "Junio",
+                    "07" => "Julio",
+                    "08" => "Agosto",
+                    "09" => "Septiembre",
+                    "10" => "Octubre",
+                    "11" => "Noviembre",
+                    "12" => "Diciembre",
+                ];
+
+                $tendencyQueries = Bill::withoutGlobalScopes()
+                    ->where('type', 'Contado')
+                    ->whereBetween('created_at', [
+                        $now->copy()->startOfYear(),
+                        $now->copy()->endOfYear()
+                    ])
+                    ->selectRaw('DATE_FORMAT(created_at, "%m") as month, SUM(total) as total')
+                    ->groupByRaw('DATE_FORMAT(created_at, "%m")')
+                    ->orderByRaw('DATE_FORMAT(created_at, "%m")')
                     ->get();
-                foreach ($tendencyQueries as $r) {
-                    $dayTotals[$r->date] = (float) $r->total;
+
+                $tendencyMonthTotals = [];
+                for ($m = 1; $m <= 12; $m++) {
+                    $key = str_pad($m, 2, '0', STR_PAD_LEFT);
+                    $tendencyMonthTotals[$key] = 0;
                 }
-                $tendencySeries = array_values($dayTotals);
+
+                foreach ($tendencyQueries as $r) {
+                    $tendencyMonthTotals[$r->month] = (float) $r->total;
+                }
+
+                $tendencySeries = [];
+                foreach ($tendencyMonthTotals as $num => $total) {
+                    $tendencySeries[] = [
+                        $tendencyMonthNames[$num],
+                        $total
+                    ];
+                }
+                $categories = [];
+                $series = [];
+
+                foreach ($tendencyMonthTotals as $num => $total) {
+                    $categories[] = $tendencyMonthNames[$num];
+                    $series[] = $total;
+                }
+
 
                 $procedures = DB::table('bill_details')
                     ->join('bills', 'bill_details.bill_id', 'bills.id')
@@ -159,8 +194,8 @@ class DashboardController extends Controller
                         ],
                         'ranking' => $ranking,
                         'tendencia' => [
-                            'categories' => $days,
-                            'series' => $tendencySeries,
+                            'categories' => $categories,
+                            'series' => $series,
                         ],
                         'procedimientos' => [
                             'labels' => $proceduresLabels,
