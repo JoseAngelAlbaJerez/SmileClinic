@@ -191,7 +191,7 @@
                                     }}</p>
                             </div>
 
-                            <!-- Branch Selection -->
+                            <!-- Role Selection -->
                             <div class="space-y-1">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     Roles  <span class="text-red-500">*</span>

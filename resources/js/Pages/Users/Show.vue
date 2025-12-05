@@ -73,7 +73,7 @@
                                     <div class="flex-1 text-center md:text-left">
                                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white/90 mb-2">{{
                                             user.first_name
-                                            }} {{
+                                        }} {{
                                                 user.last_name }}</h2>
 
                                         <div class="flex flex-col items-center gap-2 md:flex-row md:gap-4">
@@ -165,7 +165,7 @@
                                                     Electrónico</p>
                                                 <p class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">{{
                                                     user.email
-                                                }}
+                                                    }}
                                                 </p>
                                             </div>
 
@@ -190,6 +190,7 @@
                                                         {{
                                                             user.address || 'No especificado' }}</p>
                                                 </div>
+
                                             </div>
 
                                             <div>
@@ -200,6 +201,53 @@
                                                     user.specialty
                                                     || 'No especificada' }}</p>
                                             </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div>
+                                                    <p
+                                                        class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                                        Teléfono</p>
+                                                    <p
+                                                        class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">
+                                                        {{
+                                                            user.phone_number ||
+                                                            'No proporcionado' }}</p>
+                                                </div>
+
+                                                <div>
+                                                    <div class="flex">
+                                                        <p
+                                                            class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                                            Sucursales Disponibles</p><button
+                                                            @click="openBranchModal('personal')"
+                                                            class="ml-1  text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                                </path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <div v-if="user.branches" v-for="branch in user.branches"
+                                                        :key="branch.id">
+                                                        <li
+                                                            class="text-sm ml-2 font-medium text-gray-800 dark:text-white/90 mt-1">
+                                                            {{
+                                                                branch.name }}</li>
+                                                    </div>
+                                                    <div v-else>
+                                                        <p
+                                                            class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">
+                                                            {{
+                                                                'No especificado' }}</p>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -250,25 +298,25 @@
                                     <div class="space-y-6">
                                         <!-- Profile Edit Form -->
                                         <div v-if="activeModal === 'profile'" class="space-y-6">
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
-                                                    Avatar
-                                                </label>
-                                                <div class="flex items-center space-x-4">
-                                                    <div
-                                                        class="w-16 h-16 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
-                                                        <img :src="form.avatar || 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
-                                                            alt="Avatar" class="w-full h-full object-cover">
-                                                    </div>
-                                                    <input type="file" @change="handleAvatarChange" class="hidden"
-                                                        ref="avatarInput" accept="image/*">
-                                                    <button type="button" @click="$refs.avatarInput.click()"
-                                                        class="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                                        Cambiar Imagen
-                                                    </button>
+
+
+                                            <div class="flex flex-col justify-center items-center space-y-4">
+                                                <div
+                                                    class="w-40 h-40 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
+                                                    <img :src="form.avatar ? `/storage/${form.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                                        alt="Avatar" class="w-full h-full object-cover">
                                                 </div>
+
+                                                <input type="file" @change="handleAvatarChange" class="hidden"
+                                                    ref="avatarInput" accept="image/*">
+
+                                                <button type="button" @click="$refs.avatarInput.click()"
+                                                    class="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                                    Cambiar Imagen
+                                                </button>
                                             </div>
+
+
 
 
                                         </div>
@@ -321,6 +369,7 @@
                                                 <input v-model="form.specialty" type="text"
                                                     class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400">
                                             </div>
+
                                         </div>
 
 
@@ -337,6 +386,35 @@
                                         </button>
                                     </div>
                                 </form>
+                            </div>
+                        </Modal>
+                        <Modal :show="showBranchModal" @close="showBranchModal = false" maxWidth="2xl">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                        <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                                        Seleccionar Sucursales
+                                    </h3>
+                                    <button @click="showBranchModal = false" class="text-gray-400 hover:text-gray-500">
+                                        <XIcon class="h-6 w-6" />
+                                    </button>
+                                </div>
+                                <BranchSelector :branches="branches" @selected="setBranches"
+                                    @confirm="showBranchModal = false, saveChanges()" />
+                            </div>
+                        </Modal>
+                        <Modal :show="showRoleModal" @close="showRoleModal = false" maxWidth="2xl">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                                        <UserIcon class="h-6 w-6 inline-block mr-2 text-pink-500" />
+                                        Seleccionar Roles
+                                    </h3>
+                                    <button @click="showRoleModal = false" class="text-gray-400 hover:text-gray-500">
+                                        <XIcon class="h-6 w-6" />
+                                    </button>
+                                </div>
+                                <RoleSelector :roles='roles' @selected="setRoles" @confirm="showRoleModal = false" />
                             </div>
                         </Modal>
                     </div>
@@ -363,6 +441,9 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import RestoreIcon from '@/Components/Icons/RestoreIcon.vue';
+import RoleSelector from '@/Components/RoleSelector.vue';
+import BranchSelector from '@/Components/BranchSelector.vue';
+import XIcon from '@/Components/Icons/XIcon.vue';
 const toast = useToast();
 
 const props = defineProps({
@@ -370,12 +451,23 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    branches: {
+        type: Object,
+        required: true
+    },
+    roles: {
+        type: Object,
+        required: true
+    },
 });
 const crumbs = [
     { icon: markRaw(UserIcon), label: 'Usuarios', to: route('users.index') },
-    { label: props.user.first_name + ' ' + props.user.first_name }
+    { label: props.user.first_name + ' ' + props.user.last_name }
 ];
 const showModal = ref(false);
+const showBranchModal = ref(false);
+const showRoleModal = ref(false);
+
 const activeModal = ref('');
 const isLoading = ref(false);
 const avatarFile = ref(null);
@@ -388,8 +480,11 @@ const form = ref({
     position: props.user.position,
     specialty: props.user.specialty,
     avatar: props.user.avatar,
-    address: props.user.address
+    address: props.user.address,
+    roles: props.user.roles,
+    branches: props.user.branches
 });
+const selectedBranchObjects = [];
 
 const form_notes = ref({
     description: props.user.notes?.description,
@@ -412,11 +507,24 @@ const formatDate = (date) => {
         minute: '2-digit'
     });
 };
-
+const setBranches = (data) => {
+    form.value.branches = data.ids;
+    selectedBranchObjects.value = data.objects;
+};
+const openBranchModal = () => {
+    showBranchModal.value = true;
+};
+const setRoles = (roleData) => {
+    this.form.roles = roleData.ids
+    this.selectedRoleObjects = roleData.objects
+};
+const openRoleModal = () => {
+    showRoleModal = true;
+};
 
 const modalTitle = computed(() => {
     switch (activeModal.value) {
-        case 'profile': return 'Editar Perfil';
+        case 'profile': return 'Editar Avatar';
         case 'personal': return 'Editar Información Personal';
         default: return 'Editar';
     }
@@ -453,6 +561,8 @@ const closeModal = () => {
         specialty: props.user.specialty,
         avatar: props.user.avatar,
         address: props.user.address,
+        roles: props.user.roles,
+        branches: props.user.branches
     };
     avatarFile.value = null;
 };
@@ -482,12 +592,11 @@ const handleAvatarChange = (event) => {
 
 const saveChanges = async () => {
     isLoading.value = true;
-
     try {
         const formData = new FormData();
 
         Object.keys(form.value).forEach(key => {
-            if ( key !== 'avatar') {
+            if (key !== 'avatar' || key !== 'branches') {
                 formData.append(key, form.value[key]);
             }
         });

@@ -34,7 +34,7 @@
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
                         <div class="overflow-x-auto w-full">
                             <table class="min-w-[600px] w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
@@ -100,10 +100,13 @@
                                 <tbody>
                                     <tr v-for="user in users.data" :key="user.id">
                                         <td class="p-4 hidden md:table-cell">{{ user.id }} </td>
-                                        <td class="p-4">
-                                            <img :src="user.avatar ? `/storage/${user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
-                                                alt="user" class="w-16 h-16 object-cover rounded-full">
+                                        <td class="p-4 min-w-[80px]">
+                                            <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                                                <img :src="user.avatar ? `/storage/${user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                                    alt="user" class="w-full h-full object-cover">
+                                            </div>
                                         </td>
+
 
                                         <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
                                         <td class="p-4 hidden sm:table-cell">{{ formatDate(user.date_of_birth) }}</td>
@@ -126,9 +129,15 @@
                                         </td>
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(user.created_at) }}</td>
                                         <td class="p-4">
-                                            <l v-for="branch in user.branches" :key="branch.id">
-                                                <li>{{ branch.name }}</li>
-                                            </l>
+                                            <span v-for="branch in user.branches" :key="branch.id"
+                                                class="inline-block bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded-lg ml-1">
+                                                {{ branch.name }}
+                                            </span>
+
+                                            <span v-if="user.branches.length === 0"
+                                                class="inline-block bg-gray-200 text-gray-700 px-2 py-1 text-xs rounded-lg ml-1">
+                                                Ninguna
+                                            </span>
                                         </td>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
@@ -153,6 +162,99 @@
                         </div>
                         <Pagination :pagination="users" :filters="form" />
                     </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="user in users.data" :key="user.id"
+                            class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
+
+                            <!-- Header -->
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </h3>
+
+                                <Link :href="route('users.show', user.id)" class="text-pink-500 text-sm">
+                                Abrir
+                                </Link>
+                            </div>
+
+                            <!-- Avatar -->
+                            <div class="flex justify-start items-center mb-3">
+                                <div
+                                    class="w-16 h-16 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
+                                    <img :src="user.avatar ? `/storage/${user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                        alt="Avatar" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+
+                            <!-- Info Grid -->
+                            <div class="grid grid-cols-2 gap-y-2 text-sm">
+
+                                <!-- ID -->
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">ID:</span> #{{ user.id }}
+                                </p>
+
+                                <!-- Fecha nacimiento -->
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">Nacimiento:</span>
+                                    {{ formatDate(user.date_of_birth) }}
+                                </p>
+
+                                <!-- Roles -->
+                                <p class="col-span-2 text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">Rol(es):</span>
+                                    <span v-for="role in user.roles" :key="role.id" class="inline-flex items-center gap-1 bg-pink-200 text-pink-800
+                      text-xs font-semibold px-2 py-1 rounded-lg ml-1">
+                                        {{ role.name }}
+                                    </span>
+
+                                    <span v-if="user.roles.length === 0"
+                                        class="inline-flex items-center bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-lg ml-1">
+                                        Sin rol
+                                    </span>
+                                </p>
+
+                                <!-- Sucursales -->
+                                <p class="col-span-2 text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">Sucursales:</span>
+                                    <span v-for="branch in user.branches" :key="branch.id"
+                                        class="inline-block bg-blue-100 text-blue-800 px-2 py-1 text-xs rounded-lg ml-1">
+                                        {{ branch.name }}
+                                    </span>
+
+                                    <span v-if="user.branches.length === 0"
+                                        class="inline-block bg-gray-200 text-gray-700 px-2 py-1 text-xs rounded-lg ml-1">
+                                        Ninguna
+                                    </span>
+                                </p>
+
+                                <!-- Creado -->
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">Creado:</span>
+                                    {{ formatDate(user.created_at) }}
+                                </p>
+
+                                <!-- Estado -->
+                                <p class="text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(user.active)">
+                                        <HandThumbDown v-if="user.active == false" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <!-- Empty State Mobile -->
+                        <div v-if="!users.data.length" class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
+                        </div>
+
+                        <Pagination :pagination="users" :filters="form" />
+                    </div>
+
                 </div>
             </div>
         </template>
