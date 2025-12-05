@@ -72,9 +72,9 @@
                                 <h6 class="text-xl leading-8 font-semibold text-black dark:text-white mb-1">{{
                                     event.title }}</h6>
                                 <p class="text-base font-normal text-gray-600 dark:text-gray-300">
-                                    <span v-if="event.patient">Paciente: {{ event.patient.first_name }} {{
+                                    <span v-if="event.patient"><UserIcon class="w-4 h-4 inline-block"/> {{ event.patient.first_name }} {{
                                         event.patient.last_name }}</span>
-                                    <span v-if="event.doctor"> | Doctor: {{ event.doctor.first_name }} </span>
+                                    <span v-if="event.doctor"> | <UserIcon class="w-4 h-4 inline-block"/> {{ event.doctor.first_name }} </span>
                                     <AccessGate :role="['admin']" class="inline-flex">
                                     <span v-if="event.branch" class="inline-flex items-center ml-1 gap-1">
                                          | <BuildingIcon class="w-4 h-4 inline-block" />
