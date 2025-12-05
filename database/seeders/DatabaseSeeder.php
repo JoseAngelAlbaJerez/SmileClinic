@@ -87,7 +87,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(medicalHistorySeeder::class);
-        $this->call(PatientSeeder::class);
         $this->call(OdontographSeeder::class);
         $this->call(ProcedureSeeder::class);
         $this->call(PrescriptionSeeder::class);
