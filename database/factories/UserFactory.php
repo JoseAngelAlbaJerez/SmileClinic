@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'DNI' => fake()->numerify('#########'),
-            'specialty' => fake()->randomElement(['Endodontist','Orthodontist','Periodontist','Prosthodontist','Oral and Maxillofacial Surgeon','Oral and Maxillofacial Radiologist','Dentist Anesthesiologists','Oral and Maxillofacial Pathologist','Pediatric Dentist or Pedodontist'] ),
+            'specialty' => fake()->randomElement(['Endodoncista','Ortodoncista','periodoncista ','prostodoncista','Cirujano Oral y Maxillofacial ','Radiólogo Oral y Maxillofacial','Dentista Anestesiólogo ','Patóloga oral y maxilofacial','Dentista pediátrica o pedodoncista'] ),
             'phone_number' => fake()->phoneNumber(),
             'date_of_birth' => fake()->date('Y-m-d', '-18 years'),
             'address' => fake()->address(),
