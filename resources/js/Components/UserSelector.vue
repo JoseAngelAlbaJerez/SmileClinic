@@ -1,23 +1,31 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, computed } from 'vue';
 import AccessGate from './AccessGate.vue';
 import AddIcon from './Icons/AddIcon.vue';
-import UserIcon from './Icons/UserIcon.vue';
-import { Link } from '@inertiajs/vue3';
-import axios from "axios";
+import { Link, router } from '@inertiajs/vue3';
 
 const props = defineProps({
-    message: String,
-    users: Object,
-    filters: Object,
+    users: Object, // doctores paginados
 });
 
-const emit = defineEmits(['selected']);
+const emit = defineEmits(['selected']); // emitir doctor seleccionado
 
-const users = ref(props.users);
-const searchTerm = ref(props.filters?.name ?? '');
+// Estado
+const searchTerm = ref('');
 const selectedUserId = ref(null);
 
+// Filtro frontend por nombre
+const filtered = computed(() => {
+    if (!searchTerm.value) return props.users.data;
+
+    return props.users.data.filter(u =>
+        (u.first_name + " " + u.last_name)
+            .toLowerCase()
+            .includes(searchTerm.value.toLowerCase())
+    );
+});
+
+// Seleccionar doctor
 const selectUser = (user) => {
     if (selectedUserId.value === user.id) {
         selectedUserId.value = null;
@@ -28,100 +36,85 @@ const selectUser = (user) => {
     }
 };
 
-const fetchUsers = async (pageUrl = null) => {
-    try {
-        const url = pageUrl || route('users.filter');
-        const response = await axios.get(url, {
-            params: { filters: { name: searchTerm.value } },
+// Navegar páginas del backend
+const goTo = (url) => {
+    if (url) {
+        router.visit(url, {
+            preserveState: true,
+            preserveScroll: true
         });
-        users.value = response.data.users;
-    } catch (error) {
-        console.error(error);
     }
 };
-
-// Resetear a página 1 cuando cambie búsqueda
-watch(searchTerm, () => {
-    fetchUsers(route('users.filter'));
-});
 </script>
 
 <template>
     <div class="my-4 mx-4 lg:mx-10">
-        <!-- Barra de búsqueda -->
-        <div class="flex justify-between gap-4">
-            <input v-model="searchTerm" type="text" placeholder="Buscar usuario por nombre..."
-                class="mb-4 w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:text-white" />
 
-            <AccessGate role="admin">
+        <!-- Búsqueda -->
+        <div class="flex justify-between gap-4">
+            <input
+                v-model="searchTerm"
+                type="text"
+                placeholder="Buscar doctor..."
+                class="mb-4 w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:text-white"
+            />
+
+            <!-- Botón agregar doctores, si aplica -->
+            <AccessGate :role="['admin']">
                 <Link :href="route('users.create')" as="button"
-                    class="flex justify-center mb-3 rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 sm:px-4">
+                    class="flex justify-center mb-3 rounded-lg bg-pink-500 px-2 py-2 text-sm text-white shadow-sm hover:bg-pink-600 sm:px-4">
                     <AddIcon class="size-6" />
                 </Link>
             </AccessGate>
         </div>
 
         <!-- Tabla -->
-        <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg">
+        <div class="relative overflow-x-auto border rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
+                <thead class="text-xs bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
                     <tr>
                         <th class="px-4 py-3 hidden sm:table-cell">#</th>
                         <th class="px-6 py-3">Nombre</th>
-                        <th class="px-6 py-3">Rol</th>
-                        <th class="px-6 py-3">Especialidad</th>
-
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr v-for="user in users.data" :key="user.id" class="cursor-pointer" :class="{
-                        'bg-pink-500 text-white': selectedUserId === user.id,
-                        'hover:bg-gray-200 dark:hover:bg-gray-700': selectedUserId !== user.id
-                    }" @click="selectUser(user)">
+                    <tr v-for="user in filtered" :key="user.id"
+                        class="cursor-pointer"
+                        :class="{
+                            'bg-pink-500 text-white': selectedUserId === user.id,
+                            'hover:bg-gray-200 dark:hover:bg-gray-800': selectedUserId !== user.id
+                        }"
+                        @click="selectUser(user)"
+                    >
                         <td class="p-4 hidden sm:table-cell">{{ user.id }}</td>
                         <td class="p-4">{{ user.first_name }} {{ user.last_name }}</td>
-                        <td class="p-4">
-                            <span class="inline-flex items-center gap-1 bg-pink-200 text-pink-800 text-xs font-semibold px-3 py-1 rounded-xl">
-                                <UserIcon class="w-4 h-4" />
-                                {{ user.roles.length > 0 ? user.roles[0].name : 'Sin rol' }}
-                            </span>
-                        </td>
-                        <td class="p-4">{{ user.specialty }} </td>
                     </tr>
                 </tbody>
             </table>
 
-            <div v-if="!users.data.length" class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+            <!-- Sin resultados -->
+            <div v-if="!filtered.length" class="text-center py-4">
                 No hay registros disponibles.
-            </div>
-
-            <!-- Paginación LOCAL -->
-            <div v-if="users.last_page > 1" class="flex justify-center items-center gap-2 py-3">
-                <button
-                    :disabled="!users.prev_page_url"
-                    @click="fetchUsers(users.prev_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Anterior
-                </button>
-
-                <span class="text-sm text-gray-600 dark:text-gray-300">
-                    Página {{ users.current_page }} de {{ users.last_page }}
-                </span>
-
-                <button
-                    :disabled="!users.next_page_url"
-                    @click="fetchUsers(users.next_page_url)"
-                    class="px-3 py-1 border rounded disabled:opacity-50"
-                >
-                    Siguiente
-                </button>
             </div>
         </div>
 
-        <!-- Indicador -->
-        <h2 v-if="selectedUserId" class="text-sm text-green-500 mt-2">
-            Usuario Seleccionado
-        </h2>
+        <!-- Paginación -->
+        <div class="flex justify-center items-center gap-2 mt-4">
+            <button
+                v-for="link in props.users.links"
+                :key="link.label"
+                v-html="link.label"
+                @click="goTo(link.url)"
+                :class="[
+                    'px-3 py-1 rounded',
+                    link.active
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300'
+                ]"
+                :disabled="!link.url"
+            />
+        </div>
+
     </div>
 </template>
