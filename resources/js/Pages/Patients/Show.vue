@@ -230,22 +230,26 @@
                                             </div>
                                         </div>
 
-                                        <!-- MEDICAMENTOS (ACORDEÓN) -->
+                                        <!-- MEDICAMENTOS  -->
                                         <div class="mt-3">
-                                            <details class="border-t border-gray-200 dark:border-gray-600 pt-2">
-                                                <summary
-                                                    class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400">
-                                                    Ver medicamentos
-                                                    <ChevronDownIcon
-                                                        class="w-4 h-4 ml-1 transition-transform duration-300 group-open:rotate-180" />
-                                                </summary>
+                                            <button @click="toggleAccordion(prescription.id)"
+                                                class="flex items-center cursor-pointer text-sm font-medium text-pink-600 dark:text-pink-400 select-none">
+                                                Ver medicamentos
 
-                                                <div class="mt-2 space-y-3">
+                                                <ChevronDownIcon class="w-4 h-4 ml-1 transition-transform duration-300"
+                                                    :class="{ 'rotate-180': openPrescriptions[prescription.id] }" />
+                                            </button>
+
+                                            <!-- TRANSITION REAL -->
+                                            <Transition @before-enter="beforeEnter" @enter="enter"
+                                                @before-leave="beforeLeave" @leave="leave">
+                                                <div v-show="openPrescriptions[prescription.id]"
+                                                    class="overflow-hidden mt-2 space-y-3">
                                                     <div v-for="detail in prescription.prescriptions_details"
                                                         :key="detail.id"
                                                         class="bg-gray-50 dark:bg-gray-600 p-3 rounded-xl border border-gray-200 dark:border-gray-500 flex gap-3">
 
-                                                        <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded-lg">
+                                                        <div class="p-3 bg-pink-100 dark:bg-pink-900 rounded-lg">
                                                             <PillIcon
                                                                 class="w-5 h-5 text-pink-600 dark:text-pink-300" />
                                                         </div>
@@ -255,18 +259,15 @@
                                                                 {{ detail.drugs?.name }}
                                                             </h4>
                                                             <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                                {{ detail.drugs?.description }}
+                                                                {{ detail.description }}
                                                             </p>
-
-                                                            <div class="text-xs mt-2">
-                                                                <span class="font-medium">Instrucciones:</span>
-                                                                <span> {{ detail.description }}</span>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </details>
+                                            </Transition>
                                         </div>
+
+
 
                                         <!-- FOOTER -->
                                         <div
@@ -388,13 +389,7 @@
                                                 </span>
                                             </label>
 
-                                            <!-- Botones -->
-                                            <div class="flex gap-2">
-                                                <Link v-if="event.active" :href="route('events.edit', event)"
-                                                    class="flex items-center justify-center size-8 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-all transform hover:scale-110 shadow-md">
-                                                <EditIcon class="size-4" />
-                                                </Link>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -453,7 +448,7 @@
                                     <div
                                         class="bg-white dark:bg-gray-700/40 rounded-xl shadow-sm border border-gray-100 dark:border-gray-600/40 ">
 
-                                        <div @click="toggleSection(budget.id,'budgets')"
+                                        <div @click="toggleSection(budget.id, 'budgets')"
                                             class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer items-center">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-3">
@@ -482,8 +477,8 @@
 
                                                 <!-- Icono chevron que rota -->
                                                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 transform transition-transform duration-300"
-                                                    :class="isOpen(budget.id,'budgets') ? 'rotate-180' : ''" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    :class="isOpen(budget.id, 'budgets') ? 'rotate-180' : ''"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M19 9l-7 7-7-7" />
                                                 </svg>
@@ -497,7 +492,7 @@
                                             leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
                                             leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
                                             leave-to-class="max-h-0 opacity-0 -translate-y-2">
-                                            <div v-show="isOpen(budget.id,'budgets')" class="overflow-hidden">
+                                            <div v-show="isOpen(budget.id, 'budgets')" class="overflow-hidden">
                                                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
                                                     <div v-for="details in budget.budgetdetail" :key="details.id"
                                                         class="p-5  dark:hover:bg-gray-900 transition-colors duration-200">
@@ -638,13 +633,12 @@
                                     <div
                                         class="bg-white dark:bg-gray-700/40 rounded-xl shadow-sm border border-gray-100 dark:border-gray-600/40 ">
 
-                                        <div @click="toggleSection(bill.id,'bills')"
+                                        <div @click="toggleSection(bill.id, 'bills')"
                                             class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer items-center">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-3">
                                                     <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
-                                                        <CashIcon
-                                                            class="w-6 h-6 text-pink-600 dark:text-pink-400" />
+                                                        <CashIcon class="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                                     </div>
                                                     <div>
                                                         <h2 class="font-semibold text-gray-800 dark:text-white">
@@ -667,7 +661,7 @@
 
                                                 <!-- Icono chevron que rota -->
                                                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 transform transition-transform duration-300"
-                                                    :class="isOpen(bill.id,'bills') ? 'rotate-180' : ''" fill="none"
+                                                    :class="isOpen(bill.id, 'bills') ? 'rotate-180' : ''" fill="none"
                                                     viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -682,7 +676,7 @@
                                             leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
                                             leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
                                             leave-to-class="max-h-0 opacity-0 -translate-y-2">
-                                            <div v-show="isOpen(bill.id,'bills')" class="overflow-hidden">
+                                            <div v-show="isOpen(bill.id, 'bills')" class="overflow-hidden">
                                                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
                                                     <div v-for="details in bill.billdetail" :key="details.id"
                                                         class="p-5  dark:hover:bg-gray-900 transition-colors duration-200">
@@ -805,7 +799,7 @@
 
                                     <!-- Crear -->
                                     <AccessGate permission="CXC.create">
-                                        <Link :href="route('CXC.create', { patient_id: patient.id })" as="button"
+                                        <Link :href="route('payments.create', { patient_id: patient.id })" as="button"
                                             class="flex items-center justify-center size-9 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-all transform hover:scale-105 shadow-md">
                                         <AddIcon class="size-5" />
                                         </Link>
@@ -981,7 +975,7 @@
                                     class="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all hover:shadow-lg">
                                     <!-- Encabezado del Odontograma -->
                                     <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer"
-                                        @click="toggleSection(item.id,'odontographs')">
+                                        @click="toggleSection(item.id, 'odontographs')">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-3">
                                                 <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
@@ -1010,8 +1004,8 @@
                                             <button type="button"
                                                 class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 transform transition-transform duration-200"
-                                                    :class="isOpen(item.id,'odontographs') ? 'rotate-180' : ''" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    :class="isOpen(item.id, 'odontographs') ? 'rotate-180' : ''"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M19 9l-7 7-7-7" />
                                                 </svg>
@@ -1028,7 +1022,7 @@
                                         leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
                                         leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
                                         leave-to-class="max-h-0 opacity-0 -translate-y-2">
-                                        <div v-show="isOpen(item.id,'odontographs')" class="overflow-hidden">
+                                        <div v-show="isOpen(item.id, 'odontographs')" class="overflow-hidden">
 
                                             <div class="p-4">
                                                 <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">
@@ -1904,12 +1898,22 @@ export default {
                 Implante: "bg-[repeating-linear-gradient(135deg,gray,gray_5px,transparent_5px,transparent_10px)]",
                 Endodoncia: "relative after:content-['•'] after:text-red-600 after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2",
                 EndodonciaAplicada: "relative after:content-['•'] after:text-blue-600 after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2",
-            }
+            },
+            openPrescriptions: {}
 
         }
     },
 
     methods: {
+        toggleAccordion(id) {
+            if (this.openPrescriptions[id]) {
+                this.openPrescriptions = {};
+                return;
+            }
+
+            this.openPrescriptions = { [id]: true };
+        }
+        ,
         toggleSection(id, seccion) {
 
             switch (seccion) {
@@ -1938,8 +1942,8 @@ export default {
             }
         },
 
-        isOpen(id,seccion) {
-              switch (seccion) {
+        isOpen(id, seccion) {
+            switch (seccion) {
                 case 'budgets':
                     return this.openBudgetId === id;
                 case 'bills':
@@ -2085,25 +2089,29 @@ export default {
                 });
             }, 300);
         },
+        beforeEnter(el) {
+            el.style.opacity = 0;
+            el.style.maxHeight = "0px";
+        },
         enter(el) {
-            el.style.height = '0';
-            el.style.opacity = '0';
-            const height = el.scrollHeight;
-            setTimeout(() => {
-                el.style.transition = 'all 0.3s ease';
-                el.style.height = height + 'px';
-                el.style.opacity = '1';
+            el.style.transition = "all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1.2)";
+            el.style.maxHeight = el.scrollHeight + "px";
+            el.style.opacity = 1;
+        },
+
+        beforeLeave(el) {
+            el.style.opacity = 1;
+            el.style.maxHeight = el.scrollHeight + "px";
+        },
+
+        leave(el) {
+            requestAnimationFrame(() => {
+                el.style.transition = "all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1.2)";
+                el.style.maxHeight = "0px";
+                el.style.opacity = 0;
             });
         },
-        leave(el) {
-            el.style.height = el.scrollHeight + 'px';
-            el.style.opacity = '1';
-            setTimeout(() => {
-                el.style.height = el.scrollHeight + 'px';
-                el.style.height = '0';
-                el.style.opacity = '0';
-            })
-        },
+
         async print() {
             window.open(route('report.patient', {
                 patient: this.patient
