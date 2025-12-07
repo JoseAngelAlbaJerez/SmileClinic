@@ -116,8 +116,33 @@ class CXCController extends Controller
      */
     public function show(CXC $CXC)
     {
-        $CXC->load('patient', 'bills.billdetail.procedure','bills.payments','bills.branch', 'bills.doctor','branch','payment.bills.billdetail.procedure');
-        return Inertia::render('CXC/Show', [
+       $CXC->load([
+    'patient',
+    'branch',
+    'bills' => function ($q) {
+        $q->where('active', 1);
+    },
+    'bills.billdetail' => function ($q) {
+        $q->where('active', 1);
+    },
+    'bills.billdetail.procedure',
+    'bills.payments' => function ($q) {
+        $q->where('active', 1);
+    },
+    'bills.branch',
+    'bills.doctor',
+    'payment' => function ($q) {
+        $q->where('active', 1);
+    },
+    'payment.bills' => function ($q) {
+        $q->where('active', 1);
+    },
+    'payment.bills.billdetail' => function ($q) {
+        $q->where('active', 1);
+    },
+    'payment.bills.billdetail.procedure',
+]);
+ return Inertia::render('CXC/Show', [
             'CXC' => $CXC,
         ]);
     }
@@ -125,24 +150,35 @@ class CXCController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        if ($request->has('active')) {
+            $CXC = CXC::find($id);
+            $CXC->active = true;
+            $CXC->save();
+            $CXC->payment()->update(['active' => true]);
+            $CXC->bills()->update(['active' => true]);
+        return redirect()->route('CXC.index')->with('toast', 'Cuenta por cobrar restaurada correctamente.');
+
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(CXC $CXC)
     {
-        //
+        $CXC->active = false;
+        $CXC->save();
+        $CXC->payment()->update(['active' => false]);
+        $CXC->bills()->update(['active' => false]);
+
+
+        return redirect()->route('CXC.index')->with('toast', 'Cuenta por cobrar eliminada correctamente.');
     }
 }

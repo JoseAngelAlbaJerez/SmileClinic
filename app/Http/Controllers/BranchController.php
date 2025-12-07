@@ -166,6 +166,20 @@ class BranchController extends Controller
         //  $this->authorize('delete',Branch::class);
 
         $branch->active = false;
+        $branch->bills()->update(['active' => false]);
+        $branch->billDetails()->update(['active' => false]);
+        $branch->budgets()->update(['active' => false]);
+        $branch->budgetDetails()->update(['active' => false]);
+        $branch->cxc()->update(['active' => false]);
+        $branch->drugs()->update(['active' => false]);
+        $branch->events()->update(['active' => false]);
+        $branch->expenses()->update(['active' => false]);
+        $branch->odontographs()->update(['active' => false]);
+        $branch->payments()->update(['active' => false]);
+        $branch->prescriptions()->update(['active' => false]);
+        $branch->medicalHistories()->update(['active' => false]);
+        $branch->prescriptionDetails()->update(['active' => false]);
+
         $branch->save();
 
         return redirect()->back()->with('toast', 'Sucursal desactivada correctamente.');
@@ -176,6 +190,19 @@ class BranchController extends Controller
         //  $this->authorize('update',Branch::class);
 
         $branch->active = true;
+        $branch->bills()->update(['active' => true]);
+        $branch->billDetails()->update(['active' => true]);
+        $branch->budgets()->update(['active' => true]);
+        $branch->budgetDetails()->update(['active' => true]);
+        $branch->cxc()->update(['active' => true]);
+        $branch->drugs()->update(['active' => true]);
+        $branch->events()->update(['active' => true]);
+        $branch->expenses()->update(['active' => true]);
+        $branch->odontographs()->update(['active' => true]);
+        $branch->payments()->update(['active' => true]);
+        $branch->prescriptions()->update(['active' => true]);
+        $branch->medicalHistories()->update(['active' => true]);
+        $branch->prescriptionDetails()->update(['active' => true]);
         $branch->save();
 
         return redirect()->back()->with('toast', 'Sucursal restaurada correctamente.');

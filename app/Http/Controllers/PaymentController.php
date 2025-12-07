@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Budget;
 use App\Models\CXC;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -88,10 +89,59 @@ class PaymentController extends Controller
      */
     public function create(Request $request)
     {
-        $budget = $request->budget_id;
+        $patient_id = $request->input('patient_id');
 
-        return Inertia::render('Payments/Create');
+        if ($patient_id) {
+            $patients = User::where('id', $patient_id)
+                ->whereHas('CXC', function ($q) {
+                    $q->where('balance', '>', 0);
+                })
+                ->with([
+                    'CXC',
+                    'bill.billdetail',
+                    'bill' => function ($q) {
+                        $q->where('active', 1)
+                            ->with([
+                                'billdetail' => function ($d) {
+                                    $d->where('active', 1)->with('procedure');
+                                },
+                                'patient'
+                            ]);
+                    }
+                ])
+                ->first();
+        } else {
+            $patients = null;
+        }
+
+        $patient = User::role('patient')
+            ->whereHas('CXC', function ($q) {
+                $q->where('balance', '>', 0);
+            })
+            ->with([
+                'CXC',
+                'bill.billdetail',
+                'bill' => function ($q) {
+                    $q->where('active', 1)
+                        ->with([
+                            'billdetail' => function ($d) {
+                                $d->where('active', 1)->with('procedure');
+                            },
+                            'patient'
+                        ]);
+                },
+            ])
+            ->paginate(10);
+
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
+
+        return Inertia::render('Payments/Create', [
+            'patient' => $patient,
+            'patients' => $patients,
+            'doctors' => $doctors,
+        ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -99,9 +149,9 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $bill = collect($request->patient['bill'])->last();
-       $payment = Payment::create([
+        $payment = Payment::create([
             'c_x_c_id' => $request->patient['c_x_c']['id'],
-            'bill_id'=> $bill['id'] ?? null,
+            'bill_id' => $bill['id'] ?? null,
             'total'    => $request->patient['c_x_c']['balance'],
             'amount_paid' => $request->paymentAmount,
             'active' => 1,
@@ -112,7 +162,7 @@ class PaymentController extends Controller
         $CXC->save();
 
 
-        return redirect()->route('bills.show',$CXC->id)->with('toast', 'Pago registrado correctamente.');
+        return redirect()->route('CXC.show', $CXC->id)->with('toast', 'Pago registrado correctamente.');
     }
 
 

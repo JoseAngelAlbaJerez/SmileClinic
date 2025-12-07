@@ -336,24 +336,11 @@ class BudgetController extends Controller
     {
         DB::transaction(function () use ($budget) {
             $budget->active = 0;
-            $CXC = $budget->CXC;
-
-            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget, $CXC) {
+            $budget->save();
+            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget) {
                 $budgetDetail->active = 0;
                 $budgetDetail->save();
-
-                if ($budget->type == "Crédito" && $CXC) {
-                    $CXC->balance -= $budgetDetail->total;
-                    $CXC->save();
-
-                    $budgetDetail->Payment()->get()->each(function ($payment) {
-                        $payment->active = 0;
-                        $payment->save();
-                    });
-                }
             });
-
-            $budget->save();
         });
 
 
@@ -361,26 +348,13 @@ class BudgetController extends Controller
     }
     private function restore(Budget $budget)
     {
-        DB::transaction(function () use ($budget) {
+           DB::transaction(function () use ($budget) {
             $budget->active = 1;
-            $CXC = $budget->CXC;
-
-            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget, $CXC) {
+            $budget->save();
+            $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget) {
                 $budgetDetail->active = 1;
                 $budgetDetail->save();
-
-                if ($budget->type == "Crédito" && $CXC) {
-                    $CXC->balance += $budgetDetail->total;
-                    $CXC->save();
-
-                    $budgetDetail->Payment()->get()->each(function ($payment) {
-                        $payment->active = 1;
-                        $payment->save();
-                    });
-                }
             });
-
-            $budget->save();
         });
 
 

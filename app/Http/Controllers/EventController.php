@@ -298,6 +298,6 @@ class EventController extends Controller
         $event->active = 0;
         $event->save();
         return redirect()->back()
-            ->with('toast', 'Cita desactivada correctamente');
+            ->with('toast', 'Cita cancelada correctamente');
     }
 }

@@ -14,14 +14,28 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class BillController extends Controller
+class BillController extends Controller implements HasMiddleware
 {
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:bill.view', only: ['index', 'show']),
+            new Middleware('permission:bill.create', only: ['create', 'store']),
+            new Middleware('permission:bill.update', only: ['edit', 'update']),
+            new Middleware('permission:bill.delete', only: ['destroy']),
+        ];
+    }
     public function index(Request $request)
     {
-
+        $this->authorize('view', Bill::class);
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
@@ -94,6 +108,7 @@ class BillController extends Controller
     }
     public function create(Request $request)
     {
+        $this->authorize('create', Bill::class);
         $patient_id = $request->input('patient_id');
         if ($patient_id) {
             $patients = User::where('id', $patient_id)
@@ -230,7 +245,7 @@ class BillController extends Controller
                 $CXC->balance += $bill->total;
                 $CXC->save();
             }
-              $bill->load(['billdetail', 'doctor', 'patient', 'cxc']);
+            $bill->load(['billdetail', 'doctor', 'patient', 'cxc']);
 
             return response()->json([
                 'redirect' => route('bills.show', $bill->id),
@@ -254,5 +269,127 @@ class BillController extends Controller
 
 
         ]);
+    }
+
+    public function edit(Bill $bill)
+    {
+        $this->authorize('update', Bill::class);
+        $bill->load('patient', 'billdetail.procedure', 'branch');
+        $patients = User::role('patient')->paginate(10);
+        $procedure = Procedure::paginate(10);
+        $doctors = User::role('doctor')->with('roles')->paginate(10);
+
+        return Inertia::render('Bills/Edit', [
+            'bill' => $bill,
+            'patients' => $patients,
+            'doctors' => $doctors,
+            'procedure' => $procedure,
+        ]);
+    }
+
+    public function update(Request $request, Bill $bill)
+    {
+        $this->authorize('update', Bill::class);
+
+        if ($request->has('active')) {
+            $this->restore($bill);
+            return redirect()->back()->with('toast', 'Factura restaurada correctamente');
+        }
+        $data = $request->validate([
+            'patient_id' => 'required|exists:users,id',
+            'type' => 'required|string',
+            'emission_date' => 'required|date',
+            'expiration_date' => 'nullable|date',
+            'total' => 'required|numeric',
+            'amount_of_payments' => 'nullable|numeric',
+            'doctor_id' => 'required|exists:users,id',
+            'currency' => 'required|string',
+        ]);
+
+        $bill->update($data);
+
+        return redirect()->route('bills.show', $bill)->with('toast', 'Factura actualizada correctamente.');
+    }
+
+    public function destroy(Bill $bill)
+    {
+        $this->authorize('delete', Bill::class);
+
+        DB::transaction(function () use ($bill) {
+
+            $bill->load('billdetail', 'payments', 'cxc');
+
+            $bill->active = 0;
+
+            $CXC = $bill->cxc;
+
+            $totalAjuste = 0;
+
+            foreach ($bill->billdetail as $billdetail) {
+                $billdetail->active = 0;
+                $billdetail->save();
+
+                if ($bill->type === "Credito" && $CXC) {
+                    $totalAjuste += $billdetail->total;
+                }
+            }
+
+
+            foreach ($bill->payments as $payment) {
+                $payment->active = 0;
+                $payment->save();
+            }
+              Log::info($bill->type);
+            if ($bill->type === "Credito" && $CXC) {
+                Log::info($totalAjuste);
+                $CXC->balance -= $totalAjuste;
+                Log::info($CXC->balance);
+                $CXC->save();
+            }
+
+
+            $bill->save();
+        });
+
+
+        return redirect()->back()
+            ->with('toast', 'Factura eliminada correctamente');
+    }
+    public function restore(Bill $bill)
+    {
+        DB::transaction(function () use ($bill) {
+
+            $bill->load('billdetail', 'payments', 'cxc');
+
+            $bill->active = 1;
+
+            $CXC = $bill->cxc;
+
+            $totalAjuste = 0;
+
+            foreach ($bill->billdetail as $billdetail) {
+                $billdetail->active = 1;
+                $billdetail->save();
+
+                if ($bill->type === "Credito" && $CXC) {
+                    $totalAjuste += $billdetail->total;
+                }
+            }
+
+            foreach ($bill->payments as $payment) {
+                $payment->active = 1;
+                $payment->save();
+            }
+
+            if ($bill->type === "Credito" && $CXC) {
+                $CXC->balance += $totalAjuste;
+                $CXC->save();
+            }
+
+            $bill->save();
+        });
+
+
+        return redirect()->back()->with('toast', 'Factura restaurada correctamente');
     }
 }

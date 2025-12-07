@@ -301,6 +301,15 @@ class PatientController extends Controller implements HasMiddleware
         $this->authorize('delete', User::class);
 
         $patient = User::findOrFail($id);
+        $patient->odontographs()->update(['active' => false]);
+        $patient->events()->update(['active' => false]);
+        $patient->bill()->update(['active' => false]);
+        $patient->bill()->billdetail()->update(['active' => false]);
+        $patient->Prescriptions()->update(['active' => false]);
+        $patient->Prescriptions()->prescriptionsDetails()->update(['active' => false]);
+        $patient->CXC()->update(['active' => false]);
+        $patient->CXC()->Payment()->update(['active' => false]);
+        $patient->Budget()->update(['active' => false]);
         $patient->active = false;
         $patient->save();
 
