@@ -48,7 +48,7 @@
                             <template v-else>
                                 <PrimaryButton @click="restorePatient(patient.id)"
                                     class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
-                                    <RestoreIcon /> Restaurar
+                                    <RestoreIcon />
                                 </PrimaryButton>
                             </template>
 

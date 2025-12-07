@@ -47,7 +47,7 @@
                                 <template v-else>
                                     <PrimaryButton @click="restoreBill(bill.id)"
                                         class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
-                                        <RestoreIcon /> Restaurar
+                                        <RestoreIcon />
                                     </PrimaryButton>
                                 </template>
 
@@ -149,17 +149,7 @@
                                                                 || 0) }}
                                                     </p>
 
-                                                    <div v-if="bill.active && details.active">
 
-                                                        <DangerButton @click="deleteBudgetDetail(details.id)"
-                                                            class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                                            <DeleteIcon />
-                                                        </DangerButton>
-                                                    </div>
-                                                    <PrimaryButton v-else @click="restoreBudgetDetail(details.id)"
-                                                        class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                                                        <RestoreIcon />
-                                                    </PrimaryButton>
                                                 </div>
                                             </div>
                                         </div>
@@ -437,27 +427,19 @@ export default {
         formatNumber(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
-        deleteBudget(id) {
-            this.$inertia.delete(route('CXC.destroy', id),);
+        deleteBill(id) {
+            this.$inertia.delete(route('bills.destroy', id),);
         },
         openAccordion(index) {
             this.activeIndex = this.activeIndex === index ? null : index;
         },
-        restoreBudget(id) {
-            this.$inertia.put(route('budgets.update', id), {
+        restoreBill(id) {
+            this.$inertia.put(route('bills.update', id), {
                 active: true
             },
             );
         },
-        deleteBudgetDetail(id) {
-            this.$inertia.delete(route('budgetDetails.destroy', id),);
-        },
-        restoreBudgetDetail(id) {
-            this.$inertia.put(route('budgetDetails.update', id), {
-                active: true
-            },
-            );
-        },
+
         enter(el) {
             el.style.height = '0';
             el.style.opacity = '0';

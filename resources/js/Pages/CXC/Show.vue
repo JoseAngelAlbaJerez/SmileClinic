@@ -32,15 +32,10 @@
                                         <PrintIcon />
                                     </button>
 
-                                    <AccessGate permission="CXC.update">
-                                        <Link :href="route('payments.edit', CXC.id)"
-                                            class="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white shadow">
-                                        <EditIcon />
-                                        </Link>
-                                    </AccessGate>
+
 
                                     <AccessGate permission="CXC.delete">
-                                        <DangerButton @click="deleteCXC(CXC.id)"
+                                        <DangerButton @click="deleteCXC(CXC)"
                                             class="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white shadow">
                                             <DeleteIcon />
                                         </DangerButton>
@@ -51,7 +46,7 @@
                                 <template v-else>
                                     <PrimaryButton @click="restoreCXC(CXC.id)"
                                         class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
-                                        <RestoreIcon /> Restaurar
+                                        <RestoreIcon />
                                     </PrimaryButton>
                                 </template>
 
@@ -119,164 +114,188 @@
                                 class="bg-white dark:bg-gray-700/40 rounded-xl  shadow-sm border border-gray-100 dark:border-gray-600/40 ">
 
 
-                                    <div @click="toggleSection(bill.id)"
-                                        class="p-4 border-b border-gray-200   dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer items-center">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
-                                                    <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                                                </div>
-                                                <div>
-                                                    <h2 class="font-semibold text-gray-800 dark:text-white">
-                                                        Factura # {{ bill.id }}
+                                <div @click="toggleSection(bill.id)"
+                                    class="p-4 border-b border-gray-200   dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 cursor-pointer items-center">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                                                <DocumentMoney class="w-6 h-6 text-pink-600 dark:text-pink-400" />
+                                            </div>
+                                            <div>
+                                                <h2 class="font-semibold text-gray-800 dark:text-white">
+                                                    Factura # {{ bill.id }}
 
-                                                    </h2>
-                                                    <div
-                                                        class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                                        <BuildingIcon class="w-4 h-4" />
-                                                        <span>{{ bill.branch.name }}</span>
-                                                        <UserIcon class="w-4 h-4" />
-                                                        <span>{{ bill.doctor.first_name }} {{ bill.doctor.last_name
+                                                </h2>
+                                                <div
+                                                    class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                    <BuildingIcon class="w-4 h-4" />
+                                                    <span>{{ bill.branch.name }}</span>
+                                                    <UserIcon class="w-4 h-4" />
+                                                    <span>{{ bill.doctor.first_name }} {{ bill.doctor.last_name
                                                         }}</span>
-                                                        <span class="mx-1">•</span>
-                                                        <CalendarIcon class="w-4 h-4" />
-                                                        <span>{{ formatDate(bill.created_at) }}</span>
-                                                    </div>
+                                                    <span class="mx-1">•</span>
+                                                    <CalendarIcon class="w-4 h-4" />
+                                                    <span>{{ formatDate(bill.created_at) }}</span>
                                                 </div>
                                             </div>
-
-                                            <!-- Icono chevron que rota -->
-                                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 transform transition-transform duration-300"
-                                                :class="openSection[bill.id] ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 9l-7 7-7-7" />
-                                            </svg>
                                         </div>
+
+                                        <!-- Icono chevron que rota -->
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 transform transition-transform duration-300"
+                                            :class="openSection[bill.id] ? 'rotate-180' : ''" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+
+                                </div>
+                                <Transition
+                                    enter-active-class="transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                                    enter-from-class="max-h-0 opacity-0 -translate-y-3"
+                                    enter-to-class="max-h-[2000px] opacity-100 translate-y-0"
+                                    leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                                    leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
+                                    leave-to-class="max-h-0 opacity-0 -translate-y-2">
+                                    <div v-show="openSection[bill.id]" class="overflow-hidden">
+                                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                                            <div v-if="bill.payments.length" v-for="details in bill.payments"
+                                                :key="details.id"
+                                                class="p-5  dark:hover:bg-gray-900 transition-colors duration-200">
+                                                <div
+                                                    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
+
+                                                </div>
+
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                        <p class="text-sm text-gray-500 dark:text-gray-400">Fecha de
+                                                            Creacion</p>
+                                                        <p class="font-medium">{{ formatDate(details.created_at) }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                        <p class="text-sm text-gray-500 dark:text-gray-400">Monto
+                                                        </p>
+                                                        <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(details.amount_paid
+                                                            || 0) }}</p>
+                                                    </div>
+                                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                        <p class="text-sm text-gray-500 dark:text-gray-400">Restante
+                                                        </p>
+                                                        <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
+                                                            style:
+                                                                'currency', currency: 'DOP'
+                                                        }).format(details.total - details.amount_paid
+                                                            || 0) }}</p>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div
+                                                    class="flex items-center  justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
+
+                                                    <div v-if="CXC.active && details.active">
+                                                        <DangerButton @click="deletePayment(details.id)"
+                                                            class="flex ml-auto justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
+                                                            <DeleteIcon />
+                                                        </DangerButton>
+                                                    </div>
+                                                    <PrimaryButton v-else @click="restorePayment(details.id)"
+                                                        class="flex ml-auto justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
+                                                        <RestoreIcon />
+                                                    </PrimaryButton>
+                                                </div>
+                                            </div>
+                                            <div v-else class="text-center py-6 mt-2">
+                                                <div class="inline-flex flex-col items-center">
+                                                    <svg class="h-8 w-8 text-gray-400 dark:text-gray-300" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
+                                                    <p class="text-gray-500 dark:text-gray-400 font-medium">No hay
+                                                        recibos
+                                                        registrados</p>
+
+                                                    <p class="text-sm text-gray-400 dark:text-gray-500">Crea un
+                                                        nuevo
+                                                        recibo para
+                                                        comenzar
+                                                    </p>
+                                                    <AccessGate permission="payment.create" class="mt-4">
+                                                        <Link
+                                                            :href="route('payments.create', { patient_id: CXC.patient })"
+                                                            as="button"
+                                                            class="flex justify-center  rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 sm:px-4">
+                                                        <AddIcon class="size-6" />
+                                                        Nuevo Recibo
+                                                        </Link>
+                                                    </AccessGate>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-6 border-t">
+                                            <div
+                                                class=" rounded-b bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-5">
+                                                <div class="flex items-center justify-between">
+
+                                                    <p class="text-xl font-bold text-gray-700 dark:text-gray-200">
+                                                        Total:
+                                                    </p>
+
+                                                    <p
+                                                        class="text-3xl font-extrabold text-green-600 dark:text-green-400">
+                                                        {{ new
+                                                            Intl.NumberFormat('es-DO',
+                                                                {
+                                                                    style:
+                                                                        'currency', currency: 'DOP'
+                                                                }).format(bill.total
+                                                                    || 0) }}
+                                                    </p>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
 
                                     </div>
-                                    <Transition
-                                        enter-active-class="transition-all duration-600 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-                                        enter-from-class="max-h-0 opacity-0 -translate-y-3"
-                                        enter-to-class="max-h-[2000px] opacity-100 translate-y-0"
-                                        leave-active-class="transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                                        leave-from-class="max-h-[2000px] opacity-100 translate-y-0"
-                                        leave-to-class="max-h-0 opacity-0 -translate-y-2">
-                                        <div v-show="openSection[bill.id]" class="overflow-hidden">
-                                            <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                                                <div v-if="bill.payments.length" v-for="details in bill.payments"
-                                                    :key="details.id"
-                                                    class="p-5  dark:hover:bg-gray-900 transition-colors duration-200">
-                                                    <div
-                                                        class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3">
+                                </Transition>
+                            </div>
+                            <div v-if="!CXC.bills.length" class="text-center py-6 mt-2">
+                                <div class="inline-flex flex-col items-center">
+                                    <svg class="h-8 w-8 text-gray-400 dark:text-gray-300" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                    <p class="text-gray-500 dark:text-gray-400 font-medium">No hay
+                                        facturas
+                                        registradas</p>
 
-                                                    </div>
-
-                                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                                            <p class="text-sm text-gray-500 dark:text-gray-400">Fecha de
-                                                                Creacion</p>
-                                                            <p class="font-medium">{{ formatDate(details.created_at) }}
-                                                            </p>
-                                                        </div>
-                                                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                                            <p class="text-sm text-gray-500 dark:text-gray-400">Monto
-                                                            </p>
-                                                            <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
-                                                                style:
-                                                                    'currency', currency: 'DOP'
-                                                            }).format(details.amount_paid
-                                                                || 0) }}</p>
-                                                        </div>
-                                                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                                            <p class="text-sm text-gray-500 dark:text-gray-400">Restante
-                                                            </p>
-                                                            <p class="font-medium">{{ new Intl.NumberFormat('es-DO', {
-                                                                style:
-                                                                    'currency', currency: 'DOP'
-                                                            }).format(details.total - details.amount_paid
-                                                                || 0) }}</p>
-                                                        </div>
-                                                    </div>
-
-
-
-                                                    <div
-                                                        class="flex items-center  justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
-
-                                                        <div v-if="CXC.active && details.active">
-                                                            <DangerButton @click="deletePayment(details.id)"
-                                                                class="flex ml-auto justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                                                <DeleteIcon />
-                                                            </DangerButton>
-                                                        </div>
-                                                        <PrimaryButton v-else @click="restorePayment(details.id)"
-                                                            class="flex ml-auto justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                                                            <RestoreIcon />
-                                                        </PrimaryButton>
-                                                    </div>
-                                                </div>
-                                                <div v-else class="text-center py-6 mt-2">
-                                                    <div class="inline-flex flex-col items-center">
-                                                        <svg class="h-8 w-8 text-gray-400 dark:text-gray-300"
-                                                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                        </svg>
-                                                        <p class="text-gray-500 dark:text-gray-400 font-medium">No hay
-                                                            recibos
-                                                            registrados</p>
-
-                                                        <p class="text-sm text-gray-400 dark:text-gray-500">Crea un
-                                                            nuevo
-                                                            recibo para
-                                                            comenzar
-                                                        </p>
-                                                        <AccessGate permission="event.create" class="mt-4">
-                                                            <Link
-                                                                :href="route('payments.create', { patient_id: CXC.patient })"
-                                                                as="button"
-                                                                class="flex justify-center  rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 sm:px-4">
-                                                            <AddIcon class="size-6" />
-                                                            Nuevo Recibo
-                                                            </Link>
-                                                        </AccessGate>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mt-6 border-t">
-                                                <div
-                                                    class=" rounded-b bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-5">
-                                                    <div class="flex items-center justify-between">
-
-                                                        <p class="text-xl font-bold text-gray-700 dark:text-gray-200">
-                                                            Total:
-                                                        </p>
-
-                                                        <p
-                                                            class="text-3xl font-extrabold text-green-600 dark:text-green-400">
-                                                            {{ new
-                                                                Intl.NumberFormat('es-DO',
-                                                                    {
-                                                                        style:
-                                                                            'currency', currency: 'DOP'
-                                                                    }).format(bill.total
-                                                                        || 0) }}
-                                                        </p>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-                                    </Transition>
+                                    <p class="text-sm text-gray-400 dark:text-gray-500">Crea una
+                                        nueva
+                                        factura para
+                                        comenzar
+                                    </p>
+                                    <AccessGate permission="bill.create" class="mt-4">
+                                        <Link :href="route('bills.create', { patient_id: CXC.patient })" as="button"
+                                            class="flex justify-center  rounded-lg bg-pink-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 sm:px-4">
+                                        <AddIcon class="size-6" />
+                                        Nueva Factura
+                                        </Link>
+                                    </AccessGate>
                                 </div>
-
+                            </div>
 
                         </div>
 
@@ -530,8 +549,8 @@ export default {
         openAccordion(index) {
             this.activeIndex = this.activeIndex === index ? null : index;
         },
-        restoreBudget(id) {
-            this.$inertia.put(route('budgets.update', id), {
+        restoreCXC(id) {
+            this.$inertia.put(route('CXC.update', id), {
                 active: true
             },
             );

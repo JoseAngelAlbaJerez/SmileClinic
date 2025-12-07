@@ -47,7 +47,7 @@
                                 <template v-else>
                                     <PrimaryButton @click="restoreBudget(budgets.id)"
                                         class="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white shadow">
-                                        <RestoreIcon /> Restaurar
+                                        <RestoreIcon />
                                     </PrimaryButton>
                                 </template>
 
@@ -149,17 +149,7 @@
                                                                 || 0) }}
                                                     </p>
 
-                                                    <div v-if="budgets.active && details.active">
 
-                                                        <DangerButton @click="deleteBudgetDetail(budgets.id)"
-                                                            class="flex justify-center gap-2 rounded-lg bg-red-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 sm:px-4">
-                                                            <DeleteIcon />
-                                                        </DangerButton>
-                                                    </div>
-                                                    <PrimaryButton v-else @click="restoreBudgetDetail(budgets.id)"
-                                                        class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 sm:px-4">
-                                                        <RestoreIcon />
-                                                    </PrimaryButton>
                                                 </div>
                                             </div>
                                         </div>
