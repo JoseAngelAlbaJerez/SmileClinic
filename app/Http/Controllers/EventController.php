@@ -21,104 +21,100 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $sortField = $request->input('sortField');
+
+        $search        = trim($request->input('search'));
+        $sortField     = $request->input('sortField', null);
         $sortDirection = $request->input('sortDirection', 'asc');
-        $activeStates = $request->input('activeStates', []);
-        $lastDays = $request->input('lastDays', '1');
-        $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
-        $patient_id = $request->input('patient_id');
+        $lastDays      = $request->input('lastDays', '1');
+        $patient_id    = $request->input('patient_id', null);
+        $showDeleted   = filter_var($request->input('showDeleted', false), FILTER_VALIDATE_BOOLEAN);
+
 
 
         $query = Event::query()
+            ->with(['patient', 'doctor', 'branch'])
             ->select('events.*')
             ->join('users as patients', 'events.patient_id', '=', 'patients.id')
-            ->join('users as doctors', 'events.doctor_id', '=', 'doctors.id');
+            ->leftJoin('users as doctors', 'events.doctor_id', '=', 'doctors.id');
 
 
-        if ($showDeleted == true) {
-            $query->where('events.active', 1);
-        } else {
+
+        if ($showDeleted) {
             $query->where('events.active', 0);
+        } else {
+            $query->where('events.active', 1);
         }
+
+
 
         if ($patient_id) {
-            $patient = Patient::find($patient_id);
-
-            $eventDates = $patient->event()->pluck('created_at');
-
-            if ($eventDates->isNotEmpty()) {
-                $query->where('patient_id', $patient_id)
-                    ->whereIn('events.created_at', $eventDates)
-                    ->latest();
-                $lastDays = 'year';
-            }
+            $query->where('events.patient_id', $patient_id);
+            $lastDays = 'year';
         }
 
-        if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->whereRaw('patients.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(patients.first_name, " ", COALESCE(patients.last_name, "")) LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('patients.date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('events.title LIKE ?', ['%' . $search . '%']);
+
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('events.title', 'like', "%{$search}%")
+                    ->orWhere('events.description', 'like', "%{$search}%")
+                    ->orWhere('patients.first_name', 'like', "%{$search}%")
+                    ->orWhere('patients.last_name', 'like', "%{$search}%")
+                    ->orWhereRaw("CONCAT(patients.first_name, ' ', patients.last_name) LIKE ?", ["%{$search}%"])
+                    ->orWhere('doctors.first_name', 'like', "%{$search}%");
             });
+        }
+
+
+
+        if ($lastDays) {
+
+            if (is_numeric($lastDays)) {
+                $query->where('events.date', '>=', now()->subDays((int)$lastDays));
+            } elseif ($lastDays === 'month') {
+                $query->where('events.date', '>=', now()->startOfMonth());
+            } elseif ($lastDays === 'year') {
+                $query->where('events.date', '>=', now()->startOfYear());
+            }
         }
 
 
 
         if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
+            $query->orderBy("events.$sortField", $sortDirection);
         } else {
-            $query->latest('events.updated_at')
-                ->latest('events.created_at');
-        }
-        if ($lastDays) {
-            if (is_numeric($lastDays)) {
-
-                $dateFrom = Carbon::now()->subDays((int) $lastDays)->startOfDay();
-                $query->where('events.created_at', '>=', $dateFrom);
-            } else {
-
-                if ($lastDays === 'month') {
-                    $dateFrom = Carbon::now()->startOfMonth();
-                    $query->where('events.created_at', '>=', $dateFrom);
-                } elseif ($lastDays === 'year') {
-                    $dateFrom = Carbon::now()->startOfYear();
-                    $query->where('events.created_at', '>=', $dateFrom);
-                }
-            }
+            $query->orderBy('events.date', 'asc');
         }
 
-        $events = $query->orderByDesc('events.created_at')
-            ->with('doctor', 'patient', 'branch')
-            ->get()
+
+        $events = $query->get()
             ->map(function ($event) {
                 return [
-                    'id' => $event->id,
-                    'title' => $event->title ?? 'Sin título',
-                    'start' => $event->date . 'T' . $event->starttime,
-                    'end' => $event->date . 'T' . $event->endtime,
-                    'patient' => $event->patient,
-                    'branch' => $event->branch,
-                    'doctor' => $event->doctor,
-                    'attended' => $event->attended,
-                    'active' => $event->active,
+                    'id'        => $event->id,
+                    'title'     => $event->title ?? 'Sin título',
+                    'start'     => $event->date . 'T' . $event->starttime,
+                    'end'       => $event->date . 'T' . $event->endtime,
+                    'patient'   => $event->patient,
+                    'branch'    => $event->branch,
+                    'doctor'    => $event->doctor,
+                    'attended'  => $event->attended,
+                    'active'    => $event->active,
                 ];
             });
+
         return Inertia::render('Events/Index', [
-            'events' =>  $events->toArray(),
+            'events' => $events->toArray(),
             'filters' => [
-                'search' => $search,
-                'patient_id' => $patient_id,
-                'sortField' => $sortField,
+                'search'        => $search,
+                'patient_id'    => $patient_id,
+                'sortField'     => $sortField,
                 'sortDirection' => $sortDirection,
-                'activeStates' => $activeStates,
-                'lastDays' => $lastDays,
-                'showDeleted' => $showDeleted,
+                'lastDays'      => $lastDays,
+                'showDeleted'   => $showDeleted,
             ],
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -277,10 +273,13 @@ class EventController extends Controller
         $doctors = User::role('doctor')->with('roles')->paginate(10);
         $patients = User::role('patient')->with('roles')->paginate(10);
         $event->timeRange = [$starttime, $endtime];
+        $events = Event::all()->load('doctor', 'patient');
+
         return Inertia::render('Events/Edit', [
             'event' => $event,
             'doctors' => $doctors,
             'patients' => $patients,
+            'events' => $events,
 
         ]);
     }

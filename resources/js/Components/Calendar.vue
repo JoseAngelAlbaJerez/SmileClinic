@@ -72,14 +72,19 @@
                                 <h6 class="text-xl leading-8 font-semibold text-black dark:text-white mb-1">{{
                                     event.title }}</h6>
                                 <p class="text-base font-normal text-gray-600 dark:text-gray-300">
-                                    <span v-if="event.patient"><UserIcon class="w-4 h-4 inline-block"/> {{ event.patient.first_name }} {{
-                                        event.patient.last_name }}</span>
-                                    <span v-if="event.doctor"> | <UserIcon class="w-4 h-4 inline-block"/> {{ event.doctor.first_name }} </span>
-                                    <AccessGate :role="['admin']" class="inline-flex">
-                                    <span v-if="event.branch" class="inline-flex items-center ml-1 gap-1">
-                                         | <BuildingIcon class="w-4 h-4 inline-block" />
-                                        {{ event.branch.name }}
+                                    <span v-if="event.patient">
+                                        <UserIcon class="w-4 h-4 inline-block" /> {{ event.patient.first_name }} {{
+                                            event.patient.last_name }}
                                     </span>
+                                    <span v-if="event.doctor"> |
+                                        <UserIcon class="w-4 h-4 inline-block" /> {{ event.doctor.first_name }}
+                                    </span>
+                                    <AccessGate :role="['admin']" class="inline-flex">
+                                        <span v-if="event.branch" class="inline-flex items-center ml-1 gap-1">
+                                            |
+                                            <BuildingIcon class="w-4 h-4 inline-block" />
+                                            {{ event.branch.name }}
+                                        </span>
                                     </AccessGate>
                                 </p>
                                 <p v-if="event.description"
@@ -92,6 +97,22 @@
                                 class="p-6 rounded-xl bg-white dark:bg-gray-800 text-center text-gray-500 dark:text-gray-400">
                                 No hay citas registradas.
                             </div>
+                            <div class="flex justify-center mt-4 gap-2">
+                                <button @click="currentPage--" :disabled="currentPage === 1"
+                                    class="px-3 py-1 bg-gray-300 dark:bg-gray-700 rounded disabled:opacity-40">
+                                    Anterior
+                                </button>
+
+                                <span class="px-3 py-1 text-gray-700 dark:text-gray-300">
+                                    Página {{ currentPage }} / {{ totalPages }}
+                                </span>
+
+                                <button @click="currentPage++" :disabled="currentPage >= totalPages"
+                                    class="px-3 py-1 bg-gray-300 dark:bg-gray-700 rounded disabled:opacity-40">
+                                    Siguiente
+                                </button>
+                            </div>
+
                         </div>
                     </div>
 
@@ -374,6 +395,8 @@ export default {
         const searchQuery = ref(props.filters.search || '');
         const timeRange = ref(props.filters.lastDays || '1');
         const showDeleted = ref(props.filters.showDeleted !== false);
+        const currentPage = ref(1);
+        const itemsPerPage = 5;
 
         // Event form
         const eventForm = ref({
@@ -446,59 +469,65 @@ export default {
         });
 
         const filteredEvents = computed(() => {
-
+            const start = (currentPage.value - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            return filteredEventsRaw.value.slice(start, end);
+        });
+        const filteredEventsRaw = computed(() => {
             let result = events.value;
 
-            // Filter by search query
+            // SEARCH
             if (searchQuery.value.trim()) {
-                const query = searchQuery.value.toLowerCase();
+                const q = searchQuery.value.toLowerCase();
                 result = result.filter(event => {
                     return (
-                        event.title.toLowerCase().includes(query) ||
-                        (event.description && event.description.toLowerCase().includes(query)) ||
+                        event.title?.toLowerCase().includes(q) ||
+                        event.description?.toLowerCase().includes(q) ||
                         (event.patient && (
-                            event.patient.first_name.toLowerCase().includes(query) ||
-                            event.patient.last_name.toLowerCase().includes(query) ||
-                            `${event.patient.first_name} ${event.patient.last_name}`.toLowerCase().includes(query)
-                        ) ||
-                            (event.doctor && event.doctor.first_name.toLowerCase().includes(query))
-                        )
-                    )
+                            event.patient.first_name.toLowerCase().includes(q) ||
+                            event.patient.last_name.toLowerCase().includes(q) ||
+                            `${event.patient.first_name} ${event.patient.last_name}`.toLowerCase().includes(q)
+                        )) ||
+                        (event.doctor && event.doctor.first_name.toLowerCase().includes(q))
+                    );
                 });
             }
 
-            // Filter by time range
+            // SHOW / HIDE DELETED
+            if (!showDeleted.value) {
+                result = result.filter(e => !e.deleted_at);
+            }
+
+            // TIME RANGE
             const now = new Date();
+
             if (timeRange.value === 'month') {
-                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                result = result.filter(event => {
-                    const eventDate = new Date(event.start);
-                    return eventDate >= startOfMonth;
-                });
+                const start = new Date(now.getFullYear(), now.getMonth(), 1);
+                result = result.filter(e => new Date(e.start) >= start);
+
             } else if (timeRange.value === 'year') {
-                const startOfYear = new Date(now.getFullYear(), 0, 1);
-                result = result.filter(event => {
-                    const eventDate = new Date(event.start);
-                    return eventDate >= startOfYear;
-                });
+                const start = new Date(now.getFullYear(), 0, 1);
+                result = result.filter(e => new Date(e.start) >= start);
+
             } else if (!isNaN(timeRange.value)) {
                 const days = parseInt(timeRange.value);
                 const startDate = subDays(now, days);
-                result = result.filter(event => {
-                    const eventDate = new Date(event.start);
-                    return eventDate >= startDate;
-                });
+                result = result.filter(e => new Date(e.start) >= startDate);
             }
 
-
-            // Sort by date
             return result.sort((a, b) => new Date(a.start) - new Date(b.start));
+        });
+
+        const totalPages = computed(() => {
+            return Math.ceil(filteredEventsRaw.value.length / itemsPerPage);
         });
 
         // Methods
         const formatDate = (dateString) => {
             return format(parseISO(dateString), 'MMM dd, yyyy');
         };
+
+
 
         const formatTime = (dateString) => {
             return format(parseISO(dateString), 'HH:mm');
@@ -675,6 +704,8 @@ export default {
             timeRange,
             showDeleted,
             eventForm,
+            currentPage,
+            itemsPerPage,
 
             // Computed
             currentMonth,
@@ -684,6 +715,7 @@ export default {
             currentMonthDays,
             nextMonthDays,
             filteredEvents,
+            totalPages,
 
             // Methods
             formatDate,
