@@ -206,18 +206,6 @@
                                         placeholder="Describa las alergias"></textarea>
                                 </div>
 
-                                <!-- Consultation Motive -->
-                                <div class="md:col-span-2">
-                                    <label for="motive"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Motivo de consulta <span class="text-red-500">*</span>
-                                    </label>
-                                    <textarea id="motive" v-model="form.motive" rows="4"
-                                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white"
-                                        placeholder="Describa el motivo de la consulta"></textarea>
-                                    <p v-if="errors.motive" class="mt-1 text-sm text-red-600">{{ errors.motive }}</p>
-                                </div>
-
                                 <!-- Error Message -->
                                 <div v-if="error" class="md:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
                                     <div class="flex items-center">
@@ -263,7 +251,7 @@
 </template>
 
 <script>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Breadcrumb from '@/Components/BreadCrumb.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -277,6 +265,7 @@ import CardIcon from '@/Components/Icons/CardIcon.vue';
 import { markRaw } from 'vue';
 import PhoneInput from '@/Components/PhoneInput.vue';
 import DNIInput from '@/Components/DNIInput.vue';
+import EditIcon from '@/Components/Icons/EditIcon.vue';
 
 export default {
     props: {
@@ -295,15 +284,32 @@ export default {
         LocationIcon,
         CardIcon,
         PhoneInput,
-        DNIInput
+        DNIInput,
+        EditIcon,
+        Head
     },
     data() {
         return {
             error: '',
-            form: useForm({...this.patient}),
+            form: useForm({
+                first_name: this.patient.first_name,
+                last_name: this.patient.last_name,
+                DNI: this.patient.DNI,
+                phone_number: this.patient.phone_number,
+                date_of_birth: this.patient.date_of_birth,
+                complications: this.patient.medical_histories_as_patient?.complications || false,
+                complications_detail: this.patient.medical_histories_as_patient?.complications_detail || '',
+                drugs: this.patient.medical_histories_as_patient?.drugs || false,
+                drugs_detail: this.patient.medical_histories_as_patient?.drugs_detail || '',
+                alergies: this.patient.medical_histories_as_patient?.alergies || false,
+                alergies_detail: this.patient.medical_histories_as_patient?.alergies_detail || '',
+                address: this.patient.address,
+
+            }),
             crumbs: [
                 { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-                { label: this.patient.first_name + ' ' + this.patient.last_name, to: route('patients.show', this.patient) }
+                {icon: markRaw(UserIcon), label: this.patient.first_name + ' ' + this.patient.last_name, to: route('patients.show', this.patient) },
+                {icon: markRaw(EditIcon), label: 'Editar Paciente' },
             ]
         };
     },

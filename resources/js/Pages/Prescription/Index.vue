@@ -13,14 +13,14 @@
                 <div class="container mx-auto w-full px-2">
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
-                          <div class="flex gap-2">
+                        <div class="flex gap-2">
                             <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
                             <button @click="showReport = true"
                                 class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                                 <PrintIcon />
 
                             </button>
-                             <ReportModal :open="showReport" @close="showReport = false" table="prescriptions" />
+                            <ReportModal :open="showReport" @close="showReport = false" table="prescriptions" />
 
                         </div>
                         <!-- Flexible space -->
@@ -37,7 +37,7 @@
 
                     <!-- Table -->
                     <div
-                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
+                        class="hidden lg:block relative overflow-x-auto border border-gray-200 dark:border-gray-700/60 rounded-lg my-4 mx-2 sm:mx-4 lg:mx-10">
                         <div class="min-w-full overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
@@ -78,7 +78,7 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col "v-if="$page.props.auth.user.roles[0] === 'admin'"
+                                        <th scope="col " v-if="$page.props.auth.user.roles[0] === 'admin'"
                                             class="cursor-pointer " @click="sort('branch_id')">
                                             Sucursal
                                             <span v-if="form.sortField === 'branch_id'">
@@ -101,8 +101,11 @@
                                     <tr v-for="prescription in prescriptions.data" :key="prescription.id"
                                         class=" dark:border-gray-700">
                                         <td class="p-4 hidden md:table-cell">{{ prescription.id }}</td>
-                                        <td class="p-4 text-pink-600"><Link :href="route('patients.show',prescription.patient)">{{ prescription.patient.first_name }} {{
-                                            prescription.patient.last_name }}</Link></td>
+                                        <td class="p-4 text-pink-600">
+                                            <Link :href="route('patients.show', prescription.patient)">{{
+                                                prescription.patient.first_name }} {{
+                                                prescription.patient.last_name }}</Link>
+                                        </td>
                                         <td class="p-4 hidden sm:table-cell">
                                             <li v-for="detail in prescription.prescriptions_details">
                                                 {{ detail.drugs.name }}
@@ -114,7 +117,8 @@
                                         <td class="p-4 hidden lg:table-cell">{{ formatDate(prescription.created_at) }}
                                         </td>
                                         <AccessGate role="admin">
-                                            <td class="p-4 hidden lg:table-cell mt-2">{{ prescription.branch.name }}</td>
+                                            <td class="p-4 hidden lg:table-cell mt-2">{{ prescription.branch.name }}
+                                            </td>
                                         </AccessGate>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
@@ -137,6 +141,53 @@
                                 class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                                 No hay registros disponibles.
                             </div>
+                        </div>
+                        <Pagination :pagination="prescriptions" :filters="form" />
+                    </div>
+                    <!-- Card Layout (Mobile) -->
+                    <div class="lg:hidden grid gap-3 my-4 mx-2">
+                        <div v-for="prescription in prescriptions.data" :key="prescription.id"
+                            class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <h3 class="font-semibold text-pink-600">
+                                    <Link :href="route('patients.show', prescription.patient)">{{
+                                        prescription.patient.first_name }} {{ prescription.patient.last_name }}</Link>
+                                </h3>
+                                <p @click="openModal(prescription)" class="text-pink-500 cursor-pointer">
+                                    Abrir
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
+                                #{{ prescription.id }}
+                            </p>
+                            <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
+                                <p><span class="font-medium">Procedimientos:</span>
+                                <ul class="list-disc ml-4 ">
+
+                                    <li v-for="detail in prescription.prescriptions_details">
+                                        {{ detail.drugs.name }}
+                                        <br></br>
+                                    </li>
+
+                                </ul>
+                                </p>
+
+                                <p><span class="font-medium">Creado:</span> {{ formatDate(prescription.created_at) }}
+                                </p>
+
+                                <p class="flex items-center gap-1">
+                                    <span class="font-medium">Estado:</span>
+                                    <span :class="statusBadgeClasses(prescription.active)">
+                                        <HandThumbDown v-if="prescription.active == 0" />
+                                        <HandThumbUp v-else />
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div v-if="!prescriptions.data.length"
+                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                            No hay registros disponibles.
                         </div>
                         <Pagination :pagination="prescriptions" :filters="form" />
                     </div>
@@ -440,7 +491,7 @@ export default {
         },
         deleteprescription(id) {
             this.$inertia.delete(route('prescriptions.destroy', id),);
-              this.showModal = false;
+            this.showModal = false;
         },
         restoreprescription(id) {
             this.$inertia.put(route('prescriptions.update', id), {

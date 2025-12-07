@@ -1,18 +1,19 @@
 <template>
+
     <Head title="Citas" />
     <AuthenticatedLayout>
         <template #header>
             <Breadcrumb :crumbs="crumbs" />
         </template>
 
-        <template #default>
+<template #default>
             <div class=" dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8 ">
-                <div class="max-w-4xl mx-auto">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- Form Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg ">
                         <!-- Form Header -->
                         <div class="bg-pink-500  dark:bg-pink-600 px-6 py-4 rounded-t-xl">
-                            <h2 class="text-xl font-bold text-white">Editar Cita Médica</h2>
+                               <h2 class="text-xl font-bold text-white">Editar Cita Médica</h2>
                             <p class="text-pink-100 text-sm">Complete los detalles de la cita</p>
                         </div>
 
@@ -22,7 +23,7 @@
                             <div class="space-y-1">
                                 <label for="title"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Motivo de consulta <span class="text-red-500">*</span>
+                                    Motivo de Consulta <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -34,7 +35,7 @@
                                 </div>
                                 <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                     errors.title
-                                    }}</p>
+                                }}</p>
                             </div>
 
                             <!-- Doctor & Patient Row -->
@@ -93,9 +94,10 @@
                                         Horario <span class="text-red-500">*</span>
                                     </label>
                                     <VueDatePicker range v-model="timeRange" @update:model-value="onTimeRangeChange"
-                                        :time-picker="true" :format="timeFormat" :is-24="true"
-                                        format="HH:mm" :enable-time-picker="true" placeholder="Seleccione horario"
+                                        :time-picker="true" :is-24="true" format="HH:mm" :enable-time-picker="true"
+                                        :disabled-range="blockedRanges" placeholder="Seleccione horario"
                                         class="date-picker-custom border-gray-300 dark:border-gray-600 rounded-lg hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700 dark:text-white transition duration-200" />
+
                                 </div>
                             </div>
 
@@ -125,7 +127,63 @@
                             </div>
                         </form>
                     </div>
+                    <!-- Appointments of the Selected Date -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col h-full">
+                        <!-- Header -->
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center space-x-2">
+                            <CalendarIcon class="h-5 w-5 text-pink-500" />
+                            <span>
+                                Citas de
+                                {{ selected_doctor
+                                    ? selected_doctor.first_name + ' ' + selected_doctor.last_name
+                                    : 'día'
+                                }}
+                            </span>
+                        </h3>
+
+
+                        <!-- No date selected -->
+                        <div v-if="!form.date" class="text-gray-500 dark:text-gray-400 mb-4">
+                            Seleccione una fecha para ver las citas.
+                        </div>
+
+                        <!-- No appointments -->
+                        <div v-else-if="filteredAppointments.length === 0"
+                            class="text-gray-500 dark:text-gray-400 mb-4">
+                            Seleccione un doctor para ver su horario.
+                        </div>
+
+                        <!-- Scrollable appointment list -->
+                        <div v-else class="overflow-y-auto pr-2" style="max-height: 400px;">
+                            <ul class="space-y-4">
+                                <li v-for="appt in filteredAppointments" :key="appt.id"
+                                    class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-md font-semibold text-gray-800 dark:text-white">
+                                            {{ appt.title }}
+                                        </h4>
+                                    </div>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
+                                        <strong>Doctor:</strong> {{ appt.doctor.first_name }} {{
+                                            appt.doctor.last_name }}
+
+                                    </p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">
+                                        <strong>Paciente:</strong> {{ appt.patient.first_name }} {{
+                                            appt.patient.last_name }}
+                                    </p>
+                                    <!-- Time info -->
+                                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                                        <strong>Horario:</strong> {{ formatTime(appt.starttime) }} - {{
+                                            formatTime(appt.endtime) }}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
 
             <!-- Doctor Selection Modal -->
@@ -162,11 +220,12 @@
                 </div>
             </Modal>
         </template>
-    </AuthenticatedLayout>
+</AuthenticatedLayout>
 </template>
 <script>
 
 import {
+    Head,
     Link, useForm
 } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -184,17 +243,20 @@ import { ref } from 'vue';
 import UserSelector from '@/Components/UserSelector.vue';
 import Modal from '@/Components/Modal.vue';
 import PatientSelector from '@/Components/PatientSelector.vue';
+import AddIcon from '@/Components/Icons/AddIcon.vue';
 import { markRaw } from 'vue';
 import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
+import { useToast } from 'vue-toastification';
 export default {
     props: {
         errors: [Array, Object],
-        event: Object,
         doctors: Object,
-        patients: Object
-
+        patients: Object,
+        patient: Object,
+        events: Object,
+        event: Object,
     },
     components: {
         Link,
@@ -212,15 +274,50 @@ export default {
         UserSelector,
         Modal,
         PatientSelector,
+        AddIcon,
         CalendarIcon,
         EditIcon,
-        XIcon
+        XIcon,
+        Head
+    },
+    computed: {
+        filteredAppointments() {
+            return this.events.filter(appt => {
+                let matchesDoctor = true;
+                let matchesDate = true;
+                if (this.selected_doctor?.id) {
+                    matchesDoctor = appt.doctor_id === this.selected_doctor.id;
+                }
+
+                if (this.form.date) {
+                    const selectedDate = new Date(this.form.date).toISOString().split('T')[0];
+                    matchesDate = appt.date === selectedDate;
+                }
+
+                return matchesDoctor && matchesDate;
+            });
+        },
+
+
+        blockedRanges() {
+            if (!this.form.date) return [];
+
+            const baseDate = new Date(this.form.date);
+            return this.filteredAppointments.map(appt => {
+                return {
+                    start: this.toDateFromTimeOnDate(appt.starttime, baseDate),
+                    end: this.toDateFromTimeOnDate(appt.endtime, baseDate)
+                };
+            });
+        }
 
     },
     data() {
         return {
             isVisible: false,
             form: useForm({
+                date: new Date(),
+                active: true,
                 title: this.event.title,
                 doctor_id: this.event.doctor_id,
                 patient_id: this.event.patient_id,
@@ -228,14 +325,14 @@ export default {
                 endtime: this.event.endtime,
                 date: this.event.date,
             }),
-            error: '',
             timeRange: [],
             timeFormat: 'HH:mm',
+            error: '',
             showUserModal: ref(false),
             showPatientModal: ref(false),
             selected_patient: this.event.patient,
             selected_doctor: this.event.doctor,
-            crumbs: [
+           crumbs: [
                 { icon: markRaw(CalendarIcon), label: 'Citas', to: route('events.index') },
                 { icon: markRaw(UserIcon), label: this.event.patient.first_name + ' ' + this.event.patient.last_name, to: route('patients.show', this.event.patient) },
                 { label: 'Editar' },
@@ -243,24 +340,53 @@ export default {
         };
     },
     methods: {
-          onTimeRangeChange(range) {
-            if (Array.isArray(range) && range.length === 2) {
-                this.form.starttime = range[0];
-                this.form.endtime = range[1];
-            } else {
-                this.form.starttime = null;
-                this.form.endtime = null;
-            }
-             const formatTime = (time) => {
-                const h = time.hours.toString().padStart(2, '0');
-                const m = time.minutes.toString().padStart(2, '0');
-                return `${h}:${m}`;
-            };
-               this.form.starttime = formatTime(this.form.starttime);
-            this.form.endtime = formatTime(this.form.endtime);
-
+        toDateFromTimeOnDate(time, baseDate) {
+            if (!time) return null;
+            const [h, m] = time.split(':').map(Number);
+            const d = new Date(baseDate);
+            d.setHours(h, m, 0, 0);
+            return d;
+        },
+        rangesOverlap(aStart, aEnd, bStart, bEnd) {
+            return aStart < bEnd && bStart < aEnd;
         },
 
+        onTimeRangeChange(range) {
+            if (!Array.isArray(range) || range.length !== 2 || !range[0] || !range[1]) {
+                this.form.starttime = null;
+                this.form.endtime = null;
+                this.timeRange = null;
+                return;
+            }
+
+            const [selStart, selEnd] = range;
+
+            const conflict = this.blockedRanges.some(br => {
+                if (!br.start || !br.end) return false;
+                return this.rangesOverlap(selStart, selEnd, br.start, br.end);
+            });
+
+            if (conflict) {
+                this.timeRange = null;
+                this.form.starttime = null;
+                this.form.endtime = null;
+                useToast.error('El horario seleccionado se solapa con una cita ya existente.');
+                return;
+            }
+            const formatTime = (obj) => {
+                if (!obj) return null;
+                const h = String(obj.hours).padStart(2, '0');
+                const m = String(obj.minutes).padStart(2, '0');
+                return `${h}:${m}`;
+            }
+
+            this.form.starttime = formatTime(selStart);
+            this.form.endtime = formatTime(selEnd);
+            this.timeRange = range;
+        },
+        isTimeBlocked(timeDate) {
+            return this.blockedRanges.some(br => this.rangesOverlap(timeDate, new Date(timeDate.getTime() + 1), br.start, br.end));
+        },
         openUserModal() {
             this.showUserModal = true;
         },
@@ -268,7 +394,6 @@ export default {
             this.showPatientModal = true;
         },
         submit() {
-
             if (!this.form.title) {
                 this.error = 'Por favor, Ingrese un título.';
                 return;
@@ -294,18 +419,21 @@ export default {
                 this.error = 'La hora de finalización debe ser después de la hora de inicio';
                 return;
             }
+
             this.error = null;
+
             this.form.date = this.formatDate(this.form.date);
-            this.form.put(route('events.update', this.event));
+
+            this.form.post(route('events.store'),);
 
         },
-         formatDate(date) {
+        formatDate(date) {
             const d = new Date(date);
             return d.toISOString().split('T')[0];
         },
         formatTime(time) {
-            const d = new Date(time);
-            return d.toTimeString().split(' ')[0];
+            if (!time) return ''
+            return time.substring(0, 5)
         }
 
 
@@ -313,3 +441,4 @@ export default {
 
 };
 </script>
+

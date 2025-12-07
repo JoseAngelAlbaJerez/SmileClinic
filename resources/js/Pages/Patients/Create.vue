@@ -311,7 +311,6 @@ export default {
                 alergies_detail: '',
                 address: '',
                 motive: '',
-                ars_id:'',
             }),
             error: '',
             crumbs: [
