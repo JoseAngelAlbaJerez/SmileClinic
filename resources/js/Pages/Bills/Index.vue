@@ -260,7 +260,7 @@ export default {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'bills.updated_at',
+                sortField: this.filters?.sortField || 'c_x_c_s.updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
 
                 lastDays: this.filters?.lastDays || '1',
