@@ -14,6 +14,13 @@
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                        <AccessGate permission="bill.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                             <PrintIcon />
@@ -86,8 +93,11 @@
                                 <tbody>
                                     <tr v-for="bill in bills.data" :key="bill.id">
                                         <td class="p-4 items-center">{{ bill.id }}</td>
-                                        <td class="p-4 items-center text-pink-600"> <Link :href="route('patients.show', bill.patient)">{{ bill.patient.first_name }} {{
-                                            bill.patient.last_name }}</Link></td>
+                                        <td class="p-4 items-center text-pink-600">
+                                            <Link :href="route('patients.show', bill.patient)">{{
+                                            bill.patient.first_name }} {{
+                                                bill.patient.last_name }}</Link>
+                                        </td>
                                         <td class="p-4">
                                             <div v-for="detail in bill.billdetail" :key="detail.id">
                                                 <li>
@@ -136,7 +146,7 @@
                             </div>
                             <p class="text-sm text-pink-600 font-medium mt-1">
                                 <Link :href="route('patients.show', bill.patient)">{{ bill.patient.first_name }} {{
-                                            bill.patient.last_name }}</Link>
+                                    bill.patient.last_name }}</Link>
                             </p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Procedimientos:</span>
@@ -156,7 +166,7 @@
                                     }).format(bill.total
                                         ||
                                         0) }}</p>
-                                        <p><span class="font-medium">Doctor:</span> {{ bill.doctor.first_name }} {{
+                                <p><span class="font-medium">Doctor:</span> {{ bill.doctor.first_name }} {{
                                     bill.doctor.last_name }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(bill.created_at) }}</p>
 
@@ -212,6 +222,7 @@ import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
 import CashIcon from '@/Components/Icons/CashIcon.vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 export default {
 
     props: {
@@ -240,7 +251,8 @@ export default {
         Link,
         PrintIcon,
         AccessGate,
-        ReportModal
+        ReportModal,
+        DeleteIcon
 
     },
 

@@ -16,7 +16,13 @@
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <!-- Filter -->
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-
+                        <AccessGate permission="expense.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <AccessGate :role="['admin']">
                             <button @click="showReport = true"
                                 class="lex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
@@ -40,10 +46,10 @@
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar..."
                                 class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
                             <AccessGate permission="expense.create">
-                                <Link  :href="route('expenses.create')" as="button"
+                                <Link :href="route('expenses.create')" as="button"
                                     class="flex justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                                    <AddIcon class="size-5" />
-                                    <span class="hidden sm:inline">Nuevo Egreso</span>
+                                <AddIcon class="size-5" />
+                                <span class="hidden sm:inline">Nuevo Egreso</span>
                                 </Link>
                             </AccessGate>
                         </div>
@@ -101,7 +107,10 @@
                                         class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                         <td class="p-4">{{ expense.id }}</td>
                                         <td class="p-4">{{ expense.description }}</td>
-                                        <td class="p-4 text-pink-600"><Link :href="route('users.show',expense.user)">{{ expense.user.first_name }} {{ expense.user.last_name }}</Link></td>
+                                        <td class="p-4 text-pink-600">
+                                            <Link :href="route('users.show', expense.user)">{{ expense.user.first_name }}
+                                            {{ expense.user.last_name }}</Link>
+                                        </td>
                                         <td class="p-4">
                                             {{ new Intl.NumberFormat('es-DO', {
                                                 style: 'currency', currency: 'DOP'
@@ -152,7 +161,7 @@
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <AccessGate :role="'admin'">
                                     <p><span class="font-medium">Creado Por:</span>
-                                        <Link class="text-pink-600 ml-1" :href="route('users.show',expense.user)">
+                                        <Link class="text-pink-600 ml-1" :href="route('users.show', expense.user)">
                                         {{ expense.user.first_name }} {{ expense.user.last_name }}</Link>
                                     </p>
                                 </AccessGate>
@@ -278,7 +287,7 @@
                         <div class="flex items-center gap-2">
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Monto:</span>
                             <span class="text-gray-900 dark:text-gray-300">$ {{ formatNumber(selectedExpense.amount)
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
 

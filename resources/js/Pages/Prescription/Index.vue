@@ -11,10 +11,18 @@
             <div
                 class="flex items-center justify-center rounded-lg bg-white-500 py-6 sm:py-12 dark:bg-gray-900 dark:text-white">
                 <div class="container mx-auto w-full px-2">
+
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 sm:items-center">
                         <div class="flex gap-2">
                             <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                            <AccessGate permission="prescription.delete">
+                                <button @click="toggleShowDeleted()"
+                                    :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                    class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                    <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                                </button>
+                            </AccessGate>
                             <button @click="showReport = true"
                                 class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                                 <PrintIcon />
@@ -214,7 +222,7 @@
                             <span class="font-medium text-gray-500 dark:text-gray-200 w-30">Motivo de última
                                 Consulta:</span>
                             <span class="text-gray-900 dark:text-gray-300">{{ selectedprescription.patient.motive
-                                }}</span>
+                            }}</span>
                         </div>
 
                         <div class="flex items-center gap-2">
@@ -246,7 +254,7 @@
                                                     class="font-semibold text-gray-600 dark:text-gray-300">Instrucciones:
                                                 </span>
                                                 <span class="text-gray-800 dark:text-gray-200">{{ details.description
-                                                    }}</span>
+                                                }}</span>
                                             </p>
 
                                             <template v-if="details.drugs">

@@ -15,7 +15,13 @@
                     <!-- Search & Actions -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-
+                        <AccessGate permission="CXC.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <!-- Print -->
                         <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
@@ -83,7 +89,7 @@
                                         <td class="p-4">{{ CXCs.id }}</td>
                                         <td class="p-4 text-pink-600">
                                             <Link :href="route('patients.show', CXCs.patient)">{{
-                                            CXCs.patient.first_name }} {{ CXCs.patient.last_name }}</Link>
+                                                CXCs.patient.first_name }} {{ CXCs.patient.last_name }}</Link>
                                         </td>
                                         <td class="p-4">
                                             {{ new
@@ -126,7 +132,7 @@
                             <div class="flex justify-between items-center">
                                 <h3 class="font-semibold text-pink-600">
                                     <Link :href="route('patients.show', CXCs.patient)">{{ CXCs.patient.first_name }} {{
-                                    CXCs.patient.last_name }}</Link>
+                                        CXCs.patient.last_name }}</Link>
                                 </h3>
                                 <Link :href="route('CXC.show', CXCs)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
@@ -206,6 +212,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 export default {
 
     props: {
@@ -234,7 +241,8 @@ export default {
         Link,
         PrintIcon,
         AccessGate,
-        ReportModal
+        ReportModal,
+        DeleteIcon
 
 
     },

@@ -16,13 +16,20 @@
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
 
-
+                        <AccessGate permission="patient.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <!-- Print -->
                         <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                             <PrintIcon />
                         </button>
                         <ReportModal :open="showReport" @close="showReport = false" table="patients" />
+
 
                         <!-- Spacer pushes actions to right on big screens -->
                         <div class="flex flex-1 sm:flex-none sm:ml-auto items-center gap-2">
@@ -82,7 +89,7 @@
                                     <tr v-for="patient in patients.data" :key="patient.id">
                                         <td class="p-4">{{ patient.id }}</td>
                                         <td class="p-4">{{ patient.first_name }} {{ patient.last_name }}</td>
-                                        <td class="p-4">{{formatDate(patient.date_of_birth) }}</td>
+                                        <td class="p-4">{{ formatDate(patient.date_of_birth) }}</td>
                                         <td class="p-4">{{ formatDate(patient.created_at) }}</td>
 
                                         <td class="p-4">
@@ -124,7 +131,8 @@
                             </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">#{{ patient.id }}</p>
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
-                                <p><span class="font-medium">Fecha de Nacimiento:</span> {{formatDate(patient.date_of_birth) }}</p>
+                                <p><span class="font-medium">Fecha de Nacimiento:</span>
+                                    {{ formatDate(patient.date_of_birth) }}</p>
                                 <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
@@ -184,6 +192,7 @@ import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import { ref } from 'vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 export default {
 
 
@@ -215,7 +224,8 @@ export default {
         TableIcon,
         AccessGate,
         ReportModal,
-        PrintIcon
+        PrintIcon,
+        DeleteIcon
 
     },
     watch: {

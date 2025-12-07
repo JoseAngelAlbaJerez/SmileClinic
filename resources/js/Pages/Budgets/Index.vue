@@ -15,7 +15,13 @@
                     <!-- Search & Actions -->
                     <div class="my-2 flex flex-col sm:flex-row lg:mx-10 gap-2 items-stretch sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
-
+                        <AccessGate permission="budget.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <!-- Print -->
                         <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
@@ -86,7 +92,7 @@
                                         <td class="p-4">{{ budget.id }}</td>
                                         <td class="p-4 text-pink-600">
                                             <Link :href="route('patients.show', budget.patient)">{{
-                                            budget.patient.first_name }} {{ budget.patient.last_name }}</Link>
+                                                budget.patient.first_name }} {{ budget.patient.last_name }}</Link>
                                         </td>
                                         <td class="p-4">
                                             <div v-for="detail in budget.budgetdetail" :key="detail.id">
@@ -132,8 +138,10 @@
                         <div v-for="budget in budgets.data" :key="budget.id"
                             class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-pink-600"><Link :href="route('patients.show', budget.patient)">{{
-                                            budget.patient.first_name }} {{ budget.patient.last_name }}</Link></h3>
+                                <h3 class="font-semibold text-pink-600">
+                                    <Link :href="route('patients.show', budget.patient)">{{
+                                        budget.patient.first_name }} {{ budget.patient.last_name }}</Link>
+                                </h3>
                                 <Link :href="route('budgets.show', budget)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
@@ -260,6 +268,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrintIcon from '@/Components/Icons/PrintIcon.vue';
 import AccessGate from '@/Components/AccessGate.vue';
 import ReportModal from '@/Components/ReportModal.vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 export default {
 
     props: {
@@ -288,7 +297,8 @@ export default {
         Link,
         PrintIcon,
         AccessGate,
-        ReportModal
+        ReportModal,
+        DeleteIcon
 
 
     },

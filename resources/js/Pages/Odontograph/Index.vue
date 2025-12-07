@@ -14,6 +14,13 @@
                     <!-- Search & Exports -->
                     <div class="my-2 flex flex-col sm:flex-row mx-4 lg:mx-10 gap-2 sm:items-center">
                         <LastDaysFilter v-model="filters.lastDays" @change="submitFilters()" />
+                          <AccessGate permission="odontograph.delete">
+                            <button @click="toggleShowDeleted()"
+                                :class="form.showDeleted ? 'bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ' : 'bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 '"
+                                class="lg:hidden flex justify-center rounded-lg   px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm sm:px-4">
+                                <DeleteIcon /> {{ form.showDeleted ? 'Mostrar Eliminados' : 'Ocultar Eliminados' }}
+                            </button>
+                        </AccessGate>
                         <button @click="showReport = true"
                             class="flex justify-center gap-2 rounded-lg bg-green-500 px-2 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:px-4">
                             <PrintIcon />
@@ -236,6 +243,7 @@ import ReportModal from '@/Components/ReportModal.vue';
 import { ref } from 'vue';
 import BuildingIcon from '@/Components/Icons/BuildingIcon.vue';
 import TeethIcon from '@/Components/Icons/TeethIcon.vue';
+import DeleteIcon from '@/Components/Icons/DeleteIcon.vue';
 export default {
 
 
@@ -268,7 +276,8 @@ export default {
         AccessGate,
         PrintIcon,
         ReportModal,
-        TeethIcon
+        TeethIcon,
+        DeleteIcon
 
     },
     watch: {
