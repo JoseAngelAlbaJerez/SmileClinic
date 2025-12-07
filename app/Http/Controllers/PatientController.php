@@ -175,10 +175,10 @@ class PatientController extends Controller implements HasMiddleware
         $events = Event::where('patient_id', $patient->id)->with('doctor')->latest()->take(3)->get();
         $latest_event = Event::where('patient_id', $patient->id)->latest()->first();
         $medicalHistory = MedicalHistory::where('patient_id', $patient->id)->with('doctor')->latest()->first();
-        $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure','branch')->latest()->take(3)->get();
-        $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure','branch')->latest()->take(3)->get();
+        $budgets = Budget::where('patient_id', $patient->id)->with('doctor', 'patient', 'budgetdetail.procedure', 'branch')->latest()->take(3)->get();
+        $bills = Bill::where('patient_id', $patient->id)->with('doctor', 'patient', 'billdetail.procedure', 'branch')->latest()->take(3)->get();
         $CXC = CXC::where('patient_id', $patient->id)->with('Payment')->latest()->take(3)->get();
-        $odontograph = $query->orderByDesc('created_at')->with(  'branch')->latest()->take(3)->get();
+        $odontograph = $query->orderByDesc('created_at')->with('branch')->latest()->take(3)->get();
         $prescription = Prescription::where('patient_id', $patient->id)->with('patient', 'doctor', 'prescriptionsDetails.drugs')->orderByDesc('created_at')->latest()->take(3)->get();
         $patient->age =  Carbon::parse($patient->date_of_birth)->age;
         return Inertia::render('Patients/Show', [
@@ -200,10 +200,13 @@ class PatientController extends Controller implements HasMiddleware
     }
     public function edit(User $patient)
     {
+        $patient->load('medicalHistoriesAsPatient');
+
         return Inertia::render('Patients/Edit', [
-            'patient' => $patient
+            'patient' => $patient,
         ]);
     }
+
 
     public function update(Request $request, User $patient)
     {
@@ -216,22 +219,23 @@ class PatientController extends Controller implements HasMiddleware
             'last_name' => 'required|string|max:255',
             'DNI' => 'required|string|max:255',
             'phone_number' => 'nullable|string|max:255',
-            'ars' => 'nullable|string|max:255',
-            'ars_id' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string|max:255',
-            'motive' => 'nullable|string|max:255',
-            'complications' => 'boolean',
-            'complications_detail' => 'nullable|string',
-            'drugs' => 'boolean',
-            'drugs_detail' => 'nullable|string',
-            'alergies' => 'boolean',
-            'alergies_detail' => 'nullable|string',
+
         ]);
 
         $patient->update($data);
+        $data = $request->validate([
+            'complications' => 'required|boolean',
+            'complications_detail' => 'nullable|string',
+            'drugs' => 'required|boolean',
+            'drugs_detail' => 'nullable|string',
+            'alergies' => 'required|boolean',
+            'alergies_detail' => 'nullable|string',
+        ]);
+        $patient->medicalHistoriesAsPatient()->update($data);
 
-        return redirect()->back()->with('toast', 'Paciente actualizado correctamente.');
+        return redirect()->route('patients.show', $patient)->with('toast', 'Paciente actualizado correctamente.');
     }
     private function restore(User $patient)
     {

@@ -35,10 +35,16 @@ class User extends Authenticatable
     ];
 
 
-    public function medicalHistories()
+    public function medicalHistoriesAsPatient()
     {
-        return $this->hasOne(MedicalHistory::class);
+        return $this->hasOne(MedicalHistory::class, 'patient_id', 'id');
     }
+
+    public function medicalHistoriesAsDoctor()
+    {
+        return $this->hasMany(MedicalHistory::class, 'doctor_id', 'id');
+    }
+
     public function branches()
     {
         return $this->belongsToMany(Branch::class, 'users_branches', 'user_id', 'branch_id');
