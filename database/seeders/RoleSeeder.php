@@ -85,8 +85,10 @@ class RoleSeeder extends Seeder
         $user = User::where('first_name', 'Test User')->first();
         $user->syncRoles('admin');
         $user->branches()->sync($allBranches);
-        $user->active_branch_id = $user->branches()->first()->id;
+        $user = $user->fresh('branches');
+        $user->active_branch_id = $user->branches->first()->id;
         $user->save();
+
 
         $user = User::where('first_name', 'Cayetano Germosen')->first();
         $user->syncRoles('receptionist');
@@ -108,19 +110,19 @@ class RoleSeeder extends Seeder
 
         $user = User::where('first_name', 'Dra. Castro')->first();
         $user->syncRoles('doctor');
-        $user->branches()->sync([1,4]);
+        $user->branches()->sync([1, 4]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();
 
         $user = User::where('first_name', 'Dra. Madelin')->first();
-        $user->syncRoles('doctor','patient');
-        $user->branches()->sync([2,1]);
+        $user->syncRoles('doctor', 'patient');
+        $user->branches()->sync([2, 1]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();
 
         $user = User::where('first_name', 'Dra. Odalisa')->first();
         $user->syncRoles('doctor');
-        $user->branches()->sync([3,2]);
+        $user->branches()->sync([3, 2]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();
 
@@ -132,7 +134,7 @@ class RoleSeeder extends Seeder
 
         $user = User::where('first_name', 'Dr. Francisco')->first();
         $user->syncRoles('doctor');
-        $user->branches()->sync([1,1]);
+        $user->branches()->sync([1, 1]);
         $user->active_branch_id = $user->branches()->first()->id;
         $user->save();
 
