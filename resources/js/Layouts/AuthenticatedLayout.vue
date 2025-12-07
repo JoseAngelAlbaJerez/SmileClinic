@@ -30,6 +30,11 @@ import SidebarIcon from '@/Components/Icons/SidebarIcon.vue';
 import SidebarFilledIcon from '@/Components/Icons/SidebarFilledIcon.vue';
 import HomeIcon from '@/Components/Icons/HomeIcon.vue';
 import DocumentIcon from '@/Components/Icons/DocumentIcon.vue';
+import ArrowDownCircleIcon from '@/Components/Icons/ArrowDownCircleIcon.vue';
+import CashIcon from '@/Components/Icons/CashIcon.vue';
+import CardIcon from '@/Components/Icons/CardIcon.vue';
+import CreditCardIcon from '@/Components/Icons/CreditCardIcon.vue';
+import TeethIcon from '@/Components/Icons/TeethIcon.vue';
 const showingNavigationDropdown = ref(false);
 const isDark = ref(false)
 const toast = useToast();
@@ -46,6 +51,7 @@ function switchBranch(id) {
     })
 }
 const toggleSidebar = () => {
+
     sidebarExpanded.value = !sidebarExpanded.value;
     localStorage.setItem('sidebarExpanded', sidebarExpanded.value);
 };
@@ -172,7 +178,7 @@ watchEffect(() => {
                         <div class="px-3">
                             <Tooltip class="w-full" text="Sucursales" position="right">
                                 <Link :href="route('branches.index')" :class="[
-                                    route().current('branches.index') || route().current('branches.create') || route().current('branches.edit')  || route().current('branches.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('branches.index') || route().current('branches.create') || route().current('branches.edit') || route().current('branches.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -187,7 +193,7 @@ watchEffect(() => {
                         <div class="px-3">
                             <Tooltip class="w-full" text="Pacientes" position="right">
                                 <Link :href="route('patients.index')" :class="[
-                                    route().current('patients.index') || route().current('patients.create') || route().current('patients.edit')  || route().current('patients.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('patients.index') || route().current('patients.create') || route().current('patients.edit') || route().current('patients.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -199,11 +205,12 @@ watchEffect(() => {
                         </div>
                     </AccessGate>
 
+
                     <div class="px-3">
                         <AccessGate :permission="['event.view']">
                             <Tooltip class="w-full" text="Citas" position="right">
                                 <Link :href="route('events.index')" :class="[
-                                    route().current('events.index') || route().current('events.create') || route().current('events.edit')  || route().current('events.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('events.index') || route().current('events.create') || route().current('events.edit') || route().current('events.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -214,12 +221,27 @@ watchEffect(() => {
                             </Tooltip>
                         </AccessGate>
                     </div>
+                    <div class="px-3">
+                        <AccessGate :permission="['odontograph.view']">
+                            <Tooltip class="w-full" text="Odontogramas" position="right">
+                                <Link :href="route('odontographs.index')" :class="[
+                                    route().current('odontographs.index') || route().current('odontographs.create') || route().current('odontographs.edit') || route().current('odontographs.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
+                                    { 'justify-center': !sidebarExpanded }
+                                ]">
+                                <TeethIcon
+                                    class="h-5 w-5 text-gray-500 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300" />
+                                <span v-if="sidebarExpanded" class="truncate ml-3">Odontogramas</span>
+                                </Link>
+                            </Tooltip>
+                        </AccessGate>
+                    </div>
 
                     <div class="px-3">
                         <AccessGate :permission="['budget.view']">
                             <Tooltip class="w-full" text="Presupuestos" position="right">
                                 <Link :href="route('budgets.index')" :class="[
-                                    route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.edit')  || route().current('budgets.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('budgets.index') || route().current('budgets.create') || route().current('budgets.edit') || route().current('budgets.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -231,14 +253,29 @@ watchEffect(() => {
                         </AccessGate>
                     </div>
 
+
                     <AccessGate :permission="['bill.view']" class="px-3">
-                        <Tooltip class="w-full" text="Recibos" position="right">
+                        <Tooltip class="w-full" text="Facturas" position="right">
                             <Link :href="route('bills.index')" :class="[
-                                route().current('bills.index') || route().current('bills.create') || route().current('bills.edit')  || route().current('bills.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('bills.index') || route().current('bills.create') || route().current('bills.edit') || route().current('bills.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
-                            <DocumentIcon
+                            <CashIcon
+                                class="h-5 w-5 text-gray-500 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300" />
+                            <span v-if="sidebarExpanded" class="truncate ml-3">Facturas</span>
+                            </Link>
+                        </Tooltip>
+                    </AccessGate>
+
+                    <AccessGate :permission="['CXC.view']" class="px-3">
+                        <Tooltip class="w-full" text="Recibos" position="right">
+                            <Link :href="route('CXC.index')" :class="[
+                                route().current('CXC.index') || route().current('payments.create') || route().current('payments.edit') || route().current('CXC.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
+                                { 'justify-center': !sidebarExpanded }
+                            ]">
+                            <CreditCardIcon
                                 class="h-5 w-5 text-gray-500 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300" />
                             <span v-if="sidebarExpanded" class="truncate ml-3">Recibos</span>
                             </Link>
@@ -248,11 +285,11 @@ watchEffect(() => {
                     <AccessGate :permission="['expense.view']" class="px-3">
                         <Tooltip class="w-full" text="Egresos" position="right">
                             <Link :href="route('expenses.index')" :class="[
-                                route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit')  || route().current('expenses.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('expenses.index') || route().current('expenses.create') || route().current('expenses.edit') || route().current('expenses.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
-                            <CartIcon
+                            <ArrowDownCircleIcon
                                 class="h-5 w-5 text-gray-500 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300" />
                             <span v-if="sidebarExpanded" class="truncate ml-3">Egresos</span>
                             </Link>
@@ -263,7 +300,7 @@ watchEffect(() => {
                         <AccessGate :permission="['prescription.view']">
                             <Tooltip class="w-full" text="Recetas" position="right">
                                 <Link :href="route('prescriptions.index')" :class="[
-                                    route().current('prescriptions.index') || route().current('prescription.create') || route().current('prescription.edit')  || route().current('prescription.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                    route().current('prescriptions.index') || route().current('prescription.create') || route().current('prescription.edit') || route().current('prescription.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                     'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                     { 'justify-center': !sidebarExpanded }
                                 ]">
@@ -280,7 +317,7 @@ watchEffect(() => {
                     <AccessGate :permission="['user.view']" class="px-3">
                         <Tooltip class="w-full" text="Usuarios" position="right">
                             <Link :href="route('users.index')" :class="[
-                                route().current('users.index') || route().current('users.create') || route().current('users.edit')  || route().current('users.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
+                                route().current('users.index') || route().current('users.create') || route().current('users.edit') || route().current('users.show') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700',
                                 'group flex items-center px-3 py-3 text-sm font-medium rounded-md transition-all',
                                 { 'justify-center': !sidebarExpanded }
                             ]">
@@ -364,7 +401,7 @@ watchEffect(() => {
                             </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="can('CXC.view')" :href="route('CXC.index')"
                                 :active="route().current('CXC.index')">
-                                Cuentas por Cobrar
+                                Recibos
                             </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="can('expense.view')" :href="route('expenses.index')"
                                 :active="route().current('expenses.index')">
@@ -380,7 +417,7 @@ watchEffect(() => {
                             </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="can('bill.view')" :href="route('bills.index')"
                                 :active="route().current('bills.index')">
-                                Recibos
+                                Facturas
                             </ResponsiveNavLink>
 
                         </div>
@@ -403,7 +440,7 @@ watchEffect(() => {
                                 </button>
 
 
-                                <ResponsiveNavLink :href="route('logout')">
+                                <ResponsiveNavLink method="post" :href="route('logout')">
                                     Cerrar sesión
                                 </ResponsiveNavLink>
 
@@ -415,7 +452,7 @@ watchEffect(() => {
                 </nav>
 
                 <nav
-                    class="border-b hidden md:flex h-16 justify-between px-5 border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
+                    class="border-b hidden md:flex  h-16 justify-between px-5 border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
 
 
                     <!-- IZQUIERDA -->
@@ -425,9 +462,53 @@ watchEffect(() => {
                         <SidebarFilledIcon v-else class="h-5 w-5" />
                     </button>
 
-                    <!-- DERECHA -->
-                    <div class="hidden lg:ms-6 lg:flex lg:items-center ml-auto">
 
+                    <!-- DERECHA -->
+                    <div class="hidden lg:ms-6 lg:flex md:flex items-center ml-auto">
+
+
+                        <div class="w-12 h-12 ml-2 overflow-hidden  rounded-full ">
+                            <Link :href="route('profile.edit')">
+                            <img :src="page.props.auth.user.avatar ? `/storage/${page.props.auth.user.avatar}` : 'https://cdn-icons-png.flaticon.com/512/219/219983.png'"
+                                alt="user" class="w-full h-full object-cover"></Link>
+                        </div>
+                        <!-- Usuario -->
+                        <div class="relative ms-1">
+                            <Dropdown align="right" width="48">
+                                <template #trigger>
+                                    <span class="inline-flex rounded-md">
+                                        <button type="button"
+                                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                            {{ $page.props.auth.user.first_name }}
+                                            <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </template>
+
+                                <template #content>
+                                    <div v-for="branch in page.props.auth.user.branches" :key="branch.id">
+                                        <button :disabled="branch.id === page.props.auth.user.active_branch_id"
+                                            @click="switchBranch(branch.id)" :class="{
+                                                'bg-pink-500 text-white dark:hover:bg-pink-800 hover:bg-pink-400 ': branch.id === page.props.auth.user.active_branch_id,
+                                            }"
+                                            class="block w-full px-4 py-2 text-start text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                                            {{ branch.name }}
+                                        </button>
+                                    </div>
+
+
+
+                                    <DropdownLink :href="route('logout')" method="post" as="button">
+                                        Cerrar Sesión
+                                    </DropdownLink>
+                                </template>
+                            </Dropdown>
+                        </div>
                         <!-- Modo oscuro -->
                         <button @click="() => { switchTheme(); isDark = !isDark }"
                             class="text-gray-500 hover:text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300">
@@ -469,47 +550,6 @@ watchEffect(() => {
                                 </template>
                             </Dropdown>
                         </div>
-
-                        <!-- Usuario -->
-                        <div class="relative ms-1">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                    <span class="inline-flex rounded-md">
-                                        <button type="button"
-                                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400">
-                                            {{ $page.props.auth.user.first_name }}
-                                            <svg class="-me-0.5 ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </span>
-                                </template>
-
-                                <template #content>
-                                    <div v-for="branch in page.props.auth.user.branches" :key="branch.id">
-                                        <button :disabled="branch.id === page.props.auth.user.active_branch_id"
-                                            @click="switchBranch(branch.id)" :class="{
-                                                'bg-pink-500 text-white dark:hover:bg-pink-800 hover:bg-pink-400 ': branch.id === page.props.auth.user.active_branch_id,
-                                            }"
-                                            class="block w-full px-4 py-2 text-start text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                            {{ branch.name }}
-                                        </button>
-                                    </div>
-
-                                    <DropdownLink :href="route('profile.edit')">
-                                        Perfil
-                                    </DropdownLink>
-
-                                    <DropdownLink :href="route('logout')" method="post" as="button">
-                                        Cerrar Sesión
-                                    </DropdownLink>
-                                </template>
-                            </Dropdown>
-                        </div>
-
 
 
                     </div>
