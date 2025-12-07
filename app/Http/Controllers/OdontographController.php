@@ -139,7 +139,10 @@ class OdontographController extends Controller implements HasMiddleware
     public function edit(Odontograph $odontograph)
     {
         $odontograph->load(['patient', 'doctor']);
+        $patients = User::role('patient')->paginate(10);
+
         return Inertia::render('Odontograph/Edit', [
+            'patients' => $patients,
             'odontographs' => $odontograph
         ]);
     }

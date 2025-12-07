@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Odontograma" />
     <AuthenticatedLayout>
         <template #header>
@@ -12,7 +13,7 @@
 
                 <form @submit.prevent="submit" class="grid grid-cols-1 gap-y-6">
                     <div>
-                        <Odontograph v-model="odontogramData" />
+                        <Odontograph v-model="odontogramData"  @update:patient="selected_patient = $event" :patients="patients" :patient="selected_patient" />
                     </div>
                     <!-- Error general -->
                     <div v-if="error" class="mb-6 text-red-600 font-medium">
@@ -23,7 +24,7 @@
                         <SecondaryButton type="button" @click="resetForm()">
                             Limpiar
                         </SecondaryButton>
-                        <PrimaryButton type="submit" >Guardar</PrimaryButton>
+                        <PrimaryButton type="submit">Guardar</PrimaryButton>
                     </div>
                 </form>
             </div>
@@ -42,6 +43,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { ref, markRaw } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import TeethIcon from '@/Components/Icons/TeethIcon.vue';
 
 export default {
     components: {
@@ -56,26 +58,28 @@ export default {
     },
     props: {
         odontographs: Object,
+        patients: Object,
+
     },
     setup(props) {
         const error = ref(null);
         const odontogramData = ref(props.odontographs.data || {});
         const odontographKey = ref(Date.now());
-
+        const selected_patient = ref(props.odontographs.patient || null);
         const resetForm = () => {
             odontogramData.value = {};
             odontographKey.value = Date.now();
             error.value = null;
         };
         const crumbs = [
-            { icon: markRaw(UserIcon), label: 'Pacientes', to: route('patients.index') },
-            { icon: markRaw(UserIcon), label: props.odontographs.patient.first_name + " " + props.odontographs.patient.last_name, to: route('patients.show', props.odontographs.patient) },
+            { icon: markRaw(UserIcon), label: 'Odontogramas', to: route('odontographs.index') },
+            { icon: markRaw(TeethIcon), label: props.odontographs.id, to: route('odontographs.show', props.odontographs) },
             { icon: markRaw(EditIcon), label: 'Editar Odontograma' }
         ];
 
         const submit = () => {
 
-            router.put(route('odontographs.update',props.odontographs), {
+            router.put(route('odontographs.update', props.odontographs), {
                 patient_id: props.odontographs.patient.id,
                 data: odontogramData.value,
             }, {
@@ -90,6 +94,8 @@ export default {
             odontogramData,
             odontographKey,
             crumbs,
+            selected_patient,
+
             resetForm,
             submit
         };
