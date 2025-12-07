@@ -623,7 +623,7 @@ export default {
             form: useForm({
                 patient_id: this.patients?.id || '',
                 doctor_id: '',
-                type: 'Contado',
+                type: 'Credito',
                 currency: 'DOP',
                 emission_date: new Date(),
                 expiration_date: '',
