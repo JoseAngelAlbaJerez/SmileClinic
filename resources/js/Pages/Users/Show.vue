@@ -173,11 +173,11 @@
                                                 <div>
                                                     <p
                                                         class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                                        Teléfono</p>
+                                                        DNI</p>
                                                     <p
                                                         class="text-sm font-medium text-gray-800 dark:text-white/90 mt-1">
                                                         {{
-                                                            user.phone_number ||
+                                                            user.DNI ||
                                                             'No proporcionado' }}</p>
                                                 </div>
 
