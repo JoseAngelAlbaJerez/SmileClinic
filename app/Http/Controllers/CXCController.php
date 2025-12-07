@@ -78,7 +78,7 @@ class CXCController extends Controller
             }
         }
 
-        $CXC = $query->orderByDesc('created_at')->with('Patient', 'bills')->paginate(10);
+        $CXC = $query->orderByDesc('created_at')->with('patient', 'payment', 'bills', 'branch')->paginate(10);
 
 
 
@@ -114,7 +114,13 @@ class CXCController extends Controller
     /**
      * Display the specified resource.
      */
-
+    public function show(CXC $CXC)
+    {
+        $CXC->load('patient', 'bills.billdetail.procedure','bills.payments','bills.branch', 'bills.doctor','branch','payment.bills.billdetail.procedure');
+        return Inertia::render('CXC/Show', [
+            'CXC' => $CXC,
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.

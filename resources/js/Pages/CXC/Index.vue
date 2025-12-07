@@ -28,7 +28,7 @@
                             <input @input="submitFilters()" v-model="filters.search" type="text" placeholder="Buscar"
                                 class="w-full sm:w-64 lg:w-96 rounded-lg border-0 px-3 py-2 shadow-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-800 dark:ring-slate-600" />
 
-                            <Link :href="route('CXC.create')" as="button"
+                            <Link :href="route('payments.create')" as="button"
                                 class="flex justify-center gap-2 rounded-lg bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500">
                             <AddIcon class="size-5" />
                             <span class="hidden sm:inline">Nuevo Recibo</span>
@@ -59,10 +59,7 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="cursor-pointer" @click="sort('total')">
-                                            Restante <span v-if="form.sortField === 'total'">{{ form.sortDirection ===
-                                                'asc' ? '↑' : '↓' }}</span>
-                                        </th>
+
                                         <th scope="col" class="cursor-pointer" @click="sort('created_at')">
                                             Fecha de Creación <span v-if="form.sortField === 'created_at'">{{
                                                 form.sortDirection
@@ -84,17 +81,18 @@
                                 <tbody>
                                     <tr v-for="CXCs in CXC.data" :key="CXCs.id">
                                         <td class="p-4">{{ CXCs.id }}</td>
-                                        <td class="p-4 text-pink-600"><Link :href="route('patients.show', CXCs.patient)">{{ CXCs.patient.first_name }} {{ CXCs.patient.last_name }}</Link>
+                                        <td class="p-4 text-pink-600">
+                                            <Link :href="route('patients.show', CXCs.patient)">{{
+                                            CXCs.patient.first_name }} {{ CXCs.patient.last_name }}</Link>
                                         </td>
                                         <td class="p-4">
-                                           {{ new
-                                            Intl.NumberFormat('es-DO', {
-                                                style:
-                                                    'currency', currency: 'DOP'
-                                            }).format(CXCs.balance
-                                                || 0) }}
+                                            {{ new
+                                                Intl.NumberFormat('es-DO', {
+                                                    style:
+                                                        'currency', currency: 'DOP'
+                                                }).format(CXCs.balance
+                                                    || 0) }}
                                         </td>
-                                        <td class="p-4">{{ CXCs.payment[CXCs.payment.length - 1] }}</td>
                                         <td class="p-4">{{ formatDate(CXCs.created_at) }}</td>
 
                                         <td class="p-4">
@@ -107,8 +105,8 @@
                                             </div>
                                         </td>
                                         <td class="p-4">
-                                            <Link :href="route('CXC.show', CXCs)"
-                                                class="text-pink-500 cursor-pointer">Abrir</Link>
+                                            <Link :href="route('CXC.show', CXCs)" class="text-pink-500 cursor-pointer">
+                                            Abrir</Link>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -126,7 +124,10 @@
                         <div v-for="CXCs in CXC.data" :key="CXCs.id"
                             class="border rounded-lg bg-white dark:bg-gray-800 p-4 shadow-sm dark:border-gray-700">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-pink-600"><Link :href="route('patients.show', CXCs.patient)">{{ CXCs.patient.first_name }} {{ CXCs.patient.last_name }}</Link></h3>
+                                <h3 class="font-semibold text-pink-600">
+                                    <Link :href="route('patients.show', CXCs.patient)">{{ CXCs.patient.first_name }} {{
+                                    CXCs.patient.last_name }}</Link>
+                                </h3>
                                 <Link :href="route('CXC.show', CXCs)" class="text-pink-500 text-sm">Abrir</Link>
                             </div>
                             <p class="text-sm text-gray-700 dark:text-gray-300 font-medium mt-1">
@@ -138,7 +139,7 @@
 
                                     <template v-for="detail in CXCs.bill">
                                         <li>
-                                           {{ detail.procedure.name }}
+                                            {{ detail.procedure.name }}
                                         </li>
                                     </template>
 
@@ -162,8 +163,7 @@
                             </div>
                         </div>
 
-                        <div v-if="!CXC.data.length"
-                            class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
+                        <div v-if="!CXC.data.length" class="text-center text-gray-500 dark:text-gray-400 py-4 w-full">
                             No hay registros disponibles.
                         </div>
                         <Pagination :pagination="CXC" :filters="form" />
