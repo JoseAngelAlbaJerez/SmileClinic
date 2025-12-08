@@ -42,6 +42,12 @@ class RoleSeeder extends Seeder
             'prescription.create',
             'prescription.update',
             'prescription.delete',
+            'budget.view',
+            'budget.create',
+            'budget.update',
+            'budget.delete',
+            'drug.view',
+            'drug.create',
         ]);
 
         $role = Role::findByName("patient");
@@ -61,8 +67,6 @@ class RoleSeeder extends Seeder
             'patient.delete',
             'odontograph.view',
             'budget.view',
-            'budget.create',
-            'budget.delete',
             'bill.view',
             'bill.create',
             'bill.delete',
@@ -78,6 +82,9 @@ class RoleSeeder extends Seeder
             'prescription.view',
             'prescription.create',
             'prescription.delete',
+            'payment.view',
+            'payment.create',
+            'payment.delete',
         ]);
 
         $allBranches = Branch::pluck('id')->toArray();

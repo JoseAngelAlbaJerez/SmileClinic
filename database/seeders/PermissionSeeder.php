@@ -20,11 +20,18 @@ class PermissionSeeder extends Seeder
             'patient.update',
             'patient.delete',
 
+            //payment
+            'payment.view',
+            'payment.create',
+            'payment.update',
+            'payment.delete',
+
             //odontograph
             'odontograph.view',
             'odontograph.create',
             'odontograph.update',
             'odontograph.delete',
+
             //Budgets
             'budget.view',
             'budget.create',
