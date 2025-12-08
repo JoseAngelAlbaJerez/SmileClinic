@@ -180,7 +180,7 @@
                                 </ul>
                                 </p>
 
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(prescription.created_at) }}
+                                <p><span class="font-medium">Creado el: </span> {{ formatDate(prescription.created_at) }}
                                 </p>
 
                                 <p class="flex items-center gap-1">
@@ -281,7 +281,7 @@
                                         </div>
 
                                         <div class="text-sm text-gray-400 dark:text-gray-500 italic">
-                                            Creado: {{ new Date(details.created_at).toLocaleString() }}
+                                            Creado el:  {{ new Date(details.created_at).toLocaleString() }}
                                         </div>
                                     </div>
                                 </transition>
