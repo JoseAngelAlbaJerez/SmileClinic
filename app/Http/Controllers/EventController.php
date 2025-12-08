@@ -9,14 +9,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
 use Illuminate\Validation\ValidationException;
 use Spatie\GoogleCalendar\Event as GoogleCalendarEvent;
 
-class EventController extends Controller
+class EventController extends Controller implements HasMiddleware
 {
-    /**
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:event.view', only: ['index', 'show']),
+            new Middleware('permission:event.create', only: ['create', 'store']),
+            new Middleware('permission:event.update', only: ['edit', 'update']),
+            new Middleware('permission:event.delete', only: ['destroy']),
+        ];
+    }/**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -121,6 +133,7 @@ class EventController extends Controller
      */
     public function create(Request $request)
     {
+        $this->authorize('create', Event::class);
         $patient_id = $request->input('patient_id');
         if ($patient_id) {
             $patient = User::where('id', $patient_id)
@@ -159,6 +172,7 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Event::class);
         $timezone = 'America/Santo_Domingo';
 
         $validated = $request->validate([
@@ -217,6 +231,8 @@ class EventController extends Controller
     }
     public function update(Request $request, Event $event)
     {
+        $this->authorize('update', Event::class);
+
         if ($request->has('active')) {
             $this->restore($event);
             return redirect()->back()->with('toast', 'Cita restaurada correctamente');
@@ -238,6 +254,8 @@ class EventController extends Controller
     }
     private function restore(Event $event)
     {
+        $this->authorize('restore', Event::class);
+
         $event->active = 1;
         $event->save();
 
@@ -245,6 +263,7 @@ class EventController extends Controller
     }
     private function attend(Event $event, $attended)
     {
+       $this->authorize('attend', $event);
         $event->attended = $attended;
         $event->attended_at = now();
         $event->save();
@@ -267,6 +286,8 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        $this->authorize('update', Event::class);
+
         $event->load(['patient', 'doctor']);
         $starttime = $event->starttime = Carbon::parse($event->starttime)->format('H:i');
         $endtime = $event->endtime = Carbon::parse($event->endtime)->format('H:i');
@@ -294,6 +315,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+        $this->authorize('delete', Event::class);
 
         $event->active = 0;
         $event->save();

@@ -19,9 +19,22 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class BudgetController extends Controller
+class BudgetController extends Controller implements HasMiddleware
 {
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:budget.view', only: ['index', 'show']),
+            new Middleware('permission:budget.create', only: ['create', 'store']),
+            new Middleware('permission:budget.update', only: ['edit', 'update']),
+            new Middleware('permission:budget.delete', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
@@ -76,7 +89,7 @@ class BudgetController extends Controller
                 $q->where('first_name', 'LIKE', "%{$search}%")
                     ->orWhere('last_name', 'LIKE', "%{$search}%")
                     ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
-                   ;
+                ;
             });
         }
 
@@ -101,7 +114,7 @@ class BudgetController extends Controller
             $query->latest('updated_at')->latest('created_at');
         }
 
-        $budgets = $query->with('patient', 'branch','budgetdetail.procedure')->paginate(10);
+        $budgets = $query->with('patient', 'branch', 'budgetdetail.procedure')->paginate(10);
         return Inertia::render('Budgets/Index', [
             'budgets' => $budgets,
             'filters' => [
@@ -122,7 +135,9 @@ class BudgetController extends Controller
      */
     public function create(Request $request)
     {
-         $patient_id = $request->input('patient_id');
+        $this->authorize('create', Budget::class);
+
+        $patient_id = $request->input('patient_id');
         if ($patient_id) {
             $patients = User::where('id', $patient_id)
                 ->with([
@@ -169,6 +184,8 @@ class BudgetController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Budget::class);
+
         $validated = $request->validate([
             'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
@@ -217,7 +234,7 @@ class BudgetController extends Controller
 
         $budget->load(['budgetdetail', 'doctor', 'patient']);
 
-        return redirect()->route('budgets.show',$budget)->with('toast', 'Presupuesto guardado correctamente');
+        return redirect()->route('budgets.show', $budget)->with('toast', 'Presupuesto guardado correctamente');
     }
 
 
@@ -229,7 +246,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        $budget->load('doctor', 'patient', 'budgetdetail.procedure',  'budgetdetail','branch');
+        $budget->load('doctor', 'patient', 'budgetdetail.procedure',  'budgetdetail', 'branch');
         $insurance = Insurance::where('budget_id', $budget->id)->first();
         return Inertia::render("Budgets/Show", [
             'budgets' => $budget,
@@ -243,6 +260,8 @@ class BudgetController extends Controller
      */
     public function edit(Budget $budget)
     {
+        $this->authorize('update', Budget::class);
+
         $patient = User::paginate(10);
         $procedure = Procedure::paginate(10);
         $budget->load('doctor', 'patient', 'budgetdetail.procedure', 'CXC', 'budgetdetail', 'Insurance');
@@ -260,6 +279,7 @@ class BudgetController extends Controller
      */
     public function update(Request $request, Budget $budget)
     {
+        $this->authorize('update', Budget::class);
         if ($request->has('active')) {
             $this->restore($budget);
             return redirect()->back()->with('toast', 'Presupuesto restaurado correctamente');
@@ -326,7 +346,7 @@ class BudgetController extends Controller
 
         $budget->load(['budgetdetail', 'doctor', 'patient', 'CXC']);
 
-        return redirect()->route('budgets.show',$budget)->with('toast', 'Presupuesto actualizado correctamente');
+        return redirect()->route('budgets.show', $budget)->with('toast', 'Presupuesto actualizado correctamente');
     }
 
     /**
@@ -334,6 +354,7 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
+        $this->authorize('delete', Budget::class);
         DB::transaction(function () use ($budget) {
             $budget->active = 0;
             $budget->save();
@@ -348,7 +369,9 @@ class BudgetController extends Controller
     }
     private function restore(Budget $budget)
     {
-           DB::transaction(function () use ($budget) {
+        $this->authorize('restore', Budget::class);
+
+        DB::transaction(function () use ($budget) {
             $budget->active = 1;
             $budget->save();
             $budget->budgetdetail()->get()->each(function ($budgetDetail) use ($budget) {

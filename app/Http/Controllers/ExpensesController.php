@@ -9,13 +9,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-
-class ExpensesController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+class ExpensesController extends Controller implements HasMiddleware
 {
-
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:expense.view', only: ['index', 'show']),
+            new Middleware('permission:expense.create', only: ['create', 'store']),
+            new Middleware('permission:expense.update', only: ['edit', 'update']),
+            new Middleware('permission:expense.delete', only: ['destroy']),
+        ];
+    }
     public function index(Request $request)
     {
-
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
@@ -125,12 +135,14 @@ class ExpensesController extends Controller
 
     public function edit(Expenses $expense)
     {
+        $this->authorize('update', Expenses::class);
         return Inertia::render("Expenses/Edit", [
             'expense' => $expense,
         ]);
     }
     public function update(Request $request, Expenses $expense)
     {
+        $this->authorize('update', Expenses::class);
         if ($request->has('active')) {
             $this->restore($expense);
             return redirect()->back()->with('toast', 'Egreso restaurado correctamente.');
@@ -138,6 +150,7 @@ class ExpensesController extends Controller
     }
     public function destroy(Expenses $expense)
     {
+        $this->authorize('delete', Expenses::class);
         $expense->active = 0;
         $expense->save();
 

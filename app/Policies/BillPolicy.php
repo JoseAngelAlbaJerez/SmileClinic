@@ -4,8 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-
-class PatientPolicy
+class BillPolicy
 {
     /**
      * Create a new policy instance.
@@ -14,40 +13,40 @@ class PatientPolicy
     {
         //
     }
-     public function before (User $user): bool|null
+      public function before (User $user): bool|null
     {
         if ($user->hasRole('admin')) {
         return true;
         }
         return null;
     }
-
-    public function view(User $user): Response{
+      public function view(User $user): Response{
        return Response::allow();
 
     }
-       public function create(User $user): Response{
-        if ( $user->hasRole('doctor') || $user->hasRole('receptionist')) {
-            return Response::allow();
-        }
-        return Response::deny('No tiene acceso para crear pacientes');
-    }
-       public function update(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
-        return Response::deny('No tiene acceso para actualizar pacientes');
-    }
-      public function delete(User $user): Response{
+
+    public function create(User $user): Response{
         if ( $user->hasRole('receptionist')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para eliminar pacientes');
+        return Response::deny('No tiene acceso para crear facturas');
+    }
+      public function update(User $user): Response{
+        if ($user->hasRole('admin')) {
+            return Response::allow();
+        }
+        return Response::deny('No tiene acceso para actualizar facturas');
+    }
+     public function delete(User $user): Response{
+        if ( $user->hasRole('receptionist')) {
+            return Response::allow();
+        }
+        return Response::deny('No tiene acceso para eliminar facturas');
     }
      public function restore(User $user): Response{
         if ( $user->hasRole('receptionist')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para restaurar pacientes');
+        return Response::deny('No tiene acceso para restaurar facturas');
     }
 }

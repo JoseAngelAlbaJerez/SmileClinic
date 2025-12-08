@@ -22,14 +22,15 @@ class OdontographController extends Controller implements HasMiddleware
     public static function middleware()
     {
         return [
-            new Middleware('permission:patient.view', only: ['index', 'show']),
-            new Middleware('permission:patient.create', only: ['create', 'store']),
-            new Middleware('permission:patient.update', only: ['edit', 'update']),
-            new Middleware('permission:patient.delete', only: ['destroy']),
+            new Middleware('permission:odontograph.view', only: ['index', 'show']),
+            new Middleware('permission:odontograph.create', only: ['create', 'store']),
+            new Middleware('permission:odontograph.update', only: ['edit', 'update']),
+            new Middleware('permission:odontograph.delete', only: ['destroy']),
         ];
     }
     public function index(Request $request)
     {
+        $this->authorize('view', Odontograph::class);
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
@@ -113,6 +114,7 @@ class OdontographController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        $this->authorize('create', Odontograph::class);
         $validated = $request->validate([
             'patient_id' => 'required|exists:users,id',
             'data' => 'required|array',
@@ -131,13 +133,15 @@ class OdontographController extends Controller implements HasMiddleware
 
     public function show(Odontograph $odontograph)
     {
-        $odontograph->load(['patient','doctor','branch']);
+        $this->authorize('view', Odontograph::class);
+        $odontograph->load(['patient', 'doctor', 'branch']);
         return Inertia::render('Odontograph/Show', [
             'odontograph' => $odontograph,
         ]);
     }
     public function edit(Odontograph $odontograph)
     {
+        $this->authorize('update', Odontograph::class);
         $odontograph->load(['patient', 'doctor']);
         $patients = User::role('patient')->paginate(10);
 
@@ -148,6 +152,8 @@ class OdontographController extends Controller implements HasMiddleware
     }
     public function update(Request $request, Odontograph $odontograph)
     {
+        $this->authorize('update', Odontograph::class);
+
         if ($request->has('active')) {
             $this->restore($odontograph);
             return redirect()->back()->with('toast', 'Odontograma restaurado correctamente');
@@ -163,6 +169,8 @@ class OdontographController extends Controller implements HasMiddleware
     }
     private function restore(Odontograph $odontograph)
     {
+        $this->authorize('restore', Odontograph::class);
+
         $odontograph->active = 1;
         $odontograph->save();
 
@@ -171,6 +179,7 @@ class OdontographController extends Controller implements HasMiddleware
 
     public function destroy(Odontograph $odontograph)
     {
+        $this->authorize('delete', Odontograph::class);
 
         $odontograph->active = 0;
         $odontograph->save();

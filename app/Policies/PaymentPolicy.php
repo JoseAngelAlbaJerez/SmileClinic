@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class PrescriptionPolicy
+class PaymentPolicy
 {
     /**
      * Create a new policy instance.
@@ -21,40 +21,37 @@ class PrescriptionPolicy
         }
         return null;
     }
-
     public function view(User $user): Response
     {
-        if ($user->hasRole('doctor')) {
-            return Response::allow();
-        }
-        return Response::deny('No tiene acceso para ver recetas');
+        return Response::allow();
     }
+
     public function create(User $user): Response
     {
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole('receptionist')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para crear recetas');
+        return Response::deny('No tiene acceso para crear recibos');
     }
     public function update(User $user): Response
     {
         if ($user->hasRole('admin')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para actualizar recetas');
+        return Response::deny('No tiene acceso para actualizar recibos');
     }
     public function delete(User $user): Response
     {
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole('receptionist')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para eliminar recetas');
+        return Response::deny('No tiene acceso para eliminar recibos');
     }
     public function restore(User $user): Response
     {
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole('receptionist')) {
             return Response::allow();
         }
-        return Response::deny('No tiene acceso para restaurar recetas');
+        return Response::deny('No tiene acceso para restaurar recibos');
     }
 }

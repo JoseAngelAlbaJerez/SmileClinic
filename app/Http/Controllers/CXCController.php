@@ -11,15 +11,26 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-
-class CXCController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+class CXCController extends Controller implements HasMiddleware
 {
-    /**
+    use AuthorizesRequests;
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:CXC.view', only: ['index', 'show']),
+            new Middleware('permission:CXC.create', only: ['create', 'store']),
+            new Middleware('permission:CXC.update', only: ['edit', 'update']),
+            new Middleware('permission:CXC.delete', only: ['destroy']),
+        ];
+    } /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-
+        $this->authorize('view', CXC::class);
         $search = $request->input('search');
         $sortField = $request->input('sortField');
         $sortDirection = $request->input('sortDirection', 'asc');
@@ -99,6 +110,7 @@ class CXCController extends Controller
 
     public function create()
     {
+        $this->authorize('create', CXC::class);
 
         return Inertia::render("CXC/Create");
     }
@@ -116,6 +128,8 @@ class CXCController extends Controller
      */
     public function show(CXC $CXC)
     {
+        $this->authorize('view', CXC::class);
+
        $CXC->load([
     'patient',
     'branch',
@@ -156,6 +170,8 @@ class CXCController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('update', CXC::class);
+
         if ($request->has('active')) {
             $CXC = CXC::find($id);
             $CXC->active = true;
@@ -173,6 +189,7 @@ class CXCController extends Controller
      */
     public function destroy(CXC $CXC)
     {
+        $this->authorize('delete', CXC::class);
         $CXC->active = false;
         $CXC->save();
         $CXC->payment()->update(['active' => false]);

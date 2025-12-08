@@ -244,7 +244,7 @@ class DashboardController extends Controller
 
                 $doctors = User::role('doctor')->with('branches')->get();
 
-                return Inertia::render('Dashboardreceptionist', [
+                return Inertia::render('DashboardReceptionist', [
                     'agendaToday' => $agendaToday,
                     'noShowToday' => $no_show_today,
                     'newPatientsToday' => $newPatientsToday,
@@ -320,17 +320,6 @@ class DashboardController extends Controller
                 $appointmentsTrendSeries = $days->map(fn($d) => $appointmentsTrend[$d] ?? 0);
 
                 $appointmentsTrendCategories = $days->toArray();
-
-
-                Log::info($todayAppointments);
-                Log::info($totalRevenue);
-                Log::info($totalAppointments);
-                Log::info($noShowCount);
-                Log::info($noShowPercentage);
-                Log::info($recentPatients);
-                Log::info($topProcedures);
-                Log::info($appointmentsTrendSeries);
-                Log::info($appointmentsTrendCategories);
 
 
                 return Inertia::render('DashboardDoctor', [

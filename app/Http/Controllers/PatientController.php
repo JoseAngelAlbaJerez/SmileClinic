@@ -210,6 +210,7 @@ class PatientController extends Controller implements HasMiddleware
 
     public function update(Request $request, User $patient)
     {
+        $this->authorize('update', User::class);
         if ($request->has('active')) {
             $this->restore($patient);
             return redirect()->back()->with('toast', 'Paciente restaurado correctamente.');

@@ -23,33 +23,23 @@ class UserPolicy
     }
 
     public function view(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
+
         return Response::deny('No tiene acceso para ver usuarios');
     }
        public function create(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
+
         return Response::deny('No tiene acceso para ver crear usuarios');
     }
        public function update(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
+
         return Response::deny('No tiene acceso para actualizar usuarios');
     }
       public function delete(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
+
         return Response::deny('No tiene acceso para eliminar usuarios');
     }
      public function restore(User $user): Response{
-        if ($user->hasRole('admin')) {
-            return Response::allow();
-        }
+
         return Response::deny('No tiene acceso para restaurar usuarios');
     }
 }

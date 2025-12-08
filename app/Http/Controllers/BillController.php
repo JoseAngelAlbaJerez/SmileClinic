@@ -156,6 +156,8 @@ class BillController extends Controller implements HasMiddleware
     }
     public function store(Request $request)
     {
+        $this->authorize('create', Bill::class);
+
         $validated = $request->validate([
             'form.patient_id' => 'required|exists:users,id',
             'form.type' => 'required|string',
@@ -263,6 +265,7 @@ class BillController extends Controller implements HasMiddleware
     }
     public function show(Bill $bill)
     {
+        $this->authorize('view', Bill::class);
         $bill->load('patient', 'billdetail.procedure', 'branch');
         return Inertia::render('Bills/Show', [
             'bill' => $bill,
@@ -357,6 +360,7 @@ class BillController extends Controller implements HasMiddleware
     }
     public function restore(Bill $bill)
     {
+        $this->authorize('restore', Bill::class);
         DB::transaction(function () use ($bill) {
 
             $bill->load('billdetail', 'payments', 'cxc');
