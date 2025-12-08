@@ -165,7 +165,7 @@
                                     }).format(budget.total
                                         ||
                                         0) }}</p>
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(budget.created_at) }}</p>
+                                <p><span class="font-medium">Creado el: </span> {{ formatDate(budget.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>

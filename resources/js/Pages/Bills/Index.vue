@@ -168,7 +168,7 @@
                                         0) }}</p>
                                 <p><span class="font-medium">Doctor:</span> {{ bill.doctor.first_name }} {{
                                     bill.doctor.last_name }}</p>
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(bill.created_at) }}</p>
+                                <p><span class="font-medium">Creado el: </span> {{ formatDate(bill.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>

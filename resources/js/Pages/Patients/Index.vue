@@ -133,7 +133,7 @@
                             <div class="mt-2 grid grid-cols-2 gap-y-1 text-sm">
                                 <p><span class="font-medium">Fecha de Nacimiento:</span>
                                     {{ formatDate(patient.date_of_birth) }}</p>
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(patient.created_at) }}</p>
+                                <p><span class="font-medium">Creado el: </span> {{ formatDate(patient.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>

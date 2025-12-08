@@ -238,7 +238,7 @@
 
                                 <!-- Creado -->
                                 <p class="text-gray-700 dark:text-gray-300">
-                                    <span class="font-medium">Creado:</span>
+                                    <span class="font-medium">Creado el: </span>
                                     {{ formatDate(user.created_at) }}
                                 </p>
 

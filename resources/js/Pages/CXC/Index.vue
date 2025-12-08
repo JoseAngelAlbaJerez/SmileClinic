@@ -151,13 +151,13 @@
 
                                 </ul>
                                 </p>
-                                <p><span class="font-medium">Total:</span> {{ new
+                                <p><span class="font-medium">Balance:</span> {{ new
                                     Intl.NumberFormat('es-DO', {
                                         style: 'currency', currency: 'DOP'
-                                    }).format(CXC.total
+                                    }).format(CXCs.balance
                                         ||
                                         0) }}</p>
-                                <p><span class="font-medium">Creado:</span> {{ formatDate(CXCs.created_at) }}</p>
+                                <p><span class="font-medium">Creado el: </span> {{ formatDate(CXCs.created_at) }}</p>
 
                                 <p class="flex items-center gap-1">
                                     <span class="font-medium">Estado:</span>
