@@ -8,3 +8,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('expenses:process-biweekly')->monthlyOn(15, '00:05');
+Schedule::command('appointments:reset-missed')->everyMinute();
