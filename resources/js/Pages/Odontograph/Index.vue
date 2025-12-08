@@ -57,28 +57,28 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('patient_first_name')">
                                             Paciente
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'patient_first_name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('doctor_first_name')">
                                             Doctor
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'doctor_first_name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('data')">
                                             Diagnóstico
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'data'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer hidden sm:table-cell"
-                                            @click="sort('date_of_birth')">
+                                            @click="sort('created_at')">
                                             Fecha de Creación
-                                            <span v-if="form.sortField === 'date_of_birth'">
+                                            <span v-if="form.sortField === 'created_at'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
@@ -281,9 +281,7 @@ export default {
 
     },
     watch: {
-        selectedOptions() {
-            this.fetchFilteredbranches();
-        },
+
 
     },
     data() {
@@ -342,7 +340,7 @@ export default {
 
 
 
-                    this.$inertia.get(route('branches.index'), this.form, {
+                    this.$inertia.get(route('odontographs.index'), this.form, {
                         preserveState: true,
                         preserveScroll: true,
                         replace: true

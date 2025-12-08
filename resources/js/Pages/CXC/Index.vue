@@ -59,9 +59,9 @@
                                             Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " class="cursor-pointer " @click="sort('branch_id')">
+                                        <th scope="col " class="cursor-pointer " @click="sort('balance')">
                                             Balance
-                                            <span v-if="form.sortField === 'branch_id'">
+                                            <span v-if="form.sortField === 'balance'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
@@ -251,7 +251,7 @@ export default {
         return {
             form: {
                 search: this.filters?.search || '',
-                sortField: this.filters?.sortField || 'CXC.updated_at',
+                sortField: this.filters?.sortField || 'updated_at',
                 sortDirection: this.filters?.sortDirection || 'asc',
                 lastDays: this.filters?.lastDays || '1',
                 showDeleted: this.filters?.showDeleted || true,

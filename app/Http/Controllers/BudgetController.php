@@ -66,32 +66,38 @@ class BudgetController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-        $query = Budget::query()->select('budgets.*')
-            ->join('users', 'budgets.patient_id', '=', 'users.id');
+        $query = Budget::query()
+            ->select(
+                'budgets.*',
+                'u.first_name as patient_first_name',
+                'u.last_name as patient_last_name',
+                DB::raw("GROUP_CONCAT(p.name SEPARATOR ', ') as procedures_text")
+            )
+            ->join('users as u', 'budgets.patient_id', '=', 'u.id')
+            ->leftJoin('budget_details as bd', 'bd.budget_id', '=', 'budgets.id')
+            ->leftJoin('procedures as p', 'p.id', '=', 'bd.procedure_id')
+            ->groupBy('budgets.id', 'u.first_name', 'u.last_name');
 
         $query->where('budgets.active', $showDeleted ? 1 : 0);
 
         if ($patient_id) {
-            $patient = User::find($patient_id);
-            $createdAtDates = $patient->budget()->pluck('created_at');
-
-            if ($createdAtDates->isNotEmpty()) {
-                $query->where('budgets.patient_id', $patient_id)
-                    ->whereIn('budgets.created_at', $createdAtDates)
-                    ->latest();
-            }
+            $query->where('budgets.patient_id', $patient_id);
         }
+
 
 
 
         if ($search) {
-            $query->whereHas('users', function (Builder $q) use ($search) {
-                $q->where('first_name', 'LIKE', "%{$search}%")
-                    ->orWhere('last_name', 'LIKE', "%{$search}%")
-                    ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
-                ;
+            $query->where(function ($q) use ($search) {
+                $q->where('u.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('u.last_name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('budgetdetail.procedure', function ($q2) use ($search) {
+                        $q2->where('name', 'LIKE', "%{$search}%");
+                    });
             });
         }
+
+
 
 
         if ($lastDays) {
@@ -109,10 +115,16 @@ class BudgetController extends Controller implements HasMiddleware
             }
         }
         if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
+
+            if ($sortField === 'procedures') {
+                $query->orderBy('procedures_text', $sortDirection);
+            } else {
+                $query->orderBy($sortField, $sortDirection);
+            }
         } else {
-            $query->latest('updated_at')->latest('created_at');
+            $query->latest('budgets.created_at');
         }
+
 
         $budgets = $query->with('patient', 'branch', 'budgetdetail.procedure')->paginate(10);
         return Inertia::render('Budgets/Index', [

@@ -76,9 +76,9 @@
                                             <span v-if="form.sortField === 'description'">{{ form.sortDirection ===
                                                 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('users.id')">
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('user_name')">
                                             Creado Por
-                                            <span v-if="form.sortField === 'users.id'">{{ form.sortDirection === 'asc' ?
+                                            <span v-if="form.sortField === 'user_name'">{{ form.sortDirection === 'asc' ?
                                                 '↑' : '↓' }}</span>
                                         </th>
                                         <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('amount')">

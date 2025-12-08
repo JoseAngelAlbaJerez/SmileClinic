@@ -60,7 +60,6 @@ class PatientController extends Controller implements HasMiddleware
                 $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('date_of_birth LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('ars LIKE ?', ['%' . $search . '%'])
                 ;
             });
         }

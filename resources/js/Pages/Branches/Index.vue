@@ -55,28 +55,28 @@
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('name')">
                                             Nombre
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'name'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('address')">
                                             Dirección
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'address'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
-                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('first_name')">
+                                        <th scope="col" class="px-4 py-3 cursor-pointer" @click="sort('phone_number')">
                                             Número de Teléfono
-                                            <span v-if="form.sortField === 'first_name'">
+                                            <span v-if="form.sortField === 'phone_number'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
                                         <th scope="col" class="px-4 py-3 cursor-pointer hidden sm:table-cell"
-                                            @click="sort('date_of_birth')">
+                                            @click="sort('created_at')">
                                             Fecha de Creación
-                                            <span v-if="form.sortField === 'date_of_birth'">
+                                            <span v-if="form.sortField === 'created_at'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class ExpensesController extends Controller implements HasMiddleware
 {
     use AuthorizesRequests;
@@ -35,31 +36,36 @@ class ExpensesController extends Controller implements HasMiddleware
 
 
         $query = Expenses::query()
-            ->select('expenses.*')
+            ->select(
+                'expenses.*',
+                'users.first_name as user_name',
+                'users.last_name as user_last_name'
+            )
             ->join('users', 'expenses.user_id', '=', 'users.id');
 
-        if ($showDeleted) {
-            $query->where('expenses.active', 1);
-        } else {
-            $query->where('expenses.active', 0);
-        }
+        $query->where('expenses.active', $showDeleted ? 1 : 0);
 
         if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('description LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('amount LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('CONCAT(users.name, " ", COALESCE(users.last_name, "")) LIKE ?', ['%' . $search . '%'])
-
-                ;
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'LIKE', "%{$search}%")
+                    ->orWhere('amount', 'LIKE', "%{$search}%")
+                    ->orWhereRaw('CONCAT(users.first_name, " ", COALESCE(users.last_name, "")) LIKE ?', ["%$search%"]);
             });
         }
 
         if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
+
+            if ($sortField === 'user_name') {
+                $query->orderBy('users.first_name', $sortDirection)
+                    ->orderBy('users.last_name', $sortDirection);
+            } else {
+                $query->orderBy($sortField, $sortDirection);
+            }
         } else {
             $query->latest('expenses.updated_at')
                 ->latest('expenses.created_at');
         }
+
         if ($lastDays) {
             if (is_numeric($lastDays)) {
 
@@ -107,7 +113,6 @@ class ExpensesController extends Controller implements HasMiddleware
         } catch (\Exception $e) {
             return back()->withInput()->with('toast', 'Error al registrar el egreso: ' . $e->getMessage())
                 ->with('toastStyle', 'danger');
-
         }
 
         $doctor = User::where('first_name', '=', $validated['description'])->first();

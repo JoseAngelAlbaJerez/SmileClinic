@@ -14,6 +14,7 @@ use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class CXCController extends Controller implements HasMiddleware
 {
     use AuthorizesRequests;
@@ -25,7 +26,8 @@ class CXCController extends Controller implements HasMiddleware
             new Middleware('permission:CXC.update', only: ['edit', 'update']),
             new Middleware('permission:CXC.delete', only: ['destroy']),
         ];
-    } /**
+    }
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -39,39 +41,40 @@ class CXCController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-        $query = CXC::query()->select('c_x_c_s.*')
-            ->join('bills', 'c_x_c_s.patient_id', '=', 'bills.id');
-        if ($showDeleted == true) {
-            $query->where('c_x_c_s.active', 1);
-        } else {
-            $query->where('c_x_c_s.active', 0);
-        }
-        if ($patient_id) {
-            $patient = Patient::find($patient_id);
-            $createdAtDates = $patient->bill()->pluck('created_at');
+        $query = CXC::query()
+            ->select(
+                'c_x_c_s.*',
+                'p.first_name',
+                'p.last_name'
+            )
+            ->leftJoin('users as p', 'p.id', '=', 'c_x_c_s.patient_id')
+            ->where('c_x_c_s.active', $showDeleted ? 1 : 0);
 
-            if ($createdAtDates->isNotEmpty()) {
-                $query->where('c_x_c_s.patient_id', $patient_id)
-                    ->whereIn('c_x_c_s.created_at', $createdAtDates)
-                    ->latest();
-            }
+        if ($patient_id) {
+            $query->where('c_x_c_s.patient_id', $patient_id);
         }
 
         if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('last_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('bills.type LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('bills.total LIKE ?', ['%' . $search . '%']);
+            $query->where(function ($q) use ($search) {
+                $q->where('p.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('p.last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('c_x_c_s.balance', 'LIKE', "%{$search}%");
             });
         }
 
         if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
+
+            if ($sortField === 'patient_id') {
+                $query->orderBy('p.first_name', $sortDirection)
+                    ->orderBy('p.last_name', $sortDirection);
+
+            } else {
+                $query->orderBy("c_x_c_s.$sortField", $sortDirection);
+            }
         } else {
-            $query->latest('c_x_c_s.updated_at')
-                ->latest('c_x_c_s.created_at');
+            $query->latest('c_x_c_s.created_at');
         }
+
         if ($lastDays) {
             if (is_numeric($lastDays)) {
 
@@ -130,33 +133,33 @@ class CXCController extends Controller implements HasMiddleware
     {
         $this->authorize('view', CXC::class);
 
-       $CXC->load([
-    'patient',
-    'branch',
-    'bills' => function ($q) {
-        $q->where('active', 1);
-    },
-    'bills.billdetail' => function ($q) {
-        $q->where('active', 1);
-    },
-    'bills.billdetail.procedure',
-    'bills.payments' => function ($q) {
-        $q->where('active', 1);
-    },
-    'bills.branch',
-    'bills.doctor',
-    'payment' => function ($q) {
-        $q->where('active', 1);
-    },
-    'payment.bills' => function ($q) {
-        $q->where('active', 1);
-    },
-    'payment.bills.billdetail' => function ($q) {
-        $q->where('active', 1);
-    },
-    'payment.bills.billdetail.procedure',
-]);
- return Inertia::render('CXC/Show', [
+        $CXC->load([
+            'patient',
+            'branch',
+            'bills' => function ($q) {
+                $q->where('active', 1);
+            },
+            'bills.billdetail' => function ($q) {
+                $q->where('active', 1);
+            },
+            'bills.billdetail.procedure',
+            'bills.payments' => function ($q) {
+                $q->where('active', 1);
+            },
+            'bills.branch',
+            'bills.doctor',
+            'payment' => function ($q) {
+                $q->where('active', 1);
+            },
+            'payment.bills' => function ($q) {
+                $q->where('active', 1);
+            },
+            'payment.bills.billdetail' => function ($q) {
+                $q->where('active', 1);
+            },
+            'payment.bills.billdetail.procedure',
+        ]);
+        return Inertia::render('CXC/Show', [
             'CXC' => $CXC,
         ]);
     }
@@ -178,10 +181,8 @@ class CXCController extends Controller implements HasMiddleware
             $CXC->save();
             $CXC->payment()->update(['active' => true]);
             $CXC->bills()->update(['active' => true]);
-        return redirect()->route('CXC.index')->with('toast', 'Cuenta por cobrar restaurada correctamente.');
-
+            return redirect()->route('CXC.index')->with('toast', 'Cuenta por cobrar restaurada correctamente.');
         }
-
     }
 
     /**

@@ -44,13 +44,19 @@ class BillController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
         $patient_id = $request->input('patient_id');
 
-        $query = Bill::query()->select('bills.*')
-            ->join('users', 'patient_id', '=', 'users.id');
-        if ($showDeleted == true) {
-            $query->where('bills.active', 1);
-        } else {
-            $query->where('bills.active', 0);
-        }
+        $query = Bill::query()
+            ->select(
+                'bills.*',
+                'u.first_name as patient_first_name',
+                'u.last_name as patient_last_name',
+                DB::raw("GROUP_CONCAT(p.name SEPARATOR ', ') as procedures_text")
+            )
+            ->join('users as u', 'bills.patient_id', '=', 'u.id')
+            ->leftJoin('bill_details as bd', 'bd.bill_id', '=', 'bills.id')
+            ->leftJoin('procedures as p', 'p.id', '=', 'bd.procedure_id')
+            ->groupBy('bills.id', 'u.first_name', 'u.last_name');
+
+        $query->where('bills.active', $showDeleted ? 1 : 0);
 
         if ($patient_id) {
             $patient = User::find($patient_id);
@@ -63,18 +69,26 @@ class BillController extends Controller implements HasMiddleware
             }
         }
 
+
         if ($search) {
-            $query->where(function (Builder $q) use ($search) {
-                $q->WhereRaw('users.first_name LIKE ?', ['%' . $search . '%'])
-                    ->orWhereRaw('users.last_name LIKE ?', ['%' . $search . '%']);
+            $query->where(function ($q) use ($search) {
+                $q->where('u.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('u.last_name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('billdetail.procedure', function ($q2) use ($search) {
+                        $q2->where('name', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
         if ($sortField) {
-            $query->orderBy($sortField, $sortDirection);
+
+            if ($sortField === 'procedures') {
+                $query->orderBy('procedures_text', $sortDirection);
+            } else {
+                $query->orderBy($sortField, $sortDirection);
+            }
         } else {
-            $query->latest('bills.updated_at')
-                ->latest('bills.created_at');
+            $query->latest('bills.created_at');
         }
         if ($lastDays) {
             if (is_numeric($lastDays)) {
@@ -342,7 +356,7 @@ class BillController extends Controller implements HasMiddleware
                 $payment->active = 0;
                 $payment->save();
             }
-              Log::info($bill->type);
+            Log::info($bill->type);
             if ($bill->type === "Credito" && $CXC) {
                 Log::info($totalAjuste);
                 $CXC->balance -= $totalAjuste;

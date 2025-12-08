@@ -39,20 +39,30 @@ class OdontographController extends Controller implements HasMiddleware
         $showDeleted = filter_var($request->input('showDeleted', 'true'), FILTER_VALIDATE_BOOLEAN);
 
 
-        $query = Odontograph::query()->select('odontographs.*')
-            ->join('users', 'odontographs.patient_id', '=', 'users.id');
+        $query = Odontograph::query()
+            ->select(
+                'odontographs.*',
+                'patient.first_name as patient_first_name',
+                'patient.last_name as patient_last_name',
+                'doctor.first_name as doctor_first_name',
+                'doctor.last_name as doctor_last_name'
+            )
+            ->join('users as patient', 'odontographs.patient_id', '=', 'patient.id')
+            ->join('users as doctor', 'odontographs.doctor_id', '=', 'doctor.id');
 
         $query->where('odontographs.active', $showDeleted ? 1 : 0);
 
 
         if ($search) {
-            $query->whereHas('users', function (Builder $q) use ($search) {
-                $q->where('first_name', 'LIKE', "%{$search}%")
-                    ->orWhere('last_name', 'LIKE', "%{$search}%")
-                    ->orWhere('date_of_birth', 'LIKE', "%{$search}%")
-                ;
+            $query->where(function ($q) use ($search) {
+                $q->where('patient.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('patient.last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('doctor.first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('doctor.last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('patient.date_of_birth', 'LIKE', "%{$search}%");
             });
         }
+
 
         if ($sortField) {
             $query->orderBy($sortField, $sortDirection);
@@ -60,6 +70,7 @@ class OdontographController extends Controller implements HasMiddleware
             $query->latest('odontographs.updated_at')
                 ->latest('odontographs.created_at');
         }
+
         if ($lastDays) {
             if (is_numeric($lastDays)) {
 

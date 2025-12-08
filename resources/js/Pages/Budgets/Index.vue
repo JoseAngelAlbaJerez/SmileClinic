@@ -55,13 +55,13 @@
                                             # <span v-if="form.sortField === 'id'">{{ form.sortDirection === 'asc' ? '↑'
                                                 : '↓' }}</span>
                                         </th>
-                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patient_id')">
-                                            Paciente <span v-if="form.sortField === 'patient_id'">{{ form.sortDirection
+                                        <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('patient_first_name')">
+                                            Paciente <span v-if="form.sortField === 'patient_first_name'">{{ form.sortDirection
                                                 === 'asc' ? '↑' : '↓' }}</span>
                                         </th>
-                                        <th scope="col " class="cursor-pointer " @click="sort('branch_id')">
+                                        <th scope="col " class="cursor-pointer " @click="sort('procedures')">
                                             Procedimientos
-                                            <span v-if="form.sortField === 'branch_id'">
+                                            <span v-if="form.sortField === 'procedures'">
                                                 {{ form.sortDirection === 'asc' ? '↑' : '↓' }}
                                             </span>
                                         </th>
