@@ -8,7 +8,6 @@ const props = defineProps({
     patients: Object,
 });
 
-// Estado
 const searchTerm = ref('');
 const selectedPatientId = ref(null);
 const emit = defineEmits(['selected']);
@@ -32,7 +31,6 @@ const selectPatient = (patient) => {
     }
 };
 
-// Navegar páginas del backend
 const goTo = (url) => {
     if (url) {
         router.visit(url, { preserveState: true, preserveScroll: true });
