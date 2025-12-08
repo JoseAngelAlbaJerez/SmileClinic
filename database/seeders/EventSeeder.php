@@ -32,7 +32,7 @@ class EventSeeder extends Seeder
                 'title' => fake()->sentence(3),
                 'doctor_id' => $doctor->id,
                 'patient_id' => $patient->id,
-                'attended' => fake()->boolean(),
+                'attended' => fake()->randomElement([true, false, null]),
                 'starttime' => $start->format('H:i:s'),
                 'endtime' => $end->format('H:i:s'),
                 'date' => $start->format('Y-m-d'),
