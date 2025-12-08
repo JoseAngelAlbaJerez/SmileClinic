@@ -538,7 +538,7 @@
                                 <XIcon class="h-6 w-6" />
                             </button>
                         </div>
-                        <PatientSelector :patients="patient" @selected="SelectPatient($event)" />
+                        <PatientSelector :patients="patient" @selected="selectPatient" />
                     </div>
                 </Modal>
                 <!-- Doctor Selection Modal -->
@@ -554,7 +554,7 @@
                             </button>
                         </div>
                         <UserSelector :users="doctors"
-                            @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false" />
+                            @selected="selectDoctor" />
                     </div>
                 </Modal>
             </div>
@@ -586,6 +586,7 @@ import SearchIcon from '@/Components/Icons/SearchIcon.vue';
 import BudgetSelector from '@/Pages/Budgets/BudgetSelector.vue';
 import UserSelector from '@/Components/UserSelector.vue';
 import CashIcon from '@/Components/Icons/CashIcon.vue';
+import { useToast } from 'vue-toastification';
 
 export default {
     props: {
@@ -617,6 +618,10 @@ export default {
         Head,
         UserSelector
 
+    },
+     setup() {
+        const toast = useToast();
+        return { toast };
     },
     data() {
         return {
@@ -669,6 +674,28 @@ export default {
     },
 
     methods: {
+         selectDoctor(user) {
+            if (user.id === this.form.patient_id) {
+                this.toast.error("Este doctor ya está seleccionado como paciente.");
+                return;
+            }
+            this.form.doctor_id = user.id;
+            this.selected_doctor = user;
+            this.showUserModal = false;
+        },
+        selectPatient(patient) {
+            if (patient.id === this.form.doctor_id) {
+                this.toast.error("Este paciente ya está seleccionado como doctor.");
+                return;
+            }
+            if (patient.c_x_c) {
+                this.payment_form.balance = patient.c_x_c.balance
+            }
+
+            this.form.patient_id = patient.id;
+            this.selected_patient = patient;
+            this.showPatientModal = false;
+        },
         formatDate(date) {
             if (!date) return '';
             const d = new Date(date);
@@ -794,17 +821,7 @@ export default {
             const now = new Date();
             return now.toISOString().slice(0, 16);
         },
-        SelectPatient(event) {
 
-            this.form.patient_id = event.id;
-            this.selected_patient = event;
-            this.showPatientModal = false;
-
-            if (event.c_x_c) {
-                this.payment_form.balance = event.c_x_c.balance
-            }
-
-        },
         submit() {
             if (!this.form.patient_id) {
                 this.errors.patient_id = 'Por favor, seleccione un paciente.';

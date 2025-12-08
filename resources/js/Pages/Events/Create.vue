@@ -35,7 +35,7 @@
                                 </div>
                                 <p v-if="errors.title" class="mt-1 text-xs text-red-600 dark:text-red-400">{{
                                     errors.title
-                                }}</p>
+                                    }}</p>
                             </div>
 
                             <!-- Doctor & Patient Row -->
@@ -199,8 +199,7 @@
                             <XIcon class="h-6 w-6" />
                         </button>
                     </div>
-                    <UserSelector :users="doctors"
-                        @selected="form.doctor_id = $event.id, selected_doctor = $event, showUserModal = false" />
+                    <UserSelector :users="doctors" @selected="selectDoctor" />
                 </div>
             </Modal>
 
@@ -216,8 +215,7 @@
                             <XIcon class="h-6 w-6" />
                         </button>
                     </div>
-                    <PatientSelector :patients="patients"
-                        @selected="form.patient_id = $event.id, selected_patient = $event, showPatientModal = false" />
+                    <PatientSelector :patients="patients" @selected="selectPatient" />
                 </div>
             </Modal>
         </template>
@@ -250,6 +248,8 @@ import CalendarIcon from '@/Components/Icons/CalendarIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import XIcon from '@/Components/Icons/XIcon.vue';
 import { useToast } from 'vue-toastification';
+
+
 export default {
     props: {
         errors: [Array, Object],
@@ -279,6 +279,10 @@ export default {
         EditIcon,
         XIcon,
         Head
+    },
+    setup() {
+        const toast = useToast();
+        return { toast };
     },
     computed: {
         filteredAppointments() {
@@ -340,6 +344,24 @@ export default {
         };
     },
     methods: {
+        selectDoctor(user) {
+            if (user.id === this.form.patient_id) {
+                this.toast.error("Este doctor ya está seleccionado como paciente.");
+                return;
+            }
+            this.form.doctor_id = user.id;
+            this.selected_doctor = user;
+            this.showUserModal = false;
+        },
+        selectPatient(patient) {
+            if (patient.id === this.form.doctor_id) {
+                this.toast.error("Este paciente ya está seleccionado como doctor.");
+                return;
+            }
+            this.form.patient_id = patient.id;
+            this.selected_patient = patient;
+            this.showPatientModal = false;
+        },
         toDateFromTimeOnDate(time, baseDate) {
             if (!time) return null;
             const [h, m] = time.split(':').map(Number);
